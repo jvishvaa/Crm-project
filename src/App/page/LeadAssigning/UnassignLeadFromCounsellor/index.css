@@ -1,0 +1,49 @@
+.lead-button {
+    height: 30px !important;
+    padding: 0px 5px !important;
+}
+
+.search-input-lead {
+    background-color: white !important;
+}
+
+@media (max-width: 600px) {
+    .lead-button {
+        height: 30px !important;
+        padding: 0px 4px !important;
+    }
+
+    .lead-radio .ant-radio-button-wrapper {
+        padding-inline: 4px !important;
+    }
+}
+
+.search-input-lead>input {
+    background-color: white !important;
+}
+
+.lead-filter-drawer .ant-drawer-header {
+    padding: 8px 16px !important;
+}
+
+.lead-filter-drawer .ant-drawer-body {
+    padding: 0px 16px !important;
+}
+
+.lead-card-header-name {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.lead-card-subheader-text {
+    font-size: 12px;
+}
+
+.assign-filter-card .ant-card-body {
+    padding-top: 0px !important;
+}
+
+.assign-card-checkbox .ant-checkbox-inner {
+    background-color: #EFEFEF;
+    border-color: #EFEFEF;
+}

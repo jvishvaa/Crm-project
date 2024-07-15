@@ -1,0 +1,29 @@
+// font sizes
+
+@for $i from 1 through 100 {
+    .th-#{$i} {
+      font-size: $i + px;
+    }
+  }
+  
+  // font weight
+  @for $i from 100 through 900 {
+    @if $i % 100==0 {
+      .th-fw-#{$i} {
+        font-weight: $i
+      }
+    }
+  }
+
+//   border radius
+@for $i from 1 through 100 {
+    .th-br-#{$i} {
+      border-radius: $i + px;
+    }
+  }
+
+$secondary-color:linear-gradient(to right, rgba(8, 155, 171, 1) 1%, rgba(13, 181, 200, 1) 5%);
+
+.th-bg-secondary{
+  background: $secondary-color !important;
+}

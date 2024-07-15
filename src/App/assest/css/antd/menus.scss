@@ -1,0 +1,143 @@
+@import '../mixins.scss';
+
+.ant-menu {
+   font-family: Poppins;
+   font-size: 12px;
+}
+
+.ant-menu-item {
+   white-space: normal !important;
+   font-weight: 500;
+   color: #262A2A;
+   line-height: 1.5 !important;
+   padding-left: 20px !important;
+   transition: border-color 0.2s, background 0.2s, padding 0.1s cubic-bezier(0.215, 0.61, 0.355, 1) !important;
+}
+
+.ant-menu-item>svg {
+   background: #F6F6F6;
+   padding: 5px;
+   border-radius: 5px;
+   width: 26px;
+   height: 26px;
+}
+
+.ant-menu-item:hover {
+   background: none !important;
+
+   .ant-menu-title-content {
+      color: $primary !important;
+   }
+}
+
+.ant-menu-item:hover.ant-menu-item-selected {
+   color: $primary !important;
+   background: $primarylight !important;
+}
+
+.ant-menu-item-selected {
+   color: $primary !important;
+   background: $primarylight !important;
+}
+
+.ant-menu-item-selected>svg {
+   background: $primary;
+   color: white !important;
+}
+
+.ant-menu-submenu-inline .ant-menu-sub .ant-menu-item {
+   padding-left: 40px !important;
+}
+
+
+.ant-menu-submenu>div {
+   color: #262A2A !important;
+   font-weight: 500 !important;
+   background: none !important;
+}
+
+.ant-menu-submenu>div>svg {
+   background: #F6F6F6;
+   padding: 5px;
+   border-radius: 5px;
+   width: 26px;
+   height: 26px;
+}
+
+.ant-menu-submenu>div:hover {
+   font-weight: 500 !important;
+   background: #F9F9FC !important;
+
+   .ant-menu-title-content {
+      color: $primary !important
+   }
+}
+
+.ant-menu-submenu-selected>div {
+   color: #262A2A !important;
+   font-weight: 500 !important;
+   background: #F9F9FC !important;
+
+   .ant-menu-title-content {
+      color: $primary !important
+   }
+}
+
+.ant-menu-submenu-selected>div>svg {
+   background: #666666;
+   color: white !important;
+}
+
+.ant-menu-sub {
+   margin-top: -5px !important;
+   background: white !important;
+   color: #898989;
+}
+
+.ant-menu-sub .ant-menu-item {
+   color: #6F6F6F;
+   font-size: 12px;
+   font-weight: 500;
+}
+
+.ant-menu-sub .ant-menu-item:hover {
+   color: #6F6F6F !important;
+}
+
+.ant-menu-submenu-title {
+   padding-left: 20px !important;
+   transition: border-color 0.2s, background 0.2s, padding 0.1s cubic-bezier(0.215, 0.61, 0.355, 1) !important;
+}
+
+.ant-pagination-item {
+   border-color: #0A4D76 !important;
+}
+
+.ant-divider {
+   border-color: rgb(223, 227, 232) !important;
+   padding: 0px !important;
+   margin: 0px !important;
+}
+
+.ant-layout .ant-layout-sider {
+   background: white !important;
+   border-right: 1px solid #DCDCDC;
+}
+
+.ant-menu-inline-collapsed .ant-menu-item {
+   padding: 0px !important;
+   padding-top: 7px !important;
+   padding-left: 14px !important;
+}
+
+.ant-menu-submenu-vertical .ant-menu-submenu-title {
+   padding: 0px !important;
+   padding-top: 7px !important;
+   padding-left: 14px !important;
+}
+
+.ant-menu-submenu-popup .ant-menu-sub .ant-menu-item {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+}

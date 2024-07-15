@@ -1,0 +1,42 @@
+@import "../../../assest/css/mixins.scss";
+
+.add-lead-select-country-code .ant-select-selector {
+    height: 30px !important;
+    background: white !important;
+}
+
+.add-lead-select .ant-select-selector {
+    height: 30px !important;
+}
+
+.add-lead-select-contact {
+    background: white
+}
+
+.add-lead-input-header {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.add-lead-reactivate>span {
+    font-size: 10px;
+}
+
+.add-lead-form-header {
+    font-size: 12px;
+    text-decoration: underline;
+    color: $primary;
+}
+
+.add-lead-form .ant-form-item {
+    margin-top: 0px;
+}
+
+.add-lead-card-header-name {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.add-lead-card-subheader-text {
+    font-size: 12px;
+}

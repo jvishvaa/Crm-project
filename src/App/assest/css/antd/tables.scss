@@ -1,0 +1,84 @@
+@import '../mixins.scss';
+
+.ant-table {
+    font-family: "Poppins";
+    border-radius: 5px !important;
+    overflow: auto !important;
+}
+
+.ant-table-wrapper .ant-table-thead>tr>th {
+    color: #fff;
+    background: $primary;
+}
+
+.ant-table-wrapper .ant-table-container table>thead>tr:first-child>*:first-child {
+    border-start-start-radius: 5px !important;
+}
+
+.ant-table-wrapper .ant-table-container table>thead>tr:first-child>*:last-child {
+    border-start-end-radius: 5px !important;
+}
+
+.ant-table-thead .ant-table-cell {
+    background-color: $primary !important;
+}
+
+.ant-table-wrapper .ant-table-container table>tbody>tr:last-child>*:first-child {
+    border-end-start-radius: 5px !important;
+}
+
+.ant-table-wrapper .ant-table-container table>tbody>tr:last-child>*:last-child {
+    border-end-end-radius: 5px !important;
+}
+
+.ant-table-cell {
+    font-size: 12px;
+    font-family: "Poppins";
+}
+
+.ant-table-thead>tr>th {
+    padding: 7px 14px !important;
+    min-height: 32px !important;
+    text-transform: none !important;
+}
+
+.ant-table-tbody>tr>td {
+    padding: 7px 14px !important;
+    min-height: 32px !important;
+    line-height: 1.5 !important;
+    font-weight: 400 !important;
+    text-transform: none !important;
+}
+
+.ant-table.ant-table-bordered .ant-table-container {
+    border-color: #dfe3e8 !important;
+    ;
+}
+
+.ant-table.ant-table-bordered .ant-table-content {
+    border-color: #dfe3e8 !important;
+    ;
+}
+
+.ant-table.ant-table-bordered td,
+.ant-table.ant-table-bordered th {
+    border-color: #dfe3e8 !important;
+}
+
+.ant-table-tbody .ant-checkbox-inner {
+    background-color: #EFEFEF !important
+}
+
+.ant-table-thead .ant-checkbox-indeterminate .ant-checkbox-inner:after {
+    background-color: white !important
+}
+
+.ant-table-thead .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: white !important;
+    border-color: white !important;
+}
+
+.ant-table-thead .ant-checkbox-checked .ant-checkbox-inner::after {
+    border-color: $primary !important;
+    /* Change the tick color to white */
+}

@@ -1,0 +1,45 @@
+// Import mixins
+@import '../mixins.scss';
+
+.ant-input {
+  border-radius: 6px;
+  background-color: #F6F6F6;
+  /* Light grey background */
+  font-family: "Poppins";
+  font-size: 13px !important;
+
+  &:hover,
+  &:focus,
+  &:active {
+    .ant-input:not(.ant-input-disabled) {
+      border-color: $primary;
+    }
+  }
+}
+
+.ant-input-affix-wrapper {
+  border-radius: 6px;
+  background-color: #F6F6F6;
+  font-family: "Poppins";
+
+  &:hover,
+  &:focus,
+  &:active {
+    .ant-input:not(.ant-input-disabled) {
+      border-color: $primary;
+    }
+  }
+}
+
+.ant-picker {
+  background-color: #F6F6F6;
+}
+
+.ant-picker>div>input {
+  font-size: 13px !important;
+
+}
+
+.ant-input-group-addon {
+  font-size: 12px !important;
+}

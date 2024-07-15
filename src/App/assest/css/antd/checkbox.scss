@@ -1,0 +1,45 @@
+@import '../mixins.scss';
+
+.ant-checkbox-wrapper {
+  font-family: Poppins !important;
+  font-size: 12px !important;
+}
+
+.ant-radio-wrapper {
+  font-family: Poppins !important;
+  font-size: 12px !important;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner::after {
+  border-color: white !important;
+  /* Change the tick color to white */
+}
+
+.ant-checkbox-indeterminate .ant-checkbox-inner {
+  background-color: #66788A !important
+}
+
+.ant-checkbox-indeterminate .ant-checkbox-inner::after {
+  content: '';
+  display: block;
+  width: 8px;
+  /* Adjust width as needed */
+  height: 2px;
+  /* Adjust height as needed */
+  background-color: white;
+  /* Color for the minus icon */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: $primary !important;
+  border-color: $primary !important;
+}
+
+.ant-radio-checked .ant-radio-inner {
+  background-color: $primary !important;
+  border-color: $primary !important;
+}

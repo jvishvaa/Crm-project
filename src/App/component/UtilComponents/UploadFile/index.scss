@@ -1,0 +1,58 @@
+@import "../../../assest/css/mixins.scss";
+
+.file-name-text {
+    color: #66788A;
+    margin-left: 5px;
+    font-size: 12px;
+}
+
+.file-upload-div {
+    width: 100%;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+    background-color: #F0F0F0;
+    height: 34px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 9px 0px 6px 0px;
+    margin-top: 5px;
+}
+
+.file-upload-div-disabled {
+    width: 100%;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+    background-color: #F0F0F0;
+    height: 34px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 9px 0px 6px 0px;
+    margin-top: 5px;
+    cursor: not-allowed;
+}
+
+.file-upload-button {
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    font-weight: 500 !important;
+    color: black !important;
+    border: 1px solid #66788A;
+    padding: 2px 8px !important;
+    background-color: #c9d1d9 !important;
+    border: 1px solid #c9d1d9 !important;
+    margin-left: 10px !important;
+    font-size: 13px !important;
+    min-width: 80px !important;
+}
+
+.file-upload-button:hover {
+    background-color: #bec4cb !important;
+    border: 1px solid #bec4cb !important;
+}
+
+.file-upload-div:hover {
+    border: 1px solid #4096FF;
+    cursor: pointer;
+}

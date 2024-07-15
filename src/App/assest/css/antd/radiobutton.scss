@@ -1,0 +1,19 @@
+@import '../mixins.scss';
+
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    color: white !important;
+    background: $primary !important;
+    border-color: $primary !important;
+}
+
+.ant-radio-button-wrapper:hover {
+    color: $primary !important;
+}
+
+.ant-radio-button-wrapper-checked:hover {
+    color: white !important;
+}
+
+.ant-radio-button-wrapper {
+    padding-inline: 8px;
+}

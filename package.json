@@ -1,0 +1,61 @@
+{
+  "name": "CRM",
+  "version": "0.1.01",
+  "private": true,
+  "dependencies": {
+    "@ant-design/icons": "^5.2.4",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@tinymce/tinymce-react": "^4.3.0",
+    "antd": "^5.5.0",
+    "axios": "^1.4.0",
+    "dagre": "^0.8.5",
+    "dayjs": "^1.11.11",
+    "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "node-sass": "^9.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-error-boundary": "^4.0.10",
+    "react-icons": "^5.2.1",
+    "react-organizational-chart": "^2.2.1",
+    "react-router-dom": "^6.11.2",
+    "react-scripts": "5.0.1",
+    "react-transition-group": "^4.4.5",
+    "reactflow": "^11.11.4",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-methods": "^7.18.6",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "prettier": "^3.0.0"
+  }
+}

@@ -1,0 +1,38 @@
+@import '../../assest/css/mixins.scss';
+.profile-card .ant-card-body {
+    padding: 0 !important;
+}
+
+.profile-name {
+    font-weight: 500;
+    font-size: 14px;
+    color: $primary;
+}
+
+.profile-userlevel {
+    color: #6f6f6f;
+    font-size: 10px;
+}
+
+.profile-erp {
+    color: #6f6f6f;
+    font-size: 10px;
+}
+
+.header-profile {
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: underline;
+    color: $primary;
+}
+
+.profile-sub-header {
+    color: #6f6f6f;
+    font-size: 12px;
+}
+
+.profile-value {
+    color: #6f6f6f;
+    font-size: 12px;
+    font-weight: 500;
+}

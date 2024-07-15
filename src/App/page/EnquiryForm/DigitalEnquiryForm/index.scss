@@ -1,0 +1,64 @@
+@import "../../../assest/css/mixins.scss";
+
+.enquiry-form-select-country-code .ant-select-selector {
+    height: 30px !important;
+    background: white !important;
+}
+
+.enquiry-form-select .ant-select-selector {
+    height: 30px !important;
+}
+
+.enquiry-form-select-filter .ant-select-selector {
+    height: 30px !important;
+    background: white !important;
+}
+
+.enquiry-form-select-contact {
+    background: white
+}
+
+.enquiry-form-no-lead-icon-div {
+    background-color: #D8E9E8;
+    border-radius: 40px;
+    padding: 8px;
+}
+
+.enquiry-from-no-lead-icon {
+    color: $primary !important;
+}
+
+.enquiry-form-no-lead-text {
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.4;
+    font-size: 13px;
+}
+
+.enquiry-form-no-lead-card {
+    height: 100%;
+    cursor: pointer;
+}
+
+.enquiry-form-no-lead-card:hover {
+    background-color: #F9F9FC;
+}
+
+.enquiry-form-item-label {
+    font-size: 11px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.enquiry-form-item-label>span {
+    color: red;
+}
+
+.enquiry-form-header {
+    font-size: 13px;
+    font-weight: 600
+}
+
+.enquiry-form-child-number {
+    font-size: 14px;
+}

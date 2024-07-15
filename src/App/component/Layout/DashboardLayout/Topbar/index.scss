@@ -1,0 +1,134 @@
+@import "../../../../assest/css/mixins.scss";
+
+.header-wrapper {
+    transition: padding-left 0.2s ease;
+    /* Adjust the duration and easing as needed */
+}
+
+.header-wrapper-collapsed {
+    transition: padding-left 0.2s ease;
+    /* Adjust the duration and easing as needed */
+}
+
+.header-style {
+    padding: 0px;
+    height: 50px;
+    position: fixed;
+    top: 0px;
+    z-index: 10;
+    border-bottom: 1px solid #DFE3E8;
+    width: 100%;
+}
+
+.logout-buttton-style {
+    outline: none;
+    border: none;
+}
+
+.avatar-style {
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.avatar-popover .ant-popover-arrow {
+    display: none;
+}
+
+.avatar-popover .ant-popover-content {
+    right: 15px;
+    top: -5px;
+}
+
+.avatar-popover .ant-popover-content .ant-popover-inner {
+    padding: 0
+}
+
+.profile-menu .ant-menu-item {
+    padding: 0px 15px !important;
+}
+
+.profile-menu .ant-menu-item:hover {
+    background: #F5F5F5 !important;
+}
+
+.name-text {
+    font-size: 12px;
+    text-align: center;
+    font-weight: 600;
+    color: $primary;
+}
+
+.user-level-text {
+    font-size: 11px;
+    text-align: center;
+    font-weight: 500;
+    color: #6f6f6f;
+}
+
+.username-text {
+    font-size: 10px;
+    text-align: center;
+    font-weight: 500;
+    color: #6f6f6f;
+}
+
+.search-input-lead-global {
+    font-size: 10px !important;
+}
+
+.search-input-lead-global .ant-input {
+    font-size: 10px !important;
+}
+
+.search-input-lead-global .ant-input-affix-wrapper {
+    font-size: 10px !important;
+}
+
+@media (min-width: 576px) {
+    .search-input-lead-global {
+        font-size: 11px !important;
+    }
+
+    .search-input-lead-global .ant-input {
+        font-size: 11px !important;
+    }
+
+    .search-input-lead-global .ant-input-affix-wrapper {
+        font-size: 11px !important;
+    }
+}
+
+.country-code-lead-select-global .ant-select-selector {
+    height: 30px !important;
+}
+
+.country-code-lead-select-global .ant-select-selector .ant-select-selection-item {
+    font-size: 10px !important;
+}
+
+.global-search-card-data-text {
+    font-size: 11px;
+}
+
+.global-search-card-data-text>span {
+    font-weight: 500;
+}
+
+.global-search-card-header-name {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.global-search-card-subheader-text {
+    font-size: 11px;
+}
+
+.global-search-div {
+    background-color: #F6F6F6;
+    cursor: pointer;
+}
+
+.global-search-div:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}

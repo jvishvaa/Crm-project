@@ -1,0 +1,155 @@
+@import '../../../assest/css/mixins.scss';
+
+.lead-details-card-name {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.lead-details-card-contact {
+    font-size: 12px;
+}
+
+.lead-details-card-data-text {
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.assign-details-name {
+    font-size: 12px;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.assign-details-assign-date {
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.lead-details-card-data-text>span {
+    font-weight: 500;
+    font-size: 11px !important;
+}
+
+.lead-details-card-update-button {
+    font-weight: 500;
+    height: 22px;
+    font-size: 11px !important;
+}
+
+.assign-details-card-header {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.assign-details-card-subheader {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.assign-remove-button {
+    color: red !important;
+}
+
+.activity-history-list {
+    overflow: auto;
+    overflow-x: hidden;
+    min-height: 500px;
+    max-height: 650px;
+}
+
+.activity-history-sub-header {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.activity-list-icon-div {
+    background-color: #9ec8c6;
+    border-radius: 20px;
+    padding: 3px 6px;
+    width: fit-content;
+}
+
+.activity-list-date-time {
+    font-size: 11px;
+    line-height: 1.5;
+    text-wrap: nowrap;
+}
+
+.activity-list-status {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #3D928E;
+    font-weight: 500;
+}
+
+.activity-list-status-description {
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.activity-list-status-next-follow-date {
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.activity-list-status-next-follow-date>span {
+    font-weight: 600;
+}
+
+.lead-child-list {
+    overflow: auto;
+    overflow-x: hidden;
+    max-height: 330px;
+}
+
+.child-list-details-name {
+    font-size: 12px;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.child-list-details-description {
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.lead-details-hot-lead-button {
+    background-color: #ec625d !important;
+    border-color: #ec625d !important;
+}
+
+.lead-details-hot-lead-button:hover {
+    background-color: #d45853 !important;
+    border-color: #d45853 !important;
+}
+
+.lead-details-reassign-counsellor {
+    background-color: #2A98D1 !important;
+    border-color: #2A98D1 !important;
+}
+
+.lead-details-reassign-counsellor:hover {
+    background-color: #2588bc !important;
+    border-color: #2588bc !important;
+}
+
+.lead-details-update-details-button {
+    background-color: #B589D6 !important;
+    border-color: #B589D6 !important;
+}
+
+.lead-details-update-details-button:hover {
+    background-color: #906dab !important;
+    border-color: #906dab !important;
+}
+
+.child-details-button-divider {
+    color: $primary;
+}
+
+.lead-details-view-child-header {
+    color: $primary;
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: underline;
+}
