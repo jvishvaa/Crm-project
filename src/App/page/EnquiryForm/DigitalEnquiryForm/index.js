@@ -9,14 +9,17 @@ import {
   Select,
   Button,
   Form,
+  Tag,
+  Tooltip,
 } from "antd";
 import "./index.scss";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
 import getCountryCode from "../../../utils/getCountryCode";
-import { MdAdd, MdPrint, MdSearch, MdSend } from "react-icons/md";
+import { MdAdd, MdEdit, MdPrint, MdSearch, MdSend } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import CustomCard from "../../../component/UtilComponents/CustomCard";
 import { PlusOutlined } from "@ant-design/icons";
+import getCardDataText from "../../../component/UtilComponents/CardDataText";
 
 const DigitalEnquiryForm = () => {
   const [filterForm] = Form.useForm();
@@ -37,35 +40,35 @@ const DigitalEnquiryForm = () => {
   }, []);
 
   const getLeadData = () => {
-    setLeadData([]);
-    // setLeadData([
-    //   {
-    //     id: 4110494,
-    //     enquiry_no: "ENQ50517343223458",
-    //     lead_name: "Madhu Kumar S",
-    //     next_follow_date: null,
-    //     academic_year: "2023-24",
-    //     lead_created_date: "2024-02-02",
-    //     is_regen: false,
-    //     in_dormant: true,
-    //     is_enquiry: false,
-    //     is_live: true,
-    //     lead_status: {
-    //       id: 29,
-    //       status_name: "Call picked up",
-    //     },
-    //     lead_status_l2: null,
-    //     tagging: null,
-    //     contact_source: {
-    //       id: 381,
-    //       source_name: "Branch - ",
-    //     },
-    //     branch: {
-    //       id: 151,
-    //       branch_name: "Raja Test",
-    //     },
-    //   },
-    // ]);
+    // setLeadData([]);
+    setLeadData([
+      {
+        id: 4110494,
+        enquiry_no: "ENQ50517343223458",
+        lead_name: "Madhu Kumar S",
+        next_follow_date: null,
+        academic_year: "2023-24",
+        lead_created_date: "2024-02-02",
+        is_regen: true,
+        in_dormant: true,
+        is_enquiry: false,
+        is_live: true,
+        lead_status: {
+          id: 29,
+          status_name: "Call picked up",
+        },
+        lead_status_l2: null,
+        tagging: null,
+        contact_source: {
+          id: 381,
+          source_name: "Branch - ",
+        },
+        branch: {
+          id: 151,
+          branch_name: "Raja Test",
+        },
+      },
+    ]);
   };
 
   const renderLeadNotExist = () => {
@@ -141,13 +144,128 @@ const DigitalEnquiryForm = () => {
     );
   };
 
+  const renderLeadCard = () => {
+    return (
+      <Col xs={24}>
+        <Row className={"d-flex"} gutter={[8, 8]}>
+          {leadData?.map((each, index) => (
+            <Col xs={24} sm={24} md={12} xl={12} key={index}>
+              <CustomCard style={{ height: "100%" }}>
+                <Row gutter={[4, 4]} className={"d-flex"}>
+                  <Col xs={24}>
+                    <Row gutter={[4, 4]} className={"d-flex flex-nowrap"}>
+                      <Col xs={16} md={18} xl={19}>
+                        <Row className={"d-flex flex-column flex-nowrap"}>
+                          <Col xs={24}>
+                            <Typography className="enquiry-form-card-header-name">
+                              {each?.lead_name || "NA"}
+                            </Typography>
+                          </Col>
+                          <Col xs={24}>
+                            <Typography className="enquiry-form-card-subheader-text">
+                              {"+917937363636"}
+                            </Typography>
+                          </Col>
+                          <Col xs={24}>
+                            <Typography className="enquiry-form-card-subheader-text">
+                              {each?.enquiry_no || "NA"}
+                            </Typography>
+                          </Col>
+                        </Row>
+                      </Col>
+                      <Col xs={8} md={6} xl={5}>
+                        <Row
+                          className="d-flex flex-row justify-content-end"
+                          gutter={[4, 4]}
+                        >
+                          <Col>
+                            <Tooltip title="Update Enquiry Form">
+                              <Button
+                                size="small"
+                                type="text"
+                                icon={<MdEdit size="20" />}
+                                onClick={() => {
+                                  navigate(
+                                    "/enquiry-form/digital-enquiry-form/create-enquiry",
+                                    {
+                                      state: { is_edit: true },
+                                    }
+                                  );
+                                }}
+                              />
+                            </Tooltip>
+                          </Col>
+                          <Col>
+                            <Tooltip title="Send Enquiry Form">
+                              <Button
+                                size="small"
+                                type="text"
+                                icon={<MdSend size="20" />}
+                              />
+                            </Tooltip>
+                          </Col>
+                          <Col>
+                            <Tooltip title="Print Enquiry Form">
+                              <Button
+                                size="small"
+                                type="text"
+                                icon={<MdPrint size="20" />}
+                              />
+                            </Tooltip>
+                          </Col>
+                        </Row>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Divider />
+                  <Col xs={24}>
+                    <Row className={"d-flex"} gutter={[4, 4]}>
+                      {getCardDataText(
+                        "Academic Year",
+                        each?.academic_year || "--"
+                      )}
+                      {getCardDataText(
+                        "Source",
+                        each?.contact_source?.source_name || "--"
+                      )}
+                      {getCardDataText(
+                        "Branch",
+                        each?.branch?.branch_name || "--"
+                      )}
+                      {getCardDataText(
+                        "Counsellor Name",
+                        "Test Counsellor" || ""
+                      )}
+                    </Row>
+                  </Col>
+                  <Divider />
+                  <Col xs={24} className="mt-1">
+                    <Row className={"d-flex flex-row"} gutter={[4, 4]}>
+                      {each?.is_regen ? <Tag color="magenta">Regen</Tag> : null}
+                      {each.pro_status === "HOT Lead" ? (
+                        <Tag color="red">Hot</Tag>
+                      ) : null}
+                      {each.is_enquiry ? (
+                        <Tag color="green">ReEnquiry</Tag>
+                      ) : null}
+                    </Row>
+                  </Col>
+                </Row>
+              </CustomCard>
+            </Col>
+          ))}
+        </Row>
+      </Col>
+    );
+  };
+
   return (
     <div>
       <Row gutter={[8, 8]}>
         <Col xs={24}>
           <Row className="d-flex flex-column">
             <Col xs={24}>
-              <CustomBreadCrumbs data={["Add Lead"]} />
+              <CustomBreadCrumbs data={["Enquiry Form"]} />
             </Col>
             <Col xs={24}>
               <Divider />
@@ -316,7 +434,7 @@ const DigitalEnquiryForm = () => {
                 leadData?.length === 0 ? (
                   <>{renderLeadNotExist()}</>
                 ) : (
-                  <></>
+                  <>{renderLeadCard()}</>
                 )
               ) : (
                 <div

@@ -6,6 +6,7 @@ import CustomBreadCrumbs from "../../../../component/UtilComponents/CustomBreadC
 import { useLocation, useNavigate } from "react-router-dom";
 import CustomCard from "../../../../component/UtilComponents/CustomCard";
 import PersonalDetails from "./PersonalDetails";
+import PreviousSchoolDetails from "./PreviousSchoolDetails";
 
 const CreateEnquiry = () => {
   const navigate = useNavigate();
@@ -22,19 +23,45 @@ const CreateEnquiry = () => {
         child_gender: null,
         child_dob: null,
         child_grade: null,
+        child_previous_grade: null,
+        child_previous_school: null,
+        reason_for_leave_school: null,
+        previous_percentage: null,
+        previous_board: null,
+        pre_school_tieup: null,
       },
     ],
+    lead_name: null,
+    lead_relation: null,
+    country_code_primary: null,
+    lead_contact_no: null,
+    country_code_alternate: null,
+    alternate_contact_no: null,
+    lead_email_id: null,
+    lead_occupation: null,
+    lead_income: null,
+    lead_address: null,
+    google_address: null,
   });
 
+  const steps = [
+    {
+      title: "Personal Details",
+    },
+    {
+      title: "Previous School",
+    },
+  ];
+
   useEffect(() => {
-    if (!location?.state?.is_add) {
+    if (!(location?.state?.is_add || location?.state?.is_edit)) {
       navigate("/enquiry-form/digital-enquiry-form", { replace: true });
     }
   }, [location]);
 
   return (
     <div>
-      <Row gutter={[16, 16]}>
+      <Row gutter={[4, 4]}>
         <Col span={24}>
           <Row className="d-flex flex-row justify-content-between align-items-center">
             <Col>
@@ -67,14 +94,7 @@ const CreateEnquiry = () => {
                       size="small"
                       current={currentStep}
                       labelPlacement="vertical"
-                      items={[
-                        {
-                          title: "Personal Details",
-                        },
-                        {
-                          title: "Previous School",
-                        },
-                      ]}
+                      items={steps}
                     />
                   </Col>
                 </Row>
@@ -86,6 +106,37 @@ const CreateEnquiry = () => {
                     setEnquiryFormData={setEnquiryFormData}
                   />
                 ) : null}
+                {currentStep === 1 ? (
+                  <PreviousSchoolDetails
+                    enquiryFormData={enquiryFormData}
+                    setEnquiryFormData={setEnquiryFormData}
+                  />
+                ) : null}
+              </Col>
+              <Col xs={24}>
+                <Row className="d-flex flex-row justify-content-between align-items-center">
+                  <Col>
+                    {currentStep > 0 ? (
+                      <Button
+                        onClick={() => {
+                          setCurrentStep(currentStep - 1);
+                        }}
+                      >
+                        Back
+                      </Button>
+                    ) : null}
+                  </Col>
+                  <Col>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        setCurrentStep(currentStep + 1);
+                      }}
+                    >
+                      {currentStep === steps?.length - 1 ? "Save" : "Next"}
+                    </Button>
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </CustomCard>

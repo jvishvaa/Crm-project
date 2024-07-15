@@ -11,6 +11,9 @@ import {
   Typography,
 } from "antd";
 import { MdDeleteOutline } from "react-icons/md";
+import getCountryCode from "../../../../utils/getCountryCode";
+
+const { TextArea } = Input;
 
 const PersonalDetails = ({ enquiryFormData, setEnquiryFormData }) => {
   return (
@@ -325,6 +328,278 @@ const PersonalDetails = ({ enquiryFormData, setEnquiryFormData }) => {
                   </Row>
                 </Col>
               ))}
+            </Row>
+          </Col>
+        </Row>
+      </Col>
+      <Col xs={24}>
+        <Row className="d-flex flex-row" gutter={[12, 8]}>
+          <Col xs={24}>
+            <Row className="d-flex flex-row justify-content-between align-items-center">
+              <Col>
+                <Typography className="enquiry-form-header">
+                  Parent/Guardian Details
+                </Typography>
+              </Col>
+            </Row>
+          </Col>
+          <Col xs={24}>
+            <Row className="d-flex flex-row" gutter={[12, 8]}>
+              <Col xs={24} sm={12} md={6}>
+                <Typography className="enquiry-form-item-label">
+                  Lead Name <span>*</span>
+                </Typography>
+                <Input
+                  value={enquiryFormData?.lead_name}
+                  onChange={(e) => {
+                    setEnquiryFormData({
+                      ...enquiryFormData,
+                      lead_name: e.target.value,
+                    });
+                  }}
+                  maxLength={48}
+                  autoComplete="off"
+                />
+              </Col>
+              <Col xs={24} sm={12} md={6}>
+                <Typography className="enquiry-form-item-label">
+                  Lead Relation
+                </Typography>
+                <Select
+                  style={{ width: "100%" }}
+                  className="enquiry-form-select"
+                  value={enquiryFormData?.lead_relation}
+                  onChange={(values) => {
+                    setEnquiryFormData({
+                      ...enquiryFormData,
+                      lead_relation: values,
+                    });
+                  }}
+                  showSearch
+                  filterOption={(input, option) =>
+                    option.label.toLowerCase().includes(input.toLowerCase())
+                  }
+                  options={[
+                    { label: "2023-24", value: "2023-24" },
+                    { label: "2024-25", value: "2024-25" },
+                  ]}
+                />
+              </Col>
+              <Col xs={24} sm={12} md={6}>
+                <Typography className="enquiry-form-item-label">
+                  Lead Contact No <span>*</span>
+                </Typography>
+                <Row gutter={[4, 4]}>
+                  <Col xs={7} md={10} xl={8}>
+                    <Select
+                      style={{ width: "100%" }}
+                      className="enquiry-form-select"
+                      value={enquiryFormData?.country_code_primary}
+                      allowClear
+                      showSearch
+                      filterOption={(input, option) =>
+                        option.label.toLowerCase().includes(input.toLowerCase())
+                      }
+                      onChange={(values) => {
+                        setEnquiryFormData({
+                          ...enquiryFormData,
+                          country_code_primary: values,
+                          lead_contact_no: null,
+                        });
+                      }}
+                      options={getCountryCode().map((each) => ({
+                        label: each.country_code,
+                        value: each.country_code,
+                      }))}
+                    />
+                  </Col>
+                  <Col xs={17} md={14} xl={16}>
+                    <Input
+                      type="number"
+                      value={enquiryFormData?.lead_contact_no}
+                      autoComplete="off"
+                      onKeyDown={(e) => {
+                        ["e", "E", "+", "-", "."].includes(e.key) &&
+                          e.preventDefault();
+                      }}
+                      disabled={!enquiryFormData?.country_code_primary}
+                      onChange={(e) => {
+                        const maxLength =
+                          getCountryCode().find(
+                            (each) =>
+                              each.country_code ===
+                              enquiryFormData?.country_code_primary
+                          )?.max_length || Infinity;
+                        const contactNumber = e.target.value;
+                        if (contactNumber.length <= maxLength) {
+                          setEnquiryFormData({
+                            ...enquiryFormData,
+                            lead_contact_no: e.target.value,
+                          });
+                        }
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+              <Col xs={24} sm={12} md={6}>
+                <Typography className="enquiry-form-item-label">
+                  Alternate Contact No
+                </Typography>
+                <Row gutter={[4, 4]}>
+                  <Col xs={7} md={10} xl={8}>
+                    <Select
+                      style={{ width: "100%" }}
+                      className="enquiry-form-select"
+                      value={enquiryFormData?.country_code_alternate}
+                      allowClear
+                      showSearch
+                      filterOption={(input, option) =>
+                        option.label.toLowerCase().includes(input.toLowerCase())
+                      }
+                      onChange={(values) => {
+                        setEnquiryFormData({
+                          ...enquiryFormData,
+                          country_code_alternate: values,
+                          alternate_contact_no: null,
+                        });
+                      }}
+                      options={getCountryCode().map((each) => ({
+                        label: each.country_code,
+                        value: each.country_code,
+                      }))}
+                    />
+                  </Col>
+                  <Col xs={17} md={14} xl={16}>
+                    <Input
+                      type="number"
+                      value={enquiryFormData?.alternate_contact_no}
+                      autoComplete="off"
+                      onKeyDown={(e) => {
+                        ["e", "E", "+", "-", "."].includes(e.key) &&
+                          e.preventDefault();
+                      }}
+                      disabled={!enquiryFormData?.country_code_alternate}
+                      onChange={(e) => {
+                        const maxLength =
+                          getCountryCode().find(
+                            (each) =>
+                              each.country_code ===
+                              enquiryFormData?.country_code_alternate
+                          )?.max_length || Infinity;
+                        const contactNumber = e.target.value;
+                        if (contactNumber.length <= maxLength) {
+                          setEnquiryFormData({
+                            ...enquiryFormData,
+                            alternate_contact_no: e.target.value,
+                          });
+                        }
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+              <Col xs={24} sm={12} md={6}>
+                <Typography className="enquiry-form-item-label">
+                  Lead Email <span>*</span>
+                </Typography>
+                <Input
+                  type="email"
+                  value={enquiryFormData?.lead_email}
+                  onChange={(e) => {
+                    setEnquiryFormData({
+                      ...enquiryFormData,
+                      lead_email: e.target.value,
+                    });
+                  }}
+                  maxLength={48}
+                  autoComplete="off"
+                />
+              </Col>
+              <Col xs={24} sm={12} md={6}>
+                <Typography className="enquiry-form-item-label">
+                  Lead Occupation
+                </Typography>
+                <Input
+                  value={enquiryFormData?.lead_occupation}
+                  onChange={(e) => {
+                    setEnquiryFormData({
+                      ...enquiryFormData,
+                      lead_occupation: e.target.value,
+                    });
+                  }}
+                  maxLength={48}
+                  autoComplete="off"
+                />
+              </Col>
+              <Col xs={24} sm={12} md={6}>
+                <Typography className="enquiry-form-item-label">
+                  Lead Income
+                </Typography>
+                <Input
+                  type="number"
+                  value={enquiryFormData?.lead_income}
+                  onKeyDown={(e) => {
+                    ["e", "E", "+", "-", "."].includes(e.key) &&
+                      e.preventDefault();
+                  }}
+                  onChange={(e) => {
+                    setEnquiryFormData({
+                      ...enquiryFormData,
+                      lead_income: e.target.value,
+                    });
+                  }}
+                  maxLength={48}
+                  autoComplete="off"
+                />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Col>
+      <Col xs={24}>
+        <Row className="d-flex flex-row" gutter={[12, 8]}>
+          <Col xs={24}>
+            <Row className="d-flex flex-row justify-content-between align-items-center">
+              <Col>
+                <Typography className="enquiry-form-header">
+                  Address Details
+                </Typography>
+              </Col>
+            </Row>
+          </Col>
+          <Col xs={24}>
+            <Row className="d-flex flex-row" gutter={[12, 8]}>
+              <Col xs={24} sm={12}>
+                <Typography className="enquiry-form-item-label">
+                  Lead Address <span>*</span>
+                </Typography>
+                <TextArea
+                  rows={3}
+                  value={enquiryFormData?.lead_address}
+                  onChange={(e) => {
+                    setEnquiryFormData({
+                      ...enquiryFormData,
+                      lead_address: e.target.value,
+                    });
+                  }}
+                />
+              </Col>
+              <Col xs={24} sm={12}>
+                <Typography className="enquiry-form-item-label">
+                  Google Address <span>*</span>
+                </Typography>
+                <TextArea
+                  rows={3}
+                  value={enquiryFormData?.google_address}
+                  onChange={(e) => {
+                    setEnquiryFormData({
+                      ...enquiryFormData,
+                      google_address: e.target.value,
+                    });
+                  }}
+                />
+              </Col>
             </Row>
           </Col>
         </Row>
