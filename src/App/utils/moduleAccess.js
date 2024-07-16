@@ -5,7 +5,7 @@ import {
   TbUser,
   TbUserSquare,
 } from "react-icons/tb";
-import { GrGroup } from "react-icons/gr";
+import { GrGroup, GrStatusPlaceholder } from "react-icons/gr";
 import { LuUserPlus } from "react-icons/lu";
 import { lazy } from "react";
 import { RiOpenSourceLine, RiUserStarLine } from "react-icons/ri";
@@ -53,6 +53,20 @@ const modules = [
     is_route: true,
     is_sidebar: true,
     children: [
+      {
+        key: "20",
+        icon: <GrStatusPlaceholder />,
+        label: "Activity Status",
+        route: "/master-data/activity-status",
+        permission: {
+          is_view: [1],
+          is_add: [1],
+          is_modify: [1],
+        },
+        component: lazy(() => import("../page/MasterData/ActivityStatus")),
+        is_route: true,
+        is_sidebar: true,
+      },
       {
         key: "7",
         icon: <RiOpenSourceLine />,

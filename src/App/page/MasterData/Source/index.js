@@ -81,6 +81,7 @@ const Source = () => {
 
   const handleOnChange = () => {
     setPageData({ current: 1, pageSize: pageData?.pageSize, total: 0 });
+    setSourceData(null);
     setSearch("");
     setSearchFetched("");
     setGetSelected(false);

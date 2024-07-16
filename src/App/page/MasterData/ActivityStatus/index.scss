@@ -1,0 +1,28 @@
+@import '../../../assest/css/mixins.scss';
+
+.role-tab .ant-tabs-nav {
+    margin: 0px !important;
+    z-index: 2;
+}
+
+.role-tab.ant-tabs {
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: flex-end !important;
+    margin-right: 5px;
+    margin-bottom: -2px;
+}
+
+.edit-button {
+    outline: none;
+    border: none;
+}
+
+.activity_type_card .ant-card-body {
+    padding-top: 0px !important;
+}
+
+.activity-type-checkbox .ant-checkbox-inner {
+    background-color: #EFEFEF;
+    border-color: #EFEFEF;
+}
