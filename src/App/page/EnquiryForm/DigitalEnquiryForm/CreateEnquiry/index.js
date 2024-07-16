@@ -42,6 +42,8 @@ const CreateEnquiry = () => {
     lead_income: null,
     lead_address: null,
     google_address: null,
+    google_lat: null,
+    google_lng: null,
   });
 
   const steps = [

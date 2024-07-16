@@ -12,10 +12,30 @@ import {
 } from "antd";
 import { MdDeleteOutline } from "react-icons/md";
 import getCountryCode from "../../../../utils/getCountryCode";
+import Map from "./gMap";
 
 const { TextArea } = Input;
 
 const PersonalDetails = ({ enquiryFormData, setEnquiryFormData }) => {
+  const defaultCenter = {
+    lat: 13.0342708,
+    lng: 77.56816509999999,
+  };
+
+  const setMapData = (mapData) => {
+    if (mapData) {
+      setEnquiryFormData({
+        ...enquiryFormData,
+        google_lat: mapData?.mapPosition?.lat,
+        google_lng: mapData?.mapPosition?.lng,
+        ...(mapData?.mapPosition?.lat !== defaultCenter.lat ||
+        mapData?.mapPosition?.lng !== defaultCenter.lng
+          ? { google_address: mapData.address }
+          : {}),
+      });
+    }
+  };
+
   return (
     <Row className="d-flex flex-row" gutter={[8, 16]}>
       <Col xs={24}>
@@ -572,30 +592,30 @@ const PersonalDetails = ({ enquiryFormData, setEnquiryFormData }) => {
             <Row className="d-flex flex-row" gutter={[12, 8]}>
               <Col xs={24} sm={12}>
                 <Typography className="enquiry-form-item-label">
+                  Google Address <span>*</span>
+                </Typography>
+                <Map
+                  google={enquiryFormData?.google_address}
+                  center={{
+                    lat: +enquiryFormData?.google_lat || +defaultCenter.lat,
+                    lng: +enquiryFormData?.google_lng || +defaultCenter.lng,
+                  }}
+                  height="250px"
+                  setMapData={setMapData}
+                  zoom={15}
+                />
+              </Col>
+              <Col xs={24} sm={12}>
+                <Typography className="enquiry-form-item-label">
                   Lead Address <span>*</span>
                 </Typography>
                 <TextArea
-                  rows={3}
+                  rows={6}
                   value={enquiryFormData?.lead_address}
                   onChange={(e) => {
                     setEnquiryFormData({
                       ...enquiryFormData,
                       lead_address: e.target.value,
-                    });
-                  }}
-                />
-              </Col>
-              <Col xs={24} sm={12}>
-                <Typography className="enquiry-form-item-label">
-                  Google Address <span>*</span>
-                </Typography>
-                <TextArea
-                  rows={3}
-                  value={enquiryFormData?.google_address}
-                  onChange={(e) => {
-                    setEnquiryFormData({
-                      ...enquiryFormData,
-                      google_address: e.target.value,
                     });
                   }}
                 />

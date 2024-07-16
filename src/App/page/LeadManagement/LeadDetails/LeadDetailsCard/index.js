@@ -16,6 +16,7 @@ import {
 import "../index.scss";
 import { MdCall } from "react-icons/md";
 import useWindowDimensions from "../../../../component/UtilComponents/useWindowDimensions";
+import Map from "./gMap";
 
 const LeadDetailsCard = () => {
   const [form] = Form.useForm();
@@ -251,8 +252,16 @@ const LeadDetailsCard = () => {
                   <Col xs={24}>
                     <Typography className="lead-details-card-data-text">
                       <span>Google Address : </span> <br />
-                      NA
                     </Typography>
+                    <Map
+                      google={"Test Address"}
+                      center={{
+                        lat: +28.07575,
+                        lng: +-81.885078,
+                      }}
+                      height="250px"
+                      zoom={15}
+                    />
                   </Col>
                   <Col xs={24}>
                     <Typography className="lead-details-card-data-text">

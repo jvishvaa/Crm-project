@@ -11,6 +11,7 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react";
 import "../index.scss";
+import Map from "./gMap";
 
 const { TextArea } = Input;
 
@@ -21,6 +22,30 @@ const UpdateLeadDetails = ({
 }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [googleData, setGoogleData] = useState({
+    google_lat: "",
+    google_lng: "",
+    google_address: "",
+  });
+
+  const defaultCenter = {
+    lat: 13.0342708,
+    lng: 77.56816509999999,
+  };
+
+  const setMapData = (mapData) => {
+    if (mapData) {
+      setGoogleData({
+        ...googleData,
+        google_lat: mapData?.mapPosition?.lat,
+        google_lng: mapData?.mapPosition?.lng,
+        ...(mapData?.mapPosition?.lat !== defaultCenter.lat ||
+        mapData?.mapPosition?.lng !== defaultCenter.lng
+          ? { google_address: mapData.address }
+          : {}),
+      });
+    }
+  };
 
   const onFinish = (values) => {
     console.log("Received values:", values);
@@ -107,6 +132,16 @@ const UpdateLeadDetails = ({
                 >
                   Google Address
                 </Typography>
+                <Map
+                  google={googleData?.google_address}
+                  center={{
+                    lat: +googleData?.google_lat || +defaultCenter.lat,
+                    lng: +googleData?.google_lng || +defaultCenter.lng,
+                  }}
+                  height="300px"
+                  setMapData={setMapData}
+                  zoom={15}
+                />
               </Col>
             </Row>
           </Form>

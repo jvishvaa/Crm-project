@@ -110,7 +110,7 @@ const LeadDetails = () => {
               </Col>
             </Row>
           </Col>
-          <Col xs={24}>
+          <Col xs={24} className="mt-2">
             <Row gutter={[8, 8]}>
               <Col xs={24} md={12} lg={8}>
                 <Row className="d-flex flex-column" gutter={[8, 8]}>

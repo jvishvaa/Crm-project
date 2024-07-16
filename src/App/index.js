@@ -18,6 +18,7 @@ import "./assest/css/antd/checkbox.scss";
 import "./assest/css/antd/radiobutton.scss";
 import "./assest/css/antd/tag.scss";
 import "./assest/css/antd/step.scss";
+import "./assest/css/antd/googleMap.scss";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import LoginPage from "./page/LoginPage";
 import PublicRoutes from "./utils/PublicRoutes";
