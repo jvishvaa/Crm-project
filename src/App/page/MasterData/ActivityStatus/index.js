@@ -65,6 +65,8 @@ const ActivityStatus = () => {
         is_active: true,
         is_datetime_required: false,
         is_check_in_out_required: false,
+        is_dormant: false,
+        no_of_time_to_dormant: null,
         type: "Level 1",
         next_status: [
           { id: 2, status_name: "Call Picked Up" },
@@ -78,6 +80,8 @@ const ActivityStatus = () => {
         is_active: true,
         is_datetime_required: true,
         is_check_in_out_required: false,
+        is_dormant: false,
+        no_of_time_to_dormant: null,
         type: "Level 1",
         next_status: [
           { id: 4, status_name: "Home Counselling Scheduled" },
@@ -91,6 +95,8 @@ const ActivityStatus = () => {
         is_active: true,
         is_datetime_required: false,
         is_check_in_out_required: false,
+        is_dormant: true,
+        no_of_time_to_dormant: 3,
         type: "Level 1",
         next_status: [
           { id: 6, status_name: "Invalid Number" },
@@ -148,7 +154,7 @@ const ActivityStatus = () => {
     },
     {
       title: "Is Date Time Required",
-      key: "default",
+      key: "is_date_time_required",
       render: (record) => (
         <span>{record?.is_datetime_required ? "Yes" : "No"}</span>
       ),
@@ -157,12 +163,25 @@ const ActivityStatus = () => {
     },
     {
       title: "Is Check In Out Required",
-      key: "default",
+      key: "is_check_in_out_required",
       render: (record) => (
         <span>{record?.is_check_in_out_required ? "Yes" : "No"}</span>
       ),
       align: "center",
       width: 70,
+    },
+    {
+      title: "Is Dormant (No. of times to make dormant)",
+      key: "is_dormant",
+      render: (record) => (
+        <span>
+          {record?.is_dormant
+            ? `Yes (${record?.no_of_time_to_dormant} times)`
+            : "No"}
+        </span>
+      ),
+      align: "center",
+      width: 130,
     },
     {
       title: "Default",
@@ -262,13 +281,13 @@ const ActivityStatus = () => {
           </Row>
         </Col>
         <Col xs={24}>
-          <Tabs
+          {/* <Tabs
             type="card"
             defaultActiveKey={1}
             items={items}
             onChange={onChangeTab}
             className="role-tab"
-          />
+          /> */}
           <CustomCard style={{ zIndex: 1 }} className="activity_type_card ">
             {selectedTab === 1 ? (
               <Spin spinning={loading} tip="Loading">

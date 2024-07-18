@@ -21,6 +21,7 @@ const AddEditActivityStatus = ({
   statusList,
 }) => {
   const [form] = Form.useForm();
+  const isDormant = Form.useWatch("is_dormant", form);
 
   const onFinish = (values) => {
     console.log("Received values:", values);
@@ -36,6 +37,8 @@ const AddEditActivityStatus = ({
         next_status: getArrayValues(modalData?.data?.next_status, "id"),
         is_datetime_required: modalData?.data?.is_datetime_required,
         is_check_in_out_required: modalData?.data?.is_check_in_out_required,
+        is_dormant: modalData?.data?.is_dormant,
+        no_of_time_to_dormant: modalData?.data?.no_of_time_to_dormant,
       });
     }
   }, [modalData]);
@@ -140,6 +143,52 @@ const AddEditActivityStatus = ({
                   </Checkbox>
                 </Form.Item>
               </Col>
+              <Col xs={10}>
+                <Form.Item name="is_dormant" valuePropName="checked">
+                  <Checkbox
+                    className="activity-type-checkbox"
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        form.setFieldsValue({ no_of_time_to_dormant: 1 });
+                      } else {
+                        form.setFieldsValue({ no_of_time_to_dormant: null });
+                      }
+                    }}
+                  >
+                    Is Dormant
+                  </Checkbox>
+                </Form.Item>
+              </Col>
+              {isDormant ? (
+                <Col xs={14}>
+                  <Row
+                    className="d-flex flex-row align-items-center"
+                    gutter={[8, 8]}
+                  >
+                    <Col xs={8}>
+                      <Form.Item name="no_of_time_to_dormant">
+                        <Input
+                          type="number"
+                          autoComplete="off"
+                          onKeyDown={(e) => {
+                            ["e", "E", "+", "-", "."].includes(e.key) &&
+                              e.preventDefault();
+                          }}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={16}>
+                      <Typography
+                        style={{ fontSize: 12, lineHeight: 1.4 }}
+                        className="mt-2"
+                      >
+                        {" "}
+                        times to make dormant
+                      </Typography>
+                    </Col>
+                  </Row>
+                </Col>
+              ) : null}
             </Row>
           </Form>
         </Col>
