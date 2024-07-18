@@ -64,6 +64,7 @@ const ActivityStatus = () => {
         is_default: true,
         is_active: true,
         is_datetime_required: false,
+        is_schedule_datetime_required: false,
         is_check_in_out_required: false,
         is_dormant: false,
         no_of_time_to_dormant: null,
@@ -79,6 +80,7 @@ const ActivityStatus = () => {
         is_default: false,
         is_active: true,
         is_datetime_required: true,
+        is_schedule_datetime_required: false,
         is_check_in_out_required: false,
         is_dormant: false,
         no_of_time_to_dormant: null,
@@ -94,6 +96,7 @@ const ActivityStatus = () => {
         is_default: false,
         is_active: true,
         is_datetime_required: false,
+        is_schedule_datetime_required: false,
         is_check_in_out_required: false,
         is_dormant: true,
         no_of_time_to_dormant: 3,
@@ -169,6 +172,15 @@ const ActivityStatus = () => {
       ),
       align: "center",
       width: 70,
+    },
+    {
+      title: "Is Schedule Date Time Required",
+      key: "is_schedule_date_time_required",
+      render: (record) => (
+        <span>{record?.is_schedule_date_time_required ? "Yes" : "No"}</span>
+      ),
+      align: "center",
+      width: 100,
     },
     {
       title: "Is Dormant (No. of times to make dormant)",

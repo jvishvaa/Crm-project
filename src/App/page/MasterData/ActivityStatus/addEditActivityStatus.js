@@ -37,6 +37,8 @@ const AddEditActivityStatus = ({
         next_status: getArrayValues(modalData?.data?.next_status, "id"),
         is_datetime_required: modalData?.data?.is_datetime_required,
         is_check_in_out_required: modalData?.data?.is_check_in_out_required,
+        is_schedule_date_time_required:
+          modalData?.data?.is_schedule_date_time_required,
         is_dormant: modalData?.data?.is_dormant,
         no_of_time_to_dormant: modalData?.data?.no_of_time_to_dormant,
       });
@@ -140,6 +142,16 @@ const AddEditActivityStatus = ({
                 >
                   <Checkbox className="activity-type-checkbox">
                     Is Check In Out Required
+                  </Checkbox>
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={12}>
+                <Form.Item
+                  name="is_check_in_out_required"
+                  valuePropName="checked"
+                >
+                  <Checkbox className="activity-type-checkbox">
+                    Is Schedule DateTime Required
                   </Checkbox>
                 </Form.Item>
               </Col>

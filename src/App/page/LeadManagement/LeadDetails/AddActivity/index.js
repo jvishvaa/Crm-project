@@ -111,6 +111,48 @@ const AddActivity = ({ modalData, handleAddActivity, closeModal }) => {
                   />
                 </Form.Item>
               </Col>
+              <Col xs={24}>
+                <Typography className="add-activity-subheader">
+                  Schedule Details
+                </Typography>
+              </Col>
+              <Col xs={24} sm={12}>
+                <Form.Item
+                  name="schedule_date"
+                  label="Schedule Date"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Select Schedule Date",
+                    },
+                  ]}
+                >
+                  <DatePicker className="w-100" disabled={loading} />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={12}>
+                <Form.Item
+                  name="schedule_time"
+                  label="Schedule Time"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Select Schedule Time",
+                    },
+                  ]}
+                >
+                  <TimePicker
+                    className="w-100"
+                    format="hh:mm a"
+                    disabled={loading}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24}>
+                <Typography className="add-activity-subheader">
+                  Follow Up Details
+                </Typography>
+              </Col>
               <Col xs={24} sm={12}>
                 <Form.Item
                   name="next_follow_date"
