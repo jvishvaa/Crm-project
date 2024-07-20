@@ -1,15 +1,33 @@
-import React from "react";
-import { Row, Col, Typography, Divider } from "antd";
+import React, { useState } from "react";
+import { Row, Col, Typography, Divider, Button } from "antd";
+import "./index.scss";
 import CustomBreadCrumbs from "../../component/UtilComponents/CustomBreadCrumbs";
+import AddEditDashboardElements from "./AddEditDashbaordElements";
 
 const Dashboard = () => {
+  const [modalData, setModalData] = useState({ show: false, data: null });
   return (
     <div>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Row className="d-flex flex-column">
             <Col xs={24}>
-              <CustomBreadCrumbs data={["Dashboard"]} />
+              <Row className="d-flex flex-row justify-content-between">
+                <Col>
+                  <CustomBreadCrumbs data={["Dashboard"]} />
+                </Col>
+                <Col>
+                  <Button
+                    size="small"
+                    type="primary"
+                    onClick={() => {
+                      setModalData({ show: true, data: null });
+                    }}
+                  >
+                    + Add Dashboard Report
+                  </Button>
+                </Col>
+              </Row>
             </Col>
             <Col xs={24}>
               <Divider />
@@ -26,6 +44,13 @@ const Dashboard = () => {
           </Typography>
         </Col>
       </Row>
+      <AddEditDashboardElements
+        modalData={modalData}
+        handleAddEditSource={() => {}}
+        closeModal={() => {
+          setModalData({ show: false, data: null });
+        }}
+      />
     </div>
   );
 };
