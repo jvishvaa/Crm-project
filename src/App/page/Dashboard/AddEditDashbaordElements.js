@@ -6,6 +6,7 @@ import {
   Form,
   Input,
   Modal,
+  Popconfirm,
   Radio,
   Row,
   Select,
@@ -15,6 +16,7 @@ import {
 import "./index.scss";
 import React, { useEffect, useState } from "react";
 import {
+  MdDeleteOutline,
   MdDonutLarge,
   MdListAlt,
   MdOutlineBarChart,
@@ -28,6 +30,9 @@ import RenderTagMultiple from "../../component/UtilComponents/RenderMultiple";
 import CustomCard from "../../component/UtilComponents/CustomCard";
 import RenderChart from "./RenderChart";
 import getArrayValues from "../../utils/getArrayValues";
+import getFilterItemFromArray from "../../utils/getFilterItemFromArray";
+import useWindowDimensions from "../../component/UtilComponents/useWindowDimensions";
+import RenderTable from "./RenderTable";
 
 const AddEditDashboardElements = ({
   modalData,
@@ -38,11 +43,20 @@ const AddEditDashboardElements = ({
     report_name: "",
     display_type: "line-chart",
     measure: "",
-    datapoint_type: "",
-    datapoint_subtype: [],
-    subdatapoint_type: "",
-    subdatapoint_subtype: [],
+    datapoint_category: {
+      name: "",
+      type: "",
+      value: [],
+    },
+    datapoint_subcategory: {
+      name: "",
+      type: "",
+      value: [],
+    },
+    filter: [],
   });
+
+  const { width } = useWindowDimensions();
 
   const measureList = [
     { label: "Lead Count", value: "lead_count" },
@@ -50,42 +64,55 @@ const AddEditDashboardElements = ({
   ];
 
   const datapointList = [
-    { label: "Status", value: "status" },
-    { label: "Source", value: "source" },
-    { label: "Lead Created Date", value: "lead_created_date" },
+    { label: "Status", value: "status", type: "list" },
+    { label: "Source", value: "source", type: "list" },
+    { label: "Academic Year", value: "academic_year", type: "list" },
+    { label: "Lead Created Date", value: "lead_created_date", type: "date" },
   ];
 
-  const dateValue = [
-    { type: "day-wise", value: ["Day1", "Day2", "Day3", "Day4", "Day5"] },
+  const dateTypeList = [
     {
-      type: "month-wise",
-      value: ["Month1", "Month2", "Month3", "Month4", "Month5"],
+      label: "Today",
+      value: "today",
+      type: "single",
+      keyData: "Day",
+      maxData: 1,
     },
-    { type: "week-wise", value: ["Week1", "Week2", "Week3", "Week4", "Week5"] },
-  ];
-
-  const datapointSubTypeList = [
-    { label: "Series 1", value: "series 1" },
-    { label: "Series 2", value: "series 2" },
-    { label: "Series 3", value: "series 3" },
-    { label: "Series 4", value: "series 4" },
-    { label: "Series 5", value: "series 5" },
-    { label: "Series 6", value: "series 6" },
-  ];
-
-  const datapointDateTypeList = [
-    { label: "Day Wise", value: "day-wise", type: "multiple" },
-    { label: "Week Wise", value: "week-wise", type: "multiple" },
-    { label: "Month Wise", value: "month-wise", type: "multiple" },
-  ];
-
-  const subDatapointDateTypeList = [
-    { label: "Today", value: "today", type: "single" },
-    { label: "Day Wise", value: "day-wise", type: "multiple" },
-    { label: "Current Week", value: "current-week", type: "single" },
-    { label: "Week Wise", value: "week-wise", type: "multiple" },
-    { label: "Current Month", value: "current-month", type: "single" },
-    { label: "Month Wise", value: "month-wise", type: "multiple" },
+    {
+      label: "Day Wise",
+      value: "day-wise",
+      type: "multiple",
+      keyData: "Day",
+      maxData: 31,
+    },
+    {
+      label: "Current Week",
+      value: "current-week",
+      type: "single",
+      keyData: "Week",
+      maxData: 1,
+    },
+    {
+      label: "Week Wise",
+      value: "week-wise",
+      type: "multiple",
+      keyData: "Week",
+      maxData: 5,
+    },
+    {
+      label: "Current Month",
+      value: "current-month",
+      type: "single",
+      keyData: "Month",
+      maxData: 1,
+    },
+    {
+      label: "Month Wise",
+      value: "month-wise",
+      type: "multiple",
+      keyData: "Month",
+      maxData: 12,
+    },
   ];
 
   const displayTypeList = [
@@ -140,6 +167,41 @@ const AddEditDashboardElements = ({
     },
   ];
 
+  const categoryListType = [
+    { label: "Top 5", value: "top_5", maxLength: 5 },
+    { label: "Worst 5", value: "worst_5", maxLength: 5 },
+    { label: "Select Item", value: "select_item" },
+  ];
+
+  const seriesList = [
+    { label: "Series 1", value: "series 1" },
+    { label: "Series 2", value: "series 2" },
+    { label: "Series 3", value: "series 3" },
+    { label: "Series 4", value: "series 4" },
+    { label: "Series 5", value: "series 5" },
+    { label: "Series 6", value: "series 6" },
+  ];
+
+  const dataList = [
+    { label: "Data 1", value: "data 1" },
+    { label: "Data 2", value: "data 2" },
+    { label: "Data 3", value: "data 3" },
+    { label: "Data 4", value: "data 4" },
+    { label: "Data 5", value: "data 5" },
+    { label: "Data 6", value: "data 6" },
+  ];
+
+  const subSeriesList = [
+    { label: "Sub Series 1", value: "Sub series 1" },
+    { label: "Sub Series 2", value: "Sub series 2" },
+    { label: "Sub Series 3", value: "Sub series 3" },
+    { label: "Sub Series 4", value: "Sub series 4" },
+    { label: "Sub Series 5", value: "Sub series 5" },
+    { label: "Sub Series 6", value: "Sub series 6" },
+  ];
+
+  console.log(reportData);
+
   const [loading, setLoading] = useState(false);
 
   const renderTagAll = (label, value, index, key) => {
@@ -165,20 +227,26 @@ const AddEditDashboardElements = ({
   };
 
   const getCategory = () => {
-    return reportData?.datapoint_type?.includes("date")
-      ? datapointDateTypeList?.filter((each) =>
-          reportData?.datapoint_subtype?.includes(each?.value)
-        )[0]?.type === "multiple"
-        ? dateValue?.filter((each) =>
-            reportData?.datapoint_subtype?.includes(each?.type)
-          )[0]?.value
-        : []
-      : getArrayValues(
-          datapointSubTypeList?.filter((each) =>
-            reportData?.datapoint_subtype?.includes(each?.value)
-          ),
-          "label"
-        );
+    return getFilterItemFromArray(
+      datapointList,
+      "value",
+      reportData?.datapoint_category?.name
+    )[0]?.type === "date"
+      ? Array.from(
+          {
+            length: reportData?.datapoint_category?.value[0],
+          },
+          (v, i) => i + 1
+        )?.map((each, index) => {
+          return `${
+            getFilterItemFromArray(
+              dateTypeList,
+              "value",
+              reportData?.datapoint_category?.type
+            )[0]?.keyData
+          } ${index + 1}`;
+        })
+      : reportData?.datapoint_category?.value;
   };
 
   function getRandomValue() {
@@ -191,24 +259,30 @@ const AddEditDashboardElements = ({
   };
 
   const getSeries = () => {
-    const seriesNameList = reportData?.subdatapoint_type?.includes("date")
-      ? subDatapointDateTypeList?.filter((each) =>
-          reportData?.subdatapoint_subtype?.includes(each?.value)
-        )[0]?.type === "multiple"
-        ? dateValue?.filter((each) =>
-            reportData?.subdatapoint_subtype?.includes(each?.type)
-          )[0]?.value
-        : []
-      : getArrayValues(
-          datapointSubTypeList?.filter((each) =>
-            reportData?.subdatapoint_subtype?.includes(each?.value)
-          ),
-          "label"
-        );
-
     const categoryList = getCategory();
     let seriesList = [];
-    if (seriesNameList?.length) {
+    if (reportData?.datapoint_subcategory?.name) {
+      let seriesNameList =
+        getFilterItemFromArray(
+          datapointList,
+          "value",
+          reportData?.datapoint_subcategory?.name
+        )[0]?.type === "date"
+          ? Array.from(
+              {
+                length: reportData?.datapoint_subcategory?.value[0],
+              },
+              (v, i) => i + 1
+            )?.map((each, index) => {
+              return `${
+                getFilterItemFromArray(
+                  dateTypeList,
+                  "value",
+                  reportData?.datapoint_subcategory?.type
+                )[0]?.keyData
+              } ${index + 1}`;
+            })
+          : reportData?.datapoint_subcategory?.value;
       seriesNameList?.map((each) => {
         let seriesData = [];
         categoryList?.map((eachItem) => {
@@ -227,6 +301,208 @@ const AddEditDashboardElements = ({
       seriesList = [{ data: seriesData }];
     }
     return seriesList;
+  };
+
+  const renderFilter = () => {
+    return (
+      <Col xs={24}>
+        <Row
+          className="d-flex flex-row justify-content-between align-items-center"
+          gutter={[8, 8]}
+        >
+          <Col>
+            <Typography style={{ fontSize: 13, fontWeight: 500 }}>
+              Filter
+            </Typography>
+          </Col>
+          <Col>
+            <Button
+              size="small"
+              type="primary"
+              onClick={() => {
+                const myFilterData = [...reportData?.filter];
+                myFilterData.push({
+                  name: "",
+                  value: [],
+                });
+                setReportData({
+                  ...reportData,
+                  filter: myFilterData,
+                });
+              }}
+            >
+              Add Filter
+            </Button>
+          </Col>
+          {reportData?.filter?.map((each, index) => (
+            <Col xs={24}>
+              <Row
+                className="d-flex flex-row align-items-center"
+                gutter={[4, 4]}
+              >
+                <Col xs={2} md={1}>
+                  <Typography style={{ fontSize: 14, fontWeight: 500 }}>
+                    {index + 1}.
+                  </Typography>
+                </Col>
+                <Col xs={20} md={22}>
+                  <Row className="d-flex flex-row" gutter={[8, 8]}>
+                    <Col xs={24} md={12}>
+                      <Typography className={"add-dashboard-form-item-header"}>
+                        Filter Name <span>*</span>
+                      </Typography>
+                      <Select
+                        style={{ width: "100%" }}
+                        value={each?.name}
+                        allowClear
+                        onChange={(values) => {
+                          let myFilterData = [...reportData?.filter];
+                          myFilterData[index].name = values;
+                          myFilterData[index].value = [];
+                          setReportData({
+                            ...reportData,
+                            filter: myFilterData,
+                          });
+                        }}
+                        showSearch
+                        filterOption={(input, option) =>
+                          option.label
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        options={
+                          reportData?.datapoint_subcategory?.name ||
+                          reportData?.datapoint_category?.name
+                            ? getFilterItemFromArray(
+                                datapointList,
+                                "value",
+                                [
+                                  ...(reportData?.datapoint_subcategory?.name
+                                    ? [reportData?.datapoint_subcategory?.name]
+                                    : []),
+                                  ...(reportData?.datapoint_category?.name
+                                    ? [reportData?.datapoint_category?.name]
+                                    : []),
+                                ],
+                                true
+                              )?.filter((eachItem) =>
+                                reportData?.filter?.filter(
+                                  (eachItem1) => eachItem1?.name
+                                )?.length
+                                  ? eachItem?.value === each.name
+                                    ? true
+                                    : !getArrayValues(
+                                        reportData?.filter?.filter(
+                                          (eachItem1) => eachItem1?.name
+                                        ),
+                                        "name"
+                                      ).includes(eachItem?.value)
+                                  : true
+                              )
+                            : datapointList
+                        }
+                      />
+                    </Col>
+                    {getFilterItemFromArray(
+                      datapointList,
+                      "value",
+                      each.name
+                    )[0]?.type === "list" && each.name ? (
+                      <Col xs={24} md={12}>
+                        <Typography
+                          className={"add-dashboard-form-item-header"}
+                        >
+                          Filter Value <span>*</span>
+                        </Typography>
+                        <Select
+                          className="w-100 "
+                          mode="multiple"
+                          allowClear
+                          value={each.value}
+                          options={dataList}
+                          onChange={(values) => {
+                            let myFilterData = [...reportData?.filter];
+                            myFilterData[index].value = values;
+                            setReportData({
+                              ...reportData,
+                              filter: myFilterData,
+                            });
+                          }}
+                          showSearch
+                          filterOption={(input, option) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                          }
+                        />
+                      </Col>
+                    ) : null}
+                    {getFilterItemFromArray(
+                      datapointList,
+                      "value",
+                      each.name
+                    )[0]?.type === "date" && each.name ? (
+                      <Col xs={24} md={12}>
+                        <Typography
+                          className={"add-dashboard-form-item-header"}
+                        >
+                          Filter Value <span>*</span>
+                        </Typography>
+                        <Select
+                          className="w-100"
+                          allowClear
+                          value={each.value[0]}
+                          options={getFilterItemFromArray(
+                            dateTypeList,
+                            "type",
+                            "single"
+                          )}
+                          onChange={(values) => {
+                            let myFilterData = [...reportData?.filter];
+                            myFilterData[index].value = [values];
+                            setReportData({
+                              ...reportData,
+                              filter: myFilterData,
+                            });
+                          }}
+                          showSearch
+                          filterOption={(input, option) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                          }
+                        />
+                      </Col>
+                    ) : null}
+                  </Row>
+                </Col>
+                <Col xs={2} md={1}>
+                  <Popconfirm
+                    title="Are you sure to remove filter?"
+                    onConfirm={() => {
+                      let myReportFilterData = [...reportData?.filter];
+                      myReportFilterData?.splice(index, 1);
+                      setReportData({
+                        ...reportData,
+                        filter: myReportFilterData,
+                      });
+                    }}
+                  >
+                    <Button
+                      size="small"
+                      type="text"
+                      icon={
+                        <MdDeleteOutline size={20} style={{ color: "red" }} />
+                      }
+                    />
+                  </Popconfirm>
+                </Col>
+              </Row>
+            </Col>
+          ))}
+        </Row>
+      </Col>
+    );
   };
 
   return (
@@ -265,9 +541,12 @@ const AddEditDashboardElements = ({
           </Typography>
           <Divider />
         </Col>
-        <Col xs={24}>
+        <Col
+          xs={24}
+          style={{ maxHeight: "80vh", overflowY: "auto", overflowX: "hidden" }}
+        >
           <Row gutter={[16, 12]}>
-            <Col xs={24} md={10}>
+            <Col xs={24} md={11}>
               <Row gutter={[8, 12]}>
                 <Col xs={24}>
                   <Typography className={"add-dashboard-form-item-header"}>
@@ -320,6 +599,7 @@ const AddEditDashboardElements = ({
                         measure: values,
                       });
                     }}
+                    allowClear
                     showSearch
                     filterOption={(input, option) =>
                       option.label.toLowerCase().includes(input.toLowerCase())
@@ -329,185 +609,362 @@ const AddEditDashboardElements = ({
                 </Col>
                 <Col xs={24}>
                   <Typography className={"add-dashboard-form-item-header"}>
-                    DataPoint <span>*</span>
+                    Datapoint Category <span>*</span>
                   </Typography>
                   <Select
                     style={{ width: "100%" }}
-                    value={reportData?.datapoint_type}
                     allowClear
+                    value={reportData?.datapoint_category?.name}
                     onChange={(values) => {
                       setReportData({
                         ...reportData,
-                        datapoint_type: values,
-                        datapoint_subtype: [],
+                        datapoint_category: {
+                          name: values,
+                          type: "",
+                          value: [],
+                        },
                       });
                     }}
                     showSearch
                     filterOption={(input, option) =>
                       option.label.toLowerCase().includes(input.toLowerCase())
                     }
-                    options={datapointList?.filter((each) =>
-                      reportData?.subdatapoint_type
-                        ? (reportData?.subdatapoint_type?.includes("date") &&
-                            !each?.value.includes("date")) ||
-                          (!reportData?.subdatapoint_type?.includes("date") &&
-                            each?.value.includes("date"))
-                        : true
-                    )}
+                    options={
+                      reportData?.datapoint_subcategory?.name ||
+                      getFilterItemFromArray(
+                        reportData?.filter,
+                        "name",
+                        "",
+                        true
+                      )?.length
+                        ? getFilterItemFromArray(
+                            datapointList,
+                            "value",
+                            [
+                              ...(reportData?.datapoint_subcategory?.name
+                                ? [reportData?.datapoint_subcategory?.name]
+                                : []),
+                              ...getArrayValues(
+                                getFilterItemFromArray(
+                                  reportData?.filter,
+                                  "name",
+                                  "",
+                                  true
+                                ),
+                                "name"
+                              ),
+                            ],
+                            true
+                          )
+                        : datapointList
+                    }
                   />
-                  {reportData?.datapoint_type ? (
-                    <>
-                      {reportData?.datapoint_type?.includes("date") ? (
-                        <Select
-                          style={{ width: "100%" }}
-                          className="mt-2"
-                          value={
-                            reportData?.datapoint_subtype?.length
-                              ? reportData?.datapoint_subtype[0]
-                              : null
-                          }
-                          onChange={(values) => {
-                            setReportData({
-                              ...reportData,
-                              datapoint_subtype: [values],
-                            });
-                          }}
-                          showSearch
-                          filterOption={(input, option) =>
-                            option.label
-                              .toLowerCase()
-                              .includes(input.toLowerCase())
-                          }
-                          options={datapointDateTypeList}
-                        />
-                      ) : (
-                        <Select
-                          className="w-100 mt-2"
-                          mode="multiple"
-                          value={reportData?.datapoint_subtype}
-                          options={datapointSubTypeList}
-                          onChange={(values) => {
-                            setReportData({
-                              ...reportData,
-                              datapoint_subtype: values,
-                            });
-                          }}
-                          showSearch
-                          allowClear
-                          filterOption={(input, option) =>
-                            option.label
-                              .toLowerCase()
-                              .includes(input.toLowerCase())
-                          }
-                        />
-                      )}
-                    </>
+                  {reportData?.datapoint_category?.name ? (
+                    <Select
+                      style={{ width: "100%" }}
+                      className="mt-2"
+                      allowClear
+                      value={reportData?.datapoint_category?.type}
+                      onChange={(values) => {
+                        setReportData({
+                          ...reportData,
+                          datapoint_category: {
+                            ...reportData?.datapoint_category,
+                            type: values,
+                            value:
+                              values !== "select_item" ||
+                              getFilterItemFromArray(
+                                datapointList,
+                                "value",
+                                reportData?.datapoint_category?.name
+                              )[0]?.type !== "date"
+                                ? Array.from(
+                                    {
+                                      length: getFilterItemFromArray(
+                                        categoryListType,
+                                        "value",
+                                        values
+                                      )[0]?.maxLength,
+                                    },
+                                    (v, i) => i + 1
+                                  )?.map((each, index) => {
+                                    return `Series ${index + 1}`;
+                                  })
+                                : [],
+                          },
+                        });
+                      }}
+                      showSearch
+                      filterOption={(input, option) =>
+                        option.label.toLowerCase().includes(input.toLowerCase())
+                      }
+                      options={
+                        getFilterItemFromArray(
+                          datapointList,
+                          "value",
+                          reportData?.datapoint_category?.name
+                        )[0]?.type === "date"
+                          ? getFilterItemFromArray(
+                              dateTypeList,
+                              "type",
+                              "multiple"
+                            )
+                          : categoryListType
+                      }
+                    />
+                  ) : null}
+                  {reportData?.datapoint_category?.type === "select_item" ? (
+                    <Select
+                      className="w-100 mt-2"
+                      mode="multiple"
+                      allowClear
+                      value={reportData?.datapoint_category?.value}
+                      options={seriesList}
+                      onChange={(values) => {
+                        setReportData({
+                          ...reportData,
+                          datapoint_category: {
+                            ...reportData?.datapoint_category,
+                            value: values,
+                          },
+                        });
+                      }}
+                      showSearch
+                      filterOption={(input, option) =>
+                        option.label.toLowerCase().includes(input.toLowerCase())
+                      }
+                    />
+                  ) : null}
+                  {getFilterItemFromArray(
+                    datapointList,
+                    "value",
+                    reportData?.datapoint_category?.name
+                  )[0]?.type === "date" &&
+                  reportData?.datapoint_category?.type ? (
+                    <Select
+                      className="w-100 mt-2"
+                      allowClear
+                      value={reportData?.datapoint_category?.value[0]}
+                      options={Array.from(
+                        {
+                          length: getFilterItemFromArray(
+                            dateTypeList,
+                            "value",
+                            reportData?.datapoint_category?.type
+                          )[0]?.maxData,
+                        },
+                        (v, i) => i + 1
+                      )
+                        ?.filter((each) => each > 1)
+                        ?.map((each) => {
+                          return {
+                            label: `${each} ${
+                              getFilterItemFromArray(
+                                dateTypeList,
+                                "value",
+                                reportData?.datapoint_category?.type
+                              )[0]?.keyData
+                            }${each > 1 ? "s" : ""} `,
+                            value: each,
+                          };
+                        })}
+                      onChange={(values) => {
+                        setReportData({
+                          ...reportData,
+                          datapoint_category: {
+                            ...reportData?.datapoint_category,
+                            value: [values],
+                          },
+                        });
+                      }}
+                      showSearch
+                      filterOption={(input, option) =>
+                        option.label.toLowerCase().includes(input.toLowerCase())
+                      }
+                    />
                   ) : null}
                 </Col>
                 <Col xs={24}>
                   <Typography className={"add-dashboard-form-item-header"}>
-                    Sub DataPoint <span>*</span>
+                    Datapoint SubCategory
                   </Typography>
                   <Select
                     style={{ width: "100%" }}
-                    value={reportData?.subdatapoint_type}
+                    allowClear
+                    value={reportData?.datapoint_subcategory?.name}
                     onChange={(values) => {
                       setReportData({
                         ...reportData,
-                        subdatapoint_type: values,
-                        subdatapoint_subtype: [],
+                        datapoint_subcategory: {
+                          name: values,
+                          type: "",
+                          value: [],
+                        },
                       });
                     }}
-                    allowClear
                     showSearch
                     filterOption={(input, option) =>
                       option.label.toLowerCase().includes(input.toLowerCase())
                     }
-                    options={datapointList?.filter((each) =>
-                      reportData?.datapoint_type
-                        ? (reportData?.datapoint_type?.includes("date") &&
-                            !each?.value.includes("date")) ||
-                          (!reportData?.datapoint_type?.includes("date") &&
-                            each?.value.includes("date"))
-                        : true
-                    )}
-                  />
-                  {reportData?.subdatapoint_type ? (
-                    <>
-                      {reportData?.subdatapoint_type?.includes("date") ? (
-                        <Select
-                          style={{ width: "100%" }}
-                          className="mt-2"
-                          value={
-                            reportData?.subdatapoint_subtype?.length
-                              ? reportData?.subdatapoint_subtype[0]
-                              : null
-                          }
-                          onChange={(values) => {
-                            setReportData({
-                              ...reportData,
-                              subdatapoint_subtype: [values],
-                            });
-                          }}
-                          showSearch
-                          filterOption={(input, option) =>
-                            option.label
-                              .toLowerCase()
-                              .includes(input.toLowerCase())
-                          }
-                          options={subDatapointDateTypeList}
-                        />
-                      ) : (
-                        <Select
-                          className="w-100 mt-2"
-                          mode="multiple"
-                          value={reportData?.subdatapoint_subtype}
-                          options={[
-                            { label: "Series 1", value: "series 1" },
-                            { label: "Series 2", value: "series 2" },
-                          ]}
-                          tagRender={(props) =>
-                            renderTagAll(
-                              props.label,
-                              props.value,
-                              props.index,
-                              "subdatapoint_subtype"
-                            )
-                          }
-                          onChange={(values) => {
-                            if (
-                              values?.length === 0 ||
-                              (values.length > 0 &&
-                                values[values.length - 1] === 0)
-                            ) {
-                              setReportData({
-                                ...reportData,
-                                subdatapoint_subtype: [0],
-                              });
-                            } else {
-                              setReportData({
-                                ...reportData,
-                                subdatapoint_subtype: values.filter(
-                                  (each) => each !== 0
+                    options={
+                      reportData?.datapoint_category?.name ||
+                      getFilterItemFromArray(
+                        reportData?.filter,
+                        "name",
+                        "",
+                        true
+                      )?.length
+                        ? getFilterItemFromArray(
+                            datapointList,
+                            "value",
+                            [
+                              ...(reportData?.datapoint_category?.name
+                                ? [reportData?.datapoint_category?.name]
+                                : []),
+                              ...getArrayValues(
+                                getFilterItemFromArray(
+                                  reportData?.filter,
+                                  "name",
+                                  "",
+                                  true
                                 ),
-                              });
-                            }
-                          }}
-                          showSearch
-                          allowClear
-                          filterOption={(input, option) =>
-                            option.label
-                              .toLowerCase()
-                              .includes(input.toLowerCase())
-                          }
-                        />
-                      )}
-                    </>
+                                "name"
+                              ),
+                            ],
+                            true
+                          )
+                        : datapointList
+                    }
+                  />
+                  {reportData?.datapoint_subcategory?.name ? (
+                    <Select
+                      style={{ width: "100%" }}
+                      className="mt-2"
+                      allowClear
+                      value={reportData?.datapoint_subcategory?.type}
+                      onChange={(values) => {
+                        setReportData({
+                          ...reportData,
+                          datapoint_subcategory: {
+                            ...reportData?.datapoint_subcategory,
+                            type: values,
+                            value:
+                              values !== "select_item" ||
+                              getFilterItemFromArray(
+                                datapointList,
+                                "value",
+                                reportData?.datapoint_subcategory?.name
+                              )[0]?.type !== "date"
+                                ? Array.from(
+                                    {
+                                      length: getFilterItemFromArray(
+                                        categoryListType,
+                                        "value",
+                                        values
+                                      )[0]?.maxLength,
+                                    },
+                                    (v, i) => i + 1
+                                  )?.map((each, index) => {
+                                    return `Sub Series ${index + 1}`;
+                                  })
+                                : [],
+                          },
+                        });
+                      }}
+                      showSearch
+                      filterOption={(input, option) =>
+                        option.label.toLowerCase().includes(input.toLowerCase())
+                      }
+                      options={
+                        getFilterItemFromArray(
+                          datapointList,
+                          "value",
+                          reportData?.datapoint_subcategory?.name
+                        )[0]?.type === "date"
+                          ? getFilterItemFromArray(
+                              dateTypeList,
+                              "type",
+                              "multiple"
+                            )
+                          : categoryListType
+                      }
+                    />
+                  ) : null}
+                  {reportData?.datapoint_subcategory?.type === "select_item" ? (
+                    <Select
+                      className="w-100 mt-2"
+                      mode="multiple"
+                      allowClear
+                      value={reportData?.datapoint_subcategory?.value}
+                      options={subSeriesList}
+                      onChange={(values) => {
+                        setReportData({
+                          ...reportData,
+                          datapoint_subcategory: {
+                            ...reportData?.datapoint_subcategory,
+                            value: values,
+                          },
+                        });
+                      }}
+                      showSearch
+                      filterOption={(input, option) =>
+                        option.label.toLowerCase().includes(input.toLowerCase())
+                      }
+                    />
+                  ) : null}
+                  {getFilterItemFromArray(
+                    datapointList,
+                    "value",
+                    reportData?.datapoint_subcategory?.name
+                  )[0]?.type === "date" &&
+                  reportData?.datapoint_subcategory?.type ? (
+                    <Select
+                      className="w-100 mt-2"
+                      allowClear
+                      value={reportData?.datapoint_subcategory?.value[0]}
+                      options={Array.from(
+                        {
+                          length: getFilterItemFromArray(
+                            dateTypeList,
+                            "value",
+                            reportData?.datapoint_subcategory?.type
+                          )[0]?.maxData,
+                        },
+                        (v, i) => i + 1
+                      )
+                        ?.filter((each) => each > 1)
+                        ?.map((each) => {
+                          return {
+                            label: `${each} ${
+                              getFilterItemFromArray(
+                                dateTypeList,
+                                "value",
+                                reportData?.datapoint_subcategory?.type
+                              )[0]?.keyData
+                            }${each > 1 ? "s" : ""} `,
+                            value: each,
+                          };
+                        })}
+                      onChange={(values) => {
+                        setReportData({
+                          ...reportData,
+                          datapoint_subcategory: {
+                            ...reportData?.datapoint_subcategory,
+                            value: [values],
+                          },
+                        });
+                      }}
+                      showSearch
+                      filterOption={(input, option) =>
+                        option.label.toLowerCase().includes(input.toLowerCase())
+                      }
+                    />
                   ) : null}
                 </Col>
               </Row>
             </Col>
-            <Col xs={24} md={14} style={{ backgroundColor: "#EFF1F6" }}>
+            {width < 768 ? renderFilter() : null}
+            <Col xs={24} md={13} style={{ backgroundColor: "#EFF1F6" }}>
               <Row gutter={[4, 4]}>
                 <Col xs={24}>
                   <Typography style={{ fontSize: 12 }} className="mt-2">
@@ -528,11 +985,14 @@ const AddEditDashboardElements = ({
                           {reportData?.report_name || "Report Name"}
                         </Typography>
                       </Col>
-                      {reportData?.datapoint_type &&
-                      reportData?.subdatapoint_type &&
+                      {reportData?.datapoint_category?.name &&
+                      reportData?.datapoint_category?.type &&
+                      reportData?.datapoint_category?.value &&
                       reportData?.measure &&
-                      reportData?.datapoint_subtype?.length &&
-                      reportData?.subdatapoint_subtype?.length ? (
+                      ((reportData?.datapoint_subcategory?.name &&
+                        reportData?.datapoint_subcategory?.type &&
+                        reportData?.datapoint_subcategory?.value) ||
+                        !reportData?.datapoint_subcategory?.name) ? (
                         <Col xs={24}>
                           {reportData?.display_type === "line-chart" ? (
                             <RenderChart
@@ -579,6 +1039,20 @@ const AddEditDashboardElements = ({
                               stacked={true}
                             />
                           ) : null}
+                          {reportData?.display_type === "table" ? (
+                            <RenderTable
+                              category_name={
+                                getFilterItemFromArray(
+                                  datapointList,
+                                  "value",
+                                  reportData?.datapoint_category?.name
+                                )[0].label
+                              }
+                              categories={getCategory()}
+                              series={getSeries()}
+                              valueLabel={getValueLabel()}
+                            />
+                          ) : null}
                         </Col>
                       ) : (
                         <Col xs={24}>
@@ -600,6 +1074,7 @@ const AddEditDashboardElements = ({
                 </Col>
               </Row>
             </Col>
+            {width >= 768 ? renderFilter() : null}
           </Row>
         </Col>
       </Row>
