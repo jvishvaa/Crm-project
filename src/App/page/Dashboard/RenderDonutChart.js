@@ -20,7 +20,9 @@ const RenderDonutChart = ({ categories, series, valueLabels }) => {
             // Use `this.percentage` to get the percentage value
             return `${Highcharts.numberFormat(this.percentage, 0)}%`;
           },
-          connectorWidth: 0, // Set connector line width to 0 to hide it,
+          connectorWidth: 0, // Set connector line width to 0 to hide it
+          connectorPadding: 0, // Set padding to 0 to remove extra space
+          distance: -30,
         },
         showInLegend: true,
       },

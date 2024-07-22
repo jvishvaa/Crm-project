@@ -43,21 +43,22 @@ const AddEditDashboardElements = ({
   const [reportData, setReportData] = useState({
     report_name: "",
     display_type: "line-chart",
-    measure: "",
+    measure: null,
     datapoint_category: {
-      name: "",
-      type: "",
+      name: null,
+      type: null,
       value: [],
     },
     datapoint_subcategory: {
-      name: "",
-      type: "",
+      name: null,
+      type: null,
       value: [],
     },
     filter: [],
   });
 
   const { width } = useWindowDimensions();
+  console.log(reportData);
 
   const measureList = [
     { label: "Lead Count", value: "lead_count" },
@@ -212,28 +213,6 @@ const AddEditDashboardElements = ({
 
   const [loading, setLoading] = useState(false);
 
-  const renderTagAll = (label, value, index, key) => {
-    let selectedItems = reportData?.[key];
-    const showCloseIcon = !selectedItems?.includes(0);
-    return (
-      <RenderTagMultiple
-        label={label}
-        value={value}
-        showCloseIcon={showCloseIcon}
-        onClose={(closeValue) => {
-          if (selectedItems?.length === 1) {
-            setReportData({ ...reportData, [key]: [0] });
-          } else {
-            setReportData({
-              ...reportData,
-              [key]: selectedItems?.filter((each) => each !== closeValue),
-            });
-          }
-        }}
-      />
-    );
-  };
-
   const getCategory = () => {
     return getFilterItemFromArray(
       datapointList,
@@ -330,7 +309,7 @@ const AddEditDashboardElements = ({
               onClick={() => {
                 const myFilterData = [...reportData?.filter];
                 myFilterData.push({
-                  name: "",
+                  name: null,
                   value: [],
                 });
                 setReportData({
@@ -588,8 +567,8 @@ const AddEditDashboardElements = ({
                         )[0]?.is_sub_category
                           ? {
                               datapoint_subcategory: {
-                                name: "",
-                                type: "",
+                                name: null,
+                                type: null,
                                 value: [],
                               },
                             }
@@ -641,7 +620,7 @@ const AddEditDashboardElements = ({
                         ...reportData,
                         datapoint_category: {
                           name: values,
-                          type: "",
+                          type: null,
                           value: [],
                         },
                       });
@@ -655,7 +634,7 @@ const AddEditDashboardElements = ({
                       getFilterItemFromArray(
                         reportData?.filter,
                         "name",
-                        "",
+                        null,
                         true
                       )?.length
                         ? getFilterItemFromArray(
@@ -666,12 +645,7 @@ const AddEditDashboardElements = ({
                                 ? [reportData?.datapoint_subcategory?.name]
                                 : []),
                               ...getArrayValues(
-                                getFilterItemFromArray(
-                                  reportData?.filter,
-                                  "name",
-                                  "",
-                                  true
-                                ),
+                                reportData?.filter?.filter((each) => each.name),
                                 "name"
                               ),
                             ],
@@ -684,6 +658,7 @@ const AddEditDashboardElements = ({
                     <Select
                       style={{ width: "100%" }}
                       className="mt-2"
+                      placeholder="Select Type"
                       allowClear
                       value={reportData?.datapoint_category?.type}
                       onChange={(values) => {
@@ -739,6 +714,7 @@ const AddEditDashboardElements = ({
                       className="w-100 mt-2"
                       mode="multiple"
                       allowClear
+                      placeholder="Select Value"
                       value={reportData?.datapoint_category?.value}
                       options={seriesList}
                       onChange={(values) => {
@@ -765,6 +741,7 @@ const AddEditDashboardElements = ({
                     <Select
                       className="w-100 mt-2"
                       allowClear
+                      placeholder="Select Value"
                       value={reportData?.datapoint_category?.value[0]}
                       options={Array.from(
                         {
@@ -823,7 +800,7 @@ const AddEditDashboardElements = ({
                           ...reportData,
                           datapoint_subcategory: {
                             name: values,
-                            type: "",
+                            type: null,
                             value: [],
                           },
                         });
@@ -837,7 +814,7 @@ const AddEditDashboardElements = ({
                         getFilterItemFromArray(
                           reportData?.filter,
                           "name",
-                          "",
+                          null,
                           true
                         )?.length
                           ? getFilterItemFromArray(
@@ -848,11 +825,8 @@ const AddEditDashboardElements = ({
                                   ? [reportData?.datapoint_category?.name]
                                   : []),
                                 ...getArrayValues(
-                                  getFilterItemFromArray(
-                                    reportData?.filter,
-                                    "name",
-                                    "",
-                                    true
+                                  reportData?.filter?.filter(
+                                    (each) => each.name
                                   ),
                                   "name"
                                 ),
@@ -867,6 +841,7 @@ const AddEditDashboardElements = ({
                         style={{ width: "100%" }}
                         className="mt-2"
                         allowClear
+                        placeholder="Select Type"
                         value={reportData?.datapoint_subcategory?.type}
                         onChange={(values) => {
                           setReportData({
@@ -924,6 +899,7 @@ const AddEditDashboardElements = ({
                         className="w-100 mt-2"
                         mode="multiple"
                         allowClear
+                        placeholder="Select Value"
                         value={reportData?.datapoint_subcategory?.value}
                         options={subSeriesList}
                         onChange={(values) => {
@@ -952,6 +928,7 @@ const AddEditDashboardElements = ({
                       <Select
                         className="w-100 mt-2"
                         allowClear
+                        placeholder="Select Value"
                         value={reportData?.datapoint_subcategory?.value[0]}
                         options={Array.from(
                           {
