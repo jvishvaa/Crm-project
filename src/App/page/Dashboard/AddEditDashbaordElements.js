@@ -34,6 +34,9 @@ import getFilterItemFromArray from "../../utils/getFilterItemFromArray";
 import useWindowDimensions from "../../component/UtilComponents/useWindowDimensions";
 import RenderTable from "./RenderTable";
 import RenderDonutChart from "./RenderDonutChart";
+import RenderNumber from "./RenderNumber";
+
+const { TextArea } = Input;
 
 const AddEditDashboardElements = ({
   modalData,
@@ -42,6 +45,7 @@ const AddEditDashboardElements = ({
 }) => {
   const [reportData, setReportData] = useState({
     report_name: "",
+    description: "",
     display_type: "line-chart",
     measure: null,
     datapoint_category: {
@@ -499,7 +503,7 @@ const AddEditDashboardElements = ({
       onCancel={() => {
         closeModal();
       }}
-      width={765}
+      width={900}
       footer={[
         <Button
           key="back"
@@ -552,6 +556,21 @@ const AddEditDashboardElements = ({
                 </Col>
                 <Col xs={24}>
                   <Typography className={"add-dashboard-form-item-header"}>
+                    Description
+                  </Typography>
+                  <TextArea
+                    rows={2}
+                    value={reportData?.description}
+                    onChange={(e) => {
+                      setReportData({
+                        ...reportData,
+                        description: e.target.value,
+                      });
+                    }}
+                  />
+                </Col>
+                <Col xs={24}>
+                  <Typography className={"add-dashboard-form-item-header"}>
                     Display Type <span>*</span>
                   </Typography>
                   <Radio.Group
@@ -560,7 +579,7 @@ const AddEditDashboardElements = ({
                       setReportData({
                         ...reportData,
                         display_type: e.target.value,
-                        ...(getFilterItemFromArray(
+                        ...(!getFilterItemFromArray(
                           displayTypeList,
                           "value",
                           e.target.value
@@ -990,11 +1009,23 @@ const AddEditDashboardElements = ({
                     <Row gutter={[8, 8]} className="mb-1">
                       <Col xs={24}>
                         <Typography
-                          style={{ fontSize: 13, fontWeight: "500" }}
+                          style={{ fontSize: 14, fontWeight: "500" }}
                           className="pl-2 pt-2"
                         >
                           {reportData?.report_name || "Report Name"}
                         </Typography>
+                        {reportData?.description ? (
+                          <Typography
+                            style={{
+                              fontSize: 11,
+                              fontWeight: "500",
+                              color: "#7a7a7a",
+                            }}
+                            className="pl-2"
+                          >
+                            {reportData?.description || "Report Name"}
+                          </Typography>
+                        ) : null}
                       </Col>
                       {reportData?.datapoint_category?.name &&
                       reportData?.datapoint_category?.type &&
@@ -1072,6 +1103,9 @@ const AddEditDashboardElements = ({
                               type="bar"
                               stacked={true}
                             />
+                          ) : null}
+                          {reportData?.display_type === "number" ? (
+                            <RenderNumber series={getSeries()} />
                           ) : null}
                         </Col>
                       ) : (
