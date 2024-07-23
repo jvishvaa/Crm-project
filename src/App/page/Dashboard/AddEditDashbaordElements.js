@@ -3,6 +3,7 @@ import {
   Checkbox,
   Col,
   Divider,
+  Drawer,
   Form,
   Input,
   Modal,
@@ -16,6 +17,7 @@ import {
 import "./index.scss";
 import React, { useEffect, useState } from "react";
 import {
+  MdClose,
   MdDeleteOutline,
   MdDonutLarge,
   MdListAlt,
@@ -35,18 +37,28 @@ import useWindowDimensions from "../../component/UtilComponents/useWindowDimensi
 import RenderTable from "./RenderTable";
 import RenderDonutChart from "./RenderDonutChart";
 import RenderNumber from "./RenderNumber";
+import RenderGaugeChart from "./RenderGaugeChart";
 
 const { TextArea } = Input;
 
+const CustomHeader = ({ label, onClose }) => (
+  <div className="d-flex flex-row justify-content-between align-items-center">
+    <Typography>{label}</Typography>
+    <Button
+      type="link"
+      size="small"
+      onClick={onClose}
+      icon={<MdClose size={20} />}
+    />
+  </div>
+);
 const AddEditDashboardElements = ({
   modalData,
   handleAddEditDashboardElement,
   closeModal,
 }) => {
   const [reportData, setReportData] = useState({
-    report_name: "",
-    description: "",
-    display_type: "line-chart",
+    display_type: "table",
     measure: null,
     datapoint_category: {
       name: null,
@@ -60,17 +72,30 @@ const AddEditDashboardElements = ({
     },
     filter: [],
   });
-
+  const [plotBandData, setPlotBandData] = useState({
+    thresold1: null,
+    thresold2: null,
+  });
+  const [reportHeadData, setReportHeadData] = useState({
+    report_name: "",
+    description: "",
+  });
   const [graphData, setGraphData] = useState({});
 
   const { width } = useWindowDimensions();
-  console.log(reportData);
 
-  useEffect(() => {
-    if (reportData?.display_type === "number" && reportData?.measure) {
-      setGraphData({ count: 1334 });
-    } else if (
-      ((getFilterItemFromArray(
+  const checkFilter = () => {
+    return (
+      (reportData?.filter.length &&
+        reportData?.filter?.filter((each) => !each.name || !each.value?.length)
+          ?.length === 0) ||
+      !reportData?.filter?.length
+    );
+  };
+
+  const checkCategory = () => {
+    return (
+      (getFilterItemFromArray(
         displayTypeList,
         "value",
         reportData?.display_type
@@ -88,13 +113,16 @@ const AddEditDashboardElements = ({
             reportData?.datapoint_category?.name
           )[0]?.type === "sub-field") &&
         reportData?.datapoint_category?.value?.length) ||
-        !getFilterItemFromArray(
-          displayTypeList,
-          "value",
-          reportData?.display_type
-        )[0]?.is_category) &&
-      reportData?.measure &&
-      ((reportData?.datapoint_subcategory?.name &&
+      !getFilterItemFromArray(
+        displayTypeList,
+        "value",
+        reportData?.display_type
+      )[0]?.is_category
+    );
+  };
+  const checkSubCategory = () => {
+    return (
+      (reportData?.datapoint_subcategory?.name &&
         ((getFilterItemFromArray(
           datapointList,
           "value",
@@ -107,16 +135,41 @@ const AddEditDashboardElements = ({
             reportData?.datapoint_subcategory?.name
           )[0]?.type === "sub-field") &&
         reportData?.datapoint_subcategory?.value?.length) ||
-        !reportData?.datapoint_subcategory?.name)
+      !reportData?.datapoint_subcategory?.name
+    );
+  };
+  useEffect(() => {
+    if (
+      ["number", "gauge"].includes(reportData?.display_type) &&
+      reportData?.measure &&
+      checkFilter()
+    ) {
+      setGraphData({
+        count: 1334,
+        ...(reportData?.display_type === "guage" ? { plotbandData: {} } : {}),
+      });
+    } else if (
+      checkCategory() &&
+      reportData?.measure &&
+      checkSubCategory() &&
+      checkFilter()
     ) {
       setGraphData({ category: getCategory(), series: getSeries() });
     } else {
       setGraphData({});
     }
   }, [reportData]);
+
+  useEffect(() => {
+    if (reportData?.display_type === "guage" && graphData) {
+    } else {
+      setPlotBandData({ thresold1: null, thresold2: null });
+    }
+  }, [reportData]);
+
   const measureList = [
-    { label: "Lead Count", value: "lead_count" },
-    { label: "Child Count", value: "child_count" },
+    { label: "Lead Count", value: "Lead Count" },
+    { label: "Child Count", value: "Child Count" },
   ];
 
   const datapointList = [
@@ -233,6 +286,13 @@ const AddEditDashboardElements = ({
 
   const displayTypeList = [
     {
+      value: "table",
+      icon: <LuTable size={20} />,
+      label: "Table",
+      is_sub_category: true,
+      is_category: true,
+    },
+    {
       value: "line-chart",
       icon: <RiLineChartFill size={20} />,
       label: "Line Chart",
@@ -290,14 +350,7 @@ const AddEditDashboardElements = ({
       icon: <MdOutlineSpeed size={20} />,
       label: "Gauge",
       is_sub_category: false,
-      is_category: true,
-    },
-    {
-      value: "table",
-      icon: <LuTable size={20} />,
-      label: "Table",
-      is_sub_category: true,
-      is_category: true,
+      is_category: false,
     },
   ];
 
@@ -335,11 +388,6 @@ const AddEditDashboardElements = ({
   function getRandomValue() {
     return Math.floor(Math.random() * 100) + 1;
   }
-
-  const getValueLabel = () => {
-    return measureList?.filter((each) => each.value === reportData?.measure)[0]
-      .label;
-  };
 
   const getSeries = () => {
     const categoryList = getCategory();
@@ -393,244 +441,283 @@ const AddEditDashboardElements = ({
           className="d-flex flex-row justify-content-between align-items-center"
           gutter={[8, 8]}
         >
-          <Col>
-            <Typography style={{ fontSize: 13, fontWeight: 500 }}>
-              Filter
-            </Typography>
-          </Col>
-          <Col>
-            <Button
-              size="small"
-              type="primary"
-              onClick={() => {
-                const myFilterData = [...reportData?.filter];
-                myFilterData.push({
-                  name: null,
-                  value: [],
-                });
-                setReportData({
-                  ...reportData,
-                  filter: myFilterData,
-                });
-              }}
+          <Col xs={24}>
+            <Row
+              className="d-flex flex-row justify-content-between align-items-center"
+              gutter={[8, 8]}
             >
-              Add Filter
-            </Button>
+              <Col>
+                <Typography style={{ fontSize: 13, fontWeight: 500 }}>
+                  Filter
+                </Typography>
+              </Col>
+              <Col>
+                <Button
+                  size="small"
+                  type="primary"
+                  onClick={() => {
+                    const myFilterData = [...reportData?.filter];
+                    myFilterData.push({
+                      name: null,
+                      value: [],
+                    });
+                    setReportData({
+                      ...reportData,
+                      filter: myFilterData,
+                    });
+                  }}
+                >
+                  Add Filter
+                </Button>
+              </Col>
+            </Row>
           </Col>
-          {reportData?.filter?.map((each, index) => (
-            <Col xs={24}>
-              <Row
-                className="d-flex flex-row align-items-center"
-                gutter={[4, 4]}
-              >
-                <Col xs={2} md={1}>
-                  <Typography style={{ fontSize: 14, fontWeight: 500 }}>
-                    {index + 1}.
-                  </Typography>
-                </Col>
-                <Col xs={20} md={22}>
-                  <Row className="d-flex flex-row" gutter={[8, 8]}>
-                    <Col xs={24} md={12}>
-                      <Typography className={"add-dashboard-form-item-header"}>
-                        Filter Name <span>*</span>
+          <Col xs={24}>
+            <Row
+              className="d-flex flex-row justify-content-between align-items-center"
+              gutter={[24, 8]}
+            >
+              {reportData?.filter?.map((each, index) => (
+                <Col xs={24} lg={12}>
+                  <Row
+                    className="d-flex flex-row align-items-center"
+                    gutter={[4, 4]}
+                  >
+                    <Col xs={2} md={1}>
+                      <Typography
+                        style={{ fontSize: 14, fontWeight: 500, marginTop: 15 }}
+                      >
+                        {index + 1}.
                       </Typography>
-                      <Select
-                        style={{ width: "100%" }}
-                        value={each?.name}
-                        allowClear
-                        onChange={(values) => {
-                          let myFilterData = [...reportData?.filter];
-                          myFilterData[index].name = values;
-                          myFilterData[index].value = [];
-                          setReportData({
-                            ...reportData,
-                            filter: myFilterData,
-                          });
-                        }}
-                        showSearch
-                        filterOption={(input, option) =>
-                          option.label
-                            .toLowerCase()
-                            .includes(input.toLowerCase())
-                        }
-                        options={
-                          reportData?.datapoint_subcategory?.name ||
-                          reportData?.datapoint_category?.name
-                            ? getFilterItemFromArray(
-                                datapointList,
-                                "value",
-                                [
-                                  ...(reportData?.datapoint_subcategory?.name
-                                    ? [reportData?.datapoint_subcategory?.name]
-                                    : []),
-                                  ...(reportData?.datapoint_category?.name
-                                    ? [reportData?.datapoint_category?.name]
-                                    : []),
-                                ],
-                                true
-                              )?.filter((eachItem) =>
-                                reportData?.filter?.filter(
-                                  (eachItem1) => eachItem1?.name
-                                )?.length
-                                  ? eachItem?.value === each.name
-                                    ? true
-                                    : !getArrayValues(
-                                        reportData?.filter?.filter(
-                                          (eachItem1) => eachItem1?.name
-                                        ),
-                                        "name"
-                                      ).includes(eachItem?.value)
-                                  : true
-                              )
-                            : datapointList
-                        }
-                      />
                     </Col>
-                    {each.name ? (
-                      <Col xs={24} md={12}>
-                        <Typography
-                          className={"add-dashboard-form-item-header"}
-                        >
-                          Filter Value <span>*</span>
-                        </Typography>
-                        <Select
-                          className="w-100 "
-                          mode="multiple"
-                          allowClear
-                          value={each.value}
-                          options={
-                            getFilterItemFromArray(
-                              datapointList,
-                              "value",
-                              each.name
-                            )[0]?.type !== "date"
-                              ? getFilterItemFromArray(
+                    <Col xs={20} md={22}>
+                      <Row className="d-flex flex-row" gutter={[8, 8]}>
+                        <Col xs={24} md={12}>
+                          <Typography
+                            className={"add-dashboard-form-item-header"}
+                          >
+                            Filter Name <span>*</span>
+                          </Typography>
+                          <Select
+                            style={{ width: "100%" }}
+                            value={each?.name}
+                            allowClear
+                            onChange={(values) => {
+                              let myFilterData = [...reportData?.filter];
+                              myFilterData[index].name = values;
+                              myFilterData[index].value = [];
+                              setReportData({
+                                ...reportData,
+                                filter: myFilterData,
+                              });
+                            }}
+                            showSearch
+                            filterOption={(input, option) =>
+                              option.label
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                            }
+                            options={
+                              reportData?.datapoint_subcategory?.name ||
+                              reportData?.datapoint_category?.name
+                                ? getFilterItemFromArray(
+                                    datapointList,
+                                    "value",
+                                    [
+                                      ...(reportData?.datapoint_subcategory
+                                        ?.name
+                                        ? [
+                                            reportData?.datapoint_subcategory
+                                              ?.name,
+                                          ]
+                                        : []),
+                                      ...(reportData?.datapoint_category?.name
+                                        ? [reportData?.datapoint_category?.name]
+                                        : []),
+                                    ],
+                                    true
+                                  )?.filter((eachItem) =>
+                                    reportData?.filter?.filter(
+                                      (eachItem1) => eachItem1?.name
+                                    )?.length
+                                      ? eachItem?.value === each.name
+                                        ? true
+                                        : !getArrayValues(
+                                            reportData?.filter?.filter(
+                                              (eachItem1) => eachItem1?.name
+                                            ),
+                                            "name"
+                                          ).includes(eachItem?.value)
+                                      : true
+                                  )
+                                : datapointList
+                            }
+                          />
+                        </Col>
+                        {each.name ? (
+                          <Col xs={24} md={12}>
+                            <Typography
+                              className={"add-dashboard-form-item-header"}
+                            >
+                              Filter Value <span>*</span>
+                            </Typography>
+                            <Select
+                              className="w-100 "
+                              mode="multiple"
+                              allowClear
+                              value={each.value}
+                              options={
+                                getFilterItemFromArray(
                                   datapointList,
                                   "value",
                                   each.name
-                                )[0]?.valueList
-                              : getFilterItemFromArray(
-                                  dateTypeList,
-                                  "type",
-                                  "single"
-                                )
-                          }
-                          onChange={(values) => {
-                            let myFilterData = [...reportData?.filter];
-                            myFilterData[index].value = values;
-                            setReportData({
-                              ...reportData,
-                              filter: myFilterData,
-                            });
-                          }}
-                          showSearch
-                          filterOption={(input, option) =>
-                            option.label
-                              .toLowerCase()
-                              .includes(input.toLowerCase())
+                                )[0]?.type !== "date"
+                                  ? getFilterItemFromArray(
+                                      datapointList,
+                                      "value",
+                                      each.name
+                                    )[0]?.valueList
+                                  : getFilterItemFromArray(
+                                      dateTypeList,
+                                      "type",
+                                      "single"
+                                    )
+                              }
+                              onChange={(values) => {
+                                let myFilterData = [...reportData?.filter];
+                                myFilterData[index].value = values;
+                                setReportData({
+                                  ...reportData,
+                                  filter: myFilterData,
+                                });
+                              }}
+                              showSearch
+                              filterOption={(input, option) =>
+                                option.label
+                                  .toLowerCase()
+                                  .includes(input.toLowerCase())
+                              }
+                            />
+                          </Col>
+                        ) : null}
+                      </Row>
+                    </Col>
+                    <Col xs={2} md={1}>
+                      <Popconfirm
+                        title="Are you sure to remove filter?"
+                        onConfirm={() => {
+                          let myReportFilterData = [...reportData?.filter];
+                          myReportFilterData?.splice(index, 1);
+                          setReportData({
+                            ...reportData,
+                            filter: myReportFilterData,
+                          });
+                        }}
+                      >
+                        <Button
+                          size="small"
+                          type="text"
+                          style={{ marginTop: 15 }}
+                          icon={
+                            <MdDeleteOutline
+                              size={20}
+                              style={{ color: "red" }}
+                            />
                           }
                         />
-                      </Col>
-                    ) : null}
+                      </Popconfirm>
+                    </Col>
                   </Row>
                 </Col>
-                <Col xs={2} md={1}>
-                  <Popconfirm
-                    title="Are you sure to remove filter?"
-                    onConfirm={() => {
-                      let myReportFilterData = [...reportData?.filter];
-                      myReportFilterData?.splice(index, 1);
-                      setReportData({
-                        ...reportData,
-                        filter: myReportFilterData,
-                      });
-                    }}
-                  >
-                    <Button
-                      size="small"
-                      type="text"
-                      icon={
-                        <MdDeleteOutline size={20} style={{ color: "red" }} />
-                      }
-                    />
-                  </Popconfirm>
-                </Col>
-              </Row>
-            </Col>
-          ))}
+              ))}
+            </Row>
+          </Col>
         </Row>
       </Col>
     );
   };
 
   return (
-    <Modal
-      centered
-      open={modalData?.show}
-      onCancel={() => {
-        closeModal();
-      }}
-      width={900}
-      footer={[
-        <Button
-          key="back"
-          onClick={() => {
+    <Drawer
+      className="add-dashboard-drawer"
+      title={
+        <CustomHeader
+          label={
+            modalData?.data ? "Edit Dashboard Report" : "Add Dashboard Report"
+          }
+          onClose={() => {
             closeModal();
           }}
-          size="small"
+        />
+      }
+      onClose={() => {
+        closeModal();
+      }}
+      open={modalData?.show}
+      width={"90%"}
+      closable={false}
+      maskClosable={false}
+      footer={
+        <div
+          style={{
+            textAlign: "right",
+          }}
         >
-          Cancel
-        </Button>,
-        <Button
-          key="submit"
-          type="primary"
-          loading={loading}
-          onClick={() => {}}
-          size="small"
-        >
-          {modalData?.data ? "Update" : "Save"}
-        </Button>,
-      ]}
+          <Button
+            key="back"
+            style={{ marginRight: 8 }}
+            onClick={() => {
+              closeModal();
+            }}
+            size="small"
+          >
+            Cancel
+          </Button>
+          <Button
+            key="submit"
+            type="primary"
+            loading={loading}
+            onClick={() => {}}
+            size="small"
+          >
+            {modalData?.data ? "Update" : "Save"}
+          </Button>
+        </div>
+      }
     >
       <Row gutter={[8, 8]}>
-        <Col xs={24}>
-          <Typography style={{ fontSize: 14, fontWeight: 600 }}>
-            {modalData?.data ? "Edit Dashboard Report" : "Add Dashboard Report"}
-          </Typography>
-          <Divider />
-        </Col>
         <Col
           xs={24}
-          style={{ maxHeight: "80vh", overflowY: "auto", overflowX: "hidden" }}
+          style={{ maxHeight: "82vh", overflowY: "auto", overflowX: "hidden" }}
         >
           <Row gutter={[16, 12]}>
-            <Col xs={24} md={11}>
+            <Col xs={24} md={11} lg={13}>
               <Row gutter={[8, 12]}>
-                <Col xs={24}>
+                <Col xs={24} lg={12}>
                   <Typography className={"add-dashboard-form-item-header"}>
                     Report Name <span>*</span>
                   </Typography>
                   <Input
                     maxLength={48}
-                    value={reportData?.report_name}
+                    value={reportHeadData?.report_name}
                     onChange={(e) => {
-                      setReportData({
-                        ...reportData,
+                      setReportHeadData({
+                        ...reportHeadData,
                         report_name: e.target.value,
                       });
                     }}
                   />
                 </Col>
-                <Col xs={24}>
+                <Col xs={24} lg={12}>
                   <Typography className={"add-dashboard-form-item-header"}>
                     Description
                   </Typography>
                   <TextArea
                     rows={2}
-                    value={reportData?.description}
+                    value={reportHeadData?.description}
                     onChange={(e) => {
-                      setReportData({
-                        ...reportData,
+                      setReportHeadData({
+                        ...reportHeadData,
                         description: e.target.value,
                       });
                     }}
@@ -711,7 +798,18 @@ const AddEditDashboardElements = ({
                   "value",
                   reportData?.display_type
                 )[0]?.is_category ? (
-                  <Col xs={24}>
+                  <Col
+                    xs={24}
+                    lg={
+                      getFilterItemFromArray(
+                        displayTypeList,
+                        "value",
+                        reportData?.display_type
+                      )[0]?.is_sub_category
+                        ? 12
+                        : 24
+                    }
+                  >
                     <Typography className={"add-dashboard-form-item-header"}>
                       Datapoint Category <span>*</span>
                     </Typography>
@@ -922,9 +1020,12 @@ const AddEditDashboardElements = ({
                   "value",
                   reportData?.display_type
                 )[0]?.is_sub_category ? (
-                  <Col xs={24}>
+                  <Col xs={24} lg={12}>
                     <Typography className={"add-dashboard-form-item-header"}>
-                      Datapoint SubCategory
+                      Datapoint SubCategory{" "}
+                      {reportData?.datapoint_subcategory?.name ? (
+                        <span>*</span>
+                      ) : null}
                     </Typography>
                     <Select
                       style={{ width: "100%" }}
@@ -1133,7 +1234,7 @@ const AddEditDashboardElements = ({
               </Row>
             </Col>
             {width < 768 ? renderFilter() : null}
-            <Col xs={24} md={13} style={{ backgroundColor: "#EFF1F6" }}>
+            <Col xs={24} md={13} lg={11} style={{ backgroundColor: "#EFF1F6" }}>
               <Row gutter={[4, 4]}>
                 <Col xs={24}>
                   <Typography style={{ fontSize: 12 }} className="mt-2">
@@ -1151,9 +1252,9 @@ const AddEditDashboardElements = ({
                           style={{ fontSize: 14, fontWeight: "500" }}
                           className="pl-2 pt-2"
                         >
-                          {reportData?.report_name || "Report Name"}
+                          {reportHeadData?.report_name || "Report Name"}
                         </Typography>
-                        {reportData?.description ? (
+                        {reportHeadData?.description ? (
                           <Typography
                             style={{
                               fontSize: 11,
@@ -1162,7 +1263,7 @@ const AddEditDashboardElements = ({
                             }}
                             className="pl-2"
                           >
-                            {reportData?.description || "Report Name"}
+                            {reportHeadData?.description}
                           </Typography>
                         ) : null}
                       </Col>
@@ -1172,7 +1273,7 @@ const AddEditDashboardElements = ({
                             <RenderChart
                               categories={graphData?.category}
                               series={graphData?.series}
-                              valueLabel={getValueLabel()}
+                              valueLabel={reportData?.measure}
                               type={"line"}
                             />
                           ) : null}
@@ -1180,7 +1281,7 @@ const AddEditDashboardElements = ({
                             <RenderChart
                               categories={graphData?.category}
                               series={graphData?.series}
-                              valueLabel={getValueLabel()}
+                              valueLabel={reportData?.measure}
                               type={"column"}
                             />
                           ) : null}
@@ -1189,7 +1290,7 @@ const AddEditDashboardElements = ({
                             <RenderChart
                               categories={graphData?.category}
                               series={graphData?.series}
-                              valueLabel={getValueLabel()}
+                              valueLabel={reportData?.measure}
                               type={"bar"}
                             />
                           ) : null}
@@ -1198,7 +1299,7 @@ const AddEditDashboardElements = ({
                             <RenderChart
                               categories={graphData?.category}
                               series={graphData?.series}
-                              valueLabel={getValueLabel()}
+                              valueLabel={reportData?.measure}
                               type="column"
                               stacked={true}
                             />
@@ -1208,7 +1309,7 @@ const AddEditDashboardElements = ({
                             <RenderChart
                               categories={graphData?.category}
                               series={graphData?.series}
-                              valueLabel={getValueLabel()}
+                              valueLabel={reportData?.measure}
                               type="bar"
                               stacked={true}
                             />
@@ -1230,20 +1331,26 @@ const AddEditDashboardElements = ({
                               }
                               categories={graphData?.category}
                               series={graphData?.series}
-                              valueLabel={getValueLabel()}
+                              valueLabel={reportData?.measure}
                             />
                           ) : null}
                           {reportData?.display_type === "donut-chart" ? (
                             <RenderDonutChart
                               categories={graphData?.category}
                               series={graphData?.series}
-                              valueLabel={getValueLabel()}
+                              valueLabel={reportData?.measure}
                               type="bar"
                               stacked={true}
                             />
                           ) : null}
                           {reportData?.display_type === "number" ? (
                             <RenderNumber count={graphData?.count} />
+                          ) : null}
+                          {reportData?.display_type === "guage" ? (
+                            <RenderGaugeChart
+                              count={graphData?.count}
+                              valueLabel={reportData?.measure}
+                            />
                           ) : null}
                         </Col>
                       ) : (
@@ -1270,7 +1377,7 @@ const AddEditDashboardElements = ({
           </Row>
         </Col>
       </Row>
-    </Modal>
+    </Drawer>
   );
 };
 
