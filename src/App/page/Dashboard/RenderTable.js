@@ -7,33 +7,26 @@ const RenderTable = ({ category_name, categories, series, valueLabel }) => {
   const [subColumnList, setSubColumnList] = useState([]);
 
   useEffect(() => {
-    let myTableData = [];
-    categories?.map((each, index) => {
-      let seriesData = {};
-      series?.map((eachItem) => {
-        if (eachItem?.name) {
-          seriesData[eachItem?.name] = eachItem?.data[index];
-        } else {
-          seriesData[valueLabel] = eachItem?.data[index];
-        }
+    if (category_name && categories && series && valueLabel) {
+      let myTableData = [];
+      categories?.map((each, index) => {
+        let seriesData = {};
+        series?.map((eachItem) => {
+          if (eachItem?.name) {
+            seriesData[eachItem?.name] = eachItem?.data[index];
+          } else {
+            seriesData[valueLabel] = eachItem?.data[index];
+          }
+        });
+        myTableData.push({
+          [category_name]: each,
+          ...seriesData,
+        });
       });
-      myTableData.push({
-        [category_name]: each,
-        ...seriesData,
-      });
-    });
-    setTableData(myTableData);
-    setSubColumnList(getArrayValues(series, "name"));
+      setTableData(myTableData);
+      setSubColumnList(getArrayValues(series, "name"));
+    }
   }, [category_name, categories, series, valueLabel]);
-
-  console.log(
-    category_name,
-    categories,
-    series,
-    valueLabel,
-    tableData,
-    subColumnList
-  );
 
   const getChildren = () => {
     let childrenData = [];
@@ -76,13 +69,17 @@ const RenderTable = ({ category_name, categories, series, valueLabel }) => {
   ];
 
   return (
-    <Table
-      dataSource={tableData || []}
-      columns={columns}
-      bordered={true}
-      pagination={false}
-      className="p-1"
-    />
+    <>
+      {category_name && categories && series && valueLabel ? (
+        <Table
+          dataSource={tableData || []}
+          columns={columns}
+          bordered={true}
+          pagination={false}
+          className="p-1"
+        />
+      ) : null}
+    </>
   );
 };
 
