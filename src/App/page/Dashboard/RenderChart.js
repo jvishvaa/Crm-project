@@ -2,11 +2,18 @@ import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-const RenderChart = ({ categories, series, stacked, valueLabel, type }) => {
+const RenderChart = ({
+  categories,
+  series,
+  stacked,
+  valueLabel,
+  type,
+  height,
+}) => {
   const options = {
     chart: {
       type: type,
-      height: "300px",
+      ...(height ? { height: height } : {}),
     },
     xAxis: {
       categories: categories,

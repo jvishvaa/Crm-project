@@ -2,11 +2,11 @@ import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-const RenderDonutChart = ({ categories, series, valueLabels }) => {
+const RenderDonutChart = ({ categories, series, valueLabels, height }) => {
   const options = {
     chart: {
       type: "pie",
-      height: "280px",
+      ...(height ? { height: height } : {}),
     },
     title: {
       text: null, // This removes the chart title

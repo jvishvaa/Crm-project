@@ -9,7 +9,7 @@ import SolidGauge from "highcharts/modules/solid-gauge";
 HighchartsMore(Highcharts);
 SolidGauge(Highcharts);
 
-const RenderGaugeChart = ({ count, valueLabel, plotBandData }) => {
+const RenderGaugeChart = ({ count, valueLabel, plotBandData, height }) => {
   function abbreviateNumber(value) {
     if (value >= 1.0e9) {
       return (value / 1.0e9).toFixed(1) + "B";
@@ -26,7 +26,7 @@ const RenderGaugeChart = ({ count, valueLabel, plotBandData }) => {
       plotBackgroundImage: null,
       plotBorderWidth: 0,
       plotShadow: false,
-      height: "220px",
+      ...(height ? { height: height } : {}),
     },
 
     title: {

@@ -109,7 +109,7 @@ const AddEditDashboardElements = ({
   const datapointList = [
     {
       label: "Status",
-      value: "status",
+      value: "Status",
       type: "list",
       valueList: [
         { label: "Status 1", value: "Status 1" },
@@ -122,7 +122,7 @@ const AddEditDashboardElements = ({
     },
     {
       label: "Source",
-      value: "source",
+      value: "Source",
       type: "list",
       valueList: [
         { label: "Source 1", value: "Source 1" },
@@ -135,7 +135,7 @@ const AddEditDashboardElements = ({
     },
     {
       label: "Academic Year",
-      value: "academic_year",
+      value: "Academic Year",
       type: "list",
       valueList: [
         { label: "Academic Year 1", value: "Academic Year 1" },
@@ -148,7 +148,7 @@ const AddEditDashboardElements = ({
     },
     {
       label: "Lead Category",
-      value: "lead_category",
+      value: "Lead Category",
       type: "list",
       valueList: [
         { label: "Hot", value: "Hot" },
@@ -158,7 +158,7 @@ const AddEditDashboardElements = ({
     },
     {
       label: "Lead Properties",
-      value: "lead_properties",
+      value: "Lead Properties",
       type: "sub-field",
       valueList: [
         { label: "Dormant", value: "Dormant" },
@@ -168,7 +168,7 @@ const AddEditDashboardElements = ({
     },
     {
       label: "Lead Created Date",
-      value: "lead_created_date",
+      value: "Lead Created Date",
       type: "date",
     },
   ];
@@ -1382,6 +1382,7 @@ const AddEditDashboardElements = ({
                               series={graphData?.series}
                               valueLabel={reportData?.measure}
                               type={"line"}
+                              height={"300px"}
                             />
                           ) : null}
                           {reportData?.display_type === "vertical-bar-chart" ? (
@@ -1390,6 +1391,7 @@ const AddEditDashboardElements = ({
                               series={graphData?.series}
                               valueLabel={reportData?.measure}
                               type={"column"}
+                              height={"300px"}
                             />
                           ) : null}
                           {reportData?.display_type ===
@@ -1399,6 +1401,7 @@ const AddEditDashboardElements = ({
                               series={graphData?.series}
                               valueLabel={reportData?.measure}
                               type={"bar"}
+                              height={"300px"}
                             />
                           ) : null}
                           {reportData?.display_type ===
@@ -1409,6 +1412,7 @@ const AddEditDashboardElements = ({
                               valueLabel={reportData?.measure}
                               type="column"
                               stacked={true}
+                              height={"300px"}
                             />
                           ) : null}
                           {reportData?.display_type ===
@@ -1419,22 +1423,13 @@ const AddEditDashboardElements = ({
                               valueLabel={reportData?.measure}
                               type="bar"
                               stacked={true}
+                              height={"300px"}
                             />
                           ) : null}
                           {reportData?.display_type === "table" ? (
                             <RenderTable
                               category_name={
-                                getFilterItemFromArray(
-                                  datapointList,
-                                  "value",
-                                  reportData?.datapoint_category?.name
-                                )?.length
-                                  ? getFilterItemFromArray(
-                                      datapointList,
-                                      "value",
-                                      reportData?.datapoint_category?.name
-                                    )[0].label
-                                  : ""
+                                reportData?.datapoint_category?.name
                               }
                               categories={graphData?.category}
                               series={graphData?.series}
@@ -1446,8 +1441,7 @@ const AddEditDashboardElements = ({
                               categories={graphData?.category}
                               series={graphData?.series}
                               valueLabel={reportData?.measure}
-                              type="bar"
-                              stacked={true}
+                              height={"280px"}
                             />
                           ) : null}
                           {reportData?.display_type === "number" ? (
@@ -1458,6 +1452,7 @@ const AddEditDashboardElements = ({
                               count={graphData?.count}
                               valueLabel={reportData?.measure}
                               plotBandData={plotBandData}
+                              height={"220px"}
                             />
                           ) : null}
                         </Col>
