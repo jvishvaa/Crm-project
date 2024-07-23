@@ -9,7 +9,7 @@ import SolidGauge from "highcharts/modules/solid-gauge";
 HighchartsMore(Highcharts);
 SolidGauge(Highcharts);
 
-const RenderGaugeChart = ({ count, valueLabels }) => {
+const RenderGaugeChart = ({ count, valueLabel, plotBandData }) => {
   function abbreviateNumber(value) {
     if (value >= 1.0e9) {
       return (value / 1.0e9).toFixed(1) + "B";
@@ -44,7 +44,10 @@ const RenderGaugeChart = ({ count, valueLabels }) => {
     // the value axis
     yAxis: {
       min: 0,
-      max: 200,
+      max:
+        count > plotBandData.threshold2
+          ? Math.round(count * (125 / 100))
+          : Math.round(plotBandData.threshold2 * (125 / 100)),
       tickPixelInterval: 72,
       tickPosition: "inside",
       tickColor: Highcharts.defaultOptions.chart.backgroundColor || "#FFFFFF",
@@ -61,22 +64,26 @@ const RenderGaugeChart = ({ count, valueLabels }) => {
       plotBands: [
         {
           from: 0,
-          to: 130,
+          to: plotBandData?.threshold1,
           color: "#C84435", // green
           thickness: 10,
           borderRadius: "50%",
         },
         {
-          from: 150,
-          to: 200,
-          color: "#2C6E6C", // red
+          from: plotBandData?.threshold1,
+          to: plotBandData?.threshold2,
+          color: "#F6BC61", // yellow
+
           thickness: 10,
           borderRadius: "50%",
         },
         {
-          from: 120,
-          to: 160,
-          color: "#F6BC61", // yellow
+          from: plotBandData?.threshold2,
+          to:
+            count > plotBandData.threshold2
+              ? Math.round(count * (125 / 100))
+              : Math.round(plotBandData.threshold2 * (125 / 100)),
+          color: "#2C6E6C", // red
           thickness: 10,
         },
       ],
@@ -84,7 +91,7 @@ const RenderGaugeChart = ({ count, valueLabels }) => {
 
     series: [
       {
-        name: valueLabels,
+        name: valueLabel,
         data: [abbreviateNumber(count)],
         dataLabels: {
           format: "{y}",

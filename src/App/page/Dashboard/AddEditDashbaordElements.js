@@ -28,7 +28,6 @@ import {
 import { RiLineChartFill } from "react-icons/ri";
 import { TbNumber123 } from "react-icons/tb";
 import { LuTable } from "react-icons/lu";
-import RenderTagMultiple from "../../component/UtilComponents/RenderMultiple";
 import CustomCard from "../../component/UtilComponents/CustomCard";
 import RenderChart from "./RenderChart";
 import getArrayValues from "../../utils/getArrayValues";
@@ -42,22 +41,35 @@ import RenderGaugeChart from "./RenderGaugeChart";
 const { TextArea } = Input;
 
 const CustomHeader = ({ label, onClose }) => (
-  <div className="d-flex flex-row justify-content-between align-items-center">
-    <Typography>{label}</Typography>
-    <Button
-      type="link"
-      size="small"
-      onClick={onClose}
-      icon={<MdClose size={20} />}
-    />
-  </div>
+  <Row
+    className="d-flex flex-row justify-content-between align-items-center"
+    gutter={[4, 4]}
+  >
+    <Col xs={20}>
+      <Typography>{label}</Typography>
+      <Typography style={{ fontSize: 10, fontWeight: 500, lineHeight: 1.4 }}>
+        Note: If no date parameters are specified, the dashboard report will
+        default to displaying data for the current day.{" "}
+      </Typography>
+    </Col>
+    <Col xs={4}>
+      <Row className="d-flex justify-content-end">
+        <Button
+          type="link"
+          size="small"
+          onClick={onClose}
+          icon={<MdClose size={20} />}
+        />
+      </Row>
+    </Col>
+  </Row>
 );
 const AddEditDashboardElements = ({
   modalData,
   handleAddEditDashboardElement,
   closeModal,
 }) => {
-  const [reportData, setReportData] = useState({
+  const defaultReportData = {
     display_type: "table",
     measure: null,
     datapoint_category: {
@@ -71,101 +83,22 @@ const AddEditDashboardElements = ({
       value: [],
     },
     filter: [],
-  });
-  const [plotBandData, setPlotBandData] = useState({
-    thresold1: null,
-    thresold2: null,
-  });
-  const [reportHeadData, setReportHeadData] = useState({
+  };
+  const [reportData, setReportData] = useState(defaultReportData);
+  const defaultPlotBandData = {
+    threshold1: null,
+    threshold2: null,
+  };
+  const [plotBandData, setPlotBandData] = useState(defaultPlotBandData);
+  const defaultReportHeadData = {
     report_name: "",
     description: "",
-  });
+  };
+  const [reportHeadData, setReportHeadData] = useState(defaultReportHeadData);
   const [graphData, setGraphData] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const { width } = useWindowDimensions();
-
-  const checkFilter = () => {
-    return (
-      (reportData?.filter.length &&
-        reportData?.filter?.filter((each) => !each.name || !each.value?.length)
-          ?.length === 0) ||
-      !reportData?.filter?.length
-    );
-  };
-
-  const checkCategory = () => {
-    return (
-      (getFilterItemFromArray(
-        displayTypeList,
-        "value",
-        reportData?.display_type
-      )[0]?.is_category &&
-        reportData?.datapoint_category?.name &&
-        ((getFilterItemFromArray(
-          datapointList,
-          "value",
-          reportData?.datapoint_category?.name
-        )[0]?.type !== "sub-field" &&
-          reportData?.datapoint_category?.type) ||
-          getFilterItemFromArray(
-            datapointList,
-            "value",
-            reportData?.datapoint_category?.name
-          )[0]?.type === "sub-field") &&
-        reportData?.datapoint_category?.value?.length) ||
-      !getFilterItemFromArray(
-        displayTypeList,
-        "value",
-        reportData?.display_type
-      )[0]?.is_category
-    );
-  };
-  const checkSubCategory = () => {
-    return (
-      (reportData?.datapoint_subcategory?.name &&
-        ((getFilterItemFromArray(
-          datapointList,
-          "value",
-          reportData?.datapoint_subcategory?.name
-        )[0]?.type !== "sub-field" &&
-          reportData?.datapoint_subcategory?.type) ||
-          getFilterItemFromArray(
-            datapointList,
-            "value",
-            reportData?.datapoint_subcategory?.name
-          )[0]?.type === "sub-field") &&
-        reportData?.datapoint_subcategory?.value?.length) ||
-      !reportData?.datapoint_subcategory?.name
-    );
-  };
-  useEffect(() => {
-    if (
-      ["number", "gauge"].includes(reportData?.display_type) &&
-      reportData?.measure &&
-      checkFilter()
-    ) {
-      setGraphData({
-        count: 1334,
-        ...(reportData?.display_type === "guage" ? { plotbandData: {} } : {}),
-      });
-    } else if (
-      checkCategory() &&
-      reportData?.measure &&
-      checkSubCategory() &&
-      checkFilter()
-    ) {
-      setGraphData({ category: getCategory(), series: getSeries() });
-    } else {
-      setGraphData({});
-    }
-  }, [reportData]);
-
-  useEffect(() => {
-    if (reportData?.display_type === "guage" && graphData) {
-    } else {
-      setPlotBandData({ thresold1: null, thresold2: null });
-    }
-  }, [reportData]);
 
   const measureList = [
     { label: "Lead Count", value: "Lead Count" },
@@ -346,7 +279,7 @@ const AddEditDashboardElements = ({
       is_category: false,
     },
     {
-      value: "guage",
+      value: "gauge",
       icon: <MdOutlineSpeed size={20} />,
       label: "Gauge",
       is_sub_category: false,
@@ -360,7 +293,101 @@ const AddEditDashboardElements = ({
     { label: "Custom", value: "select_item" },
   ];
 
-  const [loading, setLoading] = useState(false);
+  const checkFilter = () => {
+    return (
+      (reportData?.filter.length &&
+        reportData?.filter?.filter((each) => !each.name || !each.value?.length)
+          ?.length === 0) ||
+      !reportData?.filter?.length
+    );
+  };
+
+  const checkCategory = () => {
+    return (
+      (getFilterItemFromArray(
+        displayTypeList,
+        "value",
+        reportData?.display_type
+      )[0]?.is_category &&
+        reportData?.datapoint_category?.name &&
+        ((getFilterItemFromArray(
+          datapointList,
+          "value",
+          reportData?.datapoint_category?.name
+        )[0]?.type !== "sub-field" &&
+          reportData?.datapoint_category?.type) ||
+          getFilterItemFromArray(
+            datapointList,
+            "value",
+            reportData?.datapoint_category?.name
+          )[0]?.type === "sub-field") &&
+        reportData?.datapoint_category?.value?.length) ||
+      !getFilterItemFromArray(
+        displayTypeList,
+        "value",
+        reportData?.display_type
+      )[0]?.is_category
+    );
+  };
+  const checkSubCategory = () => {
+    return (
+      (reportData?.datapoint_subcategory?.name &&
+        ((getFilterItemFromArray(
+          datapointList,
+          "value",
+          reportData?.datapoint_subcategory?.name
+        )[0]?.type !== "sub-field" &&
+          reportData?.datapoint_subcategory?.type) ||
+          getFilterItemFromArray(
+            datapointList,
+            "value",
+            reportData?.datapoint_subcategory?.name
+          )[0]?.type === "sub-field") &&
+        reportData?.datapoint_subcategory?.value?.length) ||
+      !reportData?.datapoint_subcategory?.name
+    );
+  };
+
+  useEffect(() => {
+    if (
+      ["number", "gauge"].includes(reportData?.display_type) &&
+      reportData?.measure &&
+      checkFilter()
+    ) {
+      setGraphData({
+        count: 1334,
+      });
+    } else if (
+      checkCategory() &&
+      reportData?.measure &&
+      checkSubCategory() &&
+      checkFilter()
+    ) {
+      setGraphData({ category: getCategory(), series: getSeries() });
+    } else {
+      setGraphData({});
+    }
+  }, [reportData]);
+
+  useEffect(() => {
+    if (
+      reportData?.display_type === "gauge" &&
+      Object.keys(graphData)?.length
+    ) {
+      if (!plotBandData?.threshold1 && !plotBandData?.threshold2) {
+        setPlotBandData({
+          threshold1: Math.round(
+            Math.round(graphData.count * (125 / 100)) * (40 / 100)
+          ),
+          threshold2: Math.round(
+            Math.round(graphData.count * (125 / 100)) * (70 / 100)
+          ),
+        });
+      }
+    } else {
+      setPlotBandData(defaultPlotBandData);
+    }
+  }, [reportData, graphData]);
 
   const getCategory = () => {
     return getFilterItemFromArray(
@@ -563,29 +590,52 @@ const AddEditDashboardElements = ({
                             </Typography>
                             <Select
                               className="w-100 "
-                              mode="multiple"
+                              mode={
+                                getFilterItemFromArray(
+                                  datapointList,
+                                  "value",
+                                  each.name
+                                )[0]?.type === "date"
+                                  ? "single"
+                                  : "multiple"
+                              }
                               allowClear
-                              value={each.value}
+                              value={
+                                getFilterItemFromArray(
+                                  datapointList,
+                                  "value",
+                                  each.name
+                                )[0]?.type === "date"
+                                  ? each.value[0]
+                                  : each.value
+                              }
                               options={
                                 getFilterItemFromArray(
                                   datapointList,
                                   "value",
                                   each.name
-                                )[0]?.type !== "date"
+                                )[0]?.type === "date"
                                   ? getFilterItemFromArray(
-                                      datapointList,
-                                      "value",
-                                      each.name
-                                    )[0]?.valueList
-                                  : getFilterItemFromArray(
                                       dateTypeList,
                                       "type",
                                       "single"
                                     )
+                                  : getFilterItemFromArray(
+                                      datapointList,
+                                      "value",
+                                      each.name
+                                    )[0]?.valueList
                               }
                               onChange={(values) => {
                                 let myFilterData = [...reportData?.filter];
-                                myFilterData[index].value = values;
+                                myFilterData[index].value =
+                                  getFilterItemFromArray(
+                                    datapointList,
+                                    "value",
+                                    each.name
+                                  )[0]?.type === "date"
+                                    ? [values]
+                                    : values;
                                 setReportData({
                                   ...reportData,
                                   filter: myFilterData,
@@ -654,7 +704,7 @@ const AddEditDashboardElements = ({
         closeModal();
       }}
       open={modalData?.show}
-      width={"90%"}
+      width={"92%"}
       closable={false}
       maskClosable={false}
       footer={
@@ -677,7 +727,18 @@ const AddEditDashboardElements = ({
             key="submit"
             type="primary"
             loading={loading}
-            onClick={() => {}}
+            onClick={() => {
+              handleAddEditDashboardElement({
+                reportData: reportData,
+                reportHeadData: reportHeadData,
+                plotBandData: plotBandData,
+                graphData: graphData,
+              });
+              setReportData(defaultReportData);
+              setReportHeadData(defaultReportHeadData);
+              setPlotBandData(defaultPlotBandData);
+              setGraphData({});
+            }}
             size="small"
           >
             {modalData?.data ? "Update" : "Save"}
@@ -686,10 +747,7 @@ const AddEditDashboardElements = ({
       }
     >
       <Row gutter={[8, 8]}>
-        <Col
-          xs={24}
-          style={{ maxHeight: "82vh", overflowY: "auto", overflowX: "hidden" }}
-        >
+        <Col xs={24}>
           <Row gutter={[16, 12]}>
             <Col xs={24} md={11} lg={13}>
               <Row gutter={[8, 12]}>
@@ -1231,6 +1289,49 @@ const AddEditDashboardElements = ({
                     ) : null}
                   </Col>
                 ) : null}
+                {reportData?.display_type === "gauge" &&
+                Object.keys(graphData)?.length ? (
+                  <>
+                    <Col xs={24} lg={12}>
+                      <Typography className={"add-dashboard-form-item-header"}>
+                        Threshold 1 <span>*</span>
+                      </Typography>
+                      <Input
+                        type="number"
+                        value={plotBandData?.threshold1}
+                        onKeyDown={(e) => {
+                          ["e", "E", "+", "-", "."].includes(e.key) &&
+                            e.preventDefault();
+                        }}
+                        onChange={(e) => {
+                          setPlotBandData({
+                            ...plotBandData,
+                            threshold1: e.target.value,
+                          });
+                        }}
+                      />
+                    </Col>
+                    <Col xs={24} lg={12}>
+                      <Typography className={"add-dashboard-form-item-header"}>
+                        Threshold 2 <span>*</span>
+                      </Typography>
+                      <Input
+                        type="number"
+                        value={plotBandData?.threshold2}
+                        onKeyDown={(e) => {
+                          ["e", "E", "+", "-", "."].includes(e.key) &&
+                            e.preventDefault();
+                        }}
+                        onChange={(e) => {
+                          setPlotBandData({
+                            ...plotBandData,
+                            threshold2: e.target.value,
+                          });
+                        }}
+                      />
+                    </Col>
+                  </>
+                ) : null}
               </Row>
             </Col>
             {width < 768 ? renderFilter() : null}
@@ -1346,10 +1447,11 @@ const AddEditDashboardElements = ({
                           {reportData?.display_type === "number" ? (
                             <RenderNumber count={graphData?.count} />
                           ) : null}
-                          {reportData?.display_type === "guage" ? (
+                          {reportData?.display_type === "gauge" ? (
                             <RenderGaugeChart
                               count={graphData?.count}
                               valueLabel={reportData?.measure}
+                              plotBandData={plotBandData}
                             />
                           ) : null}
                         </Col>

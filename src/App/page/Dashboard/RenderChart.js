@@ -3,6 +3,7 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
 const RenderChart = ({ categories, series, stacked, valueLabel, type }) => {
+  console.log(categories, series, stacked, valueLabel, type);
   const options = {
     chart: {
       type: type,
