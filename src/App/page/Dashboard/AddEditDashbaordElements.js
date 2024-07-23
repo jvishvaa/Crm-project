@@ -13,6 +13,7 @@ import {
   Select,
   Tooltip,
   Typography,
+  message,
 } from "antd";
 import "./index.scss";
 import React, { useEffect, useState } from "react";
@@ -727,6 +728,10 @@ const AddEditDashboardElements = ({
             key="submit"
             type="primary"
             loading={loading}
+            disabled={
+              Object.keys(graphData)?.length === 0 ||
+              !reportHeadData?.report_name
+            }
             onClick={() => {
               handleAddEditDashboardElement({
                 reportData: reportData,
@@ -738,6 +743,7 @@ const AddEditDashboardElements = ({
               setReportHeadData(defaultReportHeadData);
               setPlotBandData(defaultPlotBandData);
               setGraphData({});
+              closeModal();
             }}
             size="small"
           >

@@ -6,6 +6,8 @@ import AddEditDashboardElements from "./AddEditDashbaordElements";
 
 const Dashboard = () => {
   const [modalData, setModalData] = useState({ show: false, data: null });
+  const [dashboardReportList, setDashboardReportList] = useState([]);
+  console.log(dashboardReportList);
   return (
     <div>
       <Row gutter={[16, 16]}>
@@ -46,7 +48,11 @@ const Dashboard = () => {
       </Row>
       <AddEditDashboardElements
         modalData={modalData}
-        handleAddEditSource={() => {}}
+        handleAddEditDashboardElement={(values) => {
+          let myDashboardReportList = dashboardReportList;
+          myDashboardReportList.push(values);
+          setDashboardReportList(myDashboardReportList);
+        }}
         closeModal={() => {
           setModalData({ show: false, data: null });
         }}
