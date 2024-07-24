@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Row, Col, Typography, Divider, Button } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Row, Col, Typography, Divider, Button, Tooltip } from "antd";
 import "./index.scss";
 import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
@@ -12,12 +12,114 @@ import RenderTable from "./RenderTable";
 import RenderDonutChart from "./RenderDonutChart";
 import RenderNumber from "./RenderNumber";
 import RenderGaugeChart from "./RenderGaugeChart";
+import { AiOutlineDrag } from "react-icons/ai";
 
 const Dashboard = () => {
   const [modalData, setModalData] = useState({ show: false, data: null });
-  const [dashboardReportList, setDashboardReportList] = useState([]);
-  const [layout, setLayout] = useState([]);
-  console.log(dashboardReportList);
+  const reportHeaderRefs = useRef([]);
+  const dashboardAreaRef = useRef();
+  const [dashboardReportList, setDashboardReportList] = useState([
+    {
+      reportData: {
+        display_type: "line-chart",
+        measure: "Lead Count",
+        datapoint_category: {
+          name: "Source",
+          type: "select_item",
+          value: [
+            "Source 1",
+            "Source 2",
+            "Source 4",
+            "Source 5",
+            "Source 3",
+            "Source 6",
+          ],
+        },
+        datapoint_subcategory: {
+          name: null,
+          type: null,
+          value: [],
+        },
+        filter: [],
+      },
+      reportHeadData: {
+        report_name: "Source Wise Lead",
+        description: "Test Description",
+      },
+      plotBandData: {
+        threshold1: null,
+        threshold2: null,
+      },
+      graphData: {
+        category: [
+          "Source 1",
+          "Source 2",
+          "Source 4",
+          "Source 5",
+          "Source 3",
+          "Source 6",
+        ],
+        series: [
+          {
+            data: [3, 12, 22, 42, 6, 97],
+          },
+        ],
+      },
+    },
+  ]);
+  const [layout, setLayout] = useState([
+    {
+      i: "Source Wise Lead",
+      x: 0,
+      y: Infinity, // Puts it at the bottom
+      w: 8,
+      h: 16,
+    },
+  ]);
+  const [reportHeaderHeights, setReportHeaderHeights] = useState([]);
+  const [dashboardAreaWidth, setDashboardAreaWidth] = useState(0);
+
+  const setRefHeaderRef = (el, index) => {
+    reportHeaderRefs.current[index] = el;
+  };
+
+  useEffect(() => {
+    // Measure the height for each Col and update state
+    const heights = reportHeaderRefs.current.map(
+      (col) => col?.offsetHeight || 0
+    );
+    setReportHeaderHeights(heights);
+  }, [layout]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (dashboardAreaRef.current) {
+        setDashboardAreaWidth(dashboardAreaRef.current.offsetWidth);
+      }
+    };
+
+    // Create a ResizeObserver to observe changes in the width of the Col component
+    const resizeObserver = new ResizeObserver(handleResize);
+    if (dashboardAreaRef.current) {
+      resizeObserver.observe(dashboardAreaRef.current);
+    }
+
+    // Initial width update
+    handleResize();
+
+    // Clean up the observer on component unmount
+    return () => {
+      if (dashboardAreaRef.current) {
+        resizeObserver.unobserve(dashboardAreaRef.current);
+      }
+    };
+  }, []);
+
+  const getHeight = (index) => {
+    return 2 * layout[index].h * 10 - (25 + (reportHeaderHeights[index] || 60));
+  };
+
+  console.log(dashboardReportList, reportHeaderHeights, dashboardAreaWidth);
   return (
     <div>
       <Row gutter={[4, 4]}>
@@ -47,45 +149,60 @@ const Dashboard = () => {
           </Row>
         </Col>
         {dashboardReportList?.length ? (
-          <Col xs={24}>
+          <Col xs={24} ref={dashboardAreaRef}>
             <GridLayout
               className="layout"
               layout={layout}
               cols={24}
               rowHeight={10}
-              width={window.innerWidth - 20}
+              width={(dashboardAreaWidth || window.innerWidth) - 20}
               isResizable
               isDraggable
               autoSize
               useCSSTransforms
+              draggableHandle=".drag-handle"
               onLayoutChange={(layout) => setLayout(layout)}
             >
-              {dashboardReportList?.map((each) => (
+              {dashboardReportList?.map((each, index) => (
                 <div key={each?.reportHeadData?.report_name}>
                   <CustomCard
                     style={{ width: "100%", height: "100%", overflow: "auto" }}
                     className="add-dashboard-element-preview-card px-1"
                   >
-                    <Row gutter={[8, 8]} className="mb-1">
-                      <Col xs={24}>
-                        <Typography
-                          style={{ fontSize: 14, fontWeight: "500" }}
-                          className="pl-2 pt-2"
-                        >
-                          {each.reportHeadData?.report_name || "Report Name"}
-                        </Typography>
-                        {each.reportHeadData?.description ? (
-                          <Typography
-                            style={{
-                              fontSize: 11,
-                              fontWeight: "500",
-                              color: "#7a7a7a",
-                            }}
-                            className="pl-2"
-                          >
-                            {each?.reportHeadData?.description}
-                          </Typography>
-                        ) : null}
+                    <Row gutter={[4, 4]} className="mb-1">
+                      <Col xs={24} ref={(el) => setRefHeaderRef(el, index)}>
+                        <Row>
+                          <Col xs={18}>
+                            <Typography
+                              style={{ fontSize: 14, fontWeight: "500" }}
+                              className="pl-2 pt-2"
+                            >
+                              {each.reportHeadData?.report_name ||
+                                "Report Name"}
+                            </Typography>
+                            {each.reportHeadData?.description ? (
+                              <Typography
+                                style={{
+                                  fontSize: 11,
+                                  fontWeight: "500",
+                                  color: "#7a7a7a",
+                                }}
+                                className="pl-2"
+                              >
+                                {each?.reportHeadData?.description}
+                              </Typography>
+                            ) : null}
+                          </Col>
+                          <Col xs={6}>
+                            <Row className="d-flex flex-row justify-content-end">
+                              <Button
+                                type="text"
+                                className="drag-handle mt-1"
+                                icon={<AiOutlineDrag size="25" />}
+                              />
+                            </Row>
+                          </Col>
+                        </Row>
                       </Col>
                       {Object.keys(each?.graphData)?.length ? (
                         <Col xs={24}>
@@ -95,6 +212,7 @@ const Dashboard = () => {
                               series={each?.graphData?.series}
                               valueLabel={each?.reportData?.measure}
                               type={"line"}
+                              height={getHeight(index)}
                             />
                           ) : null}
                           {each?.reportData?.display_type ===
@@ -104,6 +222,7 @@ const Dashboard = () => {
                               series={each?.graphData?.series}
                               valueLabel={each?.reportData?.measure}
                               type={"column"}
+                              height={getHeight(index)}
                             />
                           ) : null}
                           {each?.reportData?.display_type ===
@@ -113,6 +232,7 @@ const Dashboard = () => {
                               series={each?.graphData?.series}
                               valueLabel={each?.reportData?.measure}
                               type={"bar"}
+                              height={getHeight(index)}
                             />
                           ) : null}
                           {each?.reportData?.display_type ===
@@ -123,6 +243,7 @@ const Dashboard = () => {
                               valueLabel={each?.reportData?.measure}
                               type="column"
                               stacked={true}
+                              height={getHeight(index)}
                             />
                           ) : null}
                           {each?.reportData?.display_type ===
@@ -133,6 +254,7 @@ const Dashboard = () => {
                               valueLabel={each?.reportData?.measure}
                               type="bar"
                               stacked={true}
+                              height={getHeight(index)}
                             />
                           ) : null}
                           {each?.reportData?.display_type === "table" ? (
@@ -143,6 +265,7 @@ const Dashboard = () => {
                               categories={each?.graphData?.category}
                               series={each?.graphData?.series}
                               valueLabel={each?.reportData?.measure}
+                              height={getHeight(index)}
                             />
                           ) : null}
                           {each?.reportData?.display_type === "donut-chart" ? (
@@ -150,6 +273,7 @@ const Dashboard = () => {
                               categories={each?.graphData?.category}
                               series={each?.graphData?.series}
                               valueLabel={each?.reportData?.measure}
+                              height={getHeight(index)}
                             />
                           ) : null}
                           {each?.reportData?.display_type === "number" ? (
@@ -160,6 +284,7 @@ const Dashboard = () => {
                               count={each?.graphData?.count}
                               valueLabel={each?.reportData?.measure}
                               plotBandData={each?.plotBandData}
+                              height={getHeight(index)}
                             />
                           ) : null}
                         </Col>
@@ -201,15 +326,16 @@ const Dashboard = () => {
         handleAddEditDashboardElement={(values) => {
           if (modalData?.data) {
           } else {
+            console.log(values);
             let myDashboardReportList = dashboardReportList;
             myDashboardReportList.push(values);
             setDashboardReportList(myDashboardReportList);
             const newItem = {
               i: values?.reportHeadData?.report_name,
-              x: (layout.length * 2) % 12,
+              x: 0,
               y: Infinity, // Puts it at the bottom
               w: values?.reportData?.display_type === "table" ? 12 : 8,
-              h: values?.reportData?.display_type === "number" ? 10 : 16,
+              h: values?.reportData?.display_type === "number" ? 8 : 16,
             };
             setLayout([...layout, newItem]);
           }

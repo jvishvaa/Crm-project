@@ -16,9 +16,12 @@ const RenderNumber = ({ count }) => {
   return (
     <div
       className="d-flex flex-row align-items-center"
-      style={{ minHeight: 100 }}
+      style={{ minHeight: 60 }}
     >
-      <Typography style={{ fontSize: 60 }} className="pl-2">
+      <Typography
+        style={{ fontSize: 60, color: "#2CAFFE", lineHeight: 1.0 }}
+        className="pl-2"
+      >
         {abbreviateNumber(count)}
       </Typography>
     </div>

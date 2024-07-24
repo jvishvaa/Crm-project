@@ -82,3 +82,7 @@
     border-color: $primary !important;
     /* Change the tick color to white */
 }
+
+.ant-table-tbody .ant-table-measure-row>td {
+    padding: 0px !important;
+}

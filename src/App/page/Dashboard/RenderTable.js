@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 import getArrayValues from "../../utils/getArrayValues";
 
-const RenderTable = ({ category_name, categories, series, valueLabel }) => {
+const RenderTable = ({
+  category_name,
+  categories,
+  series,
+  valueLabel,
+  height,
+}) => {
   const [tableData, setTableData] = useState([]);
   const [subColumnList, setSubColumnList] = useState([]);
 
@@ -71,13 +77,15 @@ const RenderTable = ({ category_name, categories, series, valueLabel }) => {
   return (
     <>
       {category_name && categories && series && valueLabel ? (
-        <Table
-          dataSource={tableData || []}
-          columns={columns}
-          bordered={true}
-          pagination={false}
-          className="p-1"
-        />
+        <div style={{ height: height || "auto", overflow: "auto" }}>
+          <Table
+            dataSource={tableData || []}
+            columns={columns}
+            bordered={true}
+            pagination={false}
+            className="p-1"
+          />
+        </div>
       ) : null}
     </>
   );
