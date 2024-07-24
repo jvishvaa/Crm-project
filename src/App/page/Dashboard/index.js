@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Row, Col, Typography, Divider, Button, Tooltip } from "antd";
+import {
+  Row,
+  Col,
+  Typography,
+  Divider,
+  Button,
+  Tooltip,
+  Popconfirm,
+} from "antd";
 import "./index.scss";
 import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
@@ -13,69 +21,17 @@ import RenderDonutChart from "./RenderDonutChart";
 import RenderNumber from "./RenderNumber";
 import RenderGaugeChart from "./RenderGaugeChart";
 import { AiOutlineDrag } from "react-icons/ai";
+import { MdDeleteOutline, MdEdit, MdSave } from "react-icons/md";
+import { HiDocumentChartBar } from "react-icons/hi2";
+import getArrayValues from "../../utils/getArrayValues";
 
 const Dashboard = () => {
   const [modalData, setModalData] = useState({ show: false, data: null });
   const reportHeaderRefs = useRef([]);
   const dashboardAreaRef = useRef();
-  const [dashboardReportList, setDashboardReportList] = useState([
-    {
-      reportData: {
-        display_type: "line-chart",
-        measure: "Lead Count",
-        datapoint_category: {
-          name: "Source",
-          type: "select_item",
-          value: [
-            "Source 1",
-            "Source 2",
-            "Source 4",
-            "Source 5",
-            "Source 3",
-            "Source 6",
-          ],
-        },
-        datapoint_subcategory: {
-          name: null,
-          type: null,
-          value: [],
-        },
-        filter: [],
-      },
-      reportHeadData: {
-        report_name: "Source Wise Lead",
-        description: "Test Description",
-      },
-      plotBandData: {
-        threshold1: null,
-        threshold2: null,
-      },
-      graphData: {
-        category: [
-          "Source 1",
-          "Source 2",
-          "Source 4",
-          "Source 5",
-          "Source 3",
-          "Source 6",
-        ],
-        series: [
-          {
-            data: [3, 12, 22, 42, 6, 97],
-          },
-        ],
-      },
-    },
-  ]);
-  const [layout, setLayout] = useState([
-    {
-      i: "Source Wise Lead",
-      x: 0,
-      y: Infinity, // Puts it at the bottom
-      w: 8,
-      h: 16,
-    },
-  ]);
+  const [dashboardReportList, setDashboardReportList] = useState([]);
+  const [layout, setLayout] = useState([]);
+  const [isEditView, setIsEditView] = useState(false);
   const [reportHeaderHeights, setReportHeaderHeights] = useState([]);
   const [dashboardAreaWidth, setDashboardAreaWidth] = useState(0);
 
@@ -119,7 +75,7 @@ const Dashboard = () => {
     return 2 * layout[index].h * 10 - (25 + (reportHeaderHeights[index] || 60));
   };
 
-  console.log(dashboardReportList, reportHeaderHeights, dashboardAreaWidth);
+  console.log(dashboardReportList, layout);
   return (
     <div>
       <Row gutter={[4, 4]}>
@@ -131,15 +87,52 @@ const Dashboard = () => {
                   <CustomBreadCrumbs data={["Dashboard"]} />
                 </Col>
                 <Col>
-                  <Button
-                    size="small"
-                    type="primary"
-                    onClick={() => {
-                      setModalData({ show: true, data: null });
-                    }}
+                  <Row
+                    className="d-flex flex-row justify-content-end"
+                    gutter={[4, 4]}
                   >
-                    + Add Dashboard Report
-                  </Button>
+                    {isEditView && dashboardReportList?.length ? (
+                      <Col>
+                        <Button
+                          size="small"
+                          type="primary"
+                          onClick={() => {
+                            setModalData({ show: true, data: null });
+                          }}
+                        >
+                          + Add Report
+                        </Button>
+                      </Col>
+                    ) : null}
+                    {isEditView ? (
+                      <Col>
+                        <Button
+                          size="small"
+                          type="primary"
+                          onClick={() => {
+                            setIsEditView(false);
+                          }}
+                          icon={<MdSave size={16} />}
+                        >
+                          Save Layout
+                        </Button>
+                      </Col>
+                    ) : null}
+                    {!isEditView && dashboardReportList?.length > 0 ? (
+                      <Col>
+                        <Button
+                          size="small"
+                          type="primary"
+                          onClick={() => {
+                            setIsEditView(true);
+                          }}
+                          icon={<MdEdit size={16} />}
+                        >
+                          Edit Layout
+                        </Button>
+                      </Col>
+                    ) : null}
+                  </Row>
                 </Col>
               </Row>
             </Col>
@@ -156,8 +149,8 @@ const Dashboard = () => {
               cols={24}
               rowHeight={10}
               width={(dashboardAreaWidth || window.innerWidth) - 20}
-              isResizable
-              isDraggable
+              isResizable={isEditView}
+              isDraggable={isEditView}
               autoSize
               useCSSTransforms
               draggableHandle=".drag-handle"
@@ -172,7 +165,7 @@ const Dashboard = () => {
                     <Row gutter={[4, 4]} className="mb-1">
                       <Col xs={24} ref={(el) => setRefHeaderRef(el, index)}>
                         <Row>
-                          <Col xs={18}>
+                          <Col xs={16}>
                             <Typography
                               style={{ fontSize: 14, fontWeight: "500" }}
                               className="pl-2 pt-2"
@@ -180,7 +173,81 @@ const Dashboard = () => {
                               {each.reportHeadData?.report_name ||
                                 "Report Name"}
                             </Typography>
-                            {each.reportHeadData?.description ? (
+                          </Col>
+                          <Col xs={8}>
+                            <Row className="d-flex flex-row justify-content-end align-items-center">
+                              {isEditView ? (
+                                <>
+                                  <Col>
+                                    <Tooltip title="Edit Report">
+                                      <Button
+                                        size="small"
+                                        type="text"
+                                        icon={<MdEdit size={24} />}
+                                        onClick={() => {
+                                          setModalData({
+                                            show: true,
+                                            data: each,
+                                          });
+                                        }}
+                                      />
+                                    </Tooltip>
+                                  </Col>
+                                  <Col>
+                                    <Tooltip title="Remove Report">
+                                      <Popconfirm
+                                        title="Are you sure to remove report?"
+                                        onConfirm={() => {
+                                          let myDashboardReportList = [
+                                            ...dashboardReportList,
+                                          ];
+                                          let myDashboardLayout = [...layout];
+                                          let findIndex = layout.findIndex(
+                                            (obj) =>
+                                              obj.i ===
+                                              each.reportHeadData.report_name
+                                          );
+                                          myDashboardLayout.splice(
+                                            findIndex,
+                                            1
+                                          );
+                                          myDashboardReportList.splice(
+                                            index,
+                                            1
+                                          );
+                                          setDashboardReportList(
+                                            myDashboardReportList
+                                          );
+                                          setLayout(myDashboardLayout);
+                                        }}
+                                      >
+                                        <Button
+                                          size="small"
+                                          type="text"
+                                          icon={
+                                            <MdDeleteOutline
+                                              size={24}
+                                              style={{ color: "red" }}
+                                            />
+                                          }
+                                        />
+                                      </Popconfirm>
+                                    </Tooltip>
+                                  </Col>
+                                  <Col>
+                                    <Button
+                                      type="text"
+                                      className="drag-handle"
+                                      style={{ cursor: "move" }}
+                                      icon={<AiOutlineDrag size={24} />}
+                                    />
+                                  </Col>
+                                </>
+                              ) : null}
+                            </Row>
+                          </Col>
+                          {each.reportHeadData?.description ? (
+                            <Col xs={24}>
                               <Typography
                                 style={{
                                   fontSize: 11,
@@ -191,17 +258,8 @@ const Dashboard = () => {
                               >
                                 {each?.reportHeadData?.description}
                               </Typography>
-                            ) : null}
-                          </Col>
-                          <Col xs={6}>
-                            <Row className="d-flex flex-row justify-content-end">
-                              <Button
-                                type="text"
-                                className="drag-handle mt-1"
-                                icon={<AiOutlineDrag size="25" />}
-                              />
-                            </Row>
-                          </Col>
+                            </Col>
+                          ) : null}
                         </Row>
                       </Col>
                       {Object.keys(each?.graphData)?.length ? (
@@ -310,14 +368,33 @@ const Dashboard = () => {
             </GridLayout>
           </Col>
         ) : (
-          <Col
-            xs={24}
-            className="d-flex justify-content-center align-items-center"
-            style={{ minHeight: "60vh" }}
-          >
-            <Typography style={{ fontSize: "1.5rem", textAlign: "center" }}>
-              Welcome To B2B CRM
-            </Typography>
+          <Col xs={24} style={{ minHeight: "60vh" }}>
+            <Row
+              className="d-flex justify-content-center align-items-center flex-column h-100"
+              gutter={[4, 4]}
+            >
+              <HiDocumentChartBar style={{ color: "#DCDCDC" }} size={120} />
+              <Typography
+                style={{
+                  fontSize: "18px",
+                  fontWeight: 500,
+                  color: "gray",
+                }}
+                className="mt-4 text-center"
+              >
+                Add Report in Dashboard
+              </Typography>
+              <Button
+                type="outlined"
+                size="small"
+                className="mt-2"
+                onClick={() => {
+                  setModalData({ show: true, data: null });
+                }}
+              >
+                + Add Report
+              </Button>
+            </Row>
           </Col>
         )}
       </Row>
@@ -325,10 +402,18 @@ const Dashboard = () => {
         modalData={modalData}
         handleAddEditDashboardElement={(values) => {
           if (modalData?.data) {
+            let myDashboardReportList = [...dashboardReportList];
+            let findIndex = myDashboardReportList.findIndex(
+              (obj) => obj.id === values.id
+            );
+            myDashboardReportList[findIndex] = values;
+            setDashboardReportList(myDashboardReportList);
           } else {
-            console.log(values);
-            let myDashboardReportList = dashboardReportList;
-            myDashboardReportList.push(values);
+            let myDashboardReportList = [...dashboardReportList];
+            let maxId = dashboardReportList?.length
+              ? Math.max(getArrayValues(dashboardReportList, "id")) + 1
+              : 1;
+            myDashboardReportList.push({ id: maxId, ...values });
             setDashboardReportList(myDashboardReportList);
             const newItem = {
               i: values?.reportHeadData?.report_name,
@@ -338,6 +423,7 @@ const Dashboard = () => {
               h: values?.reportData?.display_type === "number" ? 8 : 16,
             };
             setLayout([...layout, newItem]);
+            setIsEditView(true);
           }
         }}
         closeModal={() => {

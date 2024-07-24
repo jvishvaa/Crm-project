@@ -22,7 +22,7 @@ const RenderDonutChart = ({ categories, series, valueLabels, height }) => {
           },
           connectorWidth: 0, // Set connector line width to 0 to hide it
           connectorPadding: 0, // Set padding to 0 to remove extra space
-          distance: -30,
+          distance: height ? -(height / 10) : -30,
         },
         showInLegend: true,
       },

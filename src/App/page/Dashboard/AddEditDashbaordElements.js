@@ -97,6 +97,7 @@ const AddEditDashboardElements = ({
   };
   const [reportHeadData, setReportHeadData] = useState(defaultReportHeadData);
   const [graphData, setGraphData] = useState({});
+  const [isDataUpdated, setIsDataUpdated] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { width } = useWindowDimensions();
@@ -350,43 +351,59 @@ const AddEditDashboardElements = ({
   };
 
   useEffect(() => {
-    if (
-      ["number", "gauge"].includes(reportData?.display_type) &&
-      reportData?.measure &&
-      checkFilter()
-    ) {
-      setGraphData({
-        count: 1334,
-      });
-    } else if (
-      checkCategory() &&
-      reportData?.measure &&
-      checkSubCategory() &&
-      checkFilter()
-    ) {
-      setGraphData({ category: getCategory(), series: getSeries() });
-    } else {
-      setGraphData({});
+    if (modalData?.data) {
+      setReportData(modalData?.data?.reportData);
+      setPlotBandData(modalData?.data?.plotBandData);
+      setReportHeadData(modalData?.data?.reportHeadData);
+      setGraphData(modalData?.data?.graphData);
+      setTimeout(() => {
+        setIsDataUpdated(true);
+      }, [2000]);
+    }
+  }, [modalData]);
+
+  useEffect(() => {
+    if (!modalData?.data || (modalData?.data && isDataUpdated)) {
+      if (
+        ["number", "gauge"].includes(reportData?.display_type) &&
+        reportData?.measure &&
+        checkFilter()
+      ) {
+        setGraphData({
+          count: 1334,
+        });
+      } else if (
+        checkCategory() &&
+        reportData?.measure &&
+        checkSubCategory() &&
+        checkFilter()
+      ) {
+        setGraphData({ category: getCategory(), series: getSeries() });
+      } else {
+        setGraphData({});
+      }
     }
   }, [reportData]);
 
   useEffect(() => {
-    if (
-      reportData?.display_type === "gauge" &&
-      Object.keys(graphData)?.length
-    ) {
-      if (!plotBandData?.threshold1 && !plotBandData?.threshold2) {
-        setPlotBandData({
-          threshold1: Math.round(
-            Math.round(graphData.count * (125 / 100)) * (40 / 100)
-          ),
-          threshold2: Math.round(
-            Math.round(graphData.count * (125 / 100)) * (70 / 100)
-          ),
-        });
+    if (!modalData?.data || (modalData?.data && isDataUpdated)) {
+      if (
+        reportData?.display_type === "gauge" &&
+        Object.keys(graphData)?.length
+      ) {
+        if (!plotBandData?.threshold1 && !plotBandData?.threshold2) {
+          setPlotBandData({
+            threshold1: Math.round(
+              Math.round(graphData.count * (125 / 100)) * (40 / 100)
+            ),
+            threshold2: Math.round(
+              Math.round(graphData.count * (125 / 100)) * (70 / 100)
+            ),
+          });
+        }
+      } else {
+        setPlotBandData(defaultPlotBandData);
       }
-    } else {
-      setPlotBandData(defaultPlotBandData);
     }
   }, [reportData, graphData]);
 
@@ -688,6 +705,13 @@ const AddEditDashboardElements = ({
     );
   };
 
+  const setDefaultState = () => {
+    setReportData(defaultReportData);
+    setReportHeadData(defaultReportHeadData);
+    setPlotBandData(defaultPlotBandData);
+    setGraphData({});
+  };
+
   return (
     <Drawer
       className="add-dashboard-drawer"
@@ -697,11 +721,13 @@ const AddEditDashboardElements = ({
             modalData?.data ? "Edit Dashboard Report" : "Add Dashboard Report"
           }
           onClose={() => {
+            setDefaultState();
             closeModal();
           }}
         />
       }
       onClose={() => {
+        setDefaultState();
         closeModal();
       }}
       open={modalData?.show}
@@ -718,6 +744,7 @@ const AddEditDashboardElements = ({
             key="back"
             style={{ marginRight: 8 }}
             onClick={() => {
+              setDefaultState();
               closeModal();
             }}
             size="small"
@@ -738,11 +765,9 @@ const AddEditDashboardElements = ({
                 reportHeadData: reportHeadData,
                 plotBandData: plotBandData,
                 graphData: graphData,
+                ...(modalData?.data ? { id: modalData?.data?.id } : {}),
               });
-              setReportData(defaultReportData);
-              setReportHeadData(defaultReportHeadData);
-              setPlotBandData(defaultPlotBandData);
-              setGraphData({});
+              setDefaultState();
               closeModal();
             }}
             size="small"
