@@ -34,6 +34,18 @@ const modules = [
     is_sidebar: true,
   },
   {
+    key: "100",
+    icon: <TbLayoutDashboard />,
+    label: "Dashboard2",
+    route: "/dashboard2",
+    permission: {
+      is_view: [1, 2, 3, 4, 5],
+    },
+    component: lazy(() => import("../page/DashboardV2")),
+    is_route: true,
+    is_sidebar: true,
+  },
+  {
     key: "2",
     route: "/profile",
     permission: {
