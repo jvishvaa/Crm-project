@@ -7,6 +7,9 @@ import {
   Button,
   Tooltip,
   Popconfirm,
+  message,
+  Segmented,
+  DatePicker,
 } from "antd";
 import "./index.scss";
 import GridLayout from "react-grid-layout";
@@ -20,12 +23,18 @@ import RenderDonutChart from "./RenderDonutChart";
 import RenderNumber from "./RenderNumber";
 import RenderGaugeChart from "./RenderGaugeChart";
 import { AiOutlineDrag } from "react-icons/ai";
-import { MdDeleteOutline, MdEdit, MdSave } from "react-icons/md";
+import { MdDeleteOutline, MdEdit, MdEvent, MdSave } from "react-icons/md";
 import { HiDocumentChartBar } from "react-icons/hi2";
 import getArrayValues from "../../utils/getArrayValues";
 import AddDashboardReport from "./AddDashboardReport";
 import AddEditDashboardElements from "./AddEditDashbaordElements";
 import { GrConfigure } from "react-icons/gr";
+import useWindowDimensions from "../../component/UtilComponents/useWindowDimensions";
+import dayjs from "dayjs";
+import getFilterItemFromArray from "../../utils/getFilterItemFromArray";
+import { FaFileDownload } from "react-icons/fa";
+
+const { RangePicker } = DatePicker;
 
 const Dashboard = () => {
   const [modalData, setModalData] = useState({
@@ -40,6 +49,38 @@ const Dashboard = () => {
   const [isEditView, setIsEditView] = useState(false);
   const [reportHeaderHeights, setReportHeaderHeights] = useState([]);
   const [dashboardAreaWidth, setDashboardAreaWidth] = useState(0);
+  const { width } = useWindowDimensions();
+
+  console.log(dashboardReportList);
+
+  const dateData = [
+    { label: "T", value: "T", dateData: [dayjs(), dayjs()] },
+    {
+      label: "5D",
+      value: "5D",
+      dateData: [dayjs(), dayjs().subtract(4, "days")],
+    },
+    {
+      label: "7D",
+      value: "7D",
+      dateData: [dayjs(), dayjs().subtract(6, "days")],
+    },
+    {
+      label: "15D",
+      value: "15D",
+      dateData: [dayjs(), dayjs().subtract(14, "days")],
+    },
+    {
+      label: "30D",
+      value: "30D",
+      dateData: [dayjs(), dayjs().subtract(29, "days")],
+    },
+    {
+      label: <MdEvent size={14} style={{ marginTop: -2 }} />,
+      value: "custom",
+      dateData: [dayjs(), dayjs()],
+    },
+  ];
 
   const setRefHeaderRef = (el, index) => {
     reportHeaderRefs.current[index] = el;
@@ -75,13 +116,12 @@ const Dashboard = () => {
         resizeObserver.unobserve(dashboardAreaRef.current);
       }
     };
-  }, []);
+  }, [dashboardReportList]);
 
   const getHeight = (index) => {
     return 2 * layout[index].h * 10 - (25 + (reportHeaderHeights[index] || 60));
   };
 
-  console.log(dashboardReportList, layout);
   return (
     <div>
       <Row gutter={[4, 4]}>
@@ -120,6 +160,18 @@ const Dashboard = () => {
                           size="small"
                           type="primary"
                           onClick={() => {
+                            if (
+                              dashboardReportList?.filter(
+                                (each) =>
+                                  Object.keys(each?.resultData || {})
+                                    ?.length === 0
+                              )?.length
+                            ) {
+                              message.error(
+                                "Please Configure All Report To Save Layout"
+                              );
+                              return;
+                            }
                             setIsEditView(false);
                           }}
                           icon={<MdSave size={16} />}
@@ -164,18 +216,105 @@ const Dashboard = () => {
               autoSize
               useCSSTransforms
               draggableHandle=".drag-handle"
-              onLayoutChange={(layout) => setLayout(layout)}
+              onLayoutChange={(layout) => {
+                setLayout(layout);
+              }}
             >
               {dashboardReportList?.map((each, index) => (
-                <div key={each?.id?.toString()}>
+                <div
+                  key={each?.id?.toString()}
+                  style={{ position: "relative", zIndex: 0 }}
+                >
+                  {isEditView ? (
+                    <Row
+                      className="d-flex flex-row justify-content-center align-items-center"
+                      style={{
+                        position: "absolute",
+                        top: -10,
+                        left: "46%",
+                        zIndex: 1,
+                      }}
+                    >
+                      <Col>
+                        <CustomCard className="add-dashboard-element-preview-card">
+                          <Row className="d-flex flex-row justify-content-center align-items-center">
+                            {Object.keys(each?.resultData || {})?.length ? (
+                              <Col>
+                                <Tooltip title="Edit Report">
+                                  <Button
+                                    size="small"
+                                    type="text"
+                                    icon={<MdEdit size={16} />}
+                                    onClick={() => {
+                                      setModalData({
+                                        show: true,
+                                        type: "Configure Report",
+                                        data: each,
+                                      });
+                                    }}
+                                  />
+                                </Tooltip>
+                              </Col>
+                            ) : null}
+                            <Col>
+                              <Tooltip title="Remove Report">
+                                <Popconfirm
+                                  title="Are you sure to remove report?"
+                                  onConfirm={() => {
+                                    let myDashboardReportList = [
+                                      ...dashboardReportList,
+                                    ];
+                                    let myDashboardLayout = [...layout];
+                                    let findIndex = layout.findIndex(
+                                      (obj) => Number(obj.i) === Number(each.id)
+                                    );
+                                    myDashboardLayout.splice(findIndex, 1);
+                                    myDashboardReportList.splice(index, 1);
+                                    setDashboardReportList(
+                                      myDashboardReportList
+                                    );
+                                    setLayout(myDashboardLayout);
+                                  }}
+                                >
+                                  <Button
+                                    size="small"
+                                    type="text"
+                                    icon={
+                                      <MdDeleteOutline
+                                        size={16}
+                                        style={{ color: "red" }}
+                                      />
+                                    }
+                                  />
+                                </Popconfirm>
+                              </Tooltip>
+                            </Col>
+                            <Col>
+                              <Button
+                                type="text"
+                                size="small"
+                                className="drag-handle"
+                                style={{ cursor: "move" }}
+                                icon={<AiOutlineDrag size={16} />}
+                              />
+                            </Col>
+                          </Row>
+                        </CustomCard>
+                      </Col>
+                    </Row>
+                  ) : null}
                   <CustomCard
-                    style={{ width: "100%", height: "100%", overflow: "auto" }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      overflow: "auto",
+                    }}
                     className="add-dashboard-element-preview-card px-1"
                   >
                     <Row gutter={[4, 4]} className="mb-1">
                       <Col xs={24} ref={(el) => setRefHeaderRef(el, index)}>
                         <Row>
-                          <Col xs={16}>
+                          <Col xs={12}>
                             <Typography
                               style={{ fontSize: 12, fontWeight: "500" }}
                               className="pl-2 pt-2"
@@ -183,79 +322,47 @@ const Dashboard = () => {
                               {each.report_name || "Report Name"}
                             </Typography>
                           </Col>
-                          <Col xs={8}>
-                            <Row className="d-flex flex-row justify-content-end align-items-center">
-                              {isEditView ? (
-                                <>
-                                  {Object.keys(each?.resultData || {})
-                                    ?.length ? (
-                                    <Col>
-                                      <Tooltip title="Edit Report">
-                                        <Button
-                                          size="small"
-                                          type="text"
-                                          icon={<MdEdit size={24} />}
-                                          onClick={() => {
-                                            setModalData({
-                                              show: true,
-                                              type: "Configure Report",
-                                              data: each,
-                                            });
-                                          }}
-                                        />
-                                      </Tooltip>
-                                    </Col>
-                                  ) : null}
-                                  <Col>
-                                    <Tooltip title="Remove Report">
-                                      <Popconfirm
-                                        title="Are you sure to remove report?"
-                                        onConfirm={() => {
-                                          let myDashboardReportList = [
-                                            ...dashboardReportList,
-                                          ];
-                                          let myDashboardLayout = [...layout];
-                                          let findIndex = layout.findIndex(
-                                            (obj) =>
-                                              Number(obj.i) === Number(each.id)
-                                          );
-                                          myDashboardLayout.splice(
-                                            findIndex,
-                                            1
-                                          );
-                                          myDashboardReportList.splice(
-                                            index,
-                                            1
-                                          );
-                                          setDashboardReportList(
-                                            myDashboardReportList
-                                          );
-                                          setLayout(myDashboardLayout);
-                                        }}
-                                      >
-                                        <Button
-                                          size="small"
-                                          type="text"
-                                          icon={
-                                            <MdDeleteOutline
-                                              size={24}
-                                              style={{ color: "red" }}
-                                            />
-                                          }
-                                        />
-                                      </Popconfirm>
-                                    </Tooltip>
-                                  </Col>
-                                  <Col>
+
+                          <Col xs={12} className="mt-1">
+                            <Row
+                              className="d-flex flex-row justify-content-end align-items-center"
+                              gutter={[4, 4]}
+                            >
+                              {Object.keys(each?.resultData || {})?.length &&
+                              !isEditView ? (
+                                <Col>
+                                  <Tooltip title="Download CSV">
                                     <Button
                                       type="text"
-                                      className="drag-handle"
-                                      style={{ cursor: "move" }}
-                                      icon={<AiOutlineDrag size={24} />}
+                                      size="small"
+                                      icon={<FaFileDownload size={20} />}
                                     />
-                                  </Col>
-                                </>
+                                  </Tooltip>
+                                </Col>
                               ) : null}
+                              <Col>
+                                <Segmented
+                                  className="dashboard-segmented"
+                                  value={each.date_type}
+                                  onChange={(value) => {
+                                    let myDashboardReportList = [
+                                      ...dashboardReportList,
+                                    ];
+                                    myDashboardReportList[index].date_type =
+                                      value;
+                                    myDashboardReportList[index].date =
+                                      getFilterItemFromArray(
+                                        dateData,
+                                        "value",
+                                        value
+                                      )[0]?.dateData;
+                                    setDashboardReportList(
+                                      myDashboardReportList
+                                    );
+                                  }}
+                                  options={dateData}
+                                />
+                              </Col>
                             </Row>
                           </Col>
                           {each.report_description ? (
@@ -470,6 +577,8 @@ const Dashboard = () => {
           myDashboardReportList[findIndex] = {
             ...myDashboardReportList[findIndex],
             ...values,
+            date_type: "T",
+            date: [dayjs(), dayjs()],
           };
           setDashboardReportList(myDashboardReportList);
         }}

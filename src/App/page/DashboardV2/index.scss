@@ -74,3 +74,13 @@
 .card-report-name-tile-disabled {
     border: 1px solid #7a7a7a;
 }
+
+.dashboard-segmented .ant-segmented-item-label {
+    max-height: 24px !important;
+    line-height: 24px !important;
+    padding: 0 8px !important;
+}
+
+.dashboard-segmented .ant-segmented-group {
+    height: 24px !important;
+}
