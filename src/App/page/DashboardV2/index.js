@@ -33,6 +33,7 @@ import useWindowDimensions from "../../component/UtilComponents/useWindowDimensi
 import dayjs from "dayjs";
 import getFilterItemFromArray from "../../utils/getFilterItemFromArray";
 import { FaFileDownload } from "react-icons/fa";
+import SelectDate from "./SelectDate";
 
 const { RangePicker } = DatePicker;
 
@@ -54,7 +55,7 @@ const Dashboard = () => {
   console.log(dashboardReportList);
 
   const dateData = [
-    { label: "T", value: "T", dateData: [dayjs(), dayjs()] },
+    { label: "T", value: "T", dateData: [dayjs(), dayjs()], key: "T" },
     {
       label: "5D",
       value: "5D",
@@ -315,12 +316,30 @@ const Dashboard = () => {
                       <Col xs={24} ref={(el) => setRefHeaderRef(el, index)}>
                         <Row>
                           <Col xs={12}>
-                            <Typography
-                              style={{ fontSize: 12, fontWeight: "500" }}
-                              className="pl-2 pt-2"
-                            >
-                              {each.report_name || "Report Name"}
-                            </Typography>
+                            <Row className="d-flex flex-column" gutter={[2, 2]}>
+                              <Col xs={24}>
+                                <Typography
+                                  style={{ fontSize: 12, fontWeight: "500" }}
+                                  className="pl-2 pt-2"
+                                >
+                                  {each.report_name || "Report Name"}
+                                </Typography>
+                              </Col>
+                              {each.report_description ? (
+                                <Col xs={24}>
+                                  <Typography
+                                    style={{
+                                      fontSize: 10,
+                                      fontWeight: "500",
+                                      color: "#7a7a7a",
+                                    }}
+                                    className="pl-2"
+                                  >
+                                    {each?.report_description}
+                                  </Typography>
+                                </Col>
+                              ) : null}
+                            </Row>
                           </Col>
 
                           <Col xs={12} className="mt-1">
@@ -344,6 +363,26 @@ const Dashboard = () => {
                                 <Segmented
                                   className="dashboard-segmented"
                                   value={each.date_type}
+                                  disabled={isEditView}
+                                  onClick={(e) => {
+                                    if (
+                                      e.target.tagName === "DIV" &&
+                                      e.target.getAttribute("title") === null
+                                    ) {
+                                      setModalData({
+                                        show: true,
+                                        type: "Select Report Date",
+                                        data: {
+                                          date:
+                                            dashboardReportList[index]
+                                              .date_type === "custom"
+                                              ? dashboardReportList[index].date
+                                              : [dayjs(), dayjs()],
+                                          index: index,
+                                        },
+                                      });
+                                    }
+                                  }}
                                   onChange={(value) => {
                                     let myDashboardReportList = [
                                       ...dashboardReportList,
@@ -362,23 +401,22 @@ const Dashboard = () => {
                                   }}
                                   options={dateData}
                                 />
+                                {each?.date_type === "custom" ? (
+                                  <Typography
+                                    style={{ fontSize: 10, fontWeight: 500 }}
+                                    className="mt-1 text-right"
+                                  >
+                                    Date:{" "}
+                                    {dayjs(each.date[0]).format("DD/MM/YYYY")}{" "}
+                                    {!dayjs(each.date[0]).isSame(each.date[1])
+                                      ? `to
+                                    ${dayjs(each.date[1]).format("DD/MM/YYYY")}`
+                                      : ""}
+                                  </Typography>
+                                ) : null}
                               </Col>
                             </Row>
                           </Col>
-                          {each.report_description ? (
-                            <Col xs={24}>
-                              <Typography
-                                style={{
-                                  fontSize: 10,
-                                  fontWeight: "500",
-                                  color: "#7a7a7a",
-                                }}
-                                className="pl-2"
-                              >
-                                {each?.report_description}
-                              </Typography>
-                            </Col>
-                          ) : null}
                         </Row>
                       </Col>
                       {Object.keys(each?.resultData || {})?.length ? (
@@ -583,7 +621,19 @@ const Dashboard = () => {
           setDashboardReportList(myDashboardReportList);
         }}
         closeModal={() => {
-          setModalData({ show: false, data: null });
+          setModalData({ show: false, type: null, data: null });
+        }}
+      />
+      <SelectDate
+        modalData={modalData}
+        handleSelectDate={(values) => {
+          let myDashboardReportList = [...dashboardReportList];
+          console.log(myDashboardReportList, values);
+          myDashboardReportList[values.index].date = values?.date;
+          setDashboardReportList(myDashboardReportList);
+        }}
+        closeModal={() => {
+          setModalData({ show: false, type: null, data: null });
         }}
       />
     </div>
