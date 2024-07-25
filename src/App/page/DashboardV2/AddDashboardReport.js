@@ -34,7 +34,6 @@ const CustomHeader = ({ label, onClose }) => (
 const AddDashboardReport = ({ modalData, handleAddDashboard, closeModal }) => {
   const [selectedReport, setSelectedReport] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log(modalData);
   const reportList = [
     {
       label: "Lead Management Report",
@@ -94,7 +93,7 @@ const AddDashboardReport = ({ modalData, handleAddDashboard, closeModal }) => {
       onClose={() => {
         closeModal();
       }}
-      open={modalData?.show}
+      open={modalData?.show && modalData?.type === "Add Report"}
       width={"92%"}
       closable={false}
       maskClosable={false}
@@ -142,33 +141,17 @@ const AddDashboardReport = ({ modalData, handleAddDashboard, closeModal }) => {
                     selectedReport?.includes(each.value)
                       ? "card-report-name-tile-selected"
                       : ""
-                  } ${
-                    modalData?.data?.includes(each.value)
-                      ? "card-report-name-tile-disabled"
-                      : ""
-                  } d-flex flex-column justify-content-center align-content-center`}
+                  }  d-flex flex-column justify-content-center align-content-center`}
                   style={{
-                    cursor: modalData?.data?.includes(each.value)
-                      ? "not-allowed"
-                      : "pointer",
+                    cursor: "pointer",
                   }}
                   onClick={() => {
-                    if (!modalData?.data?.includes(each.value)) {
-                      onChangeCheckbox(each);
-                    }
+                    onChangeCheckbox(each);
                   }}
                 >
                   <Checkbox
-                    className={`card-report-name-tile-checkbox ${
-                      modalData?.data?.includes(each.value)
-                        ? "card-report-name-tile-checkbox-disabled"
-                        : ""
-                    }`}
-                    disabled={modalData?.data?.includes(each.value)}
-                    checked={
-                      modalData?.data?.includes(each.value) ||
-                      selectedReport?.includes(each.value)
-                    }
+                    className={`card-report-name-tile-checkbox`}
+                    checked={selectedReport?.includes(each.value)}
                     onChange={() => {
                       onChangeCheckbox(each);
                     }}

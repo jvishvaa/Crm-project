@@ -14,19 +14,44 @@ import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import CustomBreadCrumbs from "../../component/UtilComponents/CustomBreadCrumbs";
 import CustomCard from "../../component/UtilComponents/CustomCard";
+import RenderChart from "./RenderChart";
+import RenderTable from "./RenderTable";
+import RenderDonutChart from "./RenderDonutChart";
+import RenderNumber from "./RenderNumber";
+import RenderGaugeChart from "./RenderGaugeChart";
 import { AiOutlineDrag } from "react-icons/ai";
 import { MdDeleteOutline, MdEdit, MdSave } from "react-icons/md";
 import { HiDocumentChartBar } from "react-icons/hi2";
 import getArrayValues from "../../utils/getArrayValues";
 import AddDashboardReport from "./AddDashboardReport";
+import AddEditDashboardElements from "./AddEditDashbaordElements";
+import { GrConfigure } from "react-icons/gr";
 
 const Dashboard = () => {
-  const [modalData, setModalData] = useState({ show: false, data: null });
+  const [modalData, setModalData] = useState({
+    show: false,
+    type: "Add Report",
+    data: null,
+  });
+  const reportHeaderRefs = useRef([]);
   const dashboardAreaRef = useRef();
   const [dashboardReportList, setDashboardReportList] = useState([]);
   const [layout, setLayout] = useState([]);
   const [isEditView, setIsEditView] = useState(false);
+  const [reportHeaderHeights, setReportHeaderHeights] = useState([]);
   const [dashboardAreaWidth, setDashboardAreaWidth] = useState(0);
+
+  const setRefHeaderRef = (el, index) => {
+    reportHeaderRefs.current[index] = el;
+  };
+
+  useEffect(() => {
+    // Measure the height for each Col and update state
+    const heights = reportHeaderRefs.current.map(
+      (col) => col?.offsetHeight || 0
+    );
+    setReportHeaderHeights(heights);
+  }, [layout]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -53,7 +78,7 @@ const Dashboard = () => {
   }, []);
 
   const getHeight = (index) => {
-    return 2 * layout[index].h * 10 - 60;
+    return 2 * layout[index].h * 10 - (25 + (reportHeaderHeights[index] || 60));
   };
 
   console.log(dashboardReportList, layout);
@@ -80,10 +105,8 @@ const Dashboard = () => {
                           onClick={() => {
                             setModalData({
                               show: true,
-                              data: getArrayValues(
-                                dashboardReportList,
-                                "report_name"
-                              ),
+                              type: "Add Report",
+                              data: null,
                             });
                           }}
                         >
@@ -144,41 +167,45 @@ const Dashboard = () => {
               onLayoutChange={(layout) => setLayout(layout)}
             >
               {dashboardReportList?.map((each, index) => (
-                <div key={each?.report_name}>
+                <div key={each?.id?.toString()}>
                   <CustomCard
                     style={{ width: "100%", height: "100%", overflow: "auto" }}
                     className="add-dashboard-element-preview-card px-1"
                   >
                     <Row gutter={[4, 4]} className="mb-1">
-                      <Col xs={24}>
+                      <Col xs={24} ref={(el) => setRefHeaderRef(el, index)}>
                         <Row>
                           <Col xs={16}>
                             <Typography
-                              style={{ fontSize: 14, fontWeight: "500" }}
+                              style={{ fontSize: 12, fontWeight: "500" }}
                               className="pl-2 pt-2"
                             >
-                              {each?.report_name}
+                              {each.report_name || "Report Name"}
                             </Typography>
                           </Col>
                           <Col xs={8}>
                             <Row className="d-flex flex-row justify-content-end align-items-center">
                               {isEditView ? (
                                 <>
-                                  <Col>
-                                    <Tooltip title="Edit Report">
-                                      <Button
-                                        size="small"
-                                        type="text"
-                                        icon={<MdEdit size={24} />}
-                                        onClick={() => {
-                                          // setModalData({
-                                          //   show: true,
-                                          //   data: each,
-                                          // });
-                                        }}
-                                      />
-                                    </Tooltip>
-                                  </Col>
+                                  {Object.keys(each?.resultData || {})
+                                    ?.length ? (
+                                    <Col>
+                                      <Tooltip title="Edit Report">
+                                        <Button
+                                          size="small"
+                                          type="text"
+                                          icon={<MdEdit size={24} />}
+                                          onClick={() => {
+                                            setModalData({
+                                              show: true,
+                                              type: "Configure Report",
+                                              data: each,
+                                            });
+                                          }}
+                                        />
+                                      </Tooltip>
+                                    </Col>
+                                  ) : null}
                                   <Col>
                                     <Tooltip title="Remove Report">
                                       <Popconfirm
@@ -189,7 +216,8 @@ const Dashboard = () => {
                                           ];
                                           let myDashboardLayout = [...layout];
                                           let findIndex = layout.findIndex(
-                                            (obj) => obj.i === each.report_name
+                                            (obj) =>
+                                              Number(obj.i) === Number(each.id)
                                           );
                                           myDashboardLayout.splice(
                                             findIndex,
@@ -230,8 +258,138 @@ const Dashboard = () => {
                               ) : null}
                             </Row>
                           </Col>
+                          {each.report_description ? (
+                            <Col xs={24}>
+                              <Typography
+                                style={{
+                                  fontSize: 10,
+                                  fontWeight: "500",
+                                  color: "#7a7a7a",
+                                }}
+                                className="pl-2"
+                              >
+                                {each?.report_description}
+                              </Typography>
+                            </Col>
+                          ) : null}
                         </Row>
                       </Col>
+                      {Object.keys(each?.resultData || {})?.length ? (
+                        <Col xs={24}>
+                          {each?.reportConfigData?.display_type ===
+                          "line-chart" ? (
+                            <RenderChart
+                              categories={each?.resultData?.category}
+                              series={each?.resultData?.series}
+                              valueLabel={each?.reportConfigData?.measure}
+                              type={"line"}
+                              height={getHeight(index)}
+                            />
+                          ) : null}
+                          {each?.reportConfigData?.display_type ===
+                          "vertical-bar-chart" ? (
+                            <RenderChart
+                              categories={each?.resultData?.category}
+                              series={each?.resultData?.series}
+                              valueLabel={each?.reportConfigData?.measure}
+                              type={"column"}
+                              height={getHeight(index)}
+                            />
+                          ) : null}
+                          {each?.reportConfigData?.display_type ===
+                          "horizontal-bar-chart" ? (
+                            <RenderChart
+                              categories={each?.resultData?.category}
+                              series={each?.resultData?.series}
+                              valueLabel={each?.reportConfigData?.measure}
+                              type={"bar"}
+                              height={getHeight(index)}
+                            />
+                          ) : null}
+                          {each?.reportConfigData?.display_type ===
+                          "vertical-stacked-bar-chart" ? (
+                            <RenderChart
+                              categories={each?.resultData?.category}
+                              series={each?.resultData?.series}
+                              valueLabel={each?.reportConfigData?.measure}
+                              type="column"
+                              stacked={true}
+                              height={getHeight(index)}
+                            />
+                          ) : null}
+                          {each?.reportConfigData?.display_type ===
+                          "horizontal-stacked-bar-chart" ? (
+                            <RenderChart
+                              categories={each?.resultData?.category}
+                              series={each?.resultData?.series}
+                              valueLabel={each?.reportConfigData?.measure}
+                              type="bar"
+                              stacked={true}
+                              height={getHeight(index)}
+                            />
+                          ) : null}
+                          {each?.reportConfigData?.display_type === "table" ? (
+                            <RenderTable
+                              category_name={
+                                each?.reportConfigData?.datapoint_category?.name
+                              }
+                              categories={each?.resultData?.category}
+                              series={each?.resultData?.series}
+                              valueLabel={each?.reportConfigData?.measure}
+                              height={getHeight(index)}
+                            />
+                          ) : null}
+                          {each?.reportConfigData?.display_type ===
+                          "donut-chart" ? (
+                            <RenderDonutChart
+                              categories={each?.resultData?.category}
+                              series={each?.resultData?.series}
+                              valueLabel={each?.reportConfigData?.measure}
+                              height={getHeight(index)}
+                            />
+                          ) : null}
+                          {each?.reportConfigData?.display_type === "number" ? (
+                            <RenderNumber count={each?.resultData?.count} />
+                          ) : null}
+                          {each?.reportConfigData?.display_type === "gauge" ? (
+                            <RenderGaugeChart
+                              count={each?.resultData?.count}
+                              valueLabel={each?.reportConfigData?.measure}
+                              plotBandData={each?.plotBandData}
+                              height={getHeight(index)}
+                            />
+                          ) : null}
+                        </Col>
+                      ) : (
+                        <Col xs={24} style={{ height: "100%" }}>
+                          <Row
+                            className="d-flex flex-column justify-content-center align-items-center"
+                            style={{ minHeight: 150 }}
+                          >
+                            <Col>
+                              <GrConfigure
+                                style={{ color: "#DCDCDC" }}
+                                size={60}
+                              />
+                            </Col>
+                            <Col>
+                              <Button
+                                type="outlined"
+                                className="mt-2"
+                                onClick={() => {
+                                  setModalData({
+                                    show: true,
+                                    type: "Configure Report",
+                                    data: each,
+                                  });
+                                }}
+                              >
+                                Configure Report
+                              </Button>
+                            </Col>
+                          </Row>
+                        </Col>
+                      )}
                     </Row>
                   </CustomCard>
                 </div>
@@ -260,10 +418,7 @@ const Dashboard = () => {
                 size="small"
                 className="mt-2"
                 onClick={() => {
-                  setModalData({
-                    show: true,
-                    data: getArrayValues(dashboardReportList, "report_name"),
-                  });
+                  setModalData({ show: true, type: "Add Report", data: null });
                 }}
               >
                 + Add Report
@@ -279,16 +434,17 @@ const Dashboard = () => {
           let myLayout = [...layout];
           values?.map((each, index) => {
             myDashboardReportList.push({
-              id: Math.max(
-                getArrayValues(dashboardReportList, "id") + index + 1
-              ),
+              id:
+                Math.max(getArrayValues(dashboardReportList, "id")) + index + 1,
               report_name: each,
             });
             myLayout.push({
-              i: each,
+              i: `${
+                Math.max(getArrayValues(dashboardReportList, "id")) + index + 1
+              }`,
               x: 0,
               y: Infinity, // Puts it at the bottom
-              w: 8,
+              w: 11,
               h: 16,
             });
           });
@@ -299,8 +455,26 @@ const Dashboard = () => {
         closeModal={() => {
           setModalData({
             show: false,
+            type: null,
             data: null,
           });
+        }}
+      />
+      <AddEditDashboardElements
+        modalData={modalData}
+        handleAddEditDashboardElement={(values) => {
+          let myDashboardReportList = [...dashboardReportList];
+          let findIndex = myDashboardReportList.findIndex(
+            (obj) => obj.id === values.id
+          );
+          myDashboardReportList[findIndex] = {
+            ...myDashboardReportList[findIndex],
+            ...values,
+          };
+          setDashboardReportList(myDashboardReportList);
+        }}
+        closeModal={() => {
+          setModalData({ show: false, data: null });
         }}
       />
     </div>

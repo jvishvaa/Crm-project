@@ -7,7 +7,7 @@ const RenderTagMultiple = ({ label, value, showCloseIcon, onClose }) => {
     <Tag
       className={
         showCloseIcon
-          ? "render-tag-not-all-multiple"
+          ? "render-tag-not-all-multiple p-1"
           : "render-tag-not-all-single"
       }
       closable={showCloseIcon}
