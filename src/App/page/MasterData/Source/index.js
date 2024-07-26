@@ -18,11 +18,12 @@ import {
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
 import CustomCard from "../../../component/UtilComponents/CustomCard";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
-import { CloseOutlined, EditOutlined, SearchOutlined } from "@ant-design/icons";
+import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import AddEditSource from "./addEditSource";
 import CustomFilterText from "../../../component/UtilComponents/CustomFilterText";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import RenderTagMultiple from "../../../component/UtilComponents/RenderMultiple";
+import { MdEdit } from "react-icons/md";
 
 const Source = () => {
   const [form] = Form.useForm();
@@ -168,9 +169,7 @@ const Source = () => {
                   onClick={() => {
                     setModalData({ show: true, data: record });
                   }}
-                  icon={
-                    <EditOutlined style={{ paddingRight: 5, marginLeft: 5 }} />
-                  }
+                  icon={<MdEdit size={20} />}
                 />
               </>
             ),

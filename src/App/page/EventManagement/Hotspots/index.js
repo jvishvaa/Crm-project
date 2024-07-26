@@ -15,7 +15,7 @@ import {
   Empty,
 } from "antd";
 import "./index.scss";
-import { MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
+import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
 import { RiDownloadCloudFill } from "react-icons/ri";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
 import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
@@ -32,6 +32,7 @@ import getChangedCountValues from "../../../utils/getChangeCountObject";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import { TbFileUpload } from "react-icons/tb";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
+import AddEditHotspot from "./AddEditHotspot";
 
 const LeadManagement = () => {
   const defaultFilters = {
@@ -111,17 +112,9 @@ const LeadManagement = () => {
     return getChangedCountValues(
       {
         ...defaultFilters,
-        date_range: [
-          dayjs().format("YYYY-MM-DD"),
-          dayjs().format("YYYY-MM-DD"),
-        ],
       },
       {
         ...filterData,
-        date_range: [
-          dayjs(filterData?.date_range[0]).format("YYYY-MM-DD"),
-          dayjs(filterData?.date_range[1]).format("YYYY-MM-DD"),
-        ],
       }
     );
   };
@@ -134,12 +127,38 @@ const LeadManagement = () => {
       {
         id: 1,
         hotspot_name: "Test",
+        branch: {
+          id: 1,
+          name: "Orchids BTM Layout",
+        },
+        contact_name: "Test",
+        contact_no: "2443242432",
+        hotspot_type: {
+          id: 1,
+          name: "Apartment",
+        },
+        entry_cost: 100,
+      },
+      {
+        id: 2,
+        hotspot_name: "Test1",
+        branch: {
+          id: 1,
+          name: "Orchids BTM Layout",
+        },
+        contact_name: "Test",
+        contact_no: "2443242432",
+        hotspot_type: {
+          id: 1,
+          name: "Apartment",
+        },
+        entry_cost: 100,
       },
     ]);
     setPageData({
       current: page,
       pageSize: page_size,
-      total: 15,
+      total: 2,
     });
   };
 
@@ -235,11 +254,7 @@ const LeadManagement = () => {
   const renderFilterView = () => {
     return (
       <>
-        {!(
-          filterData?.city[0] === 0 &&
-          filterData?.branch[0] === 0 &&
-          filterData?.hotspot_type[0] === 0
-        ) ? (
+        {checkFilterDifference() ? (
           <Row className="d-flex flex-row align-items-center" gutter={[4, 4]}>
             <Col>
               <Typography
@@ -304,17 +319,57 @@ const LeadManagement = () => {
         index + 1 + (pageData?.current - 1) * pageData?.pageSize,
       align: "center",
     },
-
+    {
+      title: "Hotspot Name",
+      key: "hotspot_name",
+      render: (record) => <span>{record?.hotspot_name || "--"}</span>,
+      align: "center",
+    },
+    {
+      title: "Branch",
+      key: "branch",
+      render: (record) => <span>{record?.branch?.name || "--"}</span>,
+      align: "center",
+    },
+    {
+      title: "Hotspot Type",
+      key: "hotspot_type",
+      render: (record) => <span>{record?.hotspot_type?.name || "--"}</span>,
+      align: "center",
+    },
+    {
+      title: "Contact Name",
+      key: "contact_name",
+      render: (record) => <span>{record?.contact_name || "--"}</span>,
+      align: "center",
+    },
+    {
+      title: "Contact No.",
+      key: "contact_no",
+      render: (record) => <span>{record?.contact_no || "--"}</span>,
+      align: "center",
+    },
+    {
+      title: "Entry Cost",
+      key: "entry_cost",
+      render: (record) => <span>{record?.entry_cost || "0"}</span>,
+      align: "center",
+    },
     {
       title: "Action",
       key: "action",
       render: (record) => (
-        <Tooltip title="View">
+        <Tooltip title="Edit">
           <Button
             type="text"
-            icon={<IoMdEye size={20} />}
+            size="small"
+            icon={<MdEdit size={20} />}
             onClick={() => {
-              // navigate("/lead-management/lead-details/1");
+              setDrawerData({
+                show: true,
+                type: "CRUD Hotspot",
+                data: record,
+              });
             }}
           />
         </Tooltip>
@@ -342,6 +397,11 @@ const LeadManagement = () => {
                           type="primary"
                           onClick={() => {
                             // navigate("/lead-management/add-lead");
+                            setDrawerData({
+                              show: true,
+                              data: null,
+                              type: "CRUD Hotspot",
+                            });
                           }}
                         >
                           + Add Hotspots
@@ -378,19 +438,17 @@ const LeadManagement = () => {
             >
               <Col xs={24}>
                 <Row className="d-flex flex-row justify-content-between align-items-center">
-                  {width >= 576 ? (
-                    <Col xs={24} sm={8} md={8} lg={14}>
-                      <Row
-                        className="d-flex flex-row align-items-center"
-                        gutter={[8, 8]}
-                      >
-                        <Col xs={24} md={22} lg={12}>
-                          {getSearchInput()}
-                        </Col>
-                      </Row>
-                    </Col>
-                  ) : null}
-                  <Col xs={24} sm={16} md={16} lg={10}>
+                  <Col xs={13} sm={8} md={8} lg={14}>
+                    <Row
+                      className="d-flex flex-row align-items-center"
+                      gutter={[8, 8]}
+                    >
+                      <Col xs={24} md={22} lg={12}>
+                        {getSearchInput()}
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col xs={11} sm={16} md={16} lg={10}>
                     <Row
                       className="d-flex flex-row justify-content-end align-items-center"
                       gutter={[8, 8]}
@@ -435,37 +493,29 @@ const LeadManagement = () => {
                 </Row>
               </Col>
               {width <= 768 ? (
-                <Col xs={24} className={width < 576 ? "mt-2" : "mt-0"}>
+                <Col xs={24} className={width < 576 ? "mt-1" : "mt-0"}>
                   <Row
                     className="d-flex flex-row justify-content-end align-items-center"
-                    gutter={[4, 4]}
+                    gutter={[8, 8]}
                   >
-                    {width < 576 ? (
-                      <>
-                        <Col
-                          xs={16}
-                          className="d-flex flex-row justify-content-end"
-                        >
-                          {getSearchInput()}
-                        </Col>
-                      </>
-                    ) : null}
                     {checkFilterDifference() ? (
-                      <Col xs={4} style={{ textAlign: "right" }}>
+                      <Col style={{ textAlign: "right" }}>
                         {getClearFilters()}
                       </Col>
                     ) : null}
-                    <Col xs={4} style={{ textAlign: "right" }}>
-                      <Button
-                        type="link"
-                        onClick={() => {
-                          setShowFilterView(!showFilterView);
-                        }}
-                        style={{ whiteSpace: "normal" }}
-                      >
-                        {showFilterView ? "Hide Filters" : "Show Filters"}
-                      </Button>
-                    </Col>
+                    {checkFilterDifference() ? (
+                      <Col style={{ textAlign: "right" }}>
+                        <Button
+                          type="link"
+                          onClick={() => {
+                            setShowFilterView(!showFilterView);
+                          }}
+                          style={{ whiteSpace: "normal" }}
+                        >
+                          {showFilterView ? "Hide Filters" : "Show Filters"}
+                        </Button>
+                      </Col>
+                    ) : null}
                   </Row>
                 </Col>
               ) : null}
@@ -520,12 +570,12 @@ const LeadManagement = () => {
                                           >
                                             <Col xs={24}>
                                               <Typography className="lead-card-header-name">
-                                                {each?.lead_name || "NA"}
+                                                {each?.hotspot_name || "NA"}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
                                               <Typography className="lead-card-subheader-text">
-                                                {"+917937363636"}
+                                                {each?.branch?.name}
                                               </Typography>
                                             </Col>
                                           </Row>
@@ -550,10 +600,22 @@ const LeadManagement = () => {
                                     <Divider />
                                     <Col xs={24}>
                                       <Row className={"d-flex"} gutter={[4, 4]}>
-                                        {/* {getCardDataText(
-                                          "Source",
-                                          each?.contact_source || "--"
-                                        )} */}
+                                        {getCardDataText(
+                                          "Hotspot Type",
+                                          each?.hotspot_type?.name || "--"
+                                        )}
+                                        {getCardDataText(
+                                          "Contact Name",
+                                          each?.contact_name || "--"
+                                        )}
+                                        {getCardDataText(
+                                          "Contact No.",
+                                          each?.contact_no || "--"
+                                        )}
+                                        {getCardDataText(
+                                          "Entry Cost",
+                                          each?.entry_cost || "0"
+                                        )}
                                       </Row>
                                     </Col>
                                   </Row>
@@ -593,6 +655,14 @@ const LeadManagement = () => {
         closeDrawer={() => {
           setDrawerData({ show: false, type: null, data: null });
         }}
+      />
+      <AddEditHotspot
+        modalData={drawerData}
+        handleAddEditHotspot={() => {}}
+        closeModal={() => {
+          setDrawerData({ show: false, type: null, data: null });
+        }}
+        dropdownData={dropdownData}
       />
     </div>
   );

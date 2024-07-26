@@ -20,10 +20,11 @@ import CustomCard from "../../../component/UtilComponents/CustomCard";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
 import CustomFilterText from "../../../component/UtilComponents/CustomFilterText";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
-import { CloseOutlined, EditOutlined, SearchOutlined } from "@ant-design/icons";
+import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import AddEditActivityStatus from "./addEditActivityStatus";
 import getArrayValues from "../../../utils/getArrayValues";
+import { MdEdit } from "react-icons/md";
 
 const ActivityStatus = () => {
   const [form] = Form.useForm();
@@ -249,9 +250,7 @@ const ActivityStatus = () => {
                   onClick={() => {
                     setModalData({ show: true, data: record });
                   }}
-                  icon={
-                    <EditOutlined style={{ paddingRight: 5, marginLeft: 5 }} />
-                  }
+                  icon={<MdEdit size={20} />}
                 />
               </>
             ),

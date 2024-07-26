@@ -350,6 +350,8 @@ const BulkUploadLead = () => {
                       <UploadFile
                         selectedFile={selectedFile}
                         fileUploadChangeHandler={fileUploadChangeHandler}
+                        accept={".xlsx"}
+                        type={"single"}
                         disabled={submitLoading}
                       />
                       <div className="helpertext-div">

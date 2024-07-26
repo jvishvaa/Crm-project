@@ -26,14 +26,14 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
   };
 
   useEffect(() => {
-    if (drawerData?.show) {
+    if (drawerData?.show & (drawerData?.type === "Filter")) {
       setVisible(true);
     } else {
       setTimeout(() => {
         setVisible(false);
       }, [100]);
     }
-    if (drawerData.data) {
+    if (drawerData.data && drawerData?.type === "Filter") {
       form.setFieldsValue({
         city: drawerData?.data?.city,
         branch: drawerData?.data?.branch,

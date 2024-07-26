@@ -2,24 +2,37 @@ import React from "react";
 import "./index.scss";
 import { Button, Typography } from "antd";
 
-const UploadFile = ({ selectedFile, fileUploadChangeHandler, disabled }) => {
+const UploadFile = ({
+  selectedFile,
+  fileUploadChangeHandler,
+  disabled,
+  accept,
+  type,
+  label,
+}) => {
   return (
     <>
       <input
         style={{ display: "none" }}
         id="outlined-button-file"
         type="file"
+        multiple={type === "multiple" ? true : false}
         disabled={[null, undefined].includes(disabled) ? false : disabled}
         key={selectedFile}
-        accept=".xlsx"
+        accept={accept}
         onChange={(e) => {
           fileUploadChangeHandler(e);
         }}
       />
+      {label ? (
+        <Typography style={{ fontSize: 10, fontWeight: 400 }} className="mt-3">
+          {label}
+        </Typography>
+      ) : null}
       <label
         htmlFor="outlined-button-file"
         style={{ width: "100%" }}
-        className="mt-3"
+        className={label ? "mt-0" : "mt-3"}
       >
         <div
           className={disabled ? "file-upload-div-disabled" : "file-upload-div"}
@@ -35,7 +48,11 @@ const UploadFile = ({ selectedFile, fileUploadChangeHandler, disabled }) => {
             <span style={{ color: "red" }}>*</span>
           </Button>
           <Typography className="file-name-text">
-            {selectedFile ? selectedFile.name : "No file chosen"}
+            {type === "multiple"
+              ? "Choose File"
+              : selectedFile
+              ? selectedFile.name
+              : "No file chosen"}
           </Typography>
         </div>
       </label>
