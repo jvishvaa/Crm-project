@@ -34,6 +34,7 @@ import dayjs from "dayjs";
 import getFilterItemFromArray from "../../utils/getFilterItemFromArray";
 import { FaFileDownload } from "react-icons/fa";
 import SelectDate from "./SelectDate";
+import DownloadReport from "./DownloadReport";
 
 const { RangePicker } = DatePicker;
 
@@ -51,8 +52,6 @@ const Dashboard = () => {
   const [reportHeaderHeights, setReportHeaderHeights] = useState([]);
   const [dashboardAreaWidth, setDashboardAreaWidth] = useState(0);
   const { width } = useWindowDimensions();
-
-  console.log(dashboardReportList);
 
   const dateData = [
     { label: "T", value: "T", dateData: [dayjs(), dayjs()], key: "T" },
@@ -191,7 +190,7 @@ const Dashboard = () => {
                           }}
                           icon={<MdEdit size={16} />}
                         >
-                          Edit Layout
+                          Edit Dashboard
                         </Button>
                       </Col>
                     ) : null}
@@ -350,11 +349,18 @@ const Dashboard = () => {
                               {Object.keys(each?.resultData || {})?.length &&
                               !isEditView ? (
                                 <Col>
-                                  <Tooltip title="Download CSV">
+                                  <Tooltip title="Download Report">
                                     <Button
                                       type="text"
                                       size="small"
                                       icon={<FaFileDownload size={20} />}
+                                      onClick={() => {
+                                        setModalData({
+                                          show: true,
+                                          type: "Download Report",
+                                          data: each,
+                                        });
+                                      }}
                                     />
                                   </Tooltip>
                                 </Col>
@@ -628,10 +634,15 @@ const Dashboard = () => {
         modalData={modalData}
         handleSelectDate={(values) => {
           let myDashboardReportList = [...dashboardReportList];
-          console.log(myDashboardReportList, values);
           myDashboardReportList[values.index].date = values?.date;
           setDashboardReportList(myDashboardReportList);
         }}
+        closeModal={() => {
+          setModalData({ show: false, type: null, data: null });
+        }}
+      />
+      <DownloadReport
+        modalData={modalData}
         closeModal={() => {
           setModalData({ show: false, type: null, data: null });
         }}
