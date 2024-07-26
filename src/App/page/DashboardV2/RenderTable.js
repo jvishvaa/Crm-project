@@ -77,7 +77,7 @@ const RenderTable = ({
   return (
     <>
       {category_name && categories && series && valueLabel ? (
-        <div style={{ height: height || "auto", overflow: "auto" }}>
+        <div style={{ height: height + 4 || "auto", overflow: "auto" }}>
           <Table
             dataSource={tableData || []}
             columns={columns}

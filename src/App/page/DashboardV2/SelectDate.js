@@ -38,6 +38,8 @@ const SelectDate = ({ modalData, handleSelectDate, closeModal }) => {
     <Modal
       centered
       open={modalData?.show && modalData.type === "Select Report Date"}
+      maskClosable={false}
+      width={300}
       onCancel={() => {
         closeModal();
         form.resetFields();

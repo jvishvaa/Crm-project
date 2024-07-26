@@ -75,11 +75,6 @@ const Dashboard = () => {
       value: "30D",
       dateData: [dayjs(), dayjs().subtract(29, "days")],
     },
-    {
-      label: <MdEvent size={14} style={{ marginTop: -2 }} />,
-      value: "custom",
-      dateData: [dayjs(), dayjs()],
-    },
   ];
 
   const setRefHeaderRef = (el, index) => {
@@ -92,7 +87,7 @@ const Dashboard = () => {
       (col) => col?.offsetHeight || 0
     );
     setReportHeaderHeights(heights);
-  }, [layout]);
+  }, [layout, dashboardReportList]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -311,12 +306,20 @@ const Dashboard = () => {
                     }}
                     className="add-dashboard-element-preview-card px-1"
                   >
-                    <Row gutter={[4, 4]} className="mb-1">
+                    <Row
+                      gutter={[4, 4]}
+                      className="mb-1"
+                      style={{
+                        height: `calc(100% - ${
+                          reportHeaderHeights[index] + 10
+                        }px )`,
+                      }}
+                    >
                       <Col xs={24} ref={(el) => setRefHeaderRef(el, index)}>
                         <Row>
                           <Col xs={12}>
-                            <Row className="d-flex flex-column" gutter={[2, 2]}>
-                              <Col xs={24}>
+                            <Row className="d-flex flex-row" gutter={[2, 2]}>
+                              <Col style={{ maxWidth: "80%" }}>
                                 <Typography
                                   style={{ fontSize: 12, fontWeight: "500" }}
                                   className="pl-2 pt-2"
@@ -324,35 +327,14 @@ const Dashboard = () => {
                                   {each.report_name || "Report Name"}
                                 </Typography>
                               </Col>
-                              {each.report_description ? (
-                                <Col xs={24}>
-                                  <Typography
-                                    style={{
-                                      fontSize: 10,
-                                      fontWeight: "500",
-                                      color: "#7a7a7a",
-                                    }}
-                                    className="pl-2"
-                                  >
-                                    {each?.report_description}
-                                  </Typography>
-                                </Col>
-                              ) : null}
-                            </Row>
-                          </Col>
-
-                          <Col xs={12} className="mt-1">
-                            <Row
-                              className="d-flex flex-row justify-content-end align-items-center"
-                              gutter={[4, 4]}
-                            >
-                              {Object.keys(each?.resultData || {})?.length &&
-                              !isEditView ? (
-                                <Col>
+                              {Object.keys(each?.resultData || {})?.length ? (
+                                <Col xs={4}>
                                   <Tooltip title="Download Report">
                                     <Button
                                       type="text"
                                       size="small"
+                                      disabled={isEditView}
+                                      className="mt-1"
                                       icon={<FaFileDownload size={20} />}
                                       onClick={() => {
                                         setModalData({
@@ -365,6 +347,14 @@ const Dashboard = () => {
                                   </Tooltip>
                                 </Col>
                               ) : null}
+                            </Row>
+                          </Col>
+
+                          <Col xs={12} className="mt-1">
+                            <Row
+                              className="d-flex flex-row justify-content-end"
+                              gutter={[4, 4]}
+                            >
                               <Col>
                                 <Segmented
                                   className="dashboard-segmented"
@@ -397,7 +387,32 @@ const Dashboard = () => {
                                       value;
                                     myDashboardReportList[index].date =
                                       getFilterItemFromArray(
-                                        dateData,
+                                        [
+                                          ...dateData,
+                                          {
+                                            label: (
+                                              <MdEvent
+                                                size={14}
+                                                style={{
+                                                  marginTop: -2,
+                                                  cursor: "pointer",
+                                                }}
+                                                onClick={() => {
+                                                  setModalData({
+                                                    show: true,
+                                                    type: "Select Report Date",
+                                                    data: {
+                                                      date: [dayjs(), dayjs()],
+                                                      index: index,
+                                                    },
+                                                  });
+                                                }}
+                                              />
+                                            ),
+                                            value: "custom",
+                                            dateData: [dayjs(), dayjs()],
+                                          },
+                                        ],
                                         "value",
                                         value
                                       )[0]?.dateData;
@@ -405,7 +420,32 @@ const Dashboard = () => {
                                       myDashboardReportList
                                     );
                                   }}
-                                  options={dateData}
+                                  options={[
+                                    ...dateData,
+                                    {
+                                      label: (
+                                        <MdEvent
+                                          size={14}
+                                          style={{
+                                            marginTop: -2,
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() => {
+                                            setModalData({
+                                              show: true,
+                                              type: "Select Report Date",
+                                              data: {
+                                                date: [dayjs(), dayjs()],
+                                                index: index,
+                                              },
+                                            });
+                                          }}
+                                        />
+                                      ),
+                                      value: "custom",
+                                      dateData: [dayjs(), dayjs()],
+                                    },
+                                  ]}
                                 />
                                 {each?.date_type === "custom" ? (
                                   <Typography
@@ -423,10 +463,24 @@ const Dashboard = () => {
                               </Col>
                             </Row>
                           </Col>
+                          {each.report_description ? (
+                            <Col xs={24}>
+                              <Typography
+                                style={{
+                                  fontSize: 10,
+                                  fontWeight: "500",
+                                  color: "#7a7a7a",
+                                }}
+                                className="pl-2"
+                              >
+                                {each?.report_description}
+                              </Typography>
+                            </Col>
+                          ) : null}
                         </Row>
                       </Col>
                       {Object.keys(each?.resultData || {})?.length ? (
-                        <Col xs={24}>
+                        <Col xs={24} style={{ height: "100%" }}>
                           {each?.reportConfigData?.display_type ===
                           "line-chart" ? (
                             <RenderChart
@@ -515,7 +569,7 @@ const Dashboard = () => {
                         <Col xs={24} style={{ height: "100%" }}>
                           <Row
                             className="d-flex flex-column justify-content-center align-items-center"
-                            style={{ minHeight: 150 }}
+                            style={{ height: "100%" }}
                           >
                             <Col>
                               <GrConfigure
@@ -597,6 +651,8 @@ const Dashboard = () => {
               y: Infinity, // Puts it at the bottom
               w: 11,
               h: 16,
+              minW: 8,
+              minH: 7,
             });
           });
           setDashboardReportList(myDashboardReportList);

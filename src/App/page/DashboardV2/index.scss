@@ -26,6 +26,7 @@
 
 .add-dashboard-element-preview-card .ant-card-body {
     padding: 0px !important;
+    height: 100%;
 }
 
 .add-dashboard-drawer .ant-drawer-header {
@@ -75,12 +76,16 @@
     border: 1px solid #7a7a7a;
 }
 
+.dashboard-segmented {
+    font-size: 11px !important;
+}
+
 .dashboard-segmented .ant-segmented-item-label {
-    max-height: 24px !important;
-    line-height: 24px !important;
-    padding: 0 8px !important;
+    max-height: 21px !important;
+    line-height: 21px !important;
+    padding: 0 7px !important;
 }
 
 .dashboard-segmented .ant-segmented-group {
-    height: 24px !important;
+    height: 21px !important;
 }

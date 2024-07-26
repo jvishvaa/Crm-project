@@ -102,8 +102,8 @@ const AddEditDashboardElements = ({
 
   const datapointList = [
     {
-      label: "Status Wise",
-      value: "Status Wise",
+      label: "Status",
+      value: "Status",
       valueList: [
         { label: "Status 1", value: "Status 1" },
         { label: "Status 2", value: "Status 2" },
@@ -114,8 +114,8 @@ const AddEditDashboardElements = ({
       ],
     },
     {
-      label: "Source Wise",
-      value: "Source Wise",
+      label: "Source",
+      value: "Source",
       valueList: [
         { label: "Source 1", value: "Source 1" },
         { label: "Source 2", value: "Source 2" },
@@ -126,8 +126,8 @@ const AddEditDashboardElements = ({
       ],
     },
     {
-      label: "Lead Category Wise",
-      value: "Lead Category Wise",
+      label: "Lead Category",
+      value: "Lead Category",
       valueList: [
         { label: "Hot", value: "Hot" },
         { label: "Interested", value: "Interested" },
