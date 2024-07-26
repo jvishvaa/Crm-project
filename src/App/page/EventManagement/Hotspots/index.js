@@ -582,14 +582,16 @@ const LeadManagement = () => {
                                         </Col>
                                         <Col xs={6}>
                                           <Row className="d-flex flex-row justify-content-end">
-                                            <Tooltip title="View">
+                                            <Tooltip title="Edit">
                                               <Button
                                                 type="iconbutton"
-                                                icon={<IoMdEye size={25} />}
+                                                icon={<MdEdit size={20} />}
                                                 onClick={() => {
-                                                  // navigate(
-                                                  //   "/lead-management/lead-details/1"
-                                                  // );
+                                                  setDrawerData({
+                                                    show: true,
+                                                    type: "CRUD Hotspot",
+                                                    data: each,
+                                                  });
                                                 }}
                                               />
                                             </Tooltip>
@@ -647,7 +649,7 @@ const LeadManagement = () => {
       <DrawerFilter
         drawerData={drawerData}
         onSubmit={(values) => {
-          setDrawerData({ show: false, data: null });
+          setDrawerData({ show: false, type: null, data: null });
           setFilterData({ ...filterData, ...values });
           getLeadData(1, pageData?.pageSize);
         }}
