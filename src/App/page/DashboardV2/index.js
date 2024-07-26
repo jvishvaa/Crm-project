@@ -53,6 +53,8 @@ const Dashboard = () => {
   const [dashboardAreaWidth, setDashboardAreaWidth] = useState(0);
   const { width } = useWindowDimensions();
 
+  console.log(dashboardReportList, layout);
+
   const dateData = [
     { label: "T", value: "T", dateData: [dayjs(), dayjs()], key: "T" },
     {
@@ -117,6 +119,300 @@ const Dashboard = () => {
     return 2 * layout[index].h * 10 - (25 + (reportHeaderHeights[index] || 60));
   };
 
+  const renderItem = (each, index) => {
+    return (
+      <CustomCard
+        style={{
+          width: "100%",
+          height: "100%",
+          overflow: "auto",
+        }}
+        className="add-dashboard-element-preview-card px-1"
+      >
+        <Row
+          gutter={[4, 4]}
+          className="mb-1"
+          style={{
+            height:
+              width < 768
+                ? `calc(100% - ${reportHeaderHeights[index] + 20}px )`
+                : `calc(100% - ${reportHeaderHeights[index] + 10}px )`,
+          }}
+        >
+          <Col xs={24} ref={(el) => setRefHeaderRef(el, index)}>
+            <Row>
+              <Col xs={12}>
+                <Row className="d-flex flex-row" gutter={[2, 2]}>
+                  <Col style={{ maxWidth: "80%" }}>
+                    <Typography
+                      style={{ fontSize: 12, fontWeight: "500" }}
+                      className="pl-2 pt-2"
+                    >
+                      {each.report_name || "Report Name"}
+                    </Typography>
+                  </Col>
+                  {Object.keys(each?.resultData || {})?.length ? (
+                    <Col xs={4}>
+                      <Tooltip title="Download Report">
+                        <Button
+                          type="text"
+                          size="small"
+                          disabled={isEditView}
+                          className="mt-1"
+                          icon={<FaFileDownload size={20} />}
+                          onClick={() => {
+                            setModalData({
+                              show: true,
+                              type: "Download Report",
+                              data: each,
+                            });
+                          }}
+                        />
+                      </Tooltip>
+                    </Col>
+                  ) : null}
+                </Row>
+              </Col>
+
+              <Col xs={12} className="mt-1">
+                <Row
+                  className="d-flex flex-row justify-content-end"
+                  gutter={[4, 4]}
+                >
+                  <Col>
+                    <Segmented
+                      className="dashboard-segmented"
+                      value={each.date_type}
+                      style={{ fontSize: width < 768 ? "10px" : "11px" }}
+                      disabled={isEditView}
+                      onClick={(e) => {
+                        if (
+                          e.target.tagName === "DIV" &&
+                          e.target.getAttribute("title") === null
+                        ) {
+                          setModalData({
+                            show: true,
+                            type: "Select Report Date",
+                            data: {
+                              date:
+                                dashboardReportList[index].date_type ===
+                                "custom"
+                                  ? dashboardReportList[index].date
+                                  : [dayjs(), dayjs()],
+                              index: index,
+                            },
+                          });
+                        }
+                      }}
+                      onChange={(value) => {
+                        let myDashboardReportList = [...dashboardReportList];
+                        myDashboardReportList[index].date_type = value;
+                        myDashboardReportList[index].date =
+                          getFilterItemFromArray(
+                            [
+                              ...dateData,
+                              {
+                                label: (
+                                  <MdEvent
+                                    size={14}
+                                    style={{
+                                      marginTop: -2,
+                                      cursor: "pointer",
+                                    }}
+                                    onClick={() => {
+                                      setModalData({
+                                        show: true,
+                                        type: "Select Report Date",
+                                        data: {
+                                          date: [dayjs(), dayjs()],
+                                          index: index,
+                                        },
+                                      });
+                                    }}
+                                  />
+                                ),
+                                value: "custom",
+                                dateData: [dayjs(), dayjs()],
+                              },
+                            ],
+                            "value",
+                            value
+                          )[0]?.dateData;
+                        setDashboardReportList(myDashboardReportList);
+                      }}
+                      options={[
+                        ...dateData,
+                        {
+                          label: (
+                            <MdEvent
+                              size={14}
+                              style={{
+                                marginTop: -2,
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                setModalData({
+                                  show: true,
+                                  type: "Select Report Date",
+                                  data: {
+                                    date: [dayjs(), dayjs()],
+                                    index: index,
+                                  },
+                                });
+                              }}
+                            />
+                          ),
+                          value: "custom",
+                          dateData: [dayjs(), dayjs()],
+                        },
+                      ]}
+                    />
+                    {each?.date_type === "custom" ? (
+                      <Typography
+                        style={{ fontSize: 10, fontWeight: 500 }}
+                        className="mt-1 text-right"
+                      >
+                        Date: {dayjs(each.date[0]).format("DD/MM/YYYY")}{" "}
+                        {!dayjs(each.date[0]).isSame(each.date[1])
+                          ? `to
+                                    ${dayjs(each.date[1]).format("DD/MM/YYYY")}`
+                          : ""}
+                      </Typography>
+                    ) : null}
+                  </Col>
+                </Row>
+              </Col>
+              {each.report_description ? (
+                <Col xs={24}>
+                  <Typography
+                    style={{
+                      fontSize: 10,
+                      fontWeight: "500",
+                      color: "#7a7a7a",
+                    }}
+                    className="pl-2"
+                  >
+                    {each?.report_description}
+                  </Typography>
+                </Col>
+              ) : null}
+            </Row>
+          </Col>
+          {Object.keys(each?.resultData || {})?.length ? (
+            <Col xs={24} style={{ height: "100%" }}>
+              {each?.reportConfigData?.display_type === "line-chart" ? (
+                <RenderChart
+                  categories={each?.resultData?.category}
+                  series={each?.resultData?.series}
+                  valueLabel={each?.reportConfigData?.measure}
+                  type={"line"}
+                  height={getHeight(index)}
+                />
+              ) : null}
+              {each?.reportConfigData?.display_type === "vertical-bar-chart" ? (
+                <RenderChart
+                  categories={each?.resultData?.category}
+                  series={each?.resultData?.series}
+                  valueLabel={each?.reportConfigData?.measure}
+                  type={"column"}
+                  height={getHeight(index)}
+                />
+              ) : null}
+              {each?.reportConfigData?.display_type ===
+              "horizontal-bar-chart" ? (
+                <RenderChart
+                  categories={each?.resultData?.category}
+                  series={each?.resultData?.series}
+                  valueLabel={each?.reportConfigData?.measure}
+                  type={"bar"}
+                  height={getHeight(index)}
+                />
+              ) : null}
+              {each?.reportConfigData?.display_type ===
+              "vertical-stacked-bar-chart" ? (
+                <RenderChart
+                  categories={each?.resultData?.category}
+                  series={each?.resultData?.series}
+                  valueLabel={each?.reportConfigData?.measure}
+                  type="column"
+                  stacked={true}
+                  height={getHeight(index)}
+                />
+              ) : null}
+              {each?.reportConfigData?.display_type ===
+              "horizontal-stacked-bar-chart" ? (
+                <RenderChart
+                  categories={each?.resultData?.category}
+                  series={each?.resultData?.series}
+                  valueLabel={each?.reportConfigData?.measure}
+                  type="bar"
+                  stacked={true}
+                  height={getHeight(index)}
+                />
+              ) : null}
+              {each?.reportConfigData?.display_type === "table" ? (
+                <RenderTable
+                  category_name={
+                    each?.reportConfigData?.datapoint_category?.name
+                  }
+                  categories={each?.resultData?.category}
+                  series={each?.resultData?.series}
+                  valueLabel={each?.reportConfigData?.measure}
+                  height={getHeight(index)}
+                />
+              ) : null}
+              {each?.reportConfigData?.display_type === "donut-chart" ? (
+                <RenderDonutChart
+                  categories={each?.resultData?.category}
+                  series={each?.resultData?.series}
+                  valueLabel={each?.reportConfigData?.measure}
+                  height={getHeight(index)}
+                />
+              ) : null}
+              {each?.reportConfigData?.display_type === "number" ? (
+                <RenderNumber count={each?.resultData?.count} />
+              ) : null}
+              {each?.reportConfigData?.display_type === "gauge" ? (
+                <RenderGaugeChart
+                  count={each?.resultData?.count}
+                  valueLabel={each?.reportConfigData?.measure}
+                  plotBandData={each?.plotBandData}
+                  height={getHeight(index)}
+                />
+              ) : null}
+            </Col>
+          ) : (
+            <Col xs={24} style={{ height: "100%" }}>
+              <Row
+                className="d-flex flex-column justify-content-center align-items-center"
+                style={{ height: "100%" }}
+              >
+                <Col>
+                  <GrConfigure style={{ color: "#DCDCDC" }} size={60} />
+                </Col>
+                <Col>
+                  <Button
+                    type="outlined"
+                    className="mt-2"
+                    onClick={() => {
+                      setModalData({
+                        show: true,
+                        type: "Configure Report",
+                        data: each,
+                      });
+                    }}
+                  >
+                    Configure Report
+                  </Button>
+                </Col>
+              </Row>
+            </Col>
+          )}
+        </Row>
+      </CustomCard>
+    );
+  };
+
   return (
     <div>
       <Row gutter={[4, 4]}>
@@ -175,7 +471,9 @@ const Dashboard = () => {
                         </Button>
                       </Col>
                     ) : null}
-                    {!isEditView && dashboardReportList?.length > 0 ? (
+                    {!isEditView &&
+                    dashboardReportList?.length > 0 &&
+                    width >= 768 ? (
                       <Col>
                         <Button
                           size="small"
@@ -200,146 +498,57 @@ const Dashboard = () => {
         </Col>
         {dashboardReportList?.length ? (
           <Col xs={24} ref={dashboardAreaRef}>
-            <GridLayout
-              className="layout"
-              layout={layout}
-              cols={24}
-              rowHeight={10}
-              width={(dashboardAreaWidth || window.innerWidth) - 20}
-              isResizable={isEditView}
-              isDraggable={isEditView}
-              autoSize
-              useCSSTransforms
-              draggableHandle=".drag-handle"
-              onLayoutChange={(layout) => {
-                setLayout(layout);
-              }}
-            >
-              {dashboardReportList?.map((each, index) => (
-                <div
-                  key={each?.id?.toString()}
-                  style={{ position: "relative", zIndex: 0 }}
-                >
-                  {isEditView ? (
-                    <Row
-                      className="d-flex flex-row justify-content-center align-items-center"
-                      style={{
-                        position: "absolute",
-                        top: -10,
-                        left: "46%",
-                        zIndex: 1,
-                      }}
-                    >
-                      <Col>
-                        <CustomCard className="add-dashboard-element-preview-card">
-                          <Row className="d-flex flex-row justify-content-center align-items-center">
-                            {Object.keys(each?.resultData || {})?.length ? (
-                              <Col>
-                                <Tooltip title="Edit Report">
-                                  <Button
-                                    size="small"
-                                    type="text"
-                                    icon={<MdEdit size={16} />}
-                                    onClick={() => {
-                                      setModalData({
-                                        show: true,
-                                        type: "Configure Report",
-                                        data: each,
-                                      });
-                                    }}
-                                  />
-                                </Tooltip>
-                              </Col>
-                            ) : null}
-                            <Col>
-                              <Tooltip title="Remove Report">
-                                <Popconfirm
-                                  title="Are you sure to remove report?"
-                                  onConfirm={() => {
-                                    let myDashboardReportList = [
-                                      ...dashboardReportList,
-                                    ];
-                                    let myDashboardLayout = [...layout];
-                                    let findIndex = layout.findIndex(
-                                      (obj) => Number(obj.i) === Number(each.id)
-                                    );
-                                    myDashboardLayout.splice(findIndex, 1);
-                                    myDashboardReportList.splice(index, 1);
-                                    setDashboardReportList(
-                                      myDashboardReportList
-                                    );
-                                    setLayout(myDashboardLayout);
-                                  }}
-                                >
-                                  <Button
-                                    size="small"
-                                    type="text"
-                                    icon={
-                                      <MdDeleteOutline
-                                        size={16}
-                                        style={{ color: "red" }}
-                                      />
-                                    }
-                                  />
-                                </Popconfirm>
-                              </Tooltip>
-                            </Col>
-                            <Col>
-                              <Button
-                                type="text"
-                                size="small"
-                                className="drag-handle"
-                                style={{ cursor: "move" }}
-                                icon={<AiOutlineDrag size={16} />}
-                              />
-                            </Col>
-                          </Row>
-                        </CustomCard>
-                      </Col>
-                    </Row>
-                  ) : null}
-                  <CustomCard
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      overflow: "auto",
-                    }}
-                    className="add-dashboard-element-preview-card px-1"
+            {width < 768 ? (
+              <Row gutter={[8, 8]}>
+                {dashboardReportList?.map((each, index) => (
+                  <Col xs={24}>{renderItem(each, index)}</Col>
+                ))}
+              </Row>
+            ) : (
+              <GridLayout
+                className="layout"
+                layout={layout}
+                cols={24}
+                rowHeight={10}
+                width={(dashboardAreaWidth || window.innerWidth) - 20}
+                isResizable={isEditView}
+                isDraggable={isEditView}
+                autoSize
+                useCSSTransforms
+                draggableHandle=".drag-handle"
+                onLayoutChange={(layout) => {
+                  setLayout(layout);
+                }}
+              >
+                {dashboardReportList?.map((each, index) => (
+                  <div
+                    key={each?.id?.toString()}
+                    style={{ position: "relative", zIndex: 0 }}
                   >
-                    <Row
-                      gutter={[4, 4]}
-                      className="mb-1"
-                      style={{
-                        height: `calc(100% - ${
-                          reportHeaderHeights[index] + 10
-                        }px )`,
-                      }}
-                    >
-                      <Col xs={24} ref={(el) => setRefHeaderRef(el, index)}>
-                        <Row>
-                          <Col xs={12}>
-                            <Row className="d-flex flex-row" gutter={[2, 2]}>
-                              <Col style={{ maxWidth: "80%" }}>
-                                <Typography
-                                  style={{ fontSize: 12, fontWeight: "500" }}
-                                  className="pl-2 pt-2"
-                                >
-                                  {each.report_name || "Report Name"}
-                                </Typography>
-                              </Col>
+                    {isEditView ? (
+                      <Row
+                        className="d-flex flex-row justify-content-center align-items-center"
+                        style={{
+                          position: "absolute",
+                          top: -10,
+                          left: "46%",
+                          zIndex: 1,
+                        }}
+                      >
+                        <Col>
+                          <CustomCard className="add-dashboard-element-preview-card">
+                            <Row className="d-flex flex-row justify-content-center align-items-center">
                               {Object.keys(each?.resultData || {})?.length ? (
-                                <Col xs={4}>
-                                  <Tooltip title="Download Report">
+                                <Col>
+                                  <Tooltip title="Edit Report">
                                     <Button
-                                      type="text"
                                       size="small"
-                                      disabled={isEditView}
-                                      className="mt-1"
-                                      icon={<FaFileDownload size={20} />}
+                                      type="text"
+                                      icon={<MdEdit size={16} />}
                                       onClick={() => {
                                         setModalData({
                                           show: true,
-                                          type: "Download Report",
+                                          type: "Configure Report",
                                           data: each,
                                         });
                                       }}
@@ -347,259 +556,59 @@ const Dashboard = () => {
                                   </Tooltip>
                                 </Col>
                               ) : null}
-                            </Row>
-                          </Col>
-
-                          <Col xs={12} className="mt-1">
-                            <Row
-                              className="d-flex flex-row justify-content-end"
-                              gutter={[4, 4]}
-                            >
                               <Col>
-                                <Segmented
-                                  className="dashboard-segmented"
-                                  value={each.date_type}
-                                  disabled={isEditView}
-                                  onClick={(e) => {
-                                    if (
-                                      e.target.tagName === "DIV" &&
-                                      e.target.getAttribute("title") === null
-                                    ) {
-                                      setModalData({
-                                        show: true,
-                                        type: "Select Report Date",
-                                        data: {
-                                          date:
-                                            dashboardReportList[index]
-                                              .date_type === "custom"
-                                              ? dashboardReportList[index].date
-                                              : [dayjs(), dayjs()],
-                                          index: index,
-                                        },
-                                      });
-                                    }
-                                  }}
-                                  onChange={(value) => {
-                                    let myDashboardReportList = [
-                                      ...dashboardReportList,
-                                    ];
-                                    myDashboardReportList[index].date_type =
-                                      value;
-                                    myDashboardReportList[index].date =
-                                      getFilterItemFromArray(
-                                        [
-                                          ...dateData,
-                                          {
-                                            label: (
-                                              <MdEvent
-                                                size={14}
-                                                style={{
-                                                  marginTop: -2,
-                                                  cursor: "pointer",
-                                                }}
-                                                onClick={() => {
-                                                  setModalData({
-                                                    show: true,
-                                                    type: "Select Report Date",
-                                                    data: {
-                                                      date: [dayjs(), dayjs()],
-                                                      index: index,
-                                                    },
-                                                  });
-                                                }}
-                                              />
-                                            ),
-                                            value: "custom",
-                                            dateData: [dayjs(), dayjs()],
-                                          },
-                                        ],
-                                        "value",
-                                        value
-                                      )[0]?.dateData;
-                                    setDashboardReportList(
-                                      myDashboardReportList
-                                    );
-                                  }}
-                                  options={[
-                                    ...dateData,
-                                    {
-                                      label: (
-                                        <MdEvent
-                                          size={14}
-                                          style={{
-                                            marginTop: -2,
-                                            cursor: "pointer",
-                                          }}
-                                          onClick={() => {
-                                            setModalData({
-                                              show: true,
-                                              type: "Select Report Date",
-                                              data: {
-                                                date: [dayjs(), dayjs()],
-                                                index: index,
-                                              },
-                                            });
-                                          }}
-                                        />
-                                      ),
-                                      value: "custom",
-                                      dateData: [dayjs(), dayjs()],
-                                    },
-                                  ]}
-                                />
-                                {each?.date_type === "custom" ? (
-                                  <Typography
-                                    style={{ fontSize: 10, fontWeight: 500 }}
-                                    className="mt-1 text-right"
+                                <Tooltip title="Remove Report">
+                                  <Popconfirm
+                                    title="Are you sure to remove report?"
+                                    onConfirm={() => {
+                                      let myDashboardReportList = [
+                                        ...dashboardReportList,
+                                      ];
+                                      let myDashboardLayout = [...layout];
+                                      let findIndex = layout.findIndex(
+                                        (obj) =>
+                                          Number(obj.i) === Number(each.id)
+                                      );
+                                      myDashboardLayout.splice(findIndex, 1);
+                                      myDashboardReportList.splice(index, 1);
+                                      setDashboardReportList(
+                                        myDashboardReportList
+                                      );
+                                      setLayout(myDashboardLayout);
+                                    }}
                                   >
-                                    Date:{" "}
-                                    {dayjs(each.date[0]).format("DD/MM/YYYY")}{" "}
-                                    {!dayjs(each.date[0]).isSame(each.date[1])
-                                      ? `to
-                                    ${dayjs(each.date[1]).format("DD/MM/YYYY")}`
-                                      : ""}
-                                  </Typography>
-                                ) : null}
+                                    <Button
+                                      size="small"
+                                      type="text"
+                                      icon={
+                                        <MdDeleteOutline
+                                          size={16}
+                                          style={{ color: "red" }}
+                                        />
+                                      }
+                                    />
+                                  </Popconfirm>
+                                </Tooltip>
+                              </Col>
+                              <Col>
+                                <Button
+                                  type="text"
+                                  size="small"
+                                  className="drag-handle"
+                                  style={{ cursor: "move" }}
+                                  icon={<AiOutlineDrag size={16} />}
+                                />
                               </Col>
                             </Row>
-                          </Col>
-                          {each.report_description ? (
-                            <Col xs={24}>
-                              <Typography
-                                style={{
-                                  fontSize: 10,
-                                  fontWeight: "500",
-                                  color: "#7a7a7a",
-                                }}
-                                className="pl-2"
-                              >
-                                {each?.report_description}
-                              </Typography>
-                            </Col>
-                          ) : null}
-                        </Row>
-                      </Col>
-                      {Object.keys(each?.resultData || {})?.length ? (
-                        <Col xs={24} style={{ height: "100%" }}>
-                          {each?.reportConfigData?.display_type ===
-                          "line-chart" ? (
-                            <RenderChart
-                              categories={each?.resultData?.category}
-                              series={each?.resultData?.series}
-                              valueLabel={each?.reportConfigData?.measure}
-                              type={"line"}
-                              height={getHeight(index)}
-                            />
-                          ) : null}
-                          {each?.reportConfigData?.display_type ===
-                          "vertical-bar-chart" ? (
-                            <RenderChart
-                              categories={each?.resultData?.category}
-                              series={each?.resultData?.series}
-                              valueLabel={each?.reportConfigData?.measure}
-                              type={"column"}
-                              height={getHeight(index)}
-                            />
-                          ) : null}
-                          {each?.reportConfigData?.display_type ===
-                          "horizontal-bar-chart" ? (
-                            <RenderChart
-                              categories={each?.resultData?.category}
-                              series={each?.resultData?.series}
-                              valueLabel={each?.reportConfigData?.measure}
-                              type={"bar"}
-                              height={getHeight(index)}
-                            />
-                          ) : null}
-                          {each?.reportConfigData?.display_type ===
-                          "vertical-stacked-bar-chart" ? (
-                            <RenderChart
-                              categories={each?.resultData?.category}
-                              series={each?.resultData?.series}
-                              valueLabel={each?.reportConfigData?.measure}
-                              type="column"
-                              stacked={true}
-                              height={getHeight(index)}
-                            />
-                          ) : null}
-                          {each?.reportConfigData?.display_type ===
-                          "horizontal-stacked-bar-chart" ? (
-                            <RenderChart
-                              categories={each?.resultData?.category}
-                              series={each?.resultData?.series}
-                              valueLabel={each?.reportConfigData?.measure}
-                              type="bar"
-                              stacked={true}
-                              height={getHeight(index)}
-                            />
-                          ) : null}
-                          {each?.reportConfigData?.display_type === "table" ? (
-                            <RenderTable
-                              category_name={
-                                each?.reportConfigData?.datapoint_category?.name
-                              }
-                              categories={each?.resultData?.category}
-                              series={each?.resultData?.series}
-                              valueLabel={each?.reportConfigData?.measure}
-                              height={getHeight(index)}
-                            />
-                          ) : null}
-                          {each?.reportConfigData?.display_type ===
-                          "donut-chart" ? (
-                            <RenderDonutChart
-                              categories={each?.resultData?.category}
-                              series={each?.resultData?.series}
-                              valueLabel={each?.reportConfigData?.measure}
-                              height={getHeight(index)}
-                            />
-                          ) : null}
-                          {each?.reportConfigData?.display_type === "number" ? (
-                            <RenderNumber count={each?.resultData?.count} />
-                          ) : null}
-                          {each?.reportConfigData?.display_type === "gauge" ? (
-                            <RenderGaugeChart
-                              count={each?.resultData?.count}
-                              valueLabel={each?.reportConfigData?.measure}
-                              plotBandData={each?.plotBandData}
-                              height={getHeight(index)}
-                            />
-                          ) : null}
+                          </CustomCard>
                         </Col>
-                      ) : (
-                        <Col xs={24} style={{ height: "100%" }}>
-                          <Row
-                            className="d-flex flex-column justify-content-center align-items-center"
-                            style={{ height: "100%" }}
-                          >
-                            <Col>
-                              <GrConfigure
-                                style={{ color: "#DCDCDC" }}
-                                size={60}
-                              />
-                            </Col>
-                            <Col>
-                              <Button
-                                type="outlined"
-                                className="mt-2"
-                                onClick={() => {
-                                  setModalData({
-                                    show: true,
-                                    type: "Configure Report",
-                                    data: each,
-                                  });
-                                }}
-                              >
-                                Configure Report
-                              </Button>
-                            </Col>
-                          </Row>
-                        </Col>
-                      )}
-                    </Row>
-                  </CustomCard>
-                </div>
-              ))}
-            </GridLayout>
+                      </Row>
+                    ) : null}
+                    {renderItem(each, index)}
+                  </div>
+                ))}
+              </GridLayout>
+            )}
           </Col>
         ) : (
           <Col xs={24} style={{ minHeight: "60vh" }}>
@@ -616,18 +625,24 @@ const Dashboard = () => {
                 }}
                 className="mt-4 text-center"
               >
-                Add Report in Dashboard
+                {width < 768 ? "No Report Found" : "Add Report in Dashboard"}
               </Typography>
-              <Button
-                type="outlined"
-                size="small"
-                className="mt-2"
-                onClick={() => {
-                  setModalData({ show: true, type: "Add Report", data: null });
-                }}
-              >
-                + Add Report
-              </Button>
+              {width >= 768 ? (
+                <Button
+                  type="outlined"
+                  size="small"
+                  className="mt-2"
+                  onClick={() => {
+                    setModalData({
+                      show: true,
+                      type: "Add Report",
+                      data: null,
+                    });
+                  }}
+                >
+                  + Add Report
+                </Button>
+              ) : null}
             </Row>
           </Col>
         )}
