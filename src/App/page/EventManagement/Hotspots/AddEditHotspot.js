@@ -1,32 +1,33 @@
 import {
   Button,
+  Checkbox,
   Col,
-  DatePicker,
   Divider,
   Form,
+  Input,
   Modal,
   Row,
+  Select,
   Typography,
 } from "antd";
+import "./index.scss";
 import React, { useEffect, useState } from "react";
+import getArrayValues from "../../../utils/getArrayValues";
 
-const { RangePicker } = DatePicker;
-
-const SelectDate = ({ modalData, handleSelectDate, closeModal }) => {
+const AddEditHotspot = ({ modalData, handleAddEditHotspot, closeModal }) => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
+  const isDormant = Form.useWatch("is_dormant", form);
 
   const onFinish = (values) => {
     console.log("Received values:", values);
-    handleSelectDate({ date: values?.date, index: modalData?.data?.index });
-    closeModal();
+    handleAddEditHotspot(values);
     form.resetFields();
   };
 
   useEffect(() => {
-    if (modalData?.data && modalData.type === "Select Report Date") {
+    if (modalData?.data) {
       form.setFieldsValue({
-        date: modalData?.data?.date,
+        hotspot_name: modalData?.data?.hotspot_name,
       });
     }
   }, [modalData]);
@@ -34,9 +35,7 @@ const SelectDate = ({ modalData, handleSelectDate, closeModal }) => {
   return (
     <Modal
       centered
-      open={modalData?.show && modalData.type === "Select Report Date"}
-      maskClosable={false}
-      width={300}
+      open={modalData?.show}
       onCancel={() => {
         closeModal();
         form.resetFields();
@@ -55,18 +54,17 @@ const SelectDate = ({ modalData, handleSelectDate, closeModal }) => {
         <Button
           key="submit"
           type="primary"
-          loading={loading}
           onClick={() => form.submit()}
           size="small"
         >
-          Submit
+          {modalData?.data ? "Update" : "Save"}
         </Button>,
       ]}
     >
       <Row>
         <Col xs={24}>
           <Typography style={{ fontSize: 14, fontWeight: 600 }}>
-            Select Report Date
+            {modalData?.data ? "Edit Hotspot" : "Add Hotspot"}
           </Typography>
           <Divider />
         </Col>
@@ -75,11 +73,13 @@ const SelectDate = ({ modalData, handleSelectDate, closeModal }) => {
             <Row>
               <Col xs={24}>
                 <Form.Item
-                  name="date"
-                  label="Select Date"
-                  rules={[{ required: true, message: "Please Select Date" }]}
+                  name="hotspot_name"
+                  label="Hotspot Name"
+                  rules={[
+                    { required: true, message: "Please Enter Hotspot Name" },
+                  ]}
                 >
-                  <RangePicker />
+                  <Input maxLength={48} autoComplete="off" />
                 </Form.Item>
               </Col>
             </Row>
@@ -90,4 +90,4 @@ const SelectDate = ({ modalData, handleSelectDate, closeModal }) => {
   );
 };
 
-export default SelectDate;
+export default AddEditHotspot;

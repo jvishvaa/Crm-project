@@ -2,10 +2,9 @@ import {
   TbDatabase,
   TbFileUpload,
   TbLayoutDashboard,
-  TbUser,
   TbUserSquare,
 } from "react-icons/tb";
-import { GrGroup, GrStatusPlaceholder } from "react-icons/gr";
+import { GrGroup, GrMapLocation, GrStatusPlaceholder } from "react-icons/gr";
 import { LuUserPlus } from "react-icons/lu";
 import { lazy } from "react";
 import { RiOpenSourceLine, RiUserStarLine } from "react-icons/ri";
@@ -18,7 +17,7 @@ import {
   AiOutlineUsergroupAdd,
   AiOutlineUsergroupDelete,
 } from "react-icons/ai";
-import { MdRoute } from "react-icons/md";
+import { MdOutlineEventNote, MdRoute } from "react-icons/md";
 
 const modules = [
   {
@@ -242,6 +241,34 @@ const modules = [
     component: lazy(() => import("../page/FollowUp")),
     is_route: true,
     is_sidebar: true,
+  },
+  {
+    key: "21",
+    icon: <MdOutlineEventNote />,
+    label: "Event Management",
+    permission: {
+      is_view: [1],
+      is_add: [1],
+      is_modify: [1],
+    },
+    is_route: true,
+    is_sidebar: true,
+    children: [
+      {
+        key: "22",
+        icon: <GrMapLocation />,
+        label: "Hotspots",
+        route: "/event_management/hotspots",
+        permission: {
+          is_view: [1],
+          is_add: [1],
+          is_modify: [1],
+        },
+        component: lazy(() => import("../page/EventManagement/Hotspots/")),
+        is_route: true,
+        is_sidebar: true,
+      },
+    ],
   },
   {
     key: "17",

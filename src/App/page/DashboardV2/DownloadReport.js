@@ -1,19 +1,14 @@
 import {
   Button,
-  Checkbox,
   Col,
-  DatePicker,
   Divider,
   Form,
-  Input,
   Modal,
   Row,
   Select,
   Typography,
 } from "antd";
 import React, { useEffect, useState } from "react";
-
-const { RangePicker } = DatePicker;
 
 const DownloadReport = ({ modalData, closeModal }) => {
   const [form] = Form.useForm();

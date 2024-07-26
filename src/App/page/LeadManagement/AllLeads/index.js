@@ -16,7 +16,6 @@ import {
 } from "antd";
 import "./index.css";
 import { MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
-import { RiDownloadCloudFill } from "react-icons/ri";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
 import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import { IoMdEye } from "react-icons/io";
@@ -1097,16 +1096,6 @@ const LeadManagement = () => {
                           optionType="button"
                           buttonStyle="solid"
                         />
-                      </Col>
-                      <Col>
-                        <Button
-                          size="medium"
-                          type="primary"
-                          className="lead-button"
-                          icon={<RiDownloadCloudFill size={14} />}
-                        >
-                          CSV
-                        </Button>
                       </Col>
                       <Col>
                         <Button

@@ -9,7 +9,6 @@ import {
   Popconfirm,
   message,
   Segmented,
-  DatePicker,
 } from "antd";
 import "./index.scss";
 import GridLayout from "react-grid-layout";
@@ -36,8 +35,6 @@ import { FaFileDownload } from "react-icons/fa";
 import SelectDate from "./SelectDate";
 import DownloadReport from "./DownloadReport";
 
-const { RangePicker } = DatePicker;
-
 const Dashboard = () => {
   const [modalData, setModalData] = useState({
     show: false,
@@ -52,8 +49,6 @@ const Dashboard = () => {
   const [reportHeaderHeights, setReportHeaderHeights] = useState([]);
   const [dashboardAreaWidth, setDashboardAreaWidth] = useState(0);
   const { width } = useWindowDimensions();
-
-  console.log(dashboardReportList, layout);
 
   const dateData = [
     { label: "T", value: "T", dateData: [dayjs(), dayjs()], key: "T" },

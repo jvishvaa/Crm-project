@@ -2,22 +2,16 @@ import {
   Button,
   Checkbox,
   Col,
-  DatePicker,
   Divider,
   Form,
-  Input,
   Modal,
   Radio,
   Row,
-  Select,
   Space,
-  TimePicker,
   Typography,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../index.scss";
-
-const { TextArea } = Input;
 
 const GeneratePayment = ({ modalData, handleGeneratePayment, closeModal }) => {
   const [form] = Form.useForm();

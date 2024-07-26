@@ -1,17 +1,8 @@
-import {
-  Button,
-  Col,
-  Divider,
-  Form,
-  Input,
-  Modal,
-  Select,
-  Row,
-  Typography,
-} from "antd";
-import React, { useEffect, useState } from "react";
+import { Button, Col, Drawer, Form, Input, Row, Typography } from "antd";
+import React, { useState } from "react";
 import "../index.scss";
 import Map from "./gMap";
+import CustomDrawerHeader from "../../../../component/UtilComponents/CustomDrawerHeader";
 
 const { TextArea } = Input;
 
@@ -54,45 +45,58 @@ const UpdateLeadDetails = ({
   };
 
   return (
-    <Modal
-      centered
-      open={
-        modalData?.show && ["Update Lead Details"].includes(modalData?.type)
-      }
-      width={700}
-      onCancel={() => {
-        closeModal();
-        form.resetFields();
-      }}
-      footer={[
-        <Button
-          key="back"
-          onClick={() => {
+    <Drawer
+      className="lead-filter-drawer"
+      title={
+        <CustomDrawerHeader
+          label={"Update Lead Details"}
+          onClose={() => {
             closeModal();
             form.resetFields();
           }}
-          size="small"
+        />
+      }
+      onClose={() => {
+        closeModal();
+        form.resetFields();
+      }}
+      open={
+        modalData?.show && ["Update Lead Details"].includes(modalData?.type)
+      }
+      size="large"
+      closable={false}
+      maskClosable={false}
+      bodyStyle={{ paddingBottom: 80 }}
+      footer={
+        <div
+          style={{
+            textAlign: "right",
+          }}
         >
-          Cancel
-        </Button>,
-        <Button
-          key="submit"
-          type="primary"
-          onClick={() => form.submit()}
-          loading={loading}
-          size="small"
-        >
-          Update
-        </Button>,
-      ]}
+          <Button
+            key="back"
+            style={{ marginRight: 10 }}
+            onClick={() => {
+              closeModal();
+              form.resetFields();
+            }}
+            size="small"
+          >
+            Cancel
+          </Button>
+          <Button
+            key="submit"
+            type="primary"
+            onClick={() => form.submit()}
+            loading={loading}
+            size="small"
+          >
+            Update
+          </Button>
+        </div>
+      }
     >
       <Row>
-        <Col xs={24}>
-          <Typography style={{ fontSize: 14, fontWeight: 600 }}>
-            Update Lead Details
-          </Typography>
-          <Divider />
-        </Col>
         <Col xs={24}>
           <Form form={form} layout="vertical" onFinish={onFinish}>
             <Row gutter={[16, 4]}>
@@ -147,7 +151,7 @@ const UpdateLeadDetails = ({
           </Form>
         </Col>
       </Row>
-    </Modal>
+    </Drawer>
   );
 };
 

@@ -7,29 +7,9 @@ import { TbPhotoPentagon } from "react-icons/tb";
 import { GiPersonInBed } from "react-icons/gi";
 import { GrDocumentCloud, GrGroup } from "react-icons/gr";
 import { HiOutlineDocumentReport } from "react-icons/hi";
+import CustomDrawerHeader from "../../component/UtilComponents/CustomDrawerHeader";
 
 const { TextArea } = Input;
-
-const CustomHeader = ({ label, onClose }) => (
-  <Row
-    className="d-flex flex-row justify-content-between align-items-center"
-    gutter={[4, 4]}
-  >
-    <Col xs={20}>
-      <Typography>{label}</Typography>
-    </Col>
-    <Col xs={4}>
-      <Row className="d-flex justify-content-end">
-        <Button
-          type="link"
-          size="small"
-          onClick={onClose}
-          icon={<MdClose size={20} />}
-        />
-      </Row>
-    </Col>
-  </Row>
-);
 
 const AddDashboardReport = ({ modalData, handleAddDashboard, closeModal }) => {
   const [selectedReport, setSelectedReport] = useState([]);
@@ -83,15 +63,17 @@ const AddDashboardReport = ({ modalData, handleAddDashboard, closeModal }) => {
     <Drawer
       className="add-dashboard-drawer"
       title={
-        <CustomHeader
+        <CustomDrawerHeader
           label={"Select Report"}
           onClose={() => {
             closeModal();
+            setSelectedReport([]);
           }}
         />
       }
       onClose={() => {
         closeModal();
+        setSelectedReport([]);
       }}
       open={modalData?.show && modalData?.type === "Add Report"}
       width={"92%"}

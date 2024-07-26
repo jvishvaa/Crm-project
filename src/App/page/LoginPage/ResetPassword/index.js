@@ -1,8 +1,7 @@
 import { Button, Col, Form, Input, Row, Tooltip, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import "../index.css";
-import { useAuth } from "../../../../context/auth-context";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CRMLoginImage from "../../../assest/images/CrmLoginImage.jpg";
 import CrmLogo from "../../../assest/images/CRMLogo.png";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";

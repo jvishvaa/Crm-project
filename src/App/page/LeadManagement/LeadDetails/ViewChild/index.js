@@ -1,11 +1,12 @@
-import { Button, Col, Divider, Modal, Row, Tooltip, Typography } from "antd";
-import React, { useEffect, useState } from "react";
+import { Button, Col, Drawer, Row, Tooltip, Typography } from "antd";
+import React, { useState } from "react";
 import "../index.scss";
 import { MdDelete, MdEdit } from "react-icons/md";
 import AddUpdateChild from "../AddUpdateChildData";
 import UpdatePreviousSchoolData from "../UpdatePreviousSchoolData";
 import UpdateEnrollment from "../UpdateEnrollment";
 import DeleteEnrollment from "../DeleteEnrollment";
+import CustomDrawerHeader from "../../../../component/UtilComponents/CustomDrawerHeader";
 
 const ViewChild = ({ modalData, closeModal }) => {
   const [subModalData, setSubModalData] = useState({
@@ -15,23 +16,27 @@ const ViewChild = ({ modalData, closeModal }) => {
   });
 
   return (
-    <Modal
-      centered
-      width={800}
-      open={modalData?.show && ["View Child"].includes(modalData?.type)}
-      onCancel={() => {
+    <Drawer
+      className="lead-filter-drawer"
+      title={
+        <CustomDrawerHeader
+          label={"View Child"}
+          onClose={() => {
+            closeModal();
+          }}
+        />
+      }
+      onClose={() => {
         closeModal();
       }}
+      open={modalData?.show && ["View Child"].includes(modalData?.type)}
+      size="large"
+      closable={false}
+      maskClosable={false}
       footer={null}
     >
       <Row gutter={[8, 8]}>
-        <Col xs={24}>
-          <Typography style={{ fontSize: 14, fontWeight: 600 }}>
-            {modalData?.type}
-          </Typography>
-          <Divider />
-        </Col>
-        <Col xs={24}>
+        <Col xs={24} className="mt-2">
           <Row className="d-flex flex-column" gutter={[12, 12]}>
             <Col xs={24}>
               <Row className="d-flex flex-row">
@@ -309,7 +314,7 @@ const ViewChild = ({ modalData, closeModal }) => {
           setSubModalData({ show: false, type: null, data: null });
         }}
       />
-    </Modal>
+    </Drawer>
   );
 };
 

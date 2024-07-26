@@ -1,33 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  Row,
-  Col,
-  Typography,
-  Divider,
-  Drawer,
-  Button,
-  Form,
-  Select,
-  Tag,
-  DatePicker,
-} from "antd";
-import { MdClose } from "react-icons/md";
+import { Row, Col, Drawer, Button, Form, Select, DatePicker } from "antd";
 import RenderTagMultiple from "../../component/UtilComponents/RenderMultiple";
-import dayjs from "dayjs";
+import CustomDrawerHeader from "../../component/UtilComponents/CustomDrawerHeader";
 
 const { RangePicker } = DatePicker;
-
-const CustomHeader = ({ onClose }) => (
-  <div className="d-flex flex-row justify-content-between align-items-center">
-    <Typography>Filter</Typography>
-    <Button
-      type="link"
-      size="small"
-      onClick={onClose}
-      icon={<MdClose size={20} />}
-    />
-  </div>
-);
 
 const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
   const [form] = Form.useForm();
@@ -114,7 +90,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
   return (
     <Drawer
       className="lead-filter-drawer"
-      title={<CustomHeader onClose={closeDrawer} />}
+      title={<CustomDrawerHeader label={"Filter"} onClose={closeDrawer} />}
       onClose={closeDrawer}
       open={drawerData?.show}
       size="large"

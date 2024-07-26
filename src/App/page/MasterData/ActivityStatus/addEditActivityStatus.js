@@ -11,7 +11,7 @@ import {
   Typography,
 } from "antd";
 import "./index.scss";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import getArrayValues from "../../../utils/getArrayValues";
 
 const AddEditActivityStatus = ({

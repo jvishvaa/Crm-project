@@ -39,29 +39,10 @@ import RenderDonutChart from "./RenderDonutChart";
 import RenderNumber from "./RenderNumber";
 import RenderGaugeChart from "./RenderGaugeChart";
 import RenderTagMultiple from "../../component/UtilComponents/RenderMultiple";
+import CustomDrawerHeader from "../../component/UtilComponents/CustomDrawerHeader";
 
 const { TextArea } = Input;
 
-const CustomHeader = ({ label, onClose }) => (
-  <Row
-    className="d-flex flex-row justify-content-between align-items-center"
-    gutter={[4, 4]}
-  >
-    <Col xs={20}>
-      <Typography>{label}</Typography>
-    </Col>
-    <Col xs={4}>
-      <Row className="d-flex justify-content-end">
-        <Button
-          type="link"
-          size="small"
-          onClick={onClose}
-          icon={<MdClose size={20} />}
-        />
-      </Row>
-    </Col>
-  </Row>
-);
 const AddEditDashboardElements = ({
   modalData,
   handleAddEditDashboardElement,
@@ -626,7 +607,7 @@ const AddEditDashboardElements = ({
     <Drawer
       className="add-dashboard-drawer"
       title={
-        <CustomHeader
+        <CustomDrawerHeader
           label={"Configure Report"}
           onClose={() => {
             setDefaultState();
