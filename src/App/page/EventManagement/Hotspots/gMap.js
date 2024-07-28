@@ -30,7 +30,7 @@ const Map = (props) => {
       zoom: props.zoom,
       mapId: "1",
       gestureHandling: "auto",
-      draggableCursor: "pointer",
+      draggableCursor: props.isEdit ? "pointer" : "default",
       mapTypeControl: false,
       streetViewControl: false,
     });
@@ -39,7 +39,7 @@ const Map = (props) => {
     const marker = new Marker({
       map: map,
       position: mapPositionLatLng,
-      draggable: true,
+      draggable: props.isEdit ? true : false,
     });
 
     // render infowindow
@@ -53,18 +53,22 @@ const Map = (props) => {
     });
     if (address) {
       infowindow.open(map, marker);
-      inputRef.current.value = address;
+      if (props.isEdit) {
+        inputRef.current.value = address;
+      }
     } else {
       infowindow.close();
     }
 
     // map listener
-    map.addListener("click", (e) => {
-      marker.setPosition(e.latLng);
-      infowindow.close();
-      inputRef.current.value = "";
-      onMarkerDragEnd(e);
-    });
+    if (props.isEdit) {
+      map.addListener("click", (e) => {
+        marker.setPosition(e.latLng);
+        infowindow.close();
+        inputRef.current.value = "";
+        onMarkerDragEnd(e);
+      });
+    }
 
     // marker listener
     marker.addListener("click", () => {
@@ -74,42 +78,44 @@ const Map = (props) => {
         infowindow.open(map, marker); // Open the infowindow if it's closed
       }
     });
-    marker.addListener("dragend", (e) => {
-      onMarkerDragEnd(e);
-    });
-    marker.addListener("drag", (e) => {
-      infowindow.close();
-      inputRef.current.value = "";
-    });
-
-    // render autocomplete
-    const { Autocomplete } = await google.maps.importLibrary("places");
-
-    const autocomplete = new Autocomplete(inputRef.current, {
-      fields: [
-        "place_id",
-        "address_components",
-        "geometry",
-        "formatted_address",
-      ],
-      strictBounds: false,
-    });
-
-    autocomplete.bindTo("bounds", map);
-    autocomplete.addListener("place_changed", () => {
-      infowindow.close();
-      onPlaceSelected();
-    });
+    if (props.isEdit) {
+      marker.addListener("dragend", (e) => {
+        onMarkerDragEnd(e);
+      });
+      marker.addListener("drag", (e) => {
+        infowindow.close();
+        inputRef.current.value = "";
+      });
+    }
 
     mapDisplay = map;
     markerDisplay = marker;
     infowindowDisplay = infowindow;
-    autocompleteDisplay = autocomplete;
+    if (props.isEdit) {
+      // render autocomplete
+      const { Autocomplete } = await google.maps.importLibrary("places");
+      const autocomplete = new Autocomplete(inputRef.current, {
+        fields: [
+          "place_id",
+          "address_components",
+          "geometry",
+          "formatted_address",
+        ],
+        strictBounds: false,
+      });
+
+      autocomplete.bindTo("bounds", map);
+      autocomplete.addListener("place_changed", () => {
+        infowindow.close();
+        onPlaceSelected();
+      });
+      autocompleteDisplay = autocomplete;
+    }
   };
 
   useEffect(() => {
     initMap();
-  }, []);
+  }, [props.isEdit]);
 
   const onMarkerDragEnd = async (event) => {
     const newLat = event.latLng.lat();
@@ -189,23 +195,25 @@ const Map = (props) => {
           height: props.height,
         }}
       ></div>
-      <input
-        ref={inputRef}
-        type="text"
-        placeholder="Enter a location"
-        style={{
-          boxSizing: `border-box`,
-          border: `1px solid grey`,
-          width: `100%`,
-          height: `32px`,
-          padding: `0 12px`,
-          outline: "none",
-          borderRadius: `3px`,
-          boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-          fontSize: `14px`,
-          textOverflow: `ellipses`,
-        }}
-      />
+      {props.isEdit ? (
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="Enter a location"
+          style={{
+            boxSizing: `border-box`,
+            border: `1px solid grey`,
+            width: `100%`,
+            height: `32px`,
+            padding: `0 12px`,
+            outline: "none",
+            borderRadius: `3px`,
+            boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+            fontSize: `14px`,
+            textOverflow: `ellipses`,
+          }}
+        />
+      ) : null}
     </>
   );
 };

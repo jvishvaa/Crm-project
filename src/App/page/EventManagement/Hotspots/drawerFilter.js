@@ -100,7 +100,6 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
       size="large"
       closable={false}
       maskClosable={false}
-      bodyStyle={{ paddingBottom: 80 }}
       footer={
         <div
           style={{

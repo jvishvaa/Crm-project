@@ -359,20 +359,45 @@ const LeadManagement = () => {
       title: "Action",
       key: "action",
       render: (record) => (
-        <Tooltip title="Edit">
-          <Button
-            type="text"
-            size="small"
-            icon={<MdEdit size={20} />}
-            onClick={() => {
-              setDrawerData({
-                show: true,
-                type: "CRUD Hotspot",
-                data: record,
-              });
-            }}
-          />
-        </Tooltip>
+        <Row
+          className={
+            "d-flex flex-row justify-content-center align-items-center"
+          }
+          gutter={[4, 4]}
+        >
+          <Col>
+            <Tooltip title="Edit">
+              <Button
+                type="text"
+                size="small"
+                icon={<MdEdit size={18} />}
+                onClick={() => {
+                  setDrawerData({
+                    show: true,
+                    type: "View Hotspot",
+                    data: { ...record, is_edit: true },
+                  });
+                }}
+              />
+            </Tooltip>
+          </Col>
+          <Col>
+            <Tooltip title="View">
+              <Button
+                type="text"
+                size="small"
+                icon={<IoMdEye size={20} />}
+                onClick={() => {
+                  setDrawerData({
+                    show: true,
+                    type: "View Hotspot",
+                    data: record,
+                  });
+                }}
+              />
+            </Tooltip>
+          </Col>
+        </Row>
       ),
       align: "center",
     },
@@ -396,11 +421,10 @@ const LeadManagement = () => {
                           size="small"
                           type="primary"
                           onClick={() => {
-                            // navigate("/lead-management/add-lead");
                             setDrawerData({
                               show: true,
                               data: null,
-                              type: "CRUD Hotspot",
+                              type: "Add Hotspot",
                             });
                           }}
                         >
@@ -589,7 +613,7 @@ const LeadManagement = () => {
                                                 onClick={() => {
                                                   setDrawerData({
                                                     show: true,
-                                                    type: "CRUD Hotspot",
+                                                    type: "Update Hotspot",
                                                     data: each,
                                                   });
                                                 }}
