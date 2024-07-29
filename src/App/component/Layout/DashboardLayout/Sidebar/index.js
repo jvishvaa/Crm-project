@@ -208,6 +208,11 @@ const Sidebar = ({ collapsed, setCollapsed, colorBgContainer }) => {
           )}
           <Divider className="sider-desktop-divider" />
           <Menu
+            className={
+              collapsed
+                ? "sidebar-menu-collapsed"
+                : "sidebar-menu-not-collapsed"
+            }
             onClick={() => {
               if (!collapsed) {
                 setCollapsed(!collapsed);
@@ -275,6 +280,7 @@ const Sidebar = ({ collapsed, setCollapsed, colorBgContainer }) => {
         >
           <Divider className="sider-desktop-divider" />
           <Menu
+            className="sidebar-menu-small"
             onClick={() => {
               setCollapsed(!collapsed);
             }}
