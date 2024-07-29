@@ -58,7 +58,7 @@ const LeadManagement = () => {
     pageSize: 15,
     total: 0,
   });
-  const [leadData, setLeadData] = useState(null);
+  const [hotspotData, setHotspotData] = useState(null);
   const [isList, setIsList] = useState(true);
   const searchIconRef = useRef(null);
   const { width } = useWindowDimensions();
@@ -121,9 +121,9 @@ const LeadManagement = () => {
 
   const [searchFetched, setSearchFetched] = useState(false);
 
-  const getLeadData = (page, page_size, params = {}) => {
+  const getHotspotData = (page, page_size, params = {}) => {
     // setLoading(true);
-    setLeadData([
+    setHotspotData([
       {
         id: 1,
         hotspot_name: "Test",
@@ -163,17 +163,17 @@ const LeadManagement = () => {
   };
 
   useEffect(() => {
-    getLeadData(pageData?.current, pageData?.pageSize);
+    getHotspotData(pageData?.current, pageData?.pageSize);
   }, []);
 
   const handleTableChange = (pagination) => {
     window.scrollTo(0, 0);
-    getLeadData(pagination?.current, pagination?.pageSize);
+    getHotspotData(pagination?.current, pagination?.pageSize);
   };
 
   const handleCardChange = (page) => {
     window.scrollTo(0, 0);
-    getLeadData(page, pageData?.pageSize);
+    getHotspotData(page, pageData?.pageSize);
   };
 
   const getSearchInput = () => {
@@ -193,7 +193,7 @@ const LeadManagement = () => {
         onPressEnter={() => {
           setSearchFetched(true);
           setSearchValue(searchInput);
-          getLeadData(1, pageData?.pageSize);
+          getHotspotData(1, pageData?.pageSize);
         }}
         onBlur={(e) => {
           if (
@@ -226,7 +226,7 @@ const LeadManagement = () => {
               onClick={() => {
                 setSearchFetched(true);
                 setSearchValue(searchInput);
-                getLeadData(1, pageData?.pageSize);
+                getHotspotData(1, pageData?.pageSize);
               }}
             />
           )
@@ -243,7 +243,7 @@ const LeadManagement = () => {
         style={{ whiteSpace: "normal" }}
         onClick={() => {
           setFilterData({ ...defaultFilters });
-          getLeadData(1, pageData?.pageSize);
+          getHotspotData(1, pageData?.pageSize);
         }}
       >
         Clear Filters
@@ -440,7 +440,7 @@ const LeadManagement = () => {
                           disabled={loading}
                           icon={<MdRefresh size={20} />}
                           onClick={() => {
-                            getLeadData(1, pageData.pageSize);
+                            getHotspotData(1, pageData.pageSize);
                           }}
                         />
                       </Tooltip>
@@ -548,20 +548,20 @@ const LeadManagement = () => {
                   {renderFilterView()}
                 </Col>
               ) : null}
-              {leadData ? (
+              {hotspotData ? (
                 isList ? (
                   <Col xs={24} className={"mt-2"}>
                     <Table
-                      dataSource={leadData || []}
+                      dataSource={hotspotData || []}
                       columns={columns}
                       bordered={true}
-                      pagination={leadData?.length > 0 ? pageData : false}
+                      pagination={hotspotData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />
                   </Col>
                 ) : (
                   <>
-                    {leadData?.length === 0 ? (
+                    {hotspotData?.length === 0 ? (
                       <Col xs={24} className={"mt-2"}>
                         <CustomCard
                           style={{ minHeight: 200 }}
@@ -573,11 +573,11 @@ const LeadManagement = () => {
                         </CustomCard>
                       </Col>
                     ) : null}
-                    {leadData?.length > 0 ? (
+                    {hotspotData?.length > 0 ? (
                       <>
                         <Col xs={24} className={"mt-2"}>
                           <Row className={"d-flex"} gutter={[8, 8]}>
-                            {leadData?.map((each, index) => (
+                            {hotspotData?.map((each, index) => (
                               <Col xs={24} sm={12} lg={8} key={index}>
                                 <CustomCard style={{ height: "100%" }}>
                                   <Row gutter={[4, 4]} className={"d-flex"}>
@@ -675,7 +675,7 @@ const LeadManagement = () => {
         onSubmit={(values) => {
           setDrawerData({ show: false, type: null, data: null });
           setFilterData({ ...filterData, ...values });
-          getLeadData(1, pageData?.pageSize);
+          getHotspotData(1, pageData?.pageSize);
         }}
         dropdownData={dropdownData}
         closeDrawer={() => {
