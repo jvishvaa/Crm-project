@@ -268,6 +268,20 @@ const modules = [
         is_route: true,
         is_sidebar: true,
       },
+      {
+        key: "23",
+        icon: <MdOutlineEventNote />,
+        label: "Events",
+        route: "/event_management/events",
+        permission: {
+          is_view: [1],
+          is_add: [1],
+          is_modify: [1],
+        },
+        component: lazy(() => import("../page/EventManagement/Events//")),
+        is_route: true,
+        is_sidebar: true,
+      },
     ],
   },
   {
