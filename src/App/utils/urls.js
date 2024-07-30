@@ -19,6 +19,7 @@ if (process.env.REACT_APP_UI_ENV === "stage") {
 const urls = {
   login: {
     loginApi: `${BASEERP}/erp_user/login/`,
+    accessTokenApi: `${BASEERP}/erp_user/access-token/`,
   },
 };
 
