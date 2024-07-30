@@ -28,7 +28,7 @@ const modules = [
     permission: {
       is_view: [1, 2, 3, 4, 5],
     },
-    component: lazy(() => import("../page/DashboardV2")),
+    component: lazy(() => import("../page/Dashboard")),
     is_route: true,
     is_sidebar: true,
   },

@@ -38,33 +38,11 @@ import RenderTable from "./RenderTable";
 import RenderDonutChart from "./RenderDonutChart";
 import RenderNumber from "./RenderNumber";
 import RenderGaugeChart from "./RenderGaugeChart";
+import RenderTagMultiple from "../../component/UtilComponents/RenderMultiple";
+import CustomDrawerHeader from "../../component/UtilComponents/CustomDrawerHeader";
 
 const { TextArea } = Input;
 
-const CustomHeader = ({ label, onClose }) => (
-  <Row
-    className="d-flex flex-row justify-content-between align-items-center"
-    gutter={[4, 4]}
-  >
-    <Col xs={20}>
-      <Typography>{label}</Typography>
-      <Typography style={{ fontSize: 10, fontWeight: 500, lineHeight: 1.4 }}>
-        Note: If no date parameters are specified, the dashboard report will
-        default to displaying data for the current day.{" "}
-      </Typography>
-    </Col>
-    <Col xs={4}>
-      <Row className="d-flex justify-content-end">
-        <Button
-          type="link"
-          size="small"
-          onClick={onClose}
-          icon={<MdClose size={20} />}
-        />
-      </Row>
-    </Col>
-  </Row>
-);
 const AddEditDashboardElements = ({
   modalData,
   handleAddEditDashboardElement,
@@ -75,28 +53,22 @@ const AddEditDashboardElements = ({
     measure: null,
     datapoint_category: {
       name: null,
-      type: null,
       value: [],
     },
     datapoint_subcategory: {
       name: null,
-      type: null,
       value: [],
     },
     filter: [],
   };
-  const [reportData, setReportData] = useState(defaultReportData);
+  const [reportConfigData, setReportConfigData] = useState(defaultReportData);
   const defaultPlotBandData = {
     threshold1: null,
     threshold2: null,
   };
   const [plotBandData, setPlotBandData] = useState(defaultPlotBandData);
-  const defaultReportHeadData = {
-    report_name: "",
-    description: "",
-  };
-  const [reportHeadData, setReportHeadData] = useState(defaultReportHeadData);
-  const [graphData, setGraphData] = useState({});
+  const [reportDescription, setReportDescription] = useState("");
+  const [resultData, setResultData] = useState({});
   const [isDataUpdated, setIsDataUpdated] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -107,11 +79,12 @@ const AddEditDashboardElements = ({
     { label: "Child Count", value: "Child Count" },
   ];
 
+  const selectLimit = 10;
+
   const datapointList = [
     {
       label: "Status",
       value: "Status",
-      type: "list",
       valueList: [
         { label: "Status 1", value: "Status 1" },
         { label: "Status 2", value: "Status 2" },
@@ -124,7 +97,6 @@ const AddEditDashboardElements = ({
     {
       label: "Source",
       value: "Source",
-      type: "list",
       valueList: [
         { label: "Source 1", value: "Source 1" },
         { label: "Source 2", value: "Source 2" },
@@ -135,22 +107,8 @@ const AddEditDashboardElements = ({
       ],
     },
     {
-      label: "Academic Year",
-      value: "Academic Year",
-      type: "list",
-      valueList: [
-        { label: "Academic Year 1", value: "Academic Year 1" },
-        { label: "Academic Year 2", value: "Academic Year 2" },
-        { label: "Academic Year 3", value: "Academic Year 3" },
-        { label: "Academic Year 4", value: "Academic Year 4" },
-        { label: "Academic Year 5", value: "Academic Year 5" },
-        { label: "Academic Year 6", value: "Academic Year 6" },
-      ],
-    },
-    {
       label: "Lead Category",
       value: "Lead Category",
-      type: "list",
       valueList: [
         { label: "Hot", value: "Hot" },
         { label: "Interested", value: "Interested" },
@@ -158,64 +116,44 @@ const AddEditDashboardElements = ({
       ],
     },
     {
-      label: "Lead Properties",
-      value: "Lead Properties",
-      type: "sub-field",
-      valueList: [
-        { label: "Dormant", value: "Dormant" },
-        { label: "Active", value: "Active" },
-        { label: "Regen", value: "Regen" },
-      ],
-    },
-    {
       label: "Lead Created Date",
       value: "Lead Created Date",
-      type: "date",
     },
   ];
 
   const dateTypeList = [
     {
-      label: "Today",
-      value: "today",
-      type: "single",
-      keyData: "Day",
-      maxData: 1,
-    },
-    {
       label: "Day Wise",
       value: "day-wise",
-      type: "multiple",
-      keyData: "Day",
-      maxData: 31,
-    },
-    {
-      label: "Current Week",
-      value: "current-week",
-      type: "single",
-      keyData: "Week",
-      maxData: 1,
+      valueList: [
+        { label: "Day 1", value: "Day 1" },
+        { label: "Day 2", value: "Day 2" },
+        { label: "Day 3", value: "Day 3" },
+        { label: "Day 4", value: "Day 4" },
+        { label: "Day 5", value: "Day 5" },
+      ],
     },
     {
       label: "Week Wise",
       value: "week-wise",
-      type: "multiple",
-      keyData: "Week",
-      maxData: 5,
-    },
-    {
-      label: "Current Month",
-      value: "current-month",
-      type: "single",
-      keyData: "Month",
-      maxData: 1,
+      valueList: [
+        { label: "Week 1", value: "Week 1" },
+        { label: "Week 2", value: "Week 2" },
+        { label: "Week 3", value: "Week 3" },
+        { label: "Week 4", value: "Week 4" },
+        { label: "Week 5", value: "Week 5" },
+      ],
     },
     {
       label: "Month Wise",
       value: "month-wise",
-      type: "multiple",
-      keyData: "Month",
-      maxData: 12,
+      valueList: [
+        { label: "Month 1", value: "Month 1" },
+        { label: "Month 2", value: "Month 2" },
+        { label: "Month 3", value: "Month 3" },
+        { label: "Month 4", value: "Month 4" },
+        { label: "Month 5", value: "Month 5" },
+      ],
     },
   ];
 
@@ -289,18 +227,13 @@ const AddEditDashboardElements = ({
     },
   ];
 
-  const categoryListType = [
-    { label: "Top 5", value: "top_5", maxLength: 5 },
-    { label: "Worst 5", value: "worst_5", maxLength: 5 },
-    { label: "Custom", value: "select_item" },
-  ];
-
   const checkFilter = () => {
     return (
-      (reportData?.filter.length &&
-        reportData?.filter?.filter((each) => !each.name || !each.value?.length)
-          ?.length === 0) ||
-      !reportData?.filter?.length
+      (reportConfigData?.filter.length &&
+        reportConfigData?.filter?.filter(
+          (each) => !each.name || !each.value?.length
+        )?.length === 0) ||
+      !reportConfigData?.filter?.length
     );
   };
 
@@ -309,53 +242,33 @@ const AddEditDashboardElements = ({
       (getFilterItemFromArray(
         displayTypeList,
         "value",
-        reportData?.display_type
+        reportConfigData?.display_type
       )[0]?.is_category &&
-        reportData?.datapoint_category?.name &&
-        ((getFilterItemFromArray(
-          datapointList,
-          "value",
-          reportData?.datapoint_category?.name
-        )[0]?.type !== "sub-field" &&
-          reportData?.datapoint_category?.type) ||
-          getFilterItemFromArray(
-            datapointList,
-            "value",
-            reportData?.datapoint_category?.name
-          )[0]?.type === "sub-field") &&
-        reportData?.datapoint_category?.value?.length) ||
+        reportConfigData?.datapoint_category?.name &&
+        reportConfigData?.datapoint_category?.value?.length) ||
       !getFilterItemFromArray(
         displayTypeList,
         "value",
-        reportData?.display_type
+        reportConfigData?.display_type
       )[0]?.is_category
     );
   };
   const checkSubCategory = () => {
     return (
-      (reportData?.datapoint_subcategory?.name &&
-        ((getFilterItemFromArray(
-          datapointList,
-          "value",
-          reportData?.datapoint_subcategory?.name
-        )[0]?.type !== "sub-field" &&
-          reportData?.datapoint_subcategory?.type) ||
-          getFilterItemFromArray(
-            datapointList,
-            "value",
-            reportData?.datapoint_subcategory?.name
-          )[0]?.type === "sub-field") &&
-        reportData?.datapoint_subcategory?.value?.length) ||
-      !reportData?.datapoint_subcategory?.name
+      (reportConfigData?.datapoint_subcategory?.name &&
+        reportConfigData?.datapoint_subcategory?.value?.length) ||
+      !reportConfigData?.datapoint_subcategory?.name
     );
   };
 
   useEffect(() => {
-    if (modalData?.data) {
-      setReportData(modalData?.data?.reportData);
-      setPlotBandData(modalData?.data?.plotBandData);
-      setReportHeadData(modalData?.data?.reportHeadData);
-      setGraphData(modalData?.data?.graphData);
+    if (modalData?.data && modalData?.type === "Configure Report") {
+      setReportConfigData(
+        modalData?.data?.reportConfigData || defaultReportData
+      );
+      setPlotBandData(modalData?.data?.plotBandData || defaultPlotBandData);
+      setReportDescription(modalData?.data?.report_description || "");
+      setResultData(modalData?.data?.resultData || {});
       setTimeout(() => {
         setIsDataUpdated(true);
       }, [2000]);
@@ -365,39 +278,39 @@ const AddEditDashboardElements = ({
   useEffect(() => {
     if (!modalData?.data || (modalData?.data && isDataUpdated)) {
       if (
-        ["number", "gauge"].includes(reportData?.display_type) &&
-        reportData?.measure &&
+        ["number", "gauge"].includes(reportConfigData?.display_type) &&
+        reportConfigData?.measure &&
         checkFilter()
       ) {
-        setGraphData({
+        setResultData({
           count: 1334,
         });
       } else if (
         checkCategory() &&
-        reportData?.measure &&
+        reportConfigData?.measure &&
         checkSubCategory() &&
         checkFilter()
       ) {
-        setGraphData({ category: getCategory(), series: getSeries() });
+        setResultData({ category: getCategory(), series: getSeries() });
       } else {
-        setGraphData({});
+        setResultData({});
       }
     }
-  }, [reportData]);
+  }, [reportConfigData]);
 
   useEffect(() => {
     if (!modalData?.data || (modalData?.data && isDataUpdated)) {
       if (
-        reportData?.display_type === "gauge" &&
-        Object.keys(graphData)?.length
+        reportConfigData?.display_type === "gauge" &&
+        Object.keys(resultData)?.length
       ) {
         if (!plotBandData?.threshold1 && !plotBandData?.threshold2) {
           setPlotBandData({
             threshold1: Math.round(
-              Math.round(graphData.count * (125 / 100)) * (40 / 100)
+              Math.round(resultData.count * (125 / 100)) * (40 / 100)
             ),
             threshold2: Math.round(
-              Math.round(graphData.count * (125 / 100)) * (70 / 100)
+              Math.round(resultData.count * (125 / 100)) * (70 / 100)
             ),
           });
         }
@@ -405,29 +318,31 @@ const AddEditDashboardElements = ({
         setPlotBandData(defaultPlotBandData);
       }
     }
-  }, [reportData, graphData]);
+  }, [reportConfigData, resultData]);
 
   const getCategory = () => {
-    return getFilterItemFromArray(
-      datapointList,
-      "value",
-      reportData?.datapoint_category?.name
-    )[0]?.type === "date"
-      ? Array.from(
-          {
-            length: reportData?.datapoint_category?.value[0],
-          },
-          (v, i) => i + 1
-        )?.map((each, index) => {
-          return `${
-            getFilterItemFromArray(
-              dateTypeList,
-              "value",
-              reportData?.datapoint_category?.type
-            )[0]?.keyData
-          } ${index + 1}`;
-        })
-      : reportData?.datapoint_category?.value;
+    return reportConfigData?.datapoint_category?.name
+      ?.toLowerCase()
+      ?.includes("date")
+      ? getArrayValues(
+          getFilterItemFromArray(
+            dateTypeList,
+            "value",
+            reportConfigData?.datapoint_category?.value[0]
+          )[0]?.valueList,
+          "value"
+        )
+      : reportConfigData?.datapoint_category?.value?.length &&
+        reportConfigData?.datapoint_category?.value[0] === 0
+      ? getArrayValues(
+          getFilterItemFromArray(
+            datapointList,
+            "value",
+            reportConfigData?.datapoint_category?.name
+          )[0]?.valueList,
+          "value"
+        )
+      : reportConfigData?.datapoint_category?.value;
   };
 
   function getRandomValue() {
@@ -437,28 +352,19 @@ const AddEditDashboardElements = ({
   const getSeries = () => {
     const categoryList = getCategory();
     let seriesList = [];
-    if (reportData?.datapoint_subcategory?.name) {
-      let seriesNameList =
-        getFilterItemFromArray(
-          datapointList,
-          "value",
-          reportData?.datapoint_subcategory?.name
-        )[0]?.type === "date"
-          ? Array.from(
-              {
-                length: reportData?.datapoint_subcategory?.value[0],
-              },
-              (v, i) => i + 1
-            )?.map((each, index) => {
-              return `${
-                getFilterItemFromArray(
-                  dateTypeList,
-                  "value",
-                  reportData?.datapoint_subcategory?.type
-                )[0]?.keyData
-              } ${index + 1}`;
-            })
-          : reportData?.datapoint_subcategory?.value;
+    if (reportConfigData?.datapoint_subcategory?.name) {
+      let seriesNameList = reportConfigData?.datapoint_subcategory?.name
+        ?.toLowerCase()
+        ?.includes("date")
+        ? getArrayValues(
+            getFilterItemFromArray(
+              dateTypeList,
+              "value",
+              reportConfigData?.datapoint_subcategory?.value[0]
+            )[0]?.valueList,
+            "value"
+          )
+        : reportConfigData?.datapoint_subcategory?.value;
       seriesNameList?.map((each) => {
         let seriesData = [];
         categoryList?.map((eachItem) => {
@@ -501,13 +407,13 @@ const AddEditDashboardElements = ({
                   size="small"
                   type="primary"
                   onClick={() => {
-                    const myFilterData = [...reportData?.filter];
+                    const myFilterData = [...reportConfigData?.filter];
                     myFilterData.push({
                       name: null,
                       value: [],
                     });
-                    setReportData({
-                      ...reportData,
+                    setReportConfigData({
+                      ...reportConfigData,
                       filter: myFilterData,
                     });
                   }}
@@ -522,7 +428,7 @@ const AddEditDashboardElements = ({
               className="d-flex flex-row justify-content-between align-items-center"
               gutter={[24, 8]}
             >
-              {reportData?.filter?.map((each, index) => (
+              {reportConfigData?.filter?.map((each, index) => (
                 <Col xs={24} lg={12}>
                   <Row
                     className="d-flex flex-row align-items-center"
@@ -548,11 +454,11 @@ const AddEditDashboardElements = ({
                             value={each?.name}
                             allowClear
                             onChange={(values) => {
-                              let myFilterData = [...reportData?.filter];
+                              let myFilterData = [...reportConfigData?.filter];
                               myFilterData[index].name = values;
                               myFilterData[index].value = [];
-                              setReportData({
-                                ...reportData,
+                              setReportConfigData({
+                                ...reportConfigData,
                                 filter: myFilterData,
                               });
                             }}
@@ -563,39 +469,53 @@ const AddEditDashboardElements = ({
                                 .includes(input.toLowerCase())
                             }
                             options={
-                              reportData?.datapoint_subcategory?.name ||
-                              reportData?.datapoint_category?.name
+                              reportConfigData?.datapoint_subcategory?.name ||
+                              reportConfigData?.datapoint_category?.name
                                 ? getFilterItemFromArray(
-                                    datapointList,
+                                    datapointList?.filter(
+                                      (each) =>
+                                        !each.value
+                                          ?.toLowerCase()
+                                          .includes("date")
+                                    ),
                                     "value",
                                     [
-                                      ...(reportData?.datapoint_subcategory
-                                        ?.name
+                                      ...(reportConfigData
+                                        ?.datapoint_subcategory?.name
                                         ? [
-                                            reportData?.datapoint_subcategory
-                                              ?.name,
+                                            reportConfigData
+                                              ?.datapoint_subcategory?.name,
                                           ]
                                         : []),
-                                      ...(reportData?.datapoint_category?.name
-                                        ? [reportData?.datapoint_category?.name]
+                                      ...(reportConfigData?.datapoint_category
+                                        ?.name
+                                        ? [
+                                            reportConfigData?.datapoint_category
+                                              ?.name,
+                                          ]
                                         : []),
                                     ],
                                     true
                                   )?.filter((eachItem) =>
-                                    reportData?.filter?.filter(
+                                    reportConfigData?.filter?.filter(
                                       (eachItem1) => eachItem1?.name
                                     )?.length
                                       ? eachItem?.value === each.name
                                         ? true
                                         : !getArrayValues(
-                                            reportData?.filter?.filter(
+                                            reportConfigData?.filter?.filter(
                                               (eachItem1) => eachItem1?.name
                                             ),
                                             "name"
                                           ).includes(eachItem?.value)
                                       : true
                                   )
-                                : datapointList
+                                : datapointList?.filter(
+                                    (each) =>
+                                      !each.value
+                                        ?.toLowerCase()
+                                        .includes("date")
+                                  )
                             }
                           />
                         </Col>
@@ -608,54 +528,23 @@ const AddEditDashboardElements = ({
                             </Typography>
                             <Select
                               className="w-100 "
-                              mode={
-                                getFilterItemFromArray(
-                                  datapointList,
-                                  "value",
-                                  each.name
-                                )[0]?.type === "date"
-                                  ? "single"
-                                  : "multiple"
-                              }
+                              mode={"multiple"}
                               allowClear
-                              value={
-                                getFilterItemFromArray(
-                                  datapointList,
-                                  "value",
-                                  each.name
-                                )[0]?.type === "date"
-                                  ? each.value[0]
-                                  : each.value
-                              }
+                              value={each.value}
                               options={
                                 getFilterItemFromArray(
                                   datapointList,
                                   "value",
                                   each.name
-                                )[0]?.type === "date"
-                                  ? getFilterItemFromArray(
-                                      dateTypeList,
-                                      "type",
-                                      "single"
-                                    )
-                                  : getFilterItemFromArray(
-                                      datapointList,
-                                      "value",
-                                      each.name
-                                    )[0]?.valueList
+                                )[0]?.valueList
                               }
                               onChange={(values) => {
-                                let myFilterData = [...reportData?.filter];
-                                myFilterData[index].value =
-                                  getFilterItemFromArray(
-                                    datapointList,
-                                    "value",
-                                    each.name
-                                  )[0]?.type === "date"
-                                    ? [values]
-                                    : values;
-                                setReportData({
-                                  ...reportData,
+                                let myFilterData = [
+                                  ...reportConfigData?.filter,
+                                ];
+                                myFilterData[index].value = values;
+                                setReportConfigData({
+                                  ...reportConfigData,
                                   filter: myFilterData,
                                 });
                               }}
@@ -674,10 +563,12 @@ const AddEditDashboardElements = ({
                       <Popconfirm
                         title="Are you sure to remove filter?"
                         onConfirm={() => {
-                          let myReportFilterData = [...reportData?.filter];
+                          let myReportFilterData = [
+                            ...reportConfigData?.filter,
+                          ];
                           myReportFilterData?.splice(index, 1);
-                          setReportData({
-                            ...reportData,
+                          setReportConfigData({
+                            ...reportConfigData,
                             filter: myReportFilterData,
                           });
                         }}
@@ -706,20 +597,18 @@ const AddEditDashboardElements = ({
   };
 
   const setDefaultState = () => {
-    setReportData(defaultReportData);
-    setReportHeadData(defaultReportHeadData);
+    setReportConfigData(defaultReportData);
+    setReportDescription("");
     setPlotBandData(defaultPlotBandData);
-    setGraphData({});
+    setResultData({});
   };
 
   return (
     <Drawer
       className="add-dashboard-drawer"
       title={
-        <CustomHeader
-          label={
-            modalData?.data ? "Edit Dashboard Report" : "Add Dashboard Report"
-          }
+        <CustomDrawerHeader
+          label={"Configure Report"}
           onClose={() => {
             setDefaultState();
             closeModal();
@@ -730,7 +619,7 @@ const AddEditDashboardElements = ({
         setDefaultState();
         closeModal();
       }}
-      open={modalData?.show}
+      open={modalData?.show && modalData?.type === "Configure Report"}
       width={"92%"}
       closable={false}
       maskClosable={false}
@@ -755,16 +644,13 @@ const AddEditDashboardElements = ({
             key="submit"
             type="primary"
             loading={loading}
-            disabled={
-              Object.keys(graphData)?.length === 0 ||
-              !reportHeadData?.report_name
-            }
+            disabled={Object.keys(resultData)?.length === 0}
             onClick={() => {
               handleAddEditDashboardElement({
-                reportData: reportData,
-                reportHeadData: reportHeadData,
+                reportConfigData: reportConfigData,
+                report_description: reportDescription,
                 plotBandData: plotBandData,
-                graphData: graphData,
+                resultData: resultData,
                 ...(modalData?.data ? { id: modalData?.data?.id } : {}),
               });
               setDefaultState();
@@ -772,7 +658,7 @@ const AddEditDashboardElements = ({
             }}
             size="small"
           >
-            {modalData?.data ? "Update" : "Save"}
+            Submit
           </Button>
         </div>
       }
@@ -788,13 +674,8 @@ const AddEditDashboardElements = ({
                   </Typography>
                   <Input
                     maxLength={48}
-                    value={reportHeadData?.report_name}
-                    onChange={(e) => {
-                      setReportHeadData({
-                        ...reportHeadData,
-                        report_name: e.target.value,
-                      });
-                    }}
+                    value={modalData?.data?.report_name}
+                    disabled
                   />
                 </Col>
                 <Col xs={24} lg={12}>
@@ -803,12 +684,9 @@ const AddEditDashboardElements = ({
                   </Typography>
                   <TextArea
                     rows={2}
-                    value={reportHeadData?.description}
+                    value={reportDescription}
                     onChange={(e) => {
-                      setReportHeadData({
-                        ...reportHeadData,
-                        description: e.target.value,
-                      });
+                      setReportDescription(e.target.value);
                     }}
                   />
                 </Col>
@@ -819,9 +697,19 @@ const AddEditDashboardElements = ({
                   <Radio.Group
                     className="add-dashboard-form-item-radio"
                     onChange={(e) => {
-                      setReportData({
-                        ...reportData,
+                      setReportConfigData({
+                        ...reportConfigData,
                         display_type: e.target.value,
+                        ...(reportConfigData?.datapoint_category?.value
+                          ?.length &&
+                        reportConfigData?.datapoint_category?.value[0] === 0
+                          ? {
+                              datapoint_category: {
+                                ...reportConfigData?.datapoint_category,
+                                value: [],
+                              },
+                            }
+                          : {}),
                         ...(!getFilterItemFromArray(
                           displayTypeList,
                           "value",
@@ -830,7 +718,6 @@ const AddEditDashboardElements = ({
                           ? {
                               datapoint_subcategory: {
                                 name: null,
-                                type: null,
                                 value: [],
                               },
                             }
@@ -843,14 +730,13 @@ const AddEditDashboardElements = ({
                           ? {
                               datapoint_category: {
                                 name: null,
-                                type: null,
                                 value: [],
                               },
                             }
                           : {}),
                       });
                     }}
-                    value={reportData?.display_type}
+                    value={reportConfigData?.display_type}
                     optionType="button"
                     buttonStyle="solid"
                   >
@@ -867,10 +753,10 @@ const AddEditDashboardElements = ({
                   </Typography>
                   <Select
                     style={{ width: "100%" }}
-                    value={reportData?.measure}
+                    value={reportConfigData?.measure}
                     onChange={(values) => {
-                      setReportData({
-                        ...reportData,
+                      setReportConfigData({
+                        ...reportConfigData,
                         measure: values,
                       });
                     }}
@@ -885,7 +771,7 @@ const AddEditDashboardElements = ({
                 {getFilterItemFromArray(
                   displayTypeList,
                   "value",
-                  reportData?.display_type
+                  reportConfigData?.display_type
                 )[0]?.is_category ? (
                   <Col
                     xs={24}
@@ -893,7 +779,7 @@ const AddEditDashboardElements = ({
                       getFilterItemFromArray(
                         displayTypeList,
                         "value",
-                        reportData?.display_type
+                        reportConfigData?.display_type
                       )[0]?.is_sub_category
                         ? 12
                         : 24
@@ -905,13 +791,12 @@ const AddEditDashboardElements = ({
                     <Select
                       style={{ width: "100%" }}
                       allowClear
-                      value={reportData?.datapoint_category?.name}
+                      value={reportConfigData?.datapoint_category?.name}
                       onChange={(values) => {
-                        setReportData({
-                          ...reportData,
+                        setReportConfigData({
+                          ...reportConfigData,
                           datapoint_category: {
                             name: values,
-                            type: null,
                             value: [],
                           },
                         });
@@ -921,9 +806,9 @@ const AddEditDashboardElements = ({
                         option.label.toLowerCase().includes(input.toLowerCase())
                       }
                       options={
-                        reportData?.datapoint_subcategory?.name ||
+                        reportConfigData?.datapoint_subcategory?.name ||
                         getFilterItemFromArray(
-                          reportData?.filter,
+                          reportConfigData?.filter,
                           "name",
                           null,
                           true
@@ -932,11 +817,15 @@ const AddEditDashboardElements = ({
                               datapointList,
                               "value",
                               [
-                                ...(reportData?.datapoint_subcategory?.name
-                                  ? [reportData?.datapoint_subcategory?.name]
+                                ...(reportConfigData?.datapoint_subcategory
+                                  ?.name
+                                  ? [
+                                      reportConfigData?.datapoint_subcategory
+                                        ?.name,
+                                    ]
                                   : []),
                                 ...getArrayValues(
-                                  reportData?.filter?.filter(
+                                  reportConfigData?.filter?.filter(
                                     (each) => each.name
                                   ),
                                   "name"
@@ -947,185 +836,124 @@ const AddEditDashboardElements = ({
                           : datapointList
                       }
                     />
-                    {reportData?.datapoint_category?.name &&
-                    getFilterItemFromArray(
-                      datapointList,
-                      "value",
-                      reportData?.datapoint_category?.name
-                    )[0]?.type !== "sub-field" ? (
-                      <Select
-                        style={{ width: "100%" }}
-                        className="mt-2"
-                        placeholder="Select Type"
-                        allowClear
-                        value={reportData?.datapoint_category?.type}
-                        onChange={(values) => {
-                          setReportData({
-                            ...reportData,
-                            datapoint_category: {
-                              ...reportData?.datapoint_category,
-                              type: values,
-                              value:
-                                values !== "select_item" ||
-                                getFilterItemFromArray(
-                                  datapointList,
-                                  "value",
-                                  reportData?.datapoint_category?.name
-                                )[0]?.type !== "date"
-                                  ? Array.from(
-                                      {
-                                        length: getFilterItemFromArray(
-                                          categoryListType,
-                                          "value",
-                                          values
-                                        )[0]?.maxLength,
-                                      },
-                                      (v, i) => i + 1
-                                    )?.map((each, index) => {
-                                      return `${
-                                        getFilterItemFromArray(
-                                          datapointList,
-                                          "value",
-                                          reportData?.datapoint_category?.name
-                                        )[0].label
-                                      } ${index + 1}`;
-                                    })
-                                  : [],
-                            },
-                          });
-                        }}
-                        showSearch
-                        filterOption={(input, option) =>
-                          option.label
-                            .toLowerCase()
-                            .includes(input.toLowerCase())
-                        }
-                        options={
-                          getFilterItemFromArray(
-                            datapointList,
-                            "value",
-                            reportData?.datapoint_category?.name
-                          )[0]?.type === "date"
-                            ? getFilterItemFromArray(
-                                dateTypeList,
-                                "type",
-                                "multiple"
-                              )
-                            : categoryListType
-                        }
-                      />
-                    ) : null}
-                    {reportData?.datapoint_category?.type === "select_item" ||
-                    getFilterItemFromArray(
-                      datapointList,
-                      "value",
-                      reportData?.datapoint_category?.name
-                    )[0]?.type === "sub-field" ? (
-                      <Select
-                        className="w-100 mt-2"
-                        mode="multiple"
-                        allowClear
-                        placeholder="Select Value"
-                        value={reportData?.datapoint_category?.value}
-                        options={
-                          getFilterItemFromArray(
-                            datapointList,
-                            "value",
-                            reportData?.datapoint_category?.name
-                          )[0]?.valueList
-                        }
-                        onChange={(values) => {
-                          setReportData({
-                            ...reportData,
-                            datapoint_category: {
-                              ...reportData?.datapoint_category,
-                              value: values,
-                            },
-                          });
-                        }}
-                        showSearch
-                        filterOption={(input, option) =>
-                          option.label
-                            .toLowerCase()
-                            .includes(input.toLowerCase())
-                        }
-                      />
-                    ) : null}
-                    {getFilterItemFromArray(
-                      datapointList,
-                      "value",
-                      reportData?.datapoint_category?.name
-                    )[0]?.type === "date" &&
-                    reportData?.datapoint_category?.type ? (
-                      <Select
-                        className="w-100 mt-2"
-                        allowClear
-                        placeholder="Select Value"
-                        value={reportData?.datapoint_category?.value[0]}
-                        options={Array.from(
-                          {
-                            length: getFilterItemFromArray(
-                              dateTypeList,
-                              "value",
-                              reportData?.datapoint_category?.type
-                            )[0]?.maxData,
-                          },
-                          (v, i) => i + 1
-                        )
-                          ?.filter((each) => each > 1)
-                          ?.map((each) => {
-                            return {
-                              label: `${each} ${
-                                getFilterItemFromArray(
-                                  dateTypeList,
-                                  "value",
-                                  reportData?.datapoint_category?.type
-                                )[0]?.keyData
-                              }${each > 1 ? "s" : ""} `,
-                              value: each,
-                            };
-                          })}
-                        onChange={(values) => {
-                          setReportData({
-                            ...reportData,
-                            datapoint_category: {
-                              ...reportData?.datapoint_category,
-                              value: [values],
-                            },
-                          });
-                        }}
-                        showSearch
-                        filterOption={(input, option) =>
-                          option.label
-                            .toLowerCase()
-                            .includes(input.toLowerCase())
-                        }
-                      />
+
+                    {reportConfigData?.datapoint_category?.name ? (
+                      <>
+                        {reportConfigData?.datapoint_category?.name
+                          ?.toLowerCase()
+                          ?.includes("date") ? (
+                          <Select
+                            className="w-100 mt-2"
+                            allowClear
+                            placeholder="Select Value"
+                            value={
+                              reportConfigData?.datapoint_category?.value[0]
+                            }
+                            options={dateTypeList}
+                            onChange={(values) => {
+                              setReportConfigData({
+                                ...reportConfigData,
+                                datapoint_category: {
+                                  ...reportConfigData?.datapoint_category,
+                                  value: [values],
+                                },
+                              });
+                            }}
+                            showSearch
+                            filterOption={(input, option) =>
+                              option.label
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                            }
+                          />
+                        ) : (
+                          <Select
+                            className="w-100 mt-2"
+                            mode={"multiple"}
+                            allowClear
+                            placeholder="Select Value"
+                            value={reportConfigData?.datapoint_category?.value}
+                            options={[
+                              ...(reportConfigData?.display_type === "table"
+                                ? [{ label: "All", value: 0 }]
+                                : []),
+                              ...getFilterItemFromArray(
+                                datapointList,
+                                "value",
+                                reportConfigData?.datapoint_category?.name
+                              )[0]?.valueList,
+                            ]}
+                            onChange={(values) => {
+                              if (values.length <= selectLimit) {
+                                setReportConfigData({
+                                  ...reportConfigData,
+                                  datapoint_category: {
+                                    ...reportConfigData?.datapoint_category,
+                                    value:
+                                      values.length &&
+                                      values[values.length - 1] === 0
+                                        ? [0]
+                                        : values?.filter((each) => each !== 0),
+                                  },
+                                });
+                              }
+                            }}
+                            tagRender={(props) => (
+                              <RenderTagMultiple
+                                label={props.label}
+                                value={props.value}
+                                showCloseIcon={
+                                  !reportConfigData?.datapoint_category?.value?.includes(
+                                    0
+                                  )
+                                }
+                                onClose={(closeValue) => {
+                                  setReportConfigData({
+                                    ...reportConfigData,
+                                    datapoint_category: {
+                                      ...reportConfigData?.datapoint_category,
+                                      value:
+                                        reportConfigData?.datapoint_category?.value?.filter(
+                                          (each) => each !== closeValue
+                                        ),
+                                    },
+                                  });
+                                }}
+                              />
+                            )}
+                            showSearch
+                            filterOption={(input, option) =>
+                              option.label
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                            }
+                          />
+                        )}
+                      </>
                     ) : null}
                   </Col>
                 ) : null}
                 {getFilterItemFromArray(
                   displayTypeList,
                   "value",
-                  reportData?.display_type
+                  reportConfigData?.display_type
                 )[0]?.is_sub_category ? (
                   <Col xs={24} lg={12}>
                     <Typography className={"add-dashboard-form-item-header"}>
                       Datapoint SubCategory{" "}
-                      {reportData?.datapoint_subcategory?.name ? (
+                      {reportConfigData?.datapoint_subcategory?.name ? (
                         <span>*</span>
                       ) : null}
                     </Typography>
                     <Select
                       style={{ width: "100%" }}
                       allowClear
-                      value={reportData?.datapoint_subcategory?.name}
+                      value={reportConfigData?.datapoint_subcategory?.name}
                       onChange={(values) => {
-                        setReportData({
-                          ...reportData,
+                        setReportConfigData({
+                          ...reportConfigData,
                           datapoint_subcategory: {
                             name: values,
-                            type: null,
                             value: [],
                           },
                         });
@@ -1135,9 +963,9 @@ const AddEditDashboardElements = ({
                         option.label.toLowerCase().includes(input.toLowerCase())
                       }
                       options={
-                        reportData?.datapoint_category?.name ||
+                        reportConfigData?.datapoint_category?.name ||
                         getFilterItemFromArray(
-                          reportData?.filter,
+                          reportConfigData?.filter,
                           "name",
                           null,
                           true
@@ -1146,11 +974,11 @@ const AddEditDashboardElements = ({
                               datapointList,
                               "value",
                               [
-                                ...(reportData?.datapoint_category?.name
-                                  ? [reportData?.datapoint_category?.name]
+                                ...(reportConfigData?.datapoint_category?.name
+                                  ? [reportConfigData?.datapoint_category?.name]
                                   : []),
                                 ...getArrayValues(
-                                  reportData?.filter?.filter(
+                                  reportConfigData?.filter?.filter(
                                     (each) => each.name
                                   ),
                                   "name"
@@ -1161,167 +989,76 @@ const AddEditDashboardElements = ({
                           : datapointList
                       }
                     />
-                    {reportData?.datapoint_subcategory?.name &&
-                    getFilterItemFromArray(
-                      datapointList,
-                      "value",
-                      reportData?.datapoint_subcategory?.name
-                    )[0]?.type !== "sub-field" ? (
-                      <Select
-                        style={{ width: "100%" }}
-                        className="mt-2"
-                        allowClear
-                        placeholder="Select Type"
-                        value={reportData?.datapoint_subcategory?.type}
-                        onChange={(values) => {
-                          setReportData({
-                            ...reportData,
-                            datapoint_subcategory: {
-                              ...reportData?.datapoint_subcategory,
-                              type: values,
-                              value:
-                                values !== "select_item" ||
-                                getFilterItemFromArray(
-                                  datapointList,
-                                  "value",
-                                  reportData?.datapoint_subcategory?.name
-                                )[0]?.type !== "date"
-                                  ? Array.from(
-                                      {
-                                        length: getFilterItemFromArray(
-                                          categoryListType,
-                                          "value",
-                                          values
-                                        )[0]?.maxLength,
-                                      },
-                                      (v, i) => i + 1
-                                    )?.map((each, index) => {
-                                      return `${
-                                        getFilterItemFromArray(
-                                          datapointList,
-                                          "value",
-                                          reportData?.datapoint_subcategory
-                                            ?.name
-                                        )[0].label
-                                      } ${index + 1}`;
-                                    })
-                                  : [],
-                            },
-                          });
-                        }}
-                        showSearch
-                        filterOption={(input, option) =>
-                          option.label
-                            .toLowerCase()
-                            .includes(input.toLowerCase())
-                        }
-                        options={
-                          getFilterItemFromArray(
-                            datapointList,
-                            "value",
-                            reportData?.datapoint_subcategory?.name
-                          )[0]?.type === "date"
-                            ? getFilterItemFromArray(
-                                dateTypeList,
-                                "type",
-                                "multiple"
-                              )
-                            : categoryListType
-                        }
-                      />
-                    ) : null}
-                    {reportData?.datapoint_subcategory?.type ===
-                      "select_item" ||
-                    getFilterItemFromArray(
-                      datapointList,
-                      "value",
-                      reportData?.datapoint_subcategory?.name
-                    )[0]?.type === "sub-field" ? (
-                      <Select
-                        className="w-100 mt-2"
-                        mode="multiple"
-                        allowClear
-                        placeholder="Select Value"
-                        value={reportData?.datapoint_subcategory?.value}
-                        options={
-                          getFilterItemFromArray(
-                            datapointList,
-                            "value",
-                            reportData?.datapoint_subcategory?.name
-                          )[0]?.valueList
-                        }
-                        onChange={(values) => {
-                          setReportData({
-                            ...reportData,
-                            datapoint_subcategory: {
-                              ...reportData?.datapoint_subcategory,
-                              value: values,
-                            },
-                          });
-                        }}
-                        showSearch
-                        filterOption={(input, option) =>
-                          option.label
-                            .toLowerCase()
-                            .includes(input.toLowerCase())
-                        }
-                      />
-                    ) : null}
-                    {getFilterItemFromArray(
-                      datapointList,
-                      "value",
-                      reportData?.datapoint_subcategory?.name
-                    )[0]?.type === "date" &&
-                    reportData?.datapoint_subcategory?.type ? (
-                      <Select
-                        className="w-100 mt-2"
-                        allowClear
-                        placeholder="Select Value"
-                        value={reportData?.datapoint_subcategory?.value[0]}
-                        options={Array.from(
-                          {
-                            length: getFilterItemFromArray(
-                              dateTypeList,
-                              "value",
-                              reportData?.datapoint_subcategory?.type
-                            )[0]?.maxData,
-                          },
-                          (v, i) => i + 1
-                        )
-                          ?.filter((each) => each > 1)
-                          ?.map((each) => {
-                            return {
-                              label: `${each} ${
-                                getFilterItemFromArray(
-                                  dateTypeList,
-                                  "value",
-                                  reportData?.datapoint_subcategory?.type
-                                )[0]?.keyData
-                              }${each > 1 ? "s" : ""} `,
-                              value: each,
-                            };
-                          })}
-                        onChange={(values) => {
-                          setReportData({
-                            ...reportData,
-                            datapoint_subcategory: {
-                              ...reportData?.datapoint_subcategory,
-                              value: [values],
-                            },
-                          });
-                        }}
-                        showSearch
-                        filterOption={(input, option) =>
-                          option.label
-                            .toLowerCase()
-                            .includes(input.toLowerCase())
-                        }
-                      />
+                    {reportConfigData?.datapoint_subcategory?.name ? (
+                      <>
+                        {reportConfigData?.datapoint_subcategory?.name
+                          ?.toLowerCase()
+                          ?.includes("date") ? (
+                          <Select
+                            className="w-100 mt-2"
+                            allowClear
+                            placeholder="Select Value"
+                            value={
+                              reportConfigData?.datapoint_subcategory?.value[0]
+                            }
+                            options={dateTypeList}
+                            onChange={(values) => {
+                              setReportConfigData({
+                                ...reportConfigData,
+                                datapoint_subcategory: {
+                                  ...reportConfigData?.datapoint_subcategory,
+                                  value: [values],
+                                },
+                              });
+                            }}
+                            showSearch
+                            filterOption={(input, option) =>
+                              option.label
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                            }
+                          />
+                        ) : (
+                          <Select
+                            className="w-100 mt-2"
+                            mode="multiple"
+                            allowClear
+                            placeholder="Select Value"
+                            value={
+                              reportConfigData?.datapoint_subcategory?.value
+                            }
+                            options={
+                              getFilterItemFromArray(
+                                datapointList,
+                                "value",
+                                reportConfigData?.datapoint_subcategory?.name
+                              )[0]?.valueList
+                            }
+                            onChange={(values) => {
+                              if (values.length <= selectLimit) {
+                                setReportConfigData({
+                                  ...reportConfigData,
+                                  datapoint_subcategory: {
+                                    ...reportConfigData?.datapoint_subcategory,
+                                    value: values,
+                                  },
+                                });
+                              }
+                            }}
+                            showSearch
+                            filterOption={(input, option) =>
+                              option.label
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                            }
+                          />
+                        )}
+                      </>
                     ) : null}
                   </Col>
                 ) : null}
-                {reportData?.display_type === "gauge" &&
-                Object.keys(graphData)?.length ? (
+                {reportConfigData?.display_type === "gauge" &&
+                Object.keys(resultData)?.length ? (
                   <>
                     <Col xs={24} lg={12}>
                       <Typography className={"add-dashboard-form-item-header"}>
@@ -1384,9 +1121,9 @@ const AddEditDashboardElements = ({
                           style={{ fontSize: 14, fontWeight: "500" }}
                           className="pl-2 pt-2"
                         >
-                          {reportHeadData?.report_name || "Report Name"}
+                          {modalData?.data?.report_name || "Report Name"}
                         </Typography>
-                        {reportHeadData?.description ? (
+                        {reportDescription ? (
                           <Typography
                             style={{
                               fontSize: 11,
@@ -1395,87 +1132,88 @@ const AddEditDashboardElements = ({
                             }}
                             className="pl-2"
                           >
-                            {reportHeadData?.description}
+                            {reportDescription}
                           </Typography>
                         ) : null}
                       </Col>
-                      {Object.keys(graphData)?.length ? (
+                      {Object.keys(resultData)?.length ? (
                         <Col xs={24}>
-                          {reportData?.display_type === "line-chart" ? (
+                          {reportConfigData?.display_type === "line-chart" ? (
                             <RenderChart
-                              categories={graphData?.category}
-                              series={graphData?.series}
-                              valueLabel={reportData?.measure}
+                              categories={resultData?.category}
+                              series={resultData?.series}
+                              valueLabel={reportConfigData?.measure}
                               type={"line"}
                               height={"300px"}
                             />
                           ) : null}
-                          {reportData?.display_type === "vertical-bar-chart" ? (
+                          {reportConfigData?.display_type ===
+                          "vertical-bar-chart" ? (
                             <RenderChart
-                              categories={graphData?.category}
-                              series={graphData?.series}
-                              valueLabel={reportData?.measure}
+                              categories={resultData?.category}
+                              series={resultData?.series}
+                              valueLabel={reportConfigData?.measure}
                               type={"column"}
                               height={"300px"}
                             />
                           ) : null}
-                          {reportData?.display_type ===
+                          {reportConfigData?.display_type ===
                           "horizontal-bar-chart" ? (
                             <RenderChart
-                              categories={graphData?.category}
-                              series={graphData?.series}
-                              valueLabel={reportData?.measure}
+                              categories={resultData?.category}
+                              series={resultData?.series}
+                              valueLabel={reportConfigData?.measure}
                               type={"bar"}
                               height={"300px"}
                             />
                           ) : null}
-                          {reportData?.display_type ===
+                          {reportConfigData?.display_type ===
                           "vertical-stacked-bar-chart" ? (
                             <RenderChart
-                              categories={graphData?.category}
-                              series={graphData?.series}
-                              valueLabel={reportData?.measure}
+                              categories={resultData?.category}
+                              series={resultData?.series}
+                              valueLabel={reportConfigData?.measure}
                               type="column"
                               stacked={true}
                               height={"300px"}
                             />
                           ) : null}
-                          {reportData?.display_type ===
+                          {reportConfigData?.display_type ===
                           "horizontal-stacked-bar-chart" ? (
                             <RenderChart
-                              categories={graphData?.category}
-                              series={graphData?.series}
-                              valueLabel={reportData?.measure}
+                              categories={resultData?.category}
+                              series={resultData?.series}
+                              valueLabel={reportConfigData?.measure}
                               type="bar"
                               stacked={true}
                               height={"300px"}
                             />
                           ) : null}
-                          {reportData?.display_type === "table" ? (
+                          {reportConfigData?.display_type === "table" ? (
                             <RenderTable
                               category_name={
-                                reportData?.datapoint_category?.name
+                                reportConfigData?.datapoint_category?.name
                               }
-                              categories={graphData?.category}
-                              series={graphData?.series}
-                              valueLabel={reportData?.measure}
+                              categories={resultData?.category}
+                              series={resultData?.series}
+                              valueLabel={reportConfigData?.measure}
                             />
                           ) : null}
-                          {reportData?.display_type === "donut-chart" ? (
+                          {reportConfigData?.display_type === "donut-chart" ? (
                             <RenderDonutChart
-                              categories={graphData?.category}
-                              series={graphData?.series}
-                              valueLabel={reportData?.measure}
+                              categories={resultData?.category}
+                              series={resultData?.series}
+                              valueLabel={reportConfigData?.measure}
                               height={"280px"}
                             />
                           ) : null}
-                          {reportData?.display_type === "number" ? (
-                            <RenderNumber count={graphData?.count} />
+                          {reportConfigData?.display_type === "number" ? (
+                            <RenderNumber count={resultData?.count} />
                           ) : null}
-                          {reportData?.display_type === "gauge" ? (
+                          {reportConfigData?.display_type === "gauge" ? (
                             <RenderGaugeChart
-                              count={graphData?.count}
-                              valueLabel={reportData?.measure}
+                              count={resultData?.count}
+                              valueLabel={reportConfigData?.measure}
                               plotBandData={plotBandData}
                               height={"220px"}
                             />
