@@ -1,3 +1,5 @@
+@import "../../../../assest/css/mixins.scss";
+
 .th-mobile-sidebar .ant-drawer-header {
     padding: 8px !important;
 }
@@ -35,7 +37,6 @@
 
 .search-module .ant-select-selector:focus {
     border-color: #d9d9d9 !important;
-    ;
     outline: none;
 
 }
@@ -81,4 +82,10 @@
 .sidebar-menu-not-collapsed {
     overflow: auto !important;
     height: calc(100vh - 115px) !important;
+}
+
+.search-icon-div {
+    cursor: pointer;
+    background-color: #F6F6F6;
+    border-radius: 5px;
 }

@@ -51,7 +51,7 @@ const UpdateUser = ({
 
   const renderViewDetails = (label, data) => {
     return (
-      <Typography className="hotspot-detail-card-data-text">
+      <Typography className="user-update-detail-card-data-text">
         <span>{label} :</span>
         <br />
         {data}

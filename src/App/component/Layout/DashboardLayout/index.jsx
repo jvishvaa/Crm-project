@@ -3,7 +3,7 @@ import { Layout, theme } from "antd";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import Footer from "./Footer";
-import "./index.css";
+import "./index.scss";
 import useWindowDimensions from "../../UtilComponents/useWindowDimensions";
 
 const { Content } = Layout;

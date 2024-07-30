@@ -1,0 +1,19 @@
+@import '../../../assest/css/mixins.scss';
+
+.content-wrapper {
+    transition: padding-left 0.2s ease;
+    /* Adjust the duration and easing as needed */
+}
+
+.content-wrapper-collapsed {
+    transition: padding-left 0.2s ease;
+    /* Adjust the duration and easing as needed */
+}
+
+.layout-style {
+    background: $white-contrast-background;
+}
+
+.content-style {
+    min-height: 280px,
+}

@@ -1,6 +1,6 @@
 import { Button, Col, Form, Input, Row, Tooltip, Typography } from "antd";
 import React, { useEffect, useState } from "react";
-import "../index.css";
+import "../index.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import CRMLoginImage from "../../../assest/images/CrmLoginImage.jpg";
 import CrmLogo from "../../../assest/images/CRMLogo.png";
@@ -77,7 +77,7 @@ const ResetPassword = () => {
 
   return (
     <Row>
-      <Col xs={24} lg={12} style={{ backgroundColor: "#F6F6F6" }}>
+      <Col xs={24} lg={12} className="login-container-div">
         <Row justify={"center"} align={"center"}>
           <Col xs={20} sm={14} md={20} lg={18} xl={16}>
             <Row

@@ -12,7 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import MyDesktop from "../../../UtilComponents/MyDesktop";
 import MyMobile from "../../../UtilComponents/MyMobile";
-import "./index.css";
+import "./index.scss";
 import menu from "../DashbordMenu";
 import { useAuth } from "../../../../../context/auth-context";
 import CrmLogo from "../../../../assest/images/CRMLogoTransparent.png";
@@ -191,11 +191,7 @@ const Sidebar = ({ collapsed, setCollapsed, colorBgContainer }) => {
             <Row className="d-flex justify-content-center align-items-center mb-1 fade-in">
               <Tooltip title="Search Module" placement="right">
                 <div
-                  style={{
-                    cursor: "pointer",
-                    backgroundColor: "#F6F6F6",
-                    borderRadius: 5,
-                  }}
+                  className="search-icon-div"
                   onClick={() => {
                     setCollapsed(!collapsed);
                     setSearchClicked(true);
