@@ -14,7 +14,7 @@ import {
   Pagination,
   Empty,
 } from "antd";
-import "./index.css";
+import "./index.scss";
 import { MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
 import CustomBreadCrumbs from "../../component/UtilComponents/CustomBreadCrumbs";
 import { CloseOutlined, SearchOutlined } from "@ant-design/icons";

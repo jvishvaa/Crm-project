@@ -1,3 +1,5 @@
+@import "../../assest/css/mixins.scss";
+
 .lead-button {
     height: 30px !important;
     padding: 0px 5px !important;
@@ -69,5 +71,5 @@
 
 .user-count-card-selected {
     background-color: #fbfcfc;
-    border: 2px solid #77b2af !important;
+    border: 2px solid $primary !important;
 }
