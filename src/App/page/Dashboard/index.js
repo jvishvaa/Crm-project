@@ -282,10 +282,8 @@ const Dashboard = () => {
                   <Typography
                     style={{
                       fontSize: 10,
-                      fontWeight: "500",
-                      color: "#7a7a7a",
                     }}
-                    className="pl-2"
+                    className="pl-2 dashboard-report-description"
                   >
                     {each?.report_description}
                   </Typography>

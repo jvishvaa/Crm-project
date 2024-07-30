@@ -1,9 +1,10 @@
 const getColour = (key) => {
   const colors = {
     active: "#5CB85C",
-    inactve: "FC0027",
+    inactive: "#FC0027",
+    grayMedium: "#7a7a7a",
   };
-  return colors?.key || "FFFFFF";
+  return colors[key] || "#FFFFFF";
 };
 
 export default getColour;

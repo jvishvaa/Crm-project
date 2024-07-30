@@ -95,13 +95,13 @@
 }
 
 .ant-menu-sub .ant-menu-item {
-   color: #6F6F6F;
+   color: $gray-medium-high;
    font-size: 12px;
    font-weight: 500;
 }
 
 .ant-menu-sub .ant-menu-item:hover {
-   color: #6F6F6F !important;
+   color: $gray-medium-high !important;
 }
 
 .ant-menu-submenu-title {

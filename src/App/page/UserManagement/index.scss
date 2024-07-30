@@ -66,10 +66,10 @@
 }
 
 .user-count-card:hover {
-    background-color: #fbfcfc;
+    background-color: $primary-ultra-light;
 }
 
 .user-count-card-selected {
-    background-color: #fbfcfc;
+    background-color: $primary-ultra-light;
     border: 2px solid $primary !important;
 }

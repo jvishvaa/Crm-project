@@ -1127,10 +1127,8 @@ const AddEditDashboardElements = ({
                           <Typography
                             style={{
                               fontSize: 11,
-                              fontWeight: "500",
-                              color: "#7a7a7a",
                             }}
-                            className="pl-2"
+                            className="pl-2 dashboard-report-description"
                           >
                             {reportDescription}
                           </Typography>

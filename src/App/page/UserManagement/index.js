@@ -93,8 +93,8 @@ const UserManagement = () => {
       filterValue: 0,
       label: "Total Users",
       value: 1000,
-      color: "#7a7a7a",
-      icon: <BiUser size={24} style={{ color: "#7a7a7a" }} />,
+      color: getColour("grayMedium"),
+      icon: <BiUser size={24} style={{ color: getColour("grayMedium") }} />,
     },
     {
       filterValue: true,
