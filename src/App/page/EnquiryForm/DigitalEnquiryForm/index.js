@@ -11,6 +11,7 @@ import {
   Form,
   Tag,
   Tooltip,
+  Descriptions,
 } from "antd";
 import "./index.scss";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
@@ -219,7 +220,7 @@ const DigitalEnquiryForm = () => {
                   </Col>
                   <Divider />
                   <Col xs={24}>
-                    <Row className={"d-flex"} gutter={[4, 4]}>
+                    <Descriptions column={1}>
                       {getCardDataText(
                         "Academic Year",
                         each?.academic_year || "--"
@@ -236,7 +237,7 @@ const DigitalEnquiryForm = () => {
                         "Counsellor Name",
                         "Test Counsellor" || ""
                       )}
-                    </Row>
+                    </Descriptions>
                   </Col>
                   <Divider />
                   <Col xs={24} className="mt-1">

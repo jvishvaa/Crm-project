@@ -1,15 +1,9 @@
 import React from "react";
 import "./index.css";
-import { Col, Typography } from "antd";
+import { Descriptions } from "antd";
 
 const getCardDataText = (label, value) => {
-  return (
-    <Col xs={24}>
-      <Typography className="lead-card-data-text">
-        <span>{label} :</span> {value || "--"}
-      </Typography>
-    </Col>
-  );
+  return <Descriptions.Item label={label}>{value}</Descriptions.Item>;
 };
 
 export default getCardDataText;

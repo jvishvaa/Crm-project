@@ -15,6 +15,7 @@ import {
   Empty,
   Popconfirm,
   Switch,
+  Descriptions,
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -493,22 +494,6 @@ const UserManagement = () => {
               </Tooltip>
             </Col>
           ) : null}
-          <Col>
-            <Tooltip title="View">
-              <Button
-                type="text"
-                size="small"
-                icon={<IoMdEye size={20} />}
-                onClick={() => {
-                  // setDrawerData({
-                  //   show: true,
-                  //   type: "View Hotspot",
-                  //   data: record,
-                  // });
-                }}
-              />
-            </Tooltip>
-          </Col>
         </Row>
       ),
       align: "center",
@@ -784,21 +769,6 @@ const UserManagement = () => {
                                                 </Tooltip>
                                               </Col>
                                             ) : null}
-                                            <Col>
-                                              <Tooltip title="View">
-                                                <Button
-                                                  type="iconbutton"
-                                                  icon={<IoMdEye size={20} />}
-                                                  onClick={() => {
-                                                    // setDrawerData({
-                                                    //   show: true,
-                                                    //   type: "View Hotspot",
-                                                    //   data: each,
-                                                    // });
-                                                  }}
-                                                />
-                                              </Tooltip>
-                                            </Col>
                                           </Row>
                                         </Col>
                                       </Row>
@@ -806,35 +776,37 @@ const UserManagement = () => {
                                     <Divider />
                                     <Col xs={24}>
                                       <Row className={"d-flex"} gutter={[4, 4]}>
-                                        {getCardDataText(
-                                          "Contact",
-                                          each?.contact || "--"
-                                        )}
-                                        {getCardDataText(
-                                          "Email",
-                                          each?.email || "--"
-                                        )}
-                                        {getCardDataText(
-                                          "Zone",
-                                          getArrayValues(
-                                            each?.zone,
-                                            "name"
-                                          )?.join(", ")
-                                        )}
-                                        {getCardDataText(
-                                          "Branch",
-                                          getArrayValues(
-                                            each?.branch,
-                                            "name"
-                                          )?.join(", ")
-                                        )}
-                                        {getCardDataText(
-                                          "Marketing Type",
-                                          getArrayValues(
-                                            each?.field_type,
-                                            "name"
-                                          )?.join(", ")
-                                        )}
+                                        <Descriptions column={1}>
+                                          {getCardDataText(
+                                            "Contact",
+                                            each?.contact || "--"
+                                          )}
+                                          {getCardDataText(
+                                            "Email",
+                                            each?.email || "--"
+                                          )}
+                                          {getCardDataText(
+                                            "Zone",
+                                            getArrayValues(
+                                              each?.zone,
+                                              "name"
+                                            )?.join(", ")
+                                          )}
+                                          {getCardDataText(
+                                            "Branch",
+                                            getArrayValues(
+                                              each?.branch,
+                                              "name"
+                                            )?.join(", ")
+                                          )}
+                                          {getCardDataText(
+                                            "Marketing Type",
+                                            getArrayValues(
+                                              each?.field_type,
+                                              "name"
+                                            )?.join(", ")
+                                          )}
+                                        </Descriptions>
                                         <Col xs={24}>
                                           <Row
                                             className="d-flex flex-row align-items-center"
@@ -845,6 +817,8 @@ const UserManagement = () => {
                                                 style={{
                                                   fontSize: 12,
                                                   fontWeight: 500,
+                                                  color:
+                                                    getColour("grayMedium"),
                                                 }}
                                               >
                                                 Status :

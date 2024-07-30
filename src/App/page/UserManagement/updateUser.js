@@ -1,27 +1,18 @@
 import {
   Button,
-  Checkbox,
   Col,
-  DatePicker,
-  Divider,
+  Descriptions,
   Drawer,
   Form,
   Input,
-  Modal,
-  Popconfirm,
-  Radio,
   Row,
   Select,
-  Tooltip,
   Typography,
-  message,
 } from "antd";
 import "./index.scss";
 import React, { useEffect, useState } from "react";
-import getArrayValues from "../../utils/getArrayValues";
-import { MdClose, MdDelete, MdEdit, MdLink } from "react-icons/md";
 import CustomDrawerHeader from "../../component/UtilComponents/CustomDrawerHeader";
-import dayjs from "dayjs";
+import useWindowDimensions from "../../component/UtilComponents/useWindowDimensions";
 
 const { TextArea } = Input;
 
@@ -32,6 +23,7 @@ const UpdateUser = ({
   dropdownData,
 }) => {
   const [form] = Form.useForm();
+  const { width } = useWindowDimensions();
 
   const onFinish = (values) => {
     console.log("Received values:", values);
@@ -49,13 +41,11 @@ const UpdateUser = ({
     }
   }, [modalData]);
 
-  const renderViewDetails = (label, data) => {
+  const renderViewDetails = (label, data, span = 1) => {
     return (
-      <Typography className="user-update-detail-card-data-text">
-        <span>{label} :</span>
-        <br />
+      <Descriptions.Item label={label} span={span}>
         {data}
-      </Typography>
+      </Descriptions.Item>
     );
   };
 
@@ -112,20 +102,20 @@ const UpdateUser = ({
           <Form form={form} layout="vertical" onFinish={onFinish}>
             <Row gutter={[8, 0]}>
               <Col xs={24} className="mt-2">
-                <Row gutter={[8, 8]}>
-                  <Col xs={24} md={12}>
-                    {renderViewDetails("Name", "Anik Chowdhury")}
-                  </Col>
-                  <Col xs={24} md={12}>
-                    {renderViewDetails("ERP", "20398383773_OLV")}
-                  </Col>
-                  <Col xs={24} md={12}>
-                    {renderViewDetails("UserLevel", "Superadmin")}
-                  </Col>
-                  <Col xs={24} md={12}>
-                    {renderViewDetails("Branch", "Branch 1, Branch 2")}
-                  </Col>
-                </Row>
+                <Descriptions
+                  column={2}
+                  layout="vertical"
+                  className="update-user-description"
+                >
+                  {renderViewDetails("Name", "Anik Chowdhury")}
+                  {renderViewDetails("ERP", "20398383773_OLV")}
+                  {renderViewDetails(
+                    "Branch",
+                    "Branch 1, Branch 2",
+                    width < 768 ? 2 : 1
+                  )}
+                  {renderViewDetails("UserLevel", "Superadmin")}
+                </Descriptions>
               </Col>
 
               <Col xs={24} md={12}>

@@ -149,7 +149,9 @@ const AddLead = () => {
                                 size="small"
                                 icon={<IoMdEye size={22} />}
                                 onClick={() => {
-                                  navigate("/lead-management/lead-details/1");
+                                  navigate("/lead-management/lead-details/1", {
+                                    state: { is_back: true },
+                                  });
                                 }}
                               />
                             </Tooltip>
@@ -160,38 +162,36 @@ const AddLead = () => {
                   </Col>
                   <Divider />
                   <Col xs={24}>
-                    <Row className={"d-flex"} gutter={[4, 4]}>
-                      {getCardDataText(
-                        "Academic Year",
-                        each?.academic_year || "--"
-                      )}
-                      {getCardDataText(
-                        "Source",
-                        each?.contact_source?.source_name || "--"
-                      )}
-                      {getCardDataText(
-                        "Branch",
-                        each?.branch?.branch_name || "--"
-                      )}
-                      {getCardDataText(
-                        "Lead Status",
-                        `${each.lead_status?.status_name}
+                    {getCardDataText(
+                      "Academic Year",
+                      each?.academic_year || "--"
+                    )}
+                    {getCardDataText(
+                      "Source",
+                      each?.contact_source?.source_name || "--"
+                    )}
+                    {getCardDataText(
+                      "Branch",
+                      each?.branch?.branch_name || "--"
+                    )}
+                    {getCardDataText(
+                      "Lead Status",
+                      `${each.lead_status?.status_name}
                           ${
                             each.lead_status2
                               ? ` -> ${each.lead_status2?.status_name}`
                               : ""
                           }`
-                      )}
+                    )}
 
-                      {getCardDataText(
-                        "Next Follow Up Date",
-                        each?.next_follow_date
-                          ? dayjs(each?.next_follow_date).format(
-                              "DD MMM YYYY hh:mm a"
-                            )
-                          : "--"
-                      )}
-                    </Row>
+                    {getCardDataText(
+                      "Next Follow Up Date",
+                      each?.next_follow_date
+                        ? dayjs(each?.next_follow_date).format(
+                            "DD MMM YYYY hh:mm a"
+                          )
+                        : "--"
+                    )}
                   </Col>
                   <Divider />
                   <Col xs={24} className="mt-1">

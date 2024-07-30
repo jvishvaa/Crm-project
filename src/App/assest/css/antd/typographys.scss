@@ -3,3 +3,26 @@
 .ant-typography {
     font-family: Poppins;
 }
+
+.ant-descriptions .ant-descriptions-item-label {
+    font-size: 12px !important;
+    font-family: Poppins !important;
+    font-weight: 500 !important;
+    color: $gray-medium !important;
+    line-height: 1.4 !important;
+}
+
+.ant-descriptions .ant-descriptions-item-content {
+    font-size: 12px !important;
+    font-family: Poppins !important;
+    font-weight: 400 !important;
+    line-height: 1.4 !important;
+}
+
+.ant-descriptions .ant-descriptions-row>th {
+    padding-bottom: 2px !important;
+}
+
+.ant-descriptions .ant-descriptions-row>td {
+    padding-bottom: 4px !important;
+}

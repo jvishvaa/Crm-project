@@ -15,6 +15,7 @@ import {
   Empty,
   Form,
   Checkbox,
+  Descriptions,
 } from "antd";
 import "./index.css";
 import { MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -1233,10 +1234,7 @@ const AssignLeadToCounsellor = () => {
                                           </Col>
                                           <Divider />
                                           <Col xs={24}>
-                                            <Row
-                                              className={"d-flex"}
-                                              gutter={[4, 4]}
-                                            >
+                                            <Descriptions column={1}>
                                               {getCardDataText(
                                                 "Source",
                                                 each?.contact_source || "--"
@@ -1262,7 +1260,7 @@ const AssignLeadToCounsellor = () => {
                                                 "Lead Category",
                                                 each?.lead_category || "--"
                                               )}
-                                            </Row>
+                                            </Descriptions>
                                           </Col>
                                           <Divider />
                                           <Col xs={24} className="mt-1">

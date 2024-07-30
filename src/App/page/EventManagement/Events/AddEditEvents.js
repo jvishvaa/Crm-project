@@ -38,6 +38,11 @@ const AddEditEvent = ({
   const [selectedDay, setSelectedDay] = useState([]);
   const [updatedDateList, setUpdatedDateList] = useState([]);
 
+  const clearData = () => {
+    setSelectedDay([]);
+    setUpdatedDateList([]);
+  };
+
   const dayList = [
     { id: 0, name: "Su", full_name: "sunday" },
     { id: 1, name: "M", full_name: "monday" },

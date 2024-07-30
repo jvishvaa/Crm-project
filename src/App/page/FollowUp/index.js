@@ -13,6 +13,7 @@ import {
   Tooltip,
   Pagination,
   Empty,
+  Descriptions,
 } from "antd";
 import "./index.scss";
 import { MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -1221,7 +1222,10 @@ const FollowUp = () => {
                                                 icon={<IoMdEye size={25} />}
                                                 onClick={() => {
                                                   navigate(
-                                                    "/lead-management/lead-details/1"
+                                                    "/lead-management/lead-details/1",
+                                                    {
+                                                      state: { is_back: true },
+                                                    }
                                                   );
                                                 }}
                                               />
@@ -1232,7 +1236,7 @@ const FollowUp = () => {
                                     </Col>
                                     <Divider />
                                     <Col xs={24}>
-                                      <Row className={"d-flex"} gutter={[4, 4]}>
+                                      <Descriptions column={1}>
                                         {getCardDataText(
                                           "Source",
                                           each?.contact_source || "--"
@@ -1256,7 +1260,7 @@ const FollowUp = () => {
                                             "DD MMM YYYY hh:mm a"
                                           )
                                         )}
-                                      </Row>
+                                      </Descriptions>
                                     </Col>
                                     <Divider />
                                     <Col xs={24} className="mt-1">

@@ -16,6 +16,7 @@ import {
   Form,
   Checkbox,
   Popconfirm,
+  Descriptions,
 } from "antd";
 import "./index.css";
 import { MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -1241,10 +1242,7 @@ const RegenAndAssignDormantLead = () => {
                                           </Col>
                                           <Divider />
                                           <Col xs={24}>
-                                            <Row
-                                              className={"d-flex"}
-                                              gutter={[4, 4]}
-                                            >
+                                            <Descriptions column={1}>
                                               {getCardDataText(
                                                 "Source",
                                                 each?.contact_source || "--"
@@ -1262,7 +1260,7 @@ const RegenAndAssignDormantLead = () => {
                                                       : ""
                                                   }`
                                               )}
-                                            </Row>
+                                            </Descriptions>
                                           </Col>
                                           <Divider />
                                           <Col xs={24} className="mt-1">

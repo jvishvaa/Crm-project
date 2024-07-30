@@ -1,6 +1,6 @@
 import React from "react";
 import "./index.scss";
-import { Row, Col, Typography, Divider, Avatar } from "antd";
+import { Row, Col, Typography, Divider, Avatar, Descriptions } from "antd";
 import CustomBreadCrumbs from "../../component/UtilComponents/CustomBreadCrumbs";
 import CustomCard from "../../component/UtilComponents/CustomCard";
 import useWindowDimensions from "../../component/UtilComponents/useWindowDimensions";
@@ -73,11 +73,11 @@ const Profile = () => {
             </Col>
 
             <Col xs={24} sm={15} md={17} lg={18} xl={19}>
-              <Row className="d-flex flex-column flex-nowrap" gutter={[8, 8]}>
-                <Col xs={24}>
-                  <CustomCard className="profile-card">
+              <CustomCard className="profile-card">
+                <Row className="d-flex flex-column flex-nowrap p-3">
+                  <Col xs={24}>
                     <Row
-                      className="d-flex flex-column p-3 flex-nowrap"
+                      className="d-flex flex-column flex-nowrap"
                       gutter={[8, 16]}
                     >
                       <Col xs={24}>
@@ -86,44 +86,24 @@ const Profile = () => {
                         </Typography>
                       </Col>
                       <Col xs={24}>
-                        <Row gutter={[8, 16]}>
-                          <Col xs={24} md={12}>
-                            <Row gutter={[2, 2]}>
-                              <Col xs={24}>
-                                <Typography className="profile-sub-header">
-                                  Phone
-                                </Typography>
-                              </Col>
-                              <Col xs={24}>
-                                <Typography className="profile-value">
-                                  7846453553
-                                </Typography>
-                              </Col>
-                            </Row>
-                          </Col>
-                          <Col xs={24} md={12}>
-                            <Row gutter={[2, 2]}>
-                              <Col xs={24}>
-                                <Typography className="profile-sub-header">
-                                  Email
-                                </Typography>
-                              </Col>
-                              <Col xs={24}>
-                                <Typography className="profile-value">
-                                  anik.chowdhury@orchids.edu.in
-                                </Typography>
-                              </Col>
-                            </Row>
-                          </Col>
-                        </Row>
+                        <Descriptions
+                          column={{ xs: 1, sm: 2 }}
+                          layout="vertical"
+                          className="profile-description"
+                        >
+                          <Descriptions.Item label="Contact">
+                            3466365355
+                          </Descriptions.Item>
+                          <Descriptions.Item label="Email">
+                            anik.chowdhury@orchids.edu.in
+                          </Descriptions.Item>
+                        </Descriptions>
                       </Col>
                     </Row>
-                  </CustomCard>
-                </Col>
-                <Col xs={24}>
-                  <CustomCard className="profile-card">
+                  </Col>
+                  <Col xs={24}>
                     <Row
-                      className="d-flex flex-column p-3 flex-nowrap"
+                      className="d-flex flex-column flex-nowrap"
                       gutter={[8, 16]}
                     >
                       <Col xs={24}>
@@ -132,58 +112,29 @@ const Profile = () => {
                         </Typography>
                       </Col>
                       <Col xs={24}>
-                        <Row gutter={[8, 16]}>
-                          <Col xs={24} lg={12}>
-                            <Row gutter={[2, 2]}>
-                              <Col xs={24}>
-                                <Typography className="profile-sub-header">
-                                  Marketing Type
-                                </Typography>
-                              </Col>
-                              <Col xs={24}>
-                                <Typography className="profile-value">
-                                  Field Marketing, Affiliate Marketing, Digital
-                                  Marketing
-                                </Typography>
-                              </Col>
-                            </Row>
-                          </Col>
-                          <Col xs={24} lg={12}>
-                            <Row gutter={[2, 2]}>
-                              <Col xs={24}>
-                                <Typography className="profile-sub-header">
-                                  Zone
-                                </Typography>
-                              </Col>
-                              <Col xs={24}>
-                                <Typography className="profile-value">
-                                  Zone 1A, Zone 1B, Zone 2, Zone 3, Zone 4, Zone
-                                  5, Zone 6
-                                </Typography>
-                              </Col>
-                            </Row>
-                          </Col>
-                          <Col xs={24} lg={12}>
-                            <Row gutter={[2, 2]}>
-                              <Col xs={24}>
-                                <Typography className="profile-sub-header">
-                                  Branch
-                                </Typography>
-                              </Col>
-                              <Col xs={24}>
-                                <Typography className="profile-value">
-                                  Orchids BTM Layout, Orchids Banerghata,
-                                  Orchids BTM Layout, Orchids Banerghata
-                                </Typography>
-                              </Col>
-                            </Row>
-                          </Col>
-                        </Row>
+                        <Descriptions
+                          column={{ xs: 1, sm: 2 }}
+                          layout="vertical"
+                          className="profile-description"
+                        >
+                          <Descriptions.Item label="Marketing Type">
+                            Field Marketing, Affiliate Marketing, Digital
+                            Marketing
+                          </Descriptions.Item>
+                          <Descriptions.Item label="Zone">
+                            Zone 1A, Zone 1B, Zone 2, Zone 3, Zone 4, Zone 5,
+                            Zone 6
+                          </Descriptions.Item>
+                          <Descriptions.Item label="Branch">
+                            Orchids BTM Layout, Orchids Banerghata, Orchids BTM
+                            Layout, Orchids Banerghata
+                          </Descriptions.Item>
+                        </Descriptions>
                       </Col>
                     </Row>
-                  </CustomCard>
-                </Col>
-              </Row>
+                  </Col>
+                </Row>
+              </CustomCard>
             </Col>
           </Row>
         </Col>

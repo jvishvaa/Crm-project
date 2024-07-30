@@ -16,6 +16,7 @@ import {
   Radio,
   Empty,
   Pagination,
+  Descriptions,
 } from "antd";
 import "./index.scss";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
@@ -496,10 +497,7 @@ const BulkUploadLead = () => {
                                     {historyData?.map((each, index) => (
                                       <Col xs={24} lg={12} key={index}>
                                         <CustomCard style={{ height: "100%" }}>
-                                          <Row
-                                            gutter={[4, 4]}
-                                            className={"d-flex"}
-                                          >
+                                          <Descriptions column={1}>
                                             {getCardDataText(
                                               "Upload Date",
                                               each?.upload_date
@@ -568,7 +566,7 @@ const BulkUploadLead = () => {
                                                   ).format("DD/MM/YYYY hh:mma")
                                                 : "--"
                                             )}
-                                          </Row>
+                                          </Descriptions>
                                         </CustomCard>
                                       </Col>
                                     ))}

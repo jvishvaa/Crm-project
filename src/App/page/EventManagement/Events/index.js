@@ -13,6 +13,7 @@ import {
   Tooltip,
   Pagination,
   Empty,
+  Descriptions,
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -500,12 +501,12 @@ const Events = () => {
                                     </Col>
                                     <Divider />
                                     <Col xs={24}>
-                                      <Row className={"d-flex"} gutter={[4, 4]}>
+                                      <Descriptions column={1}>
                                         {getCardDataText(
                                           "Hotspot Type",
                                           each?.hotspot_type?.name || "--"
                                         )}
-                                      </Row>
+                                      </Descriptions>
                                     </Col>
                                   </Row>
                                 </CustomCard>

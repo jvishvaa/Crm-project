@@ -16,11 +16,15 @@ import AssigningDetailsCard from "./AssigningDetailsCard";
 import ActivityHistory from "./ActivityHistory";
 import ChildDetails from "./ChildDetails";
 import ReassignCounsellor from "./ReassignCounsellor";
-import { MdRefresh } from "react-icons/md";
+import { MdArrowBack, MdRefresh } from "react-icons/md";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import UpdateLeadDetails from "./UpdateLeadDetails";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const LeadDetails = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location);
   const [loading, setLoading] = useState(false);
   const [modalData, setModalData] = useState({
     show: false,
@@ -37,7 +41,23 @@ const LeadDetails = () => {
             <Col xs={24}>
               <Row className="d-flex flex-row justify-content-between align-items-center">
                 <Col>
-                  <CustomBreadCrumbs data={["Lead Details"]} />
+                  <Row className="d-flex flex-row" gutter={[4, 4]}>
+                    {location?.state?.is_back ? (
+                      <Col>
+                        <Button
+                          type="text"
+                          size="small"
+                          icon={<MdArrowBack size={20} />}
+                          onClick={() => {
+                            navigate(-1);
+                          }}
+                        />
+                      </Col>
+                    ) : null}
+                    <Col>
+                      <CustomBreadCrumbs data={["Lead Details"]} />
+                    </Col>
+                  </Row>
                 </Col>
                 <Col>
                   <Tooltip title="Refresh">
