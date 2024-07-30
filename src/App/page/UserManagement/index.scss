@@ -39,12 +39,35 @@
     font-size: 12px;
 }
 
-.hotspot-detail-card-data-text {
+.user-update-detail-card-data-text {
     font-size: 12px;
     line-height: 1.5;
 }
 
-.hotspot-detail-card-data-text>span {
+.user-update-detail-card-data-text>span {
     font-weight: 500;
     font-size: 11px !important;
+}
+
+.user-count-header {
+    font-size: 12px;
+}
+
+.user-count-value {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.user-count-card {
+    height: 100%;
+    cursor: pointer;
+}
+
+.user-count-card:hover {
+    background-color: #fbfcfc;
+}
+
+.user-count-card-selected {
+    background-color: #fbfcfc;
+    border: 2px solid #77b2af !important;
 }

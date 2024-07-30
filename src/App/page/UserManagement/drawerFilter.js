@@ -36,8 +36,6 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
         user_level: drawerData?.data?.user_level,
         zone: drawerData?.data?.zone,
         branch: drawerData?.data?.branch,
-        status: drawerData?.data?.status,
-        pip_tagged: drawerData?.data?.pip_tagged,
       });
     }
   }, [drawerData]);
@@ -170,33 +168,6 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                   onChange={(value) => {
                     onChangeMultiple(value, "branch");
                   }}
-                  showSearch
-                  allowClear
-                  filterOption={(input, option) =>
-                    option.label.toLowerCase().includes(input.toLowerCase())
-                  }
-                />
-              </Form.Item>
-            </Col>
-
-            <Col xs={24} sm={12}>
-              <Form.Item name="status" label="Status">
-                <Select
-                  className="w-100"
-                  options={dropdownData?.status}
-                  showSearch
-                  allowClear
-                  filterOption={(input, option) =>
-                    option.label.toLowerCase().includes(input.toLowerCase())
-                  }
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={12}>
-              <Form.Item name="pip_tagged" label="PIP">
-                <Select
-                  className="w-100"
-                  options={dropdownData?.pip_tagged}
                   showSearch
                   allowClear
                   filterOption={(input, option) =>

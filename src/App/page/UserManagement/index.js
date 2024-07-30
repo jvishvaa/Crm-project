@@ -18,7 +18,6 @@ import {
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
-import { RiDownloadCloudFill } from "react-icons/ri";
 import CustomBreadCrumbs from "../../component/UtilComponents/CustomBreadCrumbs";
 import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import { IoMdEye } from "react-icons/io";
@@ -27,12 +26,11 @@ import DrawerFilter from "./drawerFilter";
 import dayjs from "dayjs";
 import getArrayValues from "../../utils/getArrayValues";
 import RenderFilterTag from "../../component/UtilComponents/RenderFilterTag";
-import { BiIdCard } from "react-icons/bi";
+import { BiIdCard, BiUser, BiUserCheck, BiUserX } from "react-icons/bi";
 import CustomCard from "../../component/UtilComponents/CustomCard";
 import { useLocation, useNavigate } from "react-router-dom";
 import getChangedCountValues from "../../utils/getChangeCountObject";
 import getRoutePathDetails from "../../utils/getRoutePathDetails";
-import { TbFileUpload } from "react-icons/tb";
 import getCardDataText from "../../component/UtilComponents/CardDataText";
 import UpdateUser from "./updateUser";
 
@@ -41,8 +39,6 @@ const UserManagement = () => {
     user_level: [0],
     zone: [0],
     branch: [0],
-    status: true,
-    pip_tagged: 0,
   };
   const [loading, setLoading] = useState(false);
   const location = useLocation();
@@ -50,6 +46,7 @@ const UserManagement = () => {
   const [filterData, setFilterData] = useState({
     ...defaultFilters,
   });
+  const [selectedStatus, setSelectedStatus] = useState(true);
   const [searchValue, setSearchValue] = useState("");
   const [drawerData, setDrawerData] = useState({
     show: false,
@@ -88,12 +85,31 @@ const UserManagement = () => {
       { label: "Active", value: true },
       { label: "Inactive", value: false },
     ],
-    pip_tagged: [
-      { label: "All", value: 0 },
-      { label: "Pip Tagged", value: true },
-      { label: "Pip Not Tagged", value: false },
-    ],
   };
+
+  const userCountData = [
+    {
+      filterValue: 0,
+      label: "Total Users",
+      value: 1000,
+      color: "#7a7a7a",
+      icon: <BiUser size={24} style={{ color: "#7a7a7a" }} />,
+    },
+    {
+      filterValue: true,
+      label: "Active Users",
+      value: 800,
+      color: "#5CB85C",
+      icon: <BiUserCheck size={26} style={{ color: "#5CB85C" }} />,
+    },
+    {
+      filterValue: false,
+      label: "Inactive Users",
+      value: 200,
+      color: "#FC0027",
+      icon: <BiUserX size={26} style={{ color: "#FC0027" }} />,
+    },
+  ];
 
   useEffect(() => {
     if (width <= 991) {
@@ -286,78 +302,59 @@ const UserManagement = () => {
   const renderFilterView = () => {
     return (
       <>
-        <Row className="d-flex flex-row align-items-center" gutter={[4, 4]}>
-          <Col>
-            <Typography style={{ fontWeight: 500, fontSize: 12, marginTop: 2 }}>
-              Filter:
-            </Typography>
-          </Col>
-          {!filterData?.user_level?.includes(0) ? (
+        {checkFilterDifference() ? (
+          <Row className="d-flex flex-row align-items-center" gutter={[4, 4]}>
             <Col>
-              <RenderFilterTag
-                label="User Level"
-                value={getArrayValues(
-                  dropdownData?.userLevel?.filter(
-                    (each) => filterData?.user_level === each?.value
-                  ),
-                  "label"
-                )?.join(", ")}
-              />
+              <Typography
+                style={{ fontWeight: 500, fontSize: 12, marginTop: 2 }}
+              >
+                Filter:
+              </Typography>
             </Col>
-          ) : null}
-          {!filterData?.branch?.includes(0) ? (
-            <Col>
-              <RenderFilterTag
-                label="Branch"
-                value={getArrayValues(
-                  dropdownData?.branch?.filter((each) =>
-                    filterData?.branch?.includes(each?.value)
-                  ),
-                  "label"
-                )?.join(", ")}
-              />
-            </Col>
-          ) : !filterData?.zone?.includes(0) ? (
-            <Col>
-              <RenderFilterTag
-                label="Zone"
-                value={getArrayValues(
-                  dropdownData?.zone?.filter((each) =>
-                    filterData?.zone?.includes(each?.value)
-                  ),
-                  "label"
-                )?.join(", ")}
-              />
-            </Col>
-          ) : null}
-          <Col>
-            <RenderFilterTag
-              label="Status"
-              value={getArrayValues(
-                dropdownData?.status?.filter(
-                  (each) => filterData?.status === each?.value
-                ),
-                "label"
-              )?.join(", ")}
-            />
-          </Col>
-          {filterData?.pip_tagged !== 0 ? (
-            <Col>
-              <RenderFilterTag
-                label="PIP"
-                value={getArrayValues(
-                  dropdownData?.pip_tagged?.filter(
-                    (each) => filterData?.pip_tagged === each?.value
-                  ),
-                  "label"
-                )?.join(", ")}
-              />
-            </Col>
-          ) : null}
-          {checkFilterDifference() && width > 768 ? (
-            <Col className="pl-2">{getClearFilters()}</Col>
-          ) : null}
-        </Row>
+            {!filterData?.user_level?.includes(0) ? (
+              <Col>
+                <RenderFilterTag
+                  label="User Level"
+                  value={getArrayValues(
+                    dropdownData?.userLevel?.filter(
+                      (each) => filterData?.user_level === each?.value
+                    ),
+                    "label"
+                  )?.join(", ")}
+                />
+              </Col>
+            ) : null}
+            {!filterData?.branch?.includes(0) ? (
+              <Col>
+                <RenderFilterTag
+                  label="Branch"
+                  value={getArrayValues(
+                    dropdownData?.branch?.filter((each) =>
+                      filterData?.branch?.includes(each?.value)
+                    ),
+                    "label"
+                  )?.join(", ")}
+                />
+              </Col>
+            ) : !filterData?.zone?.includes(0) ? (
+              <Col>
+                <RenderFilterTag
+                  label="Zone"
+                  value={getArrayValues(
+                    dropdownData?.zone?.filter((each) =>
+                      filterData?.zone?.includes(each?.value)
+                    ),
+                    "label"
+                  )?.join(", ")}
+                />
+              </Col>
+            ) : null}
+
+            {checkFilterDifference() && width > 768 ? (
+              <Col className="pl-2">{getClearFilters()}</Col>
+            ) : null}
+          </Row>
+        ) : null}
       </>
     );
   };
@@ -607,7 +604,7 @@ const UserManagement = () => {
                   </Col>
                 </Row>
               </Col>
-              {width <= 768 ? (
+              {width <= 768 && checkFilterDifference() ? (
                 <Col xs={24} className={width < 576 ? "mt-1" : "mt-0"}>
                   <Row
                     className="d-flex flex-row justify-content-end align-items-center"
@@ -637,6 +634,65 @@ const UserManagement = () => {
                   {renderFilterView()}
                 </Col>
               ) : null}
+              <Col xs={24} className={"mt-1"}>
+                <Row className="d-flex flex-row" gutter={[8, 8]}>
+                  {userCountData?.map((each) => (
+                    <Col xs={8}>
+                      <CustomCard
+                        className={
+                          selectedStatus === each?.filterValue
+                            ? "user-count-card-selected"
+                            : "user-count-card"
+                        }
+                        onClick={() => {
+                          setSelectedStatus(each.filterValue);
+                        }}
+                      >
+                        <Row
+                          className={`d-flex  ${
+                            width < 576
+                              ? "flex-column justify-content-center"
+                              : "flex-row justify-content-between"
+                          } align-item-center`}
+                          gutter={[2, 0]}
+                        >
+                          <Col>
+                            <Row
+                              className={`d-flex  ${
+                                width < 576
+                                  ? "flex-column justify-content-center"
+                                  : "flex-row justify-content-between"
+                              } align-item-center`}
+                              gutter={[4, 0]}
+                            >
+                              <Col className="text-center">{each?.icon}</Col>
+                              <Col>
+                                <Typography
+                                  className={`${
+                                    width < 576 ? "text-center" : "text-left"
+                                  }  user-count-header mt-1`}
+                                >
+                                  {each?.label}
+                                </Typography>
+                              </Col>
+                            </Row>
+                          </Col>
+                          <Col>
+                            <Typography
+                              className={`${
+                                width < 576 ? "text-center" : "text-right"
+                              } user-count-value`}
+                              style={{ color: each?.color }}
+                            >
+                              {each.value}
+                            </Typography>
+                          </Col>
+                        </Row>
+                      </CustomCard>
+                    </Col>
+                  ))}
+                </Row>
+              </Col>
               {userData ? (
                 isList ? (
                   <Col xs={24} className={"mt-2"}>

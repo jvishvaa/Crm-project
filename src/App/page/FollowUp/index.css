@@ -61,5 +61,5 @@
 
 .follow-up-stats-card-selected {
     background-color: #fbfcfc;
-    border-color: #77b2af !important;
+    border: 2px solid #77b2af !important;
 }
