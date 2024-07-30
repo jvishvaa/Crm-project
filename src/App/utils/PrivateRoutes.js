@@ -5,7 +5,7 @@ import { useAuth } from "../../context/auth-context";
 const PrivateRoutes = () => {
   const authValue = useAuth();
   const location = useLocation();
-  return authValue?.token ? (
+  return authValue?.loginDetails?.user_details?.token ? (
     <Outlet />
   ) : (
     <Navigate to="/login" state={{ from: location }} replace />

@@ -1,25 +1,25 @@
 let BASE;
-let HOST;
-let HOSTNAME;
+let HOSTERP;
+let BASEERP;
 const PROTO_HTTPS = "https";
 const PROTO = "http";
 let PORT;
 
 if (process.env.REACT_APP_UI_ENV === "stage") {
-  HOST = "marketing-b2b.stage-gke.letseduvate.com";
-  HOSTNAME = `${HOST}/qbox`;
-  BASE = `${PROTO_HTTPS}://${HOSTNAME}`;
+  HOSTERP = window.location.hostname?.replace(".finance", "");
+  BASEERP = `${PROTO_HTTPS}://${HOSTERP}/qbox`;
 } else {
   // HOSTNAME = "localhost";
   // PORT = "8000";
   // BASE = `${PROTO}://${HOSTNAME}:${PORT}/qbox`;
-  HOST = "marketing-b2b.stage-gke.letseduvate.com";
-  HOSTNAME = `${HOST}/qbox`;
-  BASE = `${PROTO_HTTPS}://${HOSTNAME}`;
+  HOSTERP = "orchids-stage.stage-vm.letseduvate.com";
+  BASEERP = `${PROTO_HTTPS}://${HOSTERP}/qbox`;
 }
 
 const urls = {
-  baseUrl: `${BASE}`,
+  login: {
+    loginApi: `${BASEERP}/erp_user/login/`,
+  },
 };
 
 export default urls;

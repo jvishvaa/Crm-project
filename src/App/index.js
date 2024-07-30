@@ -32,8 +32,6 @@ import routes from "./utils/routes";
 import ForgetPassword from "./page/LoginPage/ForgetPassword";
 import ResetPassword from "./page/LoginPage/ResetPassword";
 
-axios.defaults.baseURL = urls.baseUrl;
-
 axios.interceptors.response.use(
   async (response) => {
     return response;
@@ -70,14 +68,17 @@ function App() {
   const currUserData = useAuth();
 
   useEffect(() => {
-    axios.defaults.headers.common["Authorization"] = currUserData.token
-      ? `Bearer ${currUserData.token}`
+    axios.defaults.headers.common["Authorization"] = currUserData?.loginDetails
+      ?.user_details?.token
+      ? `Bearer ${currUserData?.loginDetails?.user_details?.token}`
       : "";
   }, [currUserData]);
 
   return (
     <React.Fragment>
-      <DashboardLayout visible={currUserData?.token && currUserData.currUser}>
+      <DashboardLayout
+        visible={currUserData?.loginDetails?.user_details?.token}
+      >
         <Routes>
           <Route element={<PublicRoutes />}>
             <Route exact path="/login" element={<LoginPage />} />
@@ -103,7 +104,9 @@ function App() {
                     }
                   >
                     {user_levels?.includes(
-                      Number(currUserData?.currUser?.user_level?.id)
+                      Number(
+                        currUserData?.loginDetails?.user_details?.user_level
+                      )
                     ) && <Component />}
                   </Suspense>
                 }

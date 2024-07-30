@@ -79,13 +79,14 @@ const Topbar = ({ colorBgContainer, setCollapsed, collapsed }) => {
           }
         />
         <Typography className="mt-2 name-text">
-          {authValue?.currUser?.name}
+          {authValue?.loginDetails?.user_details?.first_name}{" "}
+          {authValue?.loginDetails?.user_details?.last_name}
         </Typography>
         <Typography className="user-level-text">
-          {authValue?.currUser?.user_level?.name}
+          {authValue?.loginDetails?.user_details?.user_level}
         </Typography>
         <Typography className="username-text">
-          @{authValue?.currUser?.erp}
+          @{authValue?.loginDetails?.user_details?.erp}
         </Typography>
         {!["/profile", "/profile/"].includes(window.location.pathname) ? (
           <Button

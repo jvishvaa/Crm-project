@@ -59,20 +59,24 @@ const Sidebar = ({ collapsed, setCollapsed, colorBgContainer }) => {
     const myMenu = [];
     menu
       ?.filter((each) =>
-        each?.user_level?.includes(authData?.currUser?.user_level?.id)
+        each?.user_level?.includes(
+          authData?.loginDetails?.user_details?.user_level
+        )
       )
       ?.map((each) => {
         if (each.children) {
           each?.children
             ?.filter((each1) =>
-              each1?.user_level?.includes(authData?.currUser?.user_level?.id)
+              each1?.user_level?.includes(
+                authData?.loginDetails?.user_details?.user_level
+              )
             )
             ?.map((each1) => {
               if (each1?.children) {
                 each1?.children
                   ?.filter((each2) =>
                     each2?.user_level?.includes(
-                      authData?.currUser?.user_level?.id
+                      authData?.loginDetails?.user_details?.user_level
                     )
                   )
                   ?.map((each2) => {
@@ -129,7 +133,11 @@ const Sidebar = ({ collapsed, setCollapsed, colorBgContainer }) => {
         navigate(menu[i].route);
       };
     }
-    if (obj?.user_level?.includes(authData?.currUser?.user_level?.id))
+    if (
+      obj?.user_level?.includes(
+        authData?.loginDetails?.user_details?.user_level
+      )
+    )
       menus.push(obj);
   }
 

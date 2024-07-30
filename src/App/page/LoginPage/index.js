@@ -20,7 +20,7 @@ const LoginPage = () => {
     console.log("Failed:", errorInfo);
   };
 
-  if (authValue?.token) {
+  if (authValue?.loginDetails?.user_details?.token) {
     return <Navigate to={"/"} />;
   }
 
