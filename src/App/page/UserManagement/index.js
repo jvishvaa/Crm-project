@@ -153,6 +153,10 @@ const UserManagement = () => {
           { id: 1, name: "Branch1" },
           { id: 2, name: "Branch2" },
         ],
+        field_type: [
+          { id: 1, name: "Field Marketing" },
+          { id: 2, name: "Email Marketing" },
+        ],
         is_active: true,
       },
       {
@@ -173,6 +177,10 @@ const UserManagement = () => {
         branch: [
           { id: 1, name: "Branch1" },
           { id: 2, name: "Branch2" },
+        ],
+        field_type: [
+          { id: 1, name: "Field Marketing" },
+          { id: 2, name: "Email Marketing" },
         ],
         is_active: false,
       },
@@ -405,26 +413,18 @@ const UserManagement = () => {
       align: "center",
     },
     {
-      title: "Zone",
-      key: "zone",
-      render: (record) => (
-        <span>{getArrayValues(record?.zone, "name")?.join(", ")}</span>
-      ),
-      align: "center",
-    },
-    {
-      title: "Zone",
-      key: "zone",
-      render: (record) => (
-        <span>{getArrayValues(record?.zone, "name")?.join(", ")}</span>
-      ),
-      align: "center",
-    },
-    {
       title: "Branch",
       key: "branch",
       render: (record) => (
         <span>{getArrayValues(record?.branch, "name")?.join(", ")}</span>
+      ),
+      align: "center",
+    },
+    {
+      title: "Marketing Type",
+      key: "field_type",
+      render: (record) => (
+        <span>{getArrayValues(record?.field_type, "name")?.join(", ")}</span>
       ),
       align: "center",
     },
@@ -460,6 +460,54 @@ const UserManagement = () => {
       ),
       align: "center",
       width: 120,
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (record) => (
+        <Row
+          className={
+            "d-flex flex-row justify-content-center align-items-center flex-nowrap"
+          }
+          gutter={[4, 4]}
+        >
+          {getRoutePathDetails().modify ? (
+            <Col>
+              <Tooltip title="Edit">
+                <Button
+                  type="text"
+                  size="small"
+                  icon={<MdEdit size={18} />}
+                  onClick={() => {
+                    setDrawerData({
+                      show: true,
+                      type: "Update User",
+                      data: record,
+                    });
+                  }}
+                />
+              </Tooltip>
+            </Col>
+          ) : null}
+          <Col>
+            <Tooltip title="View">
+              <Button
+                type="text"
+                size="small"
+                icon={<IoMdEye size={20} />}
+                onClick={() => {
+                  // setDrawerData({
+                  //   show: true,
+                  //   type: "View Hotspot",
+                  //   data: record,
+                  // });
+                }}
+              />
+            </Tooltip>
+          </Col>
+        </Row>
+      ),
+      align: "center",
     },
   ];
 
@@ -635,31 +683,59 @@ const UserManagement = () => {
                                           >
                                             <Col xs={24}>
                                               <Typography className="lead-card-header-name">
-                                                {each?.hotspot_name || "NA"}
+                                                {`${each?.first_name} ${each?.last_name}` ||
+                                                  "NA"}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
                                               <Typography className="lead-card-subheader-text">
-                                                {each?.branch?.name}
+                                                {each?.erp}
+                                              </Typography>
+                                            </Col>
+                                            <Col xs={24}>
+                                              <Typography className="lead-card-subheader-text">
+                                                {each?.user_level?.name}
                                               </Typography>
                                             </Col>
                                           </Row>
                                         </Col>
                                         <Col xs={6}>
-                                          <Row className="d-flex flex-row justify-content-end">
-                                            <Tooltip title="Edit">
-                                              <Button
-                                                type="iconbutton"
-                                                icon={<MdEdit size={20} />}
-                                                onClick={() => {
-                                                  setDrawerData({
-                                                    show: true,
-                                                    type: "Update Hotspot",
-                                                    data: each,
-                                                  });
-                                                }}
-                                              />
-                                            </Tooltip>
+                                          <Row
+                                            className="d-flex flex-row justify-content-end"
+                                            gutter={[4, 4]}
+                                          >
+                                            {getRoutePathDetails().modify ? (
+                                              <Col>
+                                                <Tooltip title="Edit">
+                                                  <Button
+                                                    type="iconbutton"
+                                                    icon={<MdEdit size={20} />}
+                                                    onClick={() => {
+                                                      setDrawerData({
+                                                        show: true,
+                                                        type: "Update User",
+                                                        data: each,
+                                                      });
+                                                    }}
+                                                  />
+                                                </Tooltip>
+                                              </Col>
+                                            ) : null}
+                                            <Col>
+                                              <Tooltip title="View">
+                                                <Button
+                                                  type="iconbutton"
+                                                  icon={<IoMdEye size={20} />}
+                                                  onClick={() => {
+                                                    // setDrawerData({
+                                                    //   show: true,
+                                                    //   type: "View Hotspot",
+                                                    //   data: each,
+                                                    // });
+                                                  }}
+                                                />
+                                              </Tooltip>
+                                            </Col>
                                           </Row>
                                         </Col>
                                       </Row>
@@ -668,9 +744,93 @@ const UserManagement = () => {
                                     <Col xs={24}>
                                       <Row className={"d-flex"} gutter={[4, 4]}>
                                         {getCardDataText(
-                                          "Hotspot Type",
-                                          each?.hotspot_type?.name || "--"
+                                          "Contact",
+                                          each?.contact || "--"
                                         )}
+                                        {getCardDataText(
+                                          "Email",
+                                          each?.email || "--"
+                                        )}
+                                        {getCardDataText(
+                                          "Zone",
+                                          getArrayValues(
+                                            each?.zone,
+                                            "name"
+                                          )?.join(", ")
+                                        )}
+                                        {getCardDataText(
+                                          "Branch",
+                                          getArrayValues(
+                                            each?.branch,
+                                            "name"
+                                          )?.join(", ")
+                                        )}
+                                        {getCardDataText(
+                                          "Marketing Type",
+                                          getArrayValues(
+                                            each?.field_type,
+                                            "name"
+                                          )?.join(", ")
+                                        )}
+                                        <Col xs={24}>
+                                          <Row
+                                            className="d-flex flex-row align-items-center"
+                                            gutter={[4, 4]}
+                                          >
+                                            <Col>
+                                              <Typography
+                                                style={{
+                                                  fontSize: 12,
+                                                  fontWeight: 500,
+                                                }}
+                                              >
+                                                Status :
+                                              </Typography>
+                                            </Col>
+                                            <Col>
+                                              {getRoutePathDetails().modify ? (
+                                                <Popconfirm
+                                                  title={`Are you sure to update "${
+                                                    each?.erp
+                                                  }" user as ${
+                                                    each?.is_active
+                                                      ? "inactive"
+                                                      : "active"
+                                                  }?`}
+                                                  onConfirm={() =>
+                                                    handleStatusChange(each)
+                                                  }
+                                                  okText="Yes"
+                                                  cancelText="No"
+                                                >
+                                                  <Switch
+                                                    checked={each?.is_active}
+                                                    style={{
+                                                      backgroundColor:
+                                                        each.is_active
+                                                          ? "#5CB85C"
+                                                          : "#FC0027",
+                                                    }}
+                                                    checkedChildren="Active"
+                                                    unCheckedChildren="Inactive"
+                                                  />
+                                                </Popconfirm>
+                                              ) : (
+                                                <Tag
+                                                  color={
+                                                    each?.is_active
+                                                      ? "#5CB85C"
+                                                      : "#FC0027"
+                                                  }
+                                                >
+                                                  {each?.is_active
+                                                    ? "Active"
+                                                    : "Inactive"}
+                                                </Tag>
+                                              )}
+                                            </Col>
+                                          </Row>
+                                        </Col>
                                       </Row>
                                     </Col>
                                   </Row>
@@ -713,7 +873,7 @@ const UserManagement = () => {
       />
       <UpdateUser
         modalData={drawerData}
-        handleAddEditEvent={() => {}}
+        handleUpdateUser={() => {}}
         closeModal={() => {
           setDrawerData({ show: false, type: null, data: null });
         }}
