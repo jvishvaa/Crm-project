@@ -3,6 +3,7 @@ import {
   Checkbox,
   Col,
   DatePicker,
+  Descriptions,
   Divider,
   Drawer,
   Form,
@@ -105,13 +106,11 @@ const AddEditEvent = ({
     );
   };
 
-  const renderViewDetails = (label, data) => {
+  const renderViewDetails = (label, data, span = 1) => {
     return (
-      <Typography className="hotspot-detail-card-data-text">
-        <span>{label} :</span>
-        <br />
+      <Descriptions.Item label={label} span={span}>
         {data}
-      </Typography>
+      </Descriptions.Item>
     );
   };
 
@@ -277,17 +276,17 @@ const AddEditEvent = ({
                         Hotspot Details
                       </Typography>
                     </Col>
-                    <Col xs={24} md={12}>
-                      {renderViewDetails("Address", "Test Address")}
-                    </Col>
-                    <Col xs={24} md={12}>
-                      {renderViewDetails("Contact Name", "Test Contact Name")}
-                    </Col>
-                    <Col xs={24} md={12}>
-                      {renderViewDetails("Contact No.", "3234232322")}
-                    </Col>
-                    <Col xs={24} md={12}>
-                      {renderViewDetails("Contact Email", "Test@gmail.com")}
+                    <Col xs={24}>
+                      <Descriptions
+                        column={2}
+                        layout="vertical"
+                        className="update-event-description"
+                      >
+                        {renderViewDetails("Address", "Test Address")}
+                        {renderViewDetails("Contact Name", "Test Contact Name")}
+                        {renderViewDetails("Contact No.", "3234232322")}
+                        {renderViewDetails("Contact Email", "Test@gmail.com")}
+                      </Descriptions>
                     </Col>
                   </Row>
                 </Col>

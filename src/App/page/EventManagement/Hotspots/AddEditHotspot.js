@@ -2,6 +2,7 @@ import {
   Button,
   Checkbox,
   Col,
+  Descriptions,
   Divider,
   Drawer,
   Form,
@@ -21,6 +22,7 @@ import Map from "./gMap";
 import UploadFile from "../../../component/UtilComponents/UploadFile";
 import { MdClose, MdDelete, MdEdit, MdLink } from "react-icons/md";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
+import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 
 const { TextArea } = Input;
 
@@ -66,6 +68,7 @@ const AddEditHotspot = ({
     google_lng: "",
     google_address: "",
   });
+  const { width } = useWindowDimensions();
   const [selectedFile, setSelectedFile] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -169,13 +172,11 @@ const AddEditHotspot = ({
     setSelectedFile(Array.from(e.target.files));
   };
 
-  const renderViewDetails = (label, data) => {
+  const renderViewDetails = (label, data, span = 1) => {
     return (
-      <Typography className="hotspot-detail-card-data-text">
-        <span>{label} :</span>
-        <br />
+      <Descriptions.Item label={label} span={span}>
         {data}
-      </Typography>
+      </Descriptions.Item>
     );
   };
 
@@ -537,18 +538,16 @@ const AddEditHotspot = ({
         !isEdit ? (
           <Col xs={24} className="pb-2 mt-2">
             <Row gutter={[8, 8]}>
-              <Col xs={12}>
+              <Descriptions
+                column={2}
+                layout="vertical"
+                className="update-hotspot-description"
+              >
                 {renderViewDetails("Hotspot Name", "Test Hotspot")}
-              </Col>
-              <Col xs={12}>
                 {renderViewDetails("Branch", "Orchids BTM Layout")}
-              </Col>
-              <Col xs={24} sm={12}>
                 {renderViewDetails("Hotspot Type", "Apartment")}
-              </Col>
-              <Col xs={24} sm={12}>
                 {renderViewDetails("Address", "Test Address")}
-              </Col>
+              </Descriptions>
               <Col xs={24}>
                 <Map
                   google={googleData?.google_address || "Test Address"}
@@ -562,14 +561,16 @@ const AddEditHotspot = ({
                   zoom={15}
                 />
               </Col>
-              <Col xs={12}>
+              <Descriptions
+                column={2}
+                layout="vertical"
+                className="update-hotspot-description"
+              >
                 {renderViewDetails("Contact Name", "Test Contact")}
-              </Col>
-              <Col xs={12}>{renderViewDetails("Entry Cost", "3533")}</Col>
-              <Col xs={12}>{renderViewDetails("Contact No", "3654243434")}</Col>
-              <Col xs={12}>
+                {renderViewDetails("Entry Cost", "3533")}
+                {renderViewDetails("Contact No", "3654243434")}
                 {renderViewDetails("Contact Email", "shdhd@gmail.com")}
-              </Col>
+              </Descriptions>
               <Col xs={24} className="mt-2">
                 <Divider />
               </Col>
@@ -578,18 +579,26 @@ const AddEditHotspot = ({
                   Hotspot Details (Can be a estimation)
                 </Typography>
               </Col>
-              <Col xs={12}>{renderViewDetails("No. Of Flats", "10")}</Col>
-              <Col xs={12}>{renderViewDetails("Flat Series", "A1 - A10")}</Col>
-              <Col xs={12}>{renderViewDetails("No. Of Blocks", "5")}</Col>
-              <Col xs={12}>{renderViewDetails("Block Series", "B1 - B10")}</Col>
-              <Col xs={12}>{renderViewDetails("No of Kids", "1000")}</Col>
-              <Col xs={12}>
-                {renderViewDetails("Community / Gathering Area", "Yes")}
+              <Col xs={24}>
+                <Descriptions
+                  column={2}
+                  layout="vertical"
+                  className="update-hotspot-description"
+                >
+                  {renderViewDetails("No. Of Flats", "10")}
+                  {renderViewDetails("Flat Series", "A1 - A10")}
+                  {renderViewDetails("No. Of Blocks", "5")}
+                  {renderViewDetails("Block Series", "B1 - B10")}
+                  {renderViewDetails("No of Kids", "1000", width < 768 ? 2 : 1)}
+                  {renderViewDetails("Community / Gathering Area", "Yes")}
+                  {renderViewDetails("Estimated No. of Footfall Per day", "10")}
+                  {renderViewDetails(
+                    "Remarks",
+                    "Test Remarks",
+                    width < 768 ? 2 : 1
+                  )}
+                </Descriptions>
               </Col>
-              <Col xs={12}>
-                {renderViewDetails("Estimated No. of Footfall Per day", "10")}
-              </Col>
-              <Col xs={24}>{renderViewDetails("Remarks", "Test Remarks")}</Col>
             </Row>
           </Col>
         ) : null}
