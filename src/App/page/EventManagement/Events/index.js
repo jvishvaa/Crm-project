@@ -34,7 +34,7 @@ import { TbFileUpload } from "react-icons/tb";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
 import AddEditEvents from "./AddEditEvents";
 
-const LeadManagement = () => {
+const Events = () => {
   const defaultFilters = {
     city: [0],
     branch: [0],
@@ -94,19 +94,6 @@ const LeadManagement = () => {
       setIsList(true);
     }
   }, [width]);
-
-  useEffect(() => {
-    if (location?.state?.data) {
-      setFilterData({
-        ...filterData,
-        ...location?.state?.data?.filterData,
-      });
-      setSearchValue(location?.state?.data?.searchValue);
-      setShowFilterView(location?.state?.data?.showFilterView);
-      setIsList(location?.state?.data?.isList);
-      setSearchInput(location?.state?.data?.searchInput);
-    }
-  }, [location]);
 
   const checkFilterDifference = () => {
     return getChangedCountValues(
@@ -570,4 +557,4 @@ const LeadManagement = () => {
   );
 };
 
-export default LeadManagement;
+export default Events;

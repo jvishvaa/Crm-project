@@ -2,6 +2,7 @@ import {
   TbDatabase,
   TbFileUpload,
   TbLayoutDashboard,
+  TbUser,
   TbUserSquare,
 } from "react-icons/tb";
 import { GrGroup, GrMapLocation, GrStatusPlaceholder } from "react-icons/gr";
@@ -95,6 +96,19 @@ const modules = [
         is_sidebar: true,
       },
     ],
+  },
+  {
+    key: "24",
+    icon: <TbUser />,
+    label: "User Management",
+    route: "/user-management",
+    permission: {
+      is_view: [1, 2, 3, 4, 5],
+      is_modify: [1, 2, 3, 4, 5],
+    },
+    component: lazy(() => import("../page/UserManagement")),
+    is_route: true,
+    is_sidebar: true,
   },
   {
     key: "3",

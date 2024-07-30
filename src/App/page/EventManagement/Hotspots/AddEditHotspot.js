@@ -20,6 +20,7 @@ import getArrayValues from "../../../utils/getArrayValues";
 import Map from "./gMap";
 import UploadFile from "../../../component/UtilComponents/UploadFile";
 import { MdClose, MdDelete, MdEdit, MdLink } from "react-icons/md";
+import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 
 const { TextArea } = Input;
 
@@ -27,16 +28,20 @@ const CustomDrawerHeader = ({ label, onClose, isEdit, setIsEdit }) => (
   <div className="d-flex flex-row justify-content-between align-items-center">
     <Typography>{label}</Typography>
     <div className="d-flex flex-row justify-content-end align-items-center">
-      {!isEdit ? (
-        <Button
-          type="link"
-          size="small"
-          className="mr-2"
-          onClick={() => {
-            setIsEdit(!isEdit);
-          }}
-          icon={<MdEdit size={20} />}
-        />
+      {getRoutePathDetails().modify ? (
+        <>
+          {!isEdit ? (
+            <Button
+              type="link"
+              size="small"
+              className="mr-2"
+              onClick={() => {
+                setIsEdit(!isEdit);
+              }}
+              icon={<MdEdit size={20} />}
+            />
+          ) : null}
+        </>
       ) : null}
       <Button
         type="link"

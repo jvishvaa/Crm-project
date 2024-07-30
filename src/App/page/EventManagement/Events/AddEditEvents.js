@@ -25,7 +25,7 @@ import dayjs from "dayjs";
 
 const { TextArea } = Input;
 
-const AddEditHotspot = ({
+const AddEditEvent = ({
   modalData,
   handleAddEditEvent,
   closeModal,
@@ -428,4 +428,4 @@ const AddEditHotspot = ({
   );
 };
 
-export default AddEditHotspot;
+export default AddEditEvent;

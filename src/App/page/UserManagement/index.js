@@ -13,32 +13,36 @@ import {
   Tooltip,
   Pagination,
   Empty,
+  Popconfirm,
+  Switch,
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
 import { RiDownloadCloudFill } from "react-icons/ri";
-import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
+import CustomBreadCrumbs from "../../component/UtilComponents/CustomBreadCrumbs";
 import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import { IoMdEye } from "react-icons/io";
-import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
+import useWindowDimensions from "../../component/UtilComponents/useWindowDimensions";
 import DrawerFilter from "./drawerFilter";
 import dayjs from "dayjs";
-import getArrayValues from "../../../utils/getArrayValues";
-import RenderFilterTag from "../../../component/UtilComponents/RenderFilterTag";
+import getArrayValues from "../../utils/getArrayValues";
+import RenderFilterTag from "../../component/UtilComponents/RenderFilterTag";
 import { BiIdCard } from "react-icons/bi";
-import CustomCard from "../../../component/UtilComponents/CustomCard";
+import CustomCard from "../../component/UtilComponents/CustomCard";
 import { useLocation, useNavigate } from "react-router-dom";
-import getChangedCountValues from "../../../utils/getChangeCountObject";
-import getRoutePathDetails from "../../../utils/getRoutePathDetails";
+import getChangedCountValues from "../../utils/getChangeCountObject";
+import getRoutePathDetails from "../../utils/getRoutePathDetails";
 import { TbFileUpload } from "react-icons/tb";
-import getCardDataText from "../../../component/UtilComponents/CardDataText";
-import AddEditHotspot from "./AddEditHotspot";
+import getCardDataText from "../../component/UtilComponents/CardDataText";
+import UpdateUser from "./updateUser";
 
-const LeadManagement = () => {
+const UserManagement = () => {
   const defaultFilters = {
-    city: [0],
+    user_level: [0],
+    zone: [0],
     branch: [0],
-    hotspot_type: [0],
+    status: true,
+    pip_tagged: 0,
   };
   const [loading, setLoading] = useState(false);
   const location = useLocation();
@@ -58,30 +62,36 @@ const LeadManagement = () => {
     pageSize: 15,
     total: 0,
   });
-  const [hotspotData, setHotspotData] = useState(null);
+  const [userData, setUserData] = useState(null);
   const [isList, setIsList] = useState(true);
   const searchIconRef = useRef(null);
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
   const dropdownData = {
-    city: [
+    userLevel: [
       { label: "All", value: 0 },
-      { label: "Bangallore", value: "bangalore" },
-      { label: "Kolkata", value: "kolkata" },
-      { label: "Chennal", value: "chennai" },
+      { label: "Admin", value: "Admin" },
+      { label: "PRM", value: "PRM" },
     ],
-
+    zone: [
+      { label: "All", value: 0 },
+      { label: "Zone 1", value: "Zone 1" },
+      { label: "Zone 2", value: "Zone 2" },
+    ],
     branch: [
       { label: "All", value: 0 },
-      { label: "Orchids BTM Layout", value: "btm-layout" },
-      { label: "Orchids Banerghata", value: "banerghata" },
-      { label: "Orchids Newtown", value: "newtown" },
+      { label: "Branch 1", value: "Branch 1" },
+      { label: "Branch 2", value: "Branch 2" },
     ],
-
-    source: [
+    status: [
       { label: "All", value: 0 },
-      { label: "Apartment", value: "apartment" },
-      { label: "Branch", value: "branch" },
+      { label: "Active", value: true },
+      { label: "Inactive", value: false },
+    ],
+    pip_tagged: [
+      { label: "All", value: 0 },
+      { label: "Pip Tagged", value: true },
+      { label: "Pip Not Tagged", value: false },
     ],
   };
 
@@ -94,6 +104,19 @@ const LeadManagement = () => {
       setIsList(true);
     }
   }, [width]);
+
+  useEffect(() => {
+    if (location?.state?.data) {
+      setFilterData({
+        ...filterData,
+        ...location?.state?.data?.filterData,
+      });
+      setSearchValue(location?.state?.data?.searchValue);
+      setShowFilterView(location?.state?.data?.showFilterView);
+      setIsList(location?.state?.data?.isList);
+      setSearchInput(location?.state?.data?.searchInput);
+    }
+  }, [location]);
 
   const checkFilterDifference = () => {
     return getChangedCountValues(
@@ -108,38 +131,50 @@ const LeadManagement = () => {
 
   const [searchFetched, setSearchFetched] = useState(false);
 
-  const getHotspotData = (page, page_size, params = {}) => {
+  const getUserData = (page, page_size, params = {}) => {
     // setLoading(true);
-    setHotspotData([
+    setUserData([
       {
         id: 1,
-        hotspot_name: "Test",
-        branch: {
-          id: 1,
-          name: "Orchids BTM Layout",
+        first_name: "Anik",
+        last_name: "Chowdhury",
+        email: "anik@gmail.com",
+        contact: "3646462736",
+        erp: "2838373636_OLV",
+        user_level: {
+          id: 2,
+          name: "Admin",
         },
-        contact_name: "Test",
-        contact_no: "2443242432",
-        hotspot_type: {
-          id: 1,
-          name: "Apartment",
-        },
-        entry_cost: 100,
+        zone: [
+          { id: 1, name: "Zone1" },
+          { id: 2, name: "Zone2" },
+        ],
+        branch: [
+          { id: 1, name: "Branch1" },
+          { id: 2, name: "Branch2" },
+        ],
+        is_active: true,
       },
       {
         id: 2,
-        hotspot_name: "Test1",
-        branch: {
+        first_name: "Utpal",
+        last_name: "Maji",
+        email: "maji@gmail.com",
+        contact: "3646462436",
+        erp: "2838373636_OLV",
+        user_level: {
           id: 1,
-          name: "Orchids BTM Layout",
+          name: "Super Admin",
         },
-        contact_name: "Test",
-        contact_no: "2443242432",
-        hotspot_type: {
-          id: 1,
-          name: "Apartment",
-        },
-        entry_cost: 100,
+        zone: [
+          { id: 1, name: "Zone1" },
+          { id: 2, name: "Zone2" },
+        ],
+        branch: [
+          { id: 1, name: "Branch1" },
+          { id: 2, name: "Branch2" },
+        ],
+        is_active: false,
       },
     ]);
     setPageData({
@@ -150,23 +185,23 @@ const LeadManagement = () => {
   };
 
   useEffect(() => {
-    getHotspotData(pageData?.current, pageData?.pageSize);
+    getUserData(pageData?.current, pageData?.pageSize);
   }, []);
 
   const handleTableChange = (pagination) => {
     window.scrollTo(0, 0);
-    getHotspotData(pagination?.current, pagination?.pageSize);
+    getUserData(pagination?.current, pagination?.pageSize);
   };
 
   const handleCardChange = (page) => {
     window.scrollTo(0, 0);
-    getHotspotData(page, pageData?.pageSize);
+    getUserData(page, pageData?.pageSize);
   };
 
   const getSearchInput = () => {
     return (
       <Input
-        placeholder="Search Hotspot"
+        placeholder="Search User"
         style={{
           height: 30,
           maxWidth: 250,
@@ -180,7 +215,7 @@ const LeadManagement = () => {
         onPressEnter={() => {
           setSearchFetched(true);
           setSearchValue(searchInput);
-          getHotspotData(1, pageData?.pageSize);
+          getUserData(1, pageData?.pageSize);
         }}
         onBlur={(e) => {
           if (
@@ -213,7 +248,7 @@ const LeadManagement = () => {
               onClick={() => {
                 setSearchFetched(true);
                 setSearchValue(searchInput);
-                getHotspotData(1, pageData?.pageSize);
+                getUserData(1, pageData?.pageSize);
               }}
             />
           )
@@ -230,7 +265,7 @@ const LeadManagement = () => {
         style={{ whiteSpace: "normal" }}
         onClick={() => {
           setFilterData({ ...defaultFilters });
-          getHotspotData(1, pageData?.pageSize);
+          getUserData(1, pageData?.pageSize);
         }}
       >
         Clear Filters
@@ -238,62 +273,83 @@ const LeadManagement = () => {
     );
   };
 
+  const handleStatusChange = (data) => {};
+
   const renderFilterView = () => {
     return (
       <>
-        {checkFilterDifference() ? (
-          <Row className="d-flex flex-row align-items-center" gutter={[4, 4]}>
+        <Row className="d-flex flex-row align-items-center" gutter={[4, 4]}>
+          <Col>
+            <Typography style={{ fontWeight: 500, fontSize: 12, marginTop: 2 }}>
+              Filter:
+            </Typography>
+          </Col>
+          {!filterData?.user_level?.includes(0) ? (
             <Col>
-              <Typography
-                style={{ fontWeight: 500, fontSize: 12, marginTop: 2 }}
-              >
-                Filter:
-              </Typography>
+              <RenderFilterTag
+                label="User Level"
+                value={getArrayValues(
+                  dropdownData?.userLevel?.filter(
+                    (each) => filterData?.user_level === each?.value
+                  ),
+                  "label"
+                )?.join(", ")}
+              />
             </Col>
-            {!filterData?.branch?.includes(0) ? (
-              <Col>
-                <RenderFilterTag
-                  label="Branch"
-                  value={getArrayValues(
-                    dropdownData?.branch?.filter((each) =>
-                      filterData?.branch?.includes(each?.value)
-                    ),
-                    "label"
-                  )?.join(", ")}
-                />
-              </Col>
-            ) : !filterData?.city?.includes(0) ? (
-              <Col>
-                <RenderFilterTag
-                  label="City"
-                  value={getArrayValues(
-                    dropdownData?.city?.filter((each) =>
-                      filterData?.city?.includes(each?.value)
-                    ),
-                    "label"
-                  )?.join(", ")}
-                />
-              </Col>
-            ) : null}
-            {!filterData?.hotspot_type?.includes(0) ? (
-              <Col>
-                <RenderFilterTag
-                  label="Hotspot Type"
-                  value={getArrayValues(
-                    dropdownData?.source?.filter((each) =>
-                      filterData?.hotspot_type?.includes(each?.value)
-                    ),
-                    "label"
-                  )?.join(", ")}
-                />
-              </Col>
-            ) : null}
-
-            {checkFilterDifference() && width > 768 ? (
-              <Col className="pl-2">{getClearFilters()}</Col>
-            ) : null}
-          </Row>
-        ) : null}
+          ) : null}
+          {!filterData?.branch?.includes(0) ? (
+            <Col>
+              <RenderFilterTag
+                label="Branch"
+                value={getArrayValues(
+                  dropdownData?.branch?.filter((each) =>
+                    filterData?.branch?.includes(each?.value)
+                  ),
+                  "label"
+                )?.join(", ")}
+              />
+            </Col>
+          ) : !filterData?.zone?.includes(0) ? (
+            <Col>
+              <RenderFilterTag
+                label="Zone"
+                value={getArrayValues(
+                  dropdownData?.zone?.filter((each) =>
+                    filterData?.zone?.includes(each?.value)
+                  ),
+                  "label"
+                )?.join(", ")}
+              />
+            </Col>
+          ) : null}
+          <Col>
+            <RenderFilterTag
+              label="Status"
+              value={getArrayValues(
+                dropdownData?.status?.filter(
+                  (each) => filterData?.status === each?.value
+                ),
+                "label"
+              )?.join(", ")}
+            />
+          </Col>
+          {filterData?.pip_tagged !== 0 ? (
+            <Col>
+              <RenderFilterTag
+                label="PIP"
+                value={getArrayValues(
+                  dropdownData?.pip_tagged?.filter(
+                    (each) => filterData?.pip_tagged === each?.value
+                  ),
+                  "label"
+                )?.join(", ")}
+              />
+            </Col>
+          ) : null}
+          {checkFilterDifference() && width > 768 ? (
+            <Col className="pl-2">{getClearFilters()}</Col>
+          ) : null}
+        </Row>
       </>
     );
   };
@@ -307,88 +363,103 @@ const LeadManagement = () => {
       align: "center",
     },
     {
-      title: "Hotspot Name",
-      key: "hotspot_name",
-      render: (record) => <span>{record?.hotspot_name || "--"}</span>,
+      title: "Name & ERP",
+      key: "name",
+      render: (record) => (
+        <Row className={"d-flex flex-column flex-nowrap"}>
+          <Col>
+            <Typography style={{ fontSize: 12 }}>
+              {record.first_name} {record.last_name}
+            </Typography>
+          </Col>
+          <Col>
+            <Typography style={{ fontSize: 10, whiteSpace: "nowrap" }}>
+              ({record?.erp})
+            </Typography>
+          </Col>
+        </Row>
+      ),
+      align: "center",
+    },
+    {
+      title: "User Contact Details",
+      key: "user",
+      render: (record) => (
+        <Row className={"d-flex flex-column flex-nowrap"}>
+          <Col>
+            <Typography style={{ fontSize: 12 }}>{record?.contact}</Typography>
+          </Col>
+          <Col>
+            <Typography style={{ fontSize: 10, whiteSpace: "nowrap" }}>
+              {record?.email}
+            </Typography>
+          </Col>
+        </Row>
+      ),
+      align: "center",
+    },
+    {
+      title: "UserLevel",
+      key: "userlevel",
+      render: (record) => <span>{record.user_level?.name}</span>,
+      align: "center",
+    },
+    {
+      title: "Zone",
+      key: "zone",
+      render: (record) => (
+        <span>{getArrayValues(record?.zone, "name")?.join(", ")}</span>
+      ),
+      align: "center",
+    },
+    {
+      title: "Zone",
+      key: "zone",
+      render: (record) => (
+        <span>{getArrayValues(record?.zone, "name")?.join(", ")}</span>
+      ),
       align: "center",
     },
     {
       title: "Branch",
       key: "branch",
-      render: (record) => <span>{record?.branch?.name || "--"}</span>,
-      align: "center",
-    },
-    {
-      title: "Hotspot Type",
-      key: "hotspot_type",
-      render: (record) => <span>{record?.hotspot_type?.name || "--"}</span>,
-      align: "center",
-    },
-    {
-      title: "Contact Name",
-      key: "contact_name",
-      render: (record) => <span>{record?.contact_name || "--"}</span>,
-      align: "center",
-    },
-    {
-      title: "Contact No.",
-      key: "contact_no",
-      render: (record) => <span>{record?.contact_no || "--"}</span>,
-      align: "center",
-    },
-    {
-      title: "Entry Cost",
-      key: "entry_cost",
-      render: (record) => <span>{record?.entry_cost || "0"}</span>,
-      align: "center",
-    },
-    {
-      title: "Action",
-      key: "action",
       render: (record) => (
-        <Row
-          className={
-            "d-flex flex-row justify-content-center align-items-center"
-          }
-          gutter={[4, 4]}
-        >
-          {getRoutePathDetails().modify ? (
-            <Col>
-              <Tooltip title="Edit">
-                <Button
-                  type="text"
-                  size="small"
-                  icon={<MdEdit size={18} />}
-                  onClick={() => {
-                    setDrawerData({
-                      show: true,
-                      type: "View Hotspot",
-                      data: { ...record, is_edit: true },
-                    });
-                  }}
-                />
-              </Tooltip>
-            </Col>
-          ) : null}
-          <Col>
-            <Tooltip title="View">
-              <Button
-                type="text"
-                size="small"
-                icon={<IoMdEye size={20} />}
-                onClick={() => {
-                  setDrawerData({
-                    show: true,
-                    type: "View Hotspot",
-                    data: record,
-                  });
-                }}
-              />
-            </Tooltip>
-          </Col>
-        </Row>
+        <span>{getArrayValues(record?.branch, "name")?.join(", ")}</span>
       ),
       align: "center",
+    },
+    {
+      title: "Status",
+      key: "is_active",
+      render: (record) => (
+        <>
+          {getRoutePathDetails().modify ? (
+            <Popconfirm
+              title={`Are you sure to update "${record?.erp}" user as ${
+                record?.is_active ? "inactive" : "active"
+              }?`}
+              onConfirm={() => handleStatusChange(record)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Switch
+                checked={record?.is_active}
+                style={{
+                  backgroundColor: record.is_active ? "#5CB85C" : "#FC0027",
+                }}
+                checkedChildren="Active"
+                unCheckedChildren="Inactive"
+              />
+            </Popconfirm>
+          ) : (
+            <Tag color={record?.is_active ? "#5CB85C" : "#FC0027"}>
+              {record?.is_active ? "Active" : "Inactive"}
+            </Tag>
+          )}
+        </>
+      ),
+      align: "center",
+      width: 120,
     },
   ];
 
@@ -400,27 +471,10 @@ const LeadManagement = () => {
             <Col xs={24}>
               <Row className="d-flex flex-row justify-content-between">
                 <Col>
-                  <CustomBreadCrumbs data={["Hotspots"]} />
+                  <CustomBreadCrumbs data={["User Manangement"]} />
                 </Col>
                 <Col>
                   <Row className="d-flex flex-row" gutter={[8, 4]}>
-                    {getRoutePathDetails().add ? (
-                      <Col>
-                        <Button
-                          size="small"
-                          type="primary"
-                          onClick={() => {
-                            setDrawerData({
-                              show: true,
-                              data: null,
-                              type: "Add Hotspot",
-                            });
-                          }}
-                        >
-                          + Add Hotspots
-                        </Button>
-                      </Col>
-                    ) : null}
                     <Col>
                       <Tooltip title="Refresh">
                         <Button
@@ -429,7 +483,7 @@ const LeadManagement = () => {
                           disabled={loading}
                           icon={<MdRefresh size={20} />}
                           onClick={() => {
-                            getHotspotData(1, pageData.pageSize);
+                            getUserData(1, pageData.pageSize);
                           }}
                         />
                       </Tooltip>
@@ -516,19 +570,17 @@ const LeadManagement = () => {
                         {getClearFilters()}
                       </Col>
                     ) : null}
-                    {checkFilterDifference() ? (
-                      <Col style={{ textAlign: "right" }}>
-                        <Button
-                          type="link"
-                          onClick={() => {
-                            setShowFilterView(!showFilterView);
-                          }}
-                          style={{ whiteSpace: "normal" }}
-                        >
-                          {showFilterView ? "Hide Filters" : "Show Filters"}
-                        </Button>
-                      </Col>
-                    ) : null}
+                    <Col style={{ textAlign: "right" }}>
+                      <Button
+                        type="link"
+                        onClick={() => {
+                          setShowFilterView(!showFilterView);
+                        }}
+                        style={{ whiteSpace: "normal" }}
+                      >
+                        {showFilterView ? "Hide Filters" : "Show Filters"}
+                      </Button>
+                    </Col>
                   </Row>
                 </Col>
               ) : null}
@@ -537,20 +589,20 @@ const LeadManagement = () => {
                   {renderFilterView()}
                 </Col>
               ) : null}
-              {hotspotData ? (
+              {userData ? (
                 isList ? (
                   <Col xs={24} className={"mt-2"}>
                     <Table
-                      dataSource={hotspotData || []}
+                      dataSource={userData || []}
                       columns={columns}
                       bordered={true}
-                      pagination={hotspotData?.length > 0 ? pageData : false}
+                      pagination={userData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />
                   </Col>
                 ) : (
                   <>
-                    {hotspotData?.length === 0 ? (
+                    {userData?.length === 0 ? (
                       <Col xs={24} className={"mt-2"}>
                         <CustomCard
                           style={{ minHeight: 200 }}
@@ -562,11 +614,11 @@ const LeadManagement = () => {
                         </CustomCard>
                       </Col>
                     ) : null}
-                    {hotspotData?.length > 0 ? (
+                    {userData?.length > 0 ? (
                       <>
                         <Col xs={24} className={"mt-2"}>
                           <Row className={"d-flex"} gutter={[8, 8]}>
-                            {hotspotData?.map((each, index) => (
+                            {userData?.map((each, index) => (
                               <Col xs={24} sm={12} lg={8} key={index}>
                                 <CustomCard style={{ height: "100%" }}>
                                   <Row gutter={[4, 4]} className={"d-flex"}>
@@ -594,45 +646,20 @@ const LeadManagement = () => {
                                           </Row>
                                         </Col>
                                         <Col xs={6}>
-                                          <Row
-                                            className="d-flex flex-row justify-content-end"
-                                            gutter={[4, 4]}
-                                          >
-                                            {getRoutePathDetails().modify ? (
-                                              <Col>
-                                                <Tooltip title="Edit">
-                                                  <Button
-                                                    type="iconbutton"
-                                                    icon={<MdEdit size={20} />}
-                                                    onClick={() => {
-                                                      setDrawerData({
-                                                        show: true,
-                                                        type: "View Hotspot",
-                                                        data: {
-                                                          ...each,
-                                                          is_edit: true,
-                                                        },
-                                                      });
-                                                    }}
-                                                  />
-                                                </Tooltip>
-                                              </Col>
-                                            ) : null}
-                                            <Col>
-                                              <Tooltip title="View">
-                                                <Button
-                                                  type="iconbutton"
-                                                  icon={<IoMdEye size={20} />}
-                                                  onClick={() => {
-                                                    setDrawerData({
-                                                      show: true,
-                                                      type: "View Hotspot",
-                                                      data: each,
-                                                    });
-                                                  }}
-                                                />
-                                              </Tooltip>
-                                            </Col>
+                                          <Row className="d-flex flex-row justify-content-end">
+                                            <Tooltip title="Edit">
+                                              <Button
+                                                type="iconbutton"
+                                                icon={<MdEdit size={20} />}
+                                                onClick={() => {
+                                                  setDrawerData({
+                                                    show: true,
+                                                    type: "Update Hotspot",
+                                                    data: each,
+                                                  });
+                                                }}
+                                              />
+                                            </Tooltip>
                                           </Row>
                                         </Col>
                                       </Row>
@@ -643,18 +670,6 @@ const LeadManagement = () => {
                                         {getCardDataText(
                                           "Hotspot Type",
                                           each?.hotspot_type?.name || "--"
-                                        )}
-                                        {getCardDataText(
-                                          "Contact Name",
-                                          each?.contact_name || "--"
-                                        )}
-                                        {getCardDataText(
-                                          "Contact No.",
-                                          each?.contact_no || "--"
-                                        )}
-                                        {getCardDataText(
-                                          "Entry Cost",
-                                          each?.entry_cost || "0"
                                         )}
                                       </Row>
                                     </Col>
@@ -689,16 +704,16 @@ const LeadManagement = () => {
         onSubmit={(values) => {
           setDrawerData({ show: false, type: null, data: null });
           setFilterData({ ...filterData, ...values });
-          getHotspotData(1, pageData?.pageSize);
+          getUserData(1, pageData?.pageSize);
         }}
         dropdownData={dropdownData}
         closeDrawer={() => {
           setDrawerData({ show: false, type: null, data: null });
         }}
       />
-      <AddEditHotspot
+      <UpdateUser
         modalData={drawerData}
-        handleAddEditHotspot={() => {}}
+        handleAddEditEvent={() => {}}
         closeModal={() => {
           setDrawerData({ show: false, type: null, data: null });
         }}
@@ -708,4 +723,4 @@ const LeadManagement = () => {
   );
 };
 
-export default LeadManagement;
+export default UserManagement;
