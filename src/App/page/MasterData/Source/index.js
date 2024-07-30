@@ -24,6 +24,7 @@ import CustomFilterText from "../../../component/UtilComponents/CustomFilterText
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import RenderTagMultiple from "../../../component/UtilComponents/RenderMultiple";
 import { MdEdit } from "react-icons/md";
+import getColour from "../../../utils/getColour";
 
 const Source = () => {
   const [form] = Form.useForm();
@@ -140,14 +141,20 @@ const Source = () => {
               <Switch
                 checked={record?.is_active}
                 style={{
-                  backgroundColor: record.is_active ? "#5CB85C" : "#FC0027",
+                  backgroundColor: record.is_active
+                    ? getColour("active")
+                    : getColour("inactive"),
                 }}
                 checkedChildren="Active"
                 unCheckedChildren="Inactive"
               />
             </Popconfirm>
           ) : (
-            <Tag color={record?.is_active ? "#5CB85C" : "#FC0027"}>
+            <Tag
+              color={
+                record?.is_active ? getColour("active") : getColour("inactive")
+              }
+            >
               {record?.is_active ? "Active" : "Inactive"}
             </Tag>
           )}

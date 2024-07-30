@@ -33,6 +33,7 @@ import getChangedCountValues from "../../utils/getChangeCountObject";
 import getRoutePathDetails from "../../utils/getRoutePathDetails";
 import getCardDataText from "../../component/UtilComponents/CardDataText";
 import UpdateUser from "./updateUser";
+import getColour from "../../utils/getColour";
 
 const UserManagement = () => {
   const defaultFilters = {
@@ -99,15 +100,15 @@ const UserManagement = () => {
       filterValue: true,
       label: "Active Users",
       value: 800,
-      color: "#5CB85C",
-      icon: <BiUserCheck size={26} style={{ color: "#5CB85C" }} />,
+      color: getColour("active"),
+      icon: <BiUserCheck size={26} style={{ color: getColour("active") }} />,
     },
     {
       filterValue: false,
       label: "Inactive Users",
       value: 200,
-      color: "#FC0027",
-      icon: <BiUserX size={26} style={{ color: "#FC0027" }} />,
+      color: getColour("inactive"),
+      icon: <BiUserX size={26} style={{ color: getColour("inactive") }} />,
     },
   ];
 
@@ -442,14 +443,20 @@ const UserManagement = () => {
               <Switch
                 checked={record?.is_active}
                 style={{
-                  backgroundColor: record.is_active ? "#5CB85C" : "#FC0027",
+                  backgroundColor: record.is_active
+                    ? getColour("active")
+                    : getColour("inactive"),
                 }}
                 checkedChildren="Active"
                 unCheckedChildren="Inactive"
               />
             </Popconfirm>
           ) : (
-            <Tag color={record?.is_active ? "#5CB85C" : "#FC0027"}>
+            <Tag
+              color={
+                record?.is_active ? getColour("active") : getColour("inactive")
+              }
+            >
               {record?.is_active ? "Active" : "Inactive"}
             </Tag>
           )}
@@ -864,8 +871,10 @@ const UserManagement = () => {
                                                     style={{
                                                       backgroundColor:
                                                         each.is_active
-                                                          ? "#5CB85C"
-                                                          : "#FC0027",
+                                                          ? getColour("active")
+                                                          : getColour(
+                                                              "inactive"
+                                                            ),
                                                     }}
                                                     checkedChildren="Active"
                                                     unCheckedChildren="Inactive"
@@ -875,8 +884,8 @@ const UserManagement = () => {
                                                 <Tag
                                                   color={
                                                     each?.is_active
-                                                      ? "#5CB85C"
-                                                      : "#FC0027"
+                                                      ? getColour("active")
+                                                      : getColour("inactive")
                                                   }
                                                 >
                                                   {each?.is_active

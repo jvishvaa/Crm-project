@@ -20,6 +20,7 @@ import { EditOutlined } from "@ant-design/icons";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import AddEditSourceType from "./addEditSourceType";
 import CustomFilterText from "../../../component/UtilComponents/CustomFilterText";
+import getColour from "../../../utils/getColour";
 
 const SourceType = () => {
   const [form] = Form.useForm();
@@ -131,14 +132,20 @@ const SourceType = () => {
               <Switch
                 checked={record?.is_active}
                 style={{
-                  backgroundColor: record.is_active ? "#5CB85C" : "#FC0027",
+                  backgroundColor: record.is_active
+                    ? getColour("active")
+                    : getColour("inactive"),
                 }}
                 checkedChildren="Active"
                 unCheckedChildren="Inactive"
               />
             </Popconfirm>
           ) : (
-            <Tag color={record?.is_active ? "#5CB85C" : "#FC0027"}>
+            <Tag
+              color={
+                record?.is_active ? getColour("active") : getColour("inactive")
+              }
+            >
               {record?.is_active ? "Active" : "Inactive"}
             </Tag>
           )}

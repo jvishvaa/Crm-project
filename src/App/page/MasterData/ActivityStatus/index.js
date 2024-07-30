@@ -25,6 +25,7 @@ import useWindowDimensions from "../../../component/UtilComponents/useWindowDime
 import AddEditActivityStatus from "./addEditActivityStatus";
 import getArrayValues from "../../../utils/getArrayValues";
 import { MdEdit } from "react-icons/md";
+import getColour from "../../../utils/getColour";
 
 const ActivityStatus = () => {
   const [form] = Form.useForm();
@@ -220,14 +221,20 @@ const ActivityStatus = () => {
               <Switch
                 checked={record?.is_active}
                 style={{
-                  backgroundColor: record.is_active ? "#5CB85C" : "#FC0027",
+                  backgroundColor: record.is_active
+                    ? getColour("active")
+                    : getColour("inactive"),
                 }}
                 checkedChildren="Active"
                 unCheckedChildren="Inactive"
               />
             </Popconfirm>
           ) : (
-            <Tag color={record?.is_active ? "#5CB85C" : "#FC0027"}>
+            <Tag
+              color={
+                record?.is_active ? getColour("active") : getColour("inactive")
+              }
+            >
               {record?.is_active ? "Active" : "Inactive"}
             </Tag>
           )}

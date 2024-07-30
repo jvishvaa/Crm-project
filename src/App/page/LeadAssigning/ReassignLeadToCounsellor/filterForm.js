@@ -2,6 +2,7 @@ import { Button, Col, DatePicker, Form, Row, Select, Switch } from "antd";
 import React from "react";
 import RenderTagMultiple from "../../../component/UtilComponents/RenderMultiple";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
+import getColour from "../../../utils/getColour";
 const { RangePicker } = DatePicker;
 
 const FilterForm = ({ form, dropdownData, isDrawer }) => {
@@ -311,7 +312,9 @@ const FilterForm = ({ form, dropdownData, isDrawer }) => {
                 : "default"
             }
             style={{
-              backgroundColor: isActive ? "#5CB85C" : "#FC0027",
+              backgroundColor: isActive
+                ? getColour("active")
+                : getColour("inactive"),
               marginTop: 26,
             }}
             onChange={(value) => {
