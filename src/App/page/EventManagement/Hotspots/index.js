@@ -244,9 +244,7 @@ const Hotspot = () => {
         {checkFilterDifference() ? (
           <Row className="d-flex flex-row align-items-center" gutter={[4, 4]}>
             <Col>
-              <Typography
-                style={{ fontWeight: 500, fontSize: 12, marginTop: 2 }}
-              >
+              <Typography style={{ marginTop: 2 }} className="th-12 th-fw-500">
                 Filter:
               </Typography>
             </Col>

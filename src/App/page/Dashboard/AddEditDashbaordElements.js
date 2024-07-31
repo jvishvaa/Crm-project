@@ -398,9 +398,7 @@ const AddEditDashboardElements = ({
               gutter={[8, 8]}
             >
               <Col>
-                <Typography style={{ fontSize: 13, fontWeight: 500 }}>
-                  Filter
-                </Typography>
+                <Typography className="th-13 th-fw-500">Filter</Typography>
               </Col>
               <Col>
                 <Button
@@ -436,7 +434,8 @@ const AddEditDashboardElements = ({
                   >
                     <Col xs={2} md={1}>
                       <Typography
-                        style={{ fontSize: 14, fontWeight: 500, marginTop: 15 }}
+                        style={{ marginTop: 15 }}
+                        className="th-14 th-fw-500"
                       >
                         {index + 1}.
                       </Typography>
@@ -1106,9 +1105,7 @@ const AddEditDashboardElements = ({
             <Col xs={24} md={13} lg={11} style={{ backgroundColor: "#EFF1F6" }}>
               <Row gutter={[4, 4]}>
                 <Col xs={24}>
-                  <Typography style={{ fontSize: 12 }} className="mt-2">
-                    Preview
-                  </Typography>
+                  <Typography className="mt-2 th-12">Preview</Typography>
                 </Col>
                 <Col xs={24}>
                   <CustomCard
@@ -1117,19 +1114,11 @@ const AddEditDashboardElements = ({
                   >
                     <Row gutter={[8, 8]} className="mb-1">
                       <Col xs={24}>
-                        <Typography
-                          style={{ fontSize: 14, fontWeight: "500" }}
-                          className="pl-2 pt-2"
-                        >
+                        <Typography className="pl-2 pt-2 th-14 th-fw-500">
                           {modalData?.data?.report_name || "Report Name"}
                         </Typography>
                         {reportDescription ? (
-                          <Typography
-                            style={{
-                              fontSize: 11,
-                            }}
-                            className="pl-2 dashboard-report-description"
-                          >
+                          <Typography className="pl-2 dashboard-report-description th-11">
                             {reportDescription}
                           </Typography>
                         ) : null}
@@ -1223,10 +1212,7 @@ const AddEditDashboardElements = ({
                             className="d-flex flex-row justify-content-center align-content-center"
                             style={{ minHeight: 100 }}
                           >
-                            <Typography
-                              className="text-center"
-                              style={{ fontSize: 14, fontWeight: 500 }}
-                            >
+                            <Typography className="text-center h-14 th-fw-500">
                               Fill all value to preview chart
                             </Typography>
                           </Row>

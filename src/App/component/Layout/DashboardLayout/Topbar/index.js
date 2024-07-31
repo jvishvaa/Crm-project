@@ -428,12 +428,12 @@ const Topbar = ({ colorBgContainer, setCollapsed, collapsed }) => {
         <Button
           type="text"
           style={{
-            fontSize: 16,
             width: 54,
             height: 54,
             border: "none",
             outline: "none",
           }}
+          className="th-16"
           icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           onClick={() => setCollapsed(!collapsed)}
         />

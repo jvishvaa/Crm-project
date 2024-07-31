@@ -564,7 +564,7 @@ const UnassignLeadFromCounsellor = () => {
     return (
       <Row className="d-flex flex-row align-items-center" gutter={[4, 4]}>
         <Col>
-          <Typography style={{ fontWeight: 500, fontSize: 12, marginTop: 2 }}>
+          <Typography style={{ marginTop: 2 }} className="th-12 th-fw-500">
             Filter:
           </Typography>
         </Col>
@@ -734,10 +734,10 @@ const UnassignLeadFromCounsellor = () => {
               <Col>
                 <Typography
                   style={{
-                    fontSize: 12,
                     whiteSpace:
                       record?.lead_name?.length <= 30 ? "nowrap" : "normal",
                   }}
+                  className="th-12"
                 >
                   {record?.lead_name || "NA"}
                 </Typography>
@@ -759,10 +759,10 @@ const UnassignLeadFromCounsellor = () => {
       render: (record) => (
         <Row className={"d-flex flex-column flex-nowrap"}>
           <Col>
-            <Typography style={{ fontSize: 12 }}>{"+917937363636"}</Typography>
+            <Typography className="th-12">{"+917937363636"}</Typography>
           </Col>
           <Col>
-            <Typography style={{ fontSize: 10, whiteSpace: "nowrap" }}>
+            <Typography style={{ whiteSpace: "nowrap" }} className="th-10">
               {"anik.chowdhury@orchids.edu.in"}
             </Typography>
           </Col>
@@ -1045,7 +1045,8 @@ const UnassignLeadFromCounsellor = () => {
                                     onChange={onChangeSelectAll}
                                   >
                                     <Typography
-                                      style={{ lineHeight: 1.2, fontSize: 12 }}
+                                      style={{ lineHeight: 1.2 }}
+                                      className="th-12"
                                     >
                                       {selectedRowKeys?.length &&
                                       leadData?.length !==
@@ -1056,7 +1057,7 @@ const UnassignLeadFromCounsellor = () => {
                                       {!isSelectAllPages ? (
                                         <>
                                           <br />
-                                          <span style={{ fontSize: 9 }}>
+                                          <span className="th-9">
                                             (Current Page)
                                           </span>
                                         </>
@@ -1076,9 +1077,7 @@ const UnassignLeadFromCounsellor = () => {
                                       }}
                                     >
                                       Select All Leads <br />{" "}
-                                      <span style={{ fontSize: 9 }}>
-                                        (All Pages)
-                                      </span>
+                                      <span className="th-9">(All Pages)</span>
                                     </Button>
                                   </Col>
                                 ) : null}
@@ -1099,12 +1098,7 @@ const UnassignLeadFromCounsellor = () => {
                                   gutter={[12, 4]}
                                 >
                                   <Col>
-                                    <Typography
-                                      style={{
-                                        fontSize: 12,
-                                        fontWeight: "500",
-                                      }}
-                                    >
+                                    <Typography className="th-12 th-fw-500">
                                       {isSelectAllPages
                                         ? "Selected All Leads"
                                         : `Selected ${

@@ -322,10 +322,7 @@ const AddEditHotspot = ({
                   </Form.Item>
                 </Col>
                 <Col xs={24}>
-                  <Typography
-                    style={{ fontSize: 10, fontWeight: 400 }}
-                    className="mt-2"
-                  >
+                  <Typography className="mt-2 th-10 th-fw-400">
                     Google Address <span style={{ color: "red" }}>*</span>
                   </Typography>
                   <Map
@@ -387,7 +384,7 @@ const AddEditHotspot = ({
                   <Divider />
                 </Col>
                 <Col xs={24} className="mt-2">
-                  <Typography style={{ fontSize: 12, fontWeight: 500 }}>
+                  <Typography S className="th-12 th-fw-500">
                     Hotspot Details (Can be a estimation)
                   </Typography>
                 </Col>
@@ -498,11 +495,11 @@ const AddEditHotspot = ({
                             <Col style={{ maxWidth: "80%" }}>
                               <Typography
                                 style={{
-                                  fontSize: 12,
                                   color: "#344767",
                                   textDecoration: "underline",
                                   lineHeight: 1.4,
                                 }}
+                                className="th-12"
                               >
                                 {each.name || "NA"}
                               </Typography>
@@ -575,7 +572,7 @@ const AddEditHotspot = ({
                 <Divider />
               </Col>
               <Col xs={24} className="mt-2">
-                <Typography style={{ fontSize: 12, fontWeight: 500 }}>
+                <Typography className="th-12 th-fw-500">
                   Hotspot Details (Can be a estimation)
                 </Typography>
               </Col>

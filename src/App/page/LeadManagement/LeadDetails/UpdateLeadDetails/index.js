@@ -129,10 +129,7 @@ const UpdateLeadDetails = ({
                 </Form.Item>
               </Col>
               <Col xs={24}>
-                <Typography
-                  style={{ fontSize: 10, fontWeight: 400 }}
-                  className="mt-3"
-                >
+                <Typography className="mt-3 th-10 th-fw-400">
                   Google Address
                 </Typography>
                 <Map

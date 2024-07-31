@@ -151,9 +151,7 @@ const RegenHistory = ({ modalData, closeModal }) => {
     >
       <Row>
         <Col xs={24}>
-          <Typography style={{ fontSize: 14, fontWeight: 600 }}>
-            Regen History
-          </Typography>
+          <Typography className="th-14 th-fw-600">Regen History</Typography>
           <Divider />
         </Col>
         <Col xs={24}>

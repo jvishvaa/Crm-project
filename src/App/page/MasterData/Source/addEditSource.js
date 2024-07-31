@@ -64,7 +64,7 @@ const AddEditSource = ({ modalData, handleAddEditSource, closeModal }) => {
     >
       <Row>
         <Col xs={24}>
-          <Typography style={{ fontSize: 14, fontWeight: 600 }}>
+          <Typography className="th-14 th-fw-600">
             {modalData?.data ? "Edit Source" : "Add Source"}
           </Typography>
           <Divider />

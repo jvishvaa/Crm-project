@@ -59,9 +59,7 @@ const AddActivity = ({ modalData, handleAddActivity, closeModal }) => {
     >
       <Row>
         <Col xs={24}>
-          <Typography style={{ fontSize: 14, fontWeight: 600 }}>
-            Add Activity
-          </Typography>
+          <Typography className="th-14 th-fw-600">Add Activity</Typography>
           <Divider />
         </Col>
         <Col xs={24}>

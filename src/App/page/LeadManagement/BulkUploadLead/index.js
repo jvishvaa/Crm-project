@@ -384,7 +384,7 @@ const BulkUploadLead = () => {
                 <Spin spinning={loading} tip="Loading">
                   <Row gutter={[8, 8]}>
                     <Col xs={24}>
-                      <Typography style={{ fontSize: 12, fontWeight: 500 }}>
+                      <Typography className="th-12 th-fw-500">
                         Upload History
                       </Typography>
                       <Divider />

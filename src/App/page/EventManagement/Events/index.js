@@ -253,10 +253,7 @@ const Events = () => {
                       />
                     </Col>
                     <Col xs={21}>
-                      <Typography
-                        style={{ fontSize: 11, fontWeight: 500 }}
-                        className="mt-1"
-                      >
+                      <Typography className="mt-1 th-11 th-fw-500">
                         {each?.label}
                       </Typography>
                     </Col>
@@ -428,7 +425,7 @@ const Events = () => {
       <>
         <Row className="d-flex flex-row align-items-center" gutter={[4, 4]}>
           <Col>
-            <Typography style={{ fontWeight: 500, fontSize: 12, marginTop: 2 }}>
+            <Typography style={{ marginTop: 2 }} className="th-12 th-fw-500">
               Filter:
             </Typography>
           </Col>
@@ -542,10 +539,10 @@ const Events = () => {
                         style={{
                           color: "white",
                           paddingRight: "5px",
-                          fontSize: "10px",
                           paddingLeft: "2px",
                           fontWeight: "bold",
                         }}
+                        className="th-10"
                       >
                         {item.value}%
                       </Typography>
@@ -911,10 +908,9 @@ const Events = () => {
                               <Col>
                                 <Typography
                                   style={{
-                                    fontSize: 18,
-                                    fontWeight: 500,
                                     color: each.color,
                                   }}
+                                  className="th-18 th-fw-500"
                                 >
                                   {each.value}
                                 </Typography>

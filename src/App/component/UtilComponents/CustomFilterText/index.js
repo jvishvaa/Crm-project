@@ -9,7 +9,7 @@ const CustomFilterText = () => {
       style={{ height: "30vh" }}
     >
       <MdFilterAlt style={{ color: "#a9a7a7", height: 50, width: 50 }} />
-      <Typography style={{ color: "#a9a7a7", fontSize: "16px" }}>
+      <Typography style={{ color: "#a9a7a7" }} className="th-16">
         Click on filter to fetch data
       </Typography>
     </div>

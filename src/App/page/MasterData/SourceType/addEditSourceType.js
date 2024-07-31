@@ -62,7 +62,7 @@ const AddEditSourceType = ({
     >
       <Row>
         <Col xs={24}>
-          <Typography style={{ fontSize: 14, fontWeight: 600 }}>
+          <Typography className="th-14 th-fw-600">
             {modalData?.data ? "Edit Source Type" : "Add Source Type"}
           </Typography>
           <Divider />

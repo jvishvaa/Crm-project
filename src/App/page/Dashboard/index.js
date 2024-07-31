@@ -139,10 +139,7 @@ const Dashboard = () => {
               <Col xs={12}>
                 <Row className="d-flex flex-row" gutter={[2, 2]}>
                   <Col style={{ maxWidth: "80%" }}>
-                    <Typography
-                      style={{ fontSize: 12, fontWeight: "500" }}
-                      className="pl-2 pt-2"
-                    >
+                    <Typography className="pl-2 pt-2 th-12 th-fw-500">
                       {each.report_name || "Report Name"}
                     </Typography>
                   </Col>
@@ -176,9 +173,10 @@ const Dashboard = () => {
                 >
                   <Col>
                     <Segmented
-                      className="dashboard-segmented"
+                      className={`dashboard-segmented ${
+                        width < 768 ? "th-10" : "th-11"
+                      }`}
                       value={each.date_type}
-                      style={{ fontSize: width < 768 ? "10px" : "11px" }}
                       disabled={isEditView}
                       onClick={(e) => {
                         if (
@@ -263,10 +261,7 @@ const Dashboard = () => {
                       ]}
                     />
                     {each?.date_type === "custom" ? (
-                      <Typography
-                        style={{ fontSize: 10, fontWeight: 500 }}
-                        className="mt-1 text-right"
-                      >
+                      <Typography className="mt-1 text-right th-10 th-fw-500">
                         Date: {dayjs(each.date[0]).format("DD/MM/YYYY")}{" "}
                         {!dayjs(each.date[0]).isSame(each.date[1])
                           ? `to
@@ -279,12 +274,7 @@ const Dashboard = () => {
               </Col>
               {each.report_description ? (
                 <Col xs={24}>
-                  <Typography
-                    style={{
-                      fontSize: 10,
-                    }}
-                    className="pl-2 dashboard-report-description"
-                  >
+                  <Typography className="pl-2 dashboard-report-description th-10">
                     {each?.report_description}
                   </Typography>
                 </Col>
@@ -612,11 +602,9 @@ const Dashboard = () => {
               <HiDocumentChartBar style={{ color: "#DCDCDC" }} size={120} />
               <Typography
                 style={{
-                  fontSize: "18px",
-                  fontWeight: 500,
                   color: "gray",
                 }}
-                className="mt-4 text-center"
+                className="mt-4 text-center th-18 th-fw-500"
               >
                 {width < 768 ? "No Report Found" : "Add Report in Dashboard"}
               </Typography>

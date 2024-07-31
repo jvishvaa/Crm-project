@@ -200,6 +200,7 @@ const Map = (props) => {
           ref={inputRef}
           type="text"
           placeholder="Enter a location"
+          className="th-14"
           style={{
             boxSizing: `border-box`,
             border: `1px solid grey`,
@@ -209,7 +210,6 @@ const Map = (props) => {
             outline: "none",
             borderRadius: `3px`,
             boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-            fontSize: `14px`,
             textOverflow: `ellipses`,
           }}
         />

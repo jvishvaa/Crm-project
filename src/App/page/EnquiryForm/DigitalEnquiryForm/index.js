@@ -444,7 +444,7 @@ const DigitalEnquiryForm = () => {
                   <MdSearch
                     style={{ color: "#a9a7a7", height: 50, width: 50 }}
                   />
-                  <Typography style={{ color: "#a9a7a7", fontSize: "16px" }}>
+                  <Typography style={{ color: "#a9a7a7" }} className="th-16">
                     Search Contact No or Enquiry
                   </Typography>
                 </div>

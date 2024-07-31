@@ -7,7 +7,7 @@ const RenderFilterTag = ({ label, value }) => {
   return (
     <Tooltip title={value?.length > 30 ? value : ""}>
       <Tag className="filter-tag">
-        <span style={{ fontWeight: 600, fontSize: 11 }}>{label}:</span>{" "}
+        <span className="th-11 th-fw-600">{label}:</span>{" "}
         {getTruncateString(value)}
       </Tag>
     </Tooltip>

@@ -76,7 +76,7 @@ const GeneratePayment = ({ modalData, handleGeneratePayment, closeModal }) => {
     >
       <Row>
         <Col xs={24}>
-          <Typography style={{ fontSize: 14, fontWeight: 600 }}>
+          <Typography className="th-14 th-fw-600">
             Child Enrollment Payment
           </Typography>
           <Divider />
@@ -129,7 +129,7 @@ const GeneratePayment = ({ modalData, handleGeneratePayment, closeModal }) => {
                 </Col>
               ) : null}
               <Col xs={24} className="mt-4">
-                <Typography style={{ fontSize: 14, fontWeight: 500 }}>
+                <Typography className="th-14 th-fw-500">
                   Total Fee: Rs: 1456
                 </Typography>
               </Col>

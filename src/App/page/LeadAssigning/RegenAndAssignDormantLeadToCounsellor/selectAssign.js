@@ -52,9 +52,7 @@ const SelectAssign = ({ modalData, handleAssign, closeModal }) => {
     >
       <Row>
         <Col xs={24}>
-          <Typography style={{ fontSize: 14, fontWeight: 600 }}>
-            Assign Counsellor
-          </Typography>
+          <Typography className="th-14 th-fw-600">Assign Counsellor</Typography>
           <Divider />
         </Col>
         <Col xs={24}>

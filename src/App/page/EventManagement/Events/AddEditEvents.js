@@ -263,10 +263,9 @@ const AddEditEvent = ({
                     <Col xs={24}>
                       <Typography
                         style={{
-                          fontSize: 12,
-                          fontWeight: 500,
                           textDecoration: "underline",
                         }}
+                        className="th-12 th-fw-500"
                       >
                         Hotspot Details
                       </Typography>
@@ -375,7 +374,7 @@ const AddEditEvent = ({
                 <Col xs={24} md={12} className="mt-3">
                   <Row>
                     <Col xs={24}>
-                      <Typography style={{ fontSize: 11, fontWeight: 500 }}>
+                      <Typography className="th-11 th-fw-500">
                         Repeat On
                       </Typography>
                     </Col>
@@ -405,8 +404,8 @@ const AddEditEvent = ({
                                     width: 14,
                                     height: 14,
                                     textAlign: "center",
-                                    fontSize: 11,
                                   }}
+                                  className="th-11"
                                 >
                                   {item.name}
                                 </Typography>

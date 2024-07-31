@@ -58,9 +58,7 @@ const DownloadReport = ({ modalData, closeModal }) => {
     >
       <Row>
         <Col xs={24}>
-          <Typography style={{ fontSize: 14, fontWeight: 600 }}>
-            Download Report
-          </Typography>
+          <Typography className="th-14 th-fw-600">Download Report</Typography>
           <Divider />
         </Col>
         <Col xs={24}>

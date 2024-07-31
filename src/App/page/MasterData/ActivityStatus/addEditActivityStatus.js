@@ -76,7 +76,7 @@ const AddEditActivityStatus = ({
     >
       <Row>
         <Col xs={24}>
-          <Typography style={{ fontSize: 14, fontWeight: 600 }}>
+          <Typography className="th-14 th-fw-600">
             {modalData?.data ? "Edit Activity Status" : "Add Activity Status"}
           </Typography>
           <Divider />
@@ -191,8 +191,8 @@ const AddEditActivityStatus = ({
                     </Col>
                     <Col xs={16}>
                       <Typography
-                        style={{ fontSize: 12, lineHeight: 1.4 }}
-                        className="mt-2"
+                        style={{ lineHeight: 1.4 }}
+                        className="mt-2 th-12"
                       >
                         {" "}
                         times to make dormant

@@ -19,8 +19,8 @@ const RenderNumber = ({ count }) => {
       style={{ minHeight: 60 }}
     >
       <Typography
-        style={{ fontSize: 60, color: "#2CAFFE", lineHeight: 1.0 }}
-        className="pl-2"
+        style={{ color: "#2CAFFE", lineHeight: 1.0 }}
+        className="pl-2 th-60"
       >
         {abbreviateNumber(count)}
       </Typography>

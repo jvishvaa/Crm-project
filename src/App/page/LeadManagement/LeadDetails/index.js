@@ -20,6 +20,7 @@ import { MdArrowBack, MdRefresh } from "react-icons/md";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import UpdateLeadDetails from "./UpdateLeadDetails";
 import { useLocation, useNavigate } from "react-router-dom";
+import CustomCard from "../../../component/UtilComponents/CustomCard";
 
 const LeadDetails = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const LeadDetails = () => {
   const { width } = useWindowDimensions();
 
   return (
-    <div>
+    <CustomCard>
       <Row gutter={[8, 8]}>
         <Col span={24}>
           <Row className="d-flex flex-column">
@@ -186,7 +187,7 @@ const LeadDetails = () => {
           setModalData({ show: false, type: null, data: null });
         }}
       />
-    </div>
+    </CustomCard>
   );
 };
 

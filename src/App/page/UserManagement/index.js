@@ -306,9 +306,7 @@ const UserManagement = () => {
         {checkFilterDifference() ? (
           <Row className="d-flex flex-row align-items-center" gutter={[4, 4]}>
             <Col>
-              <Typography
-                style={{ fontWeight: 500, fontSize: 12, marginTop: 2 }}
-              >
+              <Typography style={{ marginTop: 2 }} className="th-12 th-fw-500">
                 Filter:
               </Typography>
             </Col>
@@ -374,12 +372,12 @@ const UserManagement = () => {
       render: (record) => (
         <Row className={"d-flex flex-column flex-nowrap"}>
           <Col>
-            <Typography style={{ fontSize: 12 }}>
+            <Typography className="th-12">
               {record.first_name} {record.last_name}
             </Typography>
           </Col>
           <Col>
-            <Typography style={{ fontSize: 10, whiteSpace: "nowrap" }}>
+            <Typography style={{ whiteSpace: "nowrap" }} className="th-10">
               ({record?.erp})
             </Typography>
           </Col>
@@ -393,10 +391,10 @@ const UserManagement = () => {
       render: (record) => (
         <Row className={"d-flex flex-column flex-nowrap"}>
           <Col>
-            <Typography style={{ fontSize: 12 }}>{record?.contact}</Typography>
+            <Typography className="th-12">{record?.contact}</Typography>
           </Col>
           <Col>
-            <Typography style={{ fontSize: 10, whiteSpace: "nowrap" }}>
+            <Typography style={{ whiteSpace: "nowrap" }} className="th-10">
               {record?.email}
             </Typography>
           </Col>
@@ -816,11 +814,10 @@ const UserManagement = () => {
                                             <Col>
                                               <Typography
                                                 style={{
-                                                  fontSize: 12,
-                                                  fontWeight: 500,
                                                   color:
                                                     getColour("grayMedium"),
                                                 }}
+                                                className="th-12 th-fw-500"
                                               >
                                                 Status :
                                               </Typography>

@@ -92,10 +92,7 @@ const AssigningDetailsCard = () => {
                         </Typography>
                       </Col>
                       <Col xs={24}>
-                        <Typography
-                          className="assign-details-card-data-text"
-                          style={{ fontSize: 11 }}
-                        >
+                        <Typography className="assign-details-card-data-text th-11">
                           Assign Date : {"30/06/2024"}
                         </Typography>
                       </Col>

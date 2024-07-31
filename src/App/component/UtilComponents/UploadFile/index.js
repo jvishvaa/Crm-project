@@ -25,9 +25,7 @@ const UploadFile = ({
         }}
       />
       {label ? (
-        <Typography style={{ fontSize: 10, fontWeight: 400 }} className="mt-3">
-          {label}
-        </Typography>
+        <Typography className="mt-3 th-10 th-fw-400">{label}</Typography>
       ) : null}
       <label
         htmlFor="outlined-button-file"
