@@ -14,8 +14,6 @@ import {
   Pagination,
   Empty,
   Descriptions,
-  Statistic,
-  Progress,
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -44,6 +42,7 @@ import {
   FaSpinner,
   FaStopwatch,
 } from "react-icons/fa";
+import getFilterItemFromArray from "../../../utils/getFilterItemFromArray";
 
 const Events = () => {
   const defaultFilters = {
@@ -425,7 +424,7 @@ const Events = () => {
                           paddingRight: "5px",
                           fontSize: "10px",
                           paddingLeft: "2px",
-                          fontWeight: 500,
+                          fontWeight: "bold",
                         }}
                       >
                         {item.value}%
@@ -501,6 +500,24 @@ const Events = () => {
             ? getArrayValues(record?.assigned_user, "name")?.join(", ")
             : "--"}
         </span>
+      ),
+      align: "center",
+    },
+    {
+      title: "Status",
+      key: "status",
+      render: (record) => (
+        <Tag
+          color={
+            getFilterItemFromArray(
+              eventStatusCountList,
+              "label",
+              record.status
+            )[0].color
+          }
+        >
+          {record?.status}
+        </Tag>
       ),
       align: "center",
     },
@@ -798,6 +815,19 @@ const Events = () => {
                                                       each?.end_date
                                                     ).format("DD/MM/YYYY")}`}
                                               </Typography>
+                                            </Col>
+                                            <Col xs={24}>
+                                              <Tag
+                                                color={
+                                                  getFilterItemFromArray(
+                                                    eventStatusCountList,
+                                                    "label",
+                                                    each.status
+                                                  )[0].color
+                                                }
+                                              >
+                                                {each?.status}
+                                              </Tag>
                                             </Col>
                                           </Row>
                                         </Col>
