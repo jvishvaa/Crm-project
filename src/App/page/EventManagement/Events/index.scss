@@ -77,3 +77,13 @@
 .assign-popover .ant-popover-content .ant-popover-inner {
     padding: 10px;
 }
+
+.assign-user-list:hover {
+    cursor: pointer;
+    background-color: $white-contrast-background;
+}
+
+.selected-count-assign {
+    color: $primary;
+    font-size: 10px;
+}

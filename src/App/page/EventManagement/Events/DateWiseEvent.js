@@ -1,12 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Drawer, Descriptions, Table, Tag } from "antd";
+import {
+  Row,
+  Col,
+  Drawer,
+  Descriptions,
+  Table,
+  Tag,
+  Popover,
+  Button,
+} from "antd";
+import "./index.scss";
 import CustomDrawerHeader from "../../../component/UtilComponents/CustomDrawerHeader";
 import dayjs from "dayjs";
 import getFilterItemFromArray from "../../../utils/getFilterItemFromArray";
 import getArrayValues from "../../../utils/getArrayValues";
 
-const DateWiseEvent = ({ drawerData, closeDrawer, eventStatusCountList }) => {
+const DateWiseEvent = ({
+  drawerData,
+  closeDrawer,
+  eventStatusCountList,
+  getAssignContent,
+  setSearchAssignInput,
+  setSelectedAssignId,
+}) => {
   const [dateWiseEventData, setDateWiseEventData] = useState([]);
+  const [popoverVisible, setPopoverVisible] = useState(null);
 
   const getDateWiseEventData = () => {
     setDateWiseEventData([
@@ -28,7 +46,7 @@ const DateWiseEvent = ({ drawerData, closeDrawer, eventStatusCountList }) => {
         total_lead: 100,
       },
       {
-        id: 2,
+        id: 3,
         date: "2024-01-03",
         assigned_user: null,
         status: "Timed Out",
@@ -61,11 +79,30 @@ const DateWiseEvent = ({ drawerData, closeDrawer, eventStatusCountList }) => {
       title: "BDE",
       key: "assigned_user",
       render: (record) => (
-        <span>
-          {record?.assigned_user
-            ? getArrayValues(record?.assigned_user, "name")?.join(", ")
-            : "--"}
-        </span>
+        <>
+          <span>
+            {record?.assigned_user
+              ? getArrayValues(record?.assigned_user, "name")?.join(", ")
+              : "--"}
+          </span>
+          <br />
+          <Popover
+            content={getAssignContent(record)}
+            trigger="click"
+            placement="bottom"
+            open={popoverVisible === record.id ? true : false}
+            onOpenChange={() => {
+              setPopoverVisible(popoverVisible ? null : record.id);
+              setSearchAssignInput("");
+              setSelectedAssignId([]);
+            }}
+            overlayClassName="assign-popover"
+          >
+            <Button type="link" size="small" className="view-date-wise-button">
+              Assign
+            </Button>
+          </Popover>
+        </>
       ),
       align: "center",
     },

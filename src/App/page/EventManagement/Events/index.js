@@ -15,6 +15,7 @@ import {
   Empty,
   Descriptions,
   Popover,
+  Checkbox,
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -75,10 +76,17 @@ const Events = () => {
   const [popoverVisible, setPopoverVisible] = useState(null);
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
-  const [selectedAssignId, setSelectedAssignId] = useState("");
+  const [selectedAssignId, setSelectedAssignId] = useState([]);
+  const [searchAssignInput, setSearchAssignInput] = useState("");
   const assignUserList = [
     { id: 1, label: "Anik", erp: 2039484838 },
     { id: 2, label: "Utpal", erp: 2039484838 },
+    { id: 3, label: "Anik1", erp: 2039484838 },
+    { id: 4, label: "Utpal1", erp: 2039484838 },
+    { id: 5, label: "Anik2", erp: 2039484838 },
+    { id: 6, label: "Utpal2", erp: 2039484838 },
+    { id: 7, label: "Anik3", erp: 2039484838 },
+    { id: 8, label: "Utpal3", erp: 2039484838 },
   ];
   const dropdownData = {
     city: [
@@ -122,9 +130,9 @@ const Events = () => {
     {
       id: 3,
       label: "Yet To Start",
-      color: "#e5d758",
+      color: "#fdb614",
       value: 30,
-      icon: <FaHourglassStart size={20} style={{ color: "#e5d758" }} />,
+      icon: <FaHourglassStart size={20} style={{ color: "#fdb614" }} />,
       smallWidth: "33%",
     },
     {
@@ -174,8 +182,113 @@ const Events = () => {
     );
   };
 
+  const handleAssignCheckbox = (each) => {
+    let mySelectedAssignId = [...selectedAssignId];
+    if (mySelectedAssignId?.includes(each?.id)) {
+      let findIndex = mySelectedAssignId.findIndex((x) => x === each.id);
+      mySelectedAssignId.splice(findIndex, 1);
+    } else {
+      mySelectedAssignId.push(each.id);
+    }
+    setSelectedAssignId(mySelectedAssignId);
+  };
+
   const getAssignContent = () => {
-    return <h6>Hello</h6>;
+    return (
+      <Row className="d-flex flex-column" gutter={[8, 8]}>
+        <Col xs={24}>
+          <Input
+            placeholder="Search User"
+            style={{
+              height: 30,
+              maxWidth: 250,
+            }}
+            value={searchAssignInput}
+            onChange={(e) => {
+              setSearchAssignInput(e.target.value);
+            }}
+            maxLength={48}
+            suffix={
+              searchAssignInput ? (
+                <CloseOutlined
+                  style={{ cursor: "pointer" }}
+                  onClick={(e) => {
+                    setSearchAssignInput("");
+                  }}
+                />
+              ) : (
+                <SearchOutlined />
+              )
+            }
+          />
+        </Col>
+        <Col xs={24} style={{ overflow: "auto", maxHeight: 200 }}>
+          <Row className="d-flex flex-column">
+            {assignUserList
+              ?.filter((each) =>
+                searchAssignInput
+                  ? each?.label
+                      ?.toLowerCase()
+                      ?.includes(searchAssignInput?.toLowerCase())
+                  : true
+              )
+              ?.map((each) => (
+                <Col
+                  xs={24}
+                  className="assign-user-list"
+                  onClick={() => {
+                    handleAssignCheckbox(each);
+                  }}
+                >
+                  <Row
+                    className="d-flex flex-row align-items-center"
+                    style={{ minHeight: 28 }}
+                  >
+                    <Col xs={3} className="pl-1">
+                      <Checkbox
+                        checked={selectedAssignId?.includes(each?.id)}
+                        onChange={() => {
+                          handleAssignCheckbox(each);
+                        }}
+                      />
+                    </Col>
+                    <Col xs={21}>
+                      <Typography
+                        style={{ fontSize: 11, fontWeight: 500 }}
+                        className="mt-1"
+                      >
+                        {each?.label}
+                      </Typography>
+                    </Col>
+                  </Row>
+                  <Divider />
+                </Col>
+              ))}
+          </Row>
+        </Col>
+        <Col xs={24}>
+          <Typography className="selected-count-assign">
+            {selectedAssignId?.length} Selected
+          </Typography>
+        </Col>
+        <Col xs={24} style={{ marginTop: -10 }}>
+          <Row className="d-flex flex-row justify-content-end">
+            <Button
+              size="small"
+              type="primary"
+              disabled={selectedAssignId?.length === 0}
+              onClick={() => {
+                setPopoverVisible(null);
+                setSearchAssignInput("");
+                setSelectedAssignId([]);
+              }}
+            >
+              Assign
+            </Button>
+          </Row>
+        </Col>
+      </Row>
+    );
   };
 
   const [searchFetched, setSearchFetched] = useState(false);
@@ -537,6 +650,8 @@ const Events = () => {
             open={popoverVisible === record.id ? true : false}
             onOpenChange={() => {
               setPopoverVisible(popoverVisible ? null : record.id);
+              setSearchAssignInput("");
+              setSelectedAssignId([]);
             }}
             overlayClassName="assign-popover"
           >
@@ -1033,6 +1148,9 @@ const Events = () => {
         closeDrawer={() => {
           setDrawerData({ show: false, type: null, data: null });
         }}
+        setSearchAssignInput={setSearchAssignInput}
+        setSelectedAssignId={setSelectedAssignId}
+        getAssignContent={getAssignContent}
         eventStatusCountList={eventStatusCountList}
       />
       <AddEditEvents
