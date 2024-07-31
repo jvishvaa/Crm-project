@@ -613,7 +613,6 @@ const LeadManagement = () => {
           height: 30,
           maxWidth: 250,
         }}
-        className="search-input-lead"
         value={searchInput}
         onChange={(e) => {
           setSearchInput(e.target.value);
@@ -987,7 +986,7 @@ const LeadManagement = () => {
   ];
 
   return (
-    <div>
+    <CustomCard>
       <Row gutter={[8, 8]}>
         <Col xs={24}>
           <Row className="d-flex flex-column" gutter={[2, 2]}>
@@ -1001,7 +1000,7 @@ const LeadManagement = () => {
                     <Col>
                       <Button
                         size="small"
-                        type="outline"
+                        type="primary"
                         icon={<TbFileUpload size={18} />}
                         onClick={() => {
                           navigate("/lead-management/bulk-upload-lead");
@@ -1014,7 +1013,7 @@ const LeadManagement = () => {
                       <Col>
                         <Button
                           size="small"
-                          type="outline"
+                          type="primary"
                           onClick={() => {
                             navigate("/lead-management/add-lead");
                           }}
@@ -1330,7 +1329,7 @@ const LeadManagement = () => {
           setDrawerData({ show: false, data: null });
         }}
       />
-    </div>
+    </CustomCard>
   );
 };
 

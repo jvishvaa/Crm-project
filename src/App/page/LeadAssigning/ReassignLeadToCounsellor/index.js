@@ -490,7 +490,6 @@ const ReAssignLeadToCounsellor = () => {
           height: 30,
           maxWidth: 250,
         }}
-        className="search-input-lead"
         value={searchInput}
         onChange={(e) => {
           setSearchInput(e.target.value);
@@ -890,7 +889,7 @@ const ReAssignLeadToCounsellor = () => {
   };
 
   return (
-    <div>
+    <CustomCard>
       <Row gutter={[8, 8]}>
         <Col xs={24}>
           <Row className="d-flex flex-column" gutter={[2, 2]}>
@@ -1061,7 +1060,7 @@ const ReAssignLeadToCounsellor = () => {
                                       leadData?.length !==
                                         selectedRowKeys?.length
                                     }
-                                    className="pl-3"
+                                    className="pl-3 assign-card-checkbox"
                                     onChange={onChangeSelectAll}
                                   >
                                     <Typography
@@ -1194,14 +1193,14 @@ const ReAssignLeadToCounsellor = () => {
                         <>
                           {leadData?.length === 0 ? (
                             <Col xs={24} className={"mt-2"}>
-                              <CustomCard
+                              <Row
                                 style={{ minHeight: 200 }}
                                 className={
                                   "d-flex justify-content-center align-items-center"
                                 }
                               >
                                 <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                              </CustomCard>
+                              </Row>
                             </Col>
                           ) : null}
                           {leadData?.length > 0 ? (
@@ -1362,26 +1361,20 @@ const ReAssignLeadToCounsellor = () => {
               ) : (
                 <>
                   <Col xs={24}>
-                    <CustomCard className="assign-filter-card">
-                      <Row gutter={[8, 8]}>
-                        <Col xs={24}>
-                          <Form
+                    <Row gutter={[8, 8]}>
+                      <Col xs={24}>
+                        <Form form={form} layout="vertical" onFinish={onFinish}>
+                          <FilterForm
                             form={form}
-                            layout="vertical"
-                            onFinish={onFinish}
-                          >
-                            <FilterForm
-                              form={form}
-                              dropdownData={dropdownData}
-                              isDrawer={false}
-                            />
-                          </Form>
-                        </Col>
-                        <Col xs={24}>
-                          <CustomFilterText />
-                        </Col>
-                      </Row>
-                    </CustomCard>
+                            dropdownData={dropdownData}
+                            isDrawer={false}
+                          />
+                        </Form>
+                      </Col>
+                      <Col xs={24}>
+                        <CustomFilterText />
+                      </Col>
+                    </Row>
                   </Col>
                 </>
               )}
@@ -1407,7 +1400,7 @@ const ReAssignLeadToCounsellor = () => {
           setModalData({ show: false, data: null });
         }}
       />
-    </div>
+    </CustomCard>
   );
 };
 

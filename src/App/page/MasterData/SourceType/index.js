@@ -157,8 +157,8 @@ const SourceType = () => {
   ];
 
   return (
-    <div>
-      <Row gutter={[8, 8]}>
+    <CustomCard>
+      <Row gutter={[8, 0]}>
         <Col span={24}>
           <Row className="d-flex flex-column">
             <Col xs={24}>
@@ -188,74 +188,72 @@ const SourceType = () => {
             </Col>
           </Row>
         </Col>
-        <Col xs={24}>
-          <CustomCard className="source_type-card ">
-            <Spin spinning={loading} tip="Loading">
-              <Row gutter={[8, 8]}>
-                <Col xs={24}>
-                  <Form
-                    form={form}
-                    layout="vertical"
-                    onFinish={() => {
-                      getSourceTypeData();
-                    }}
-                  >
-                    <Row gutter={[8, 8]}>
-                      <Col xs={12} sm={8} xl={6}>
-                        <Form.Item
+        <Col xs={24} style={{ marginTop: -10 }}>
+          <Spin spinning={loading} tip="Loading">
+            <Row gutter={[8, 8]}>
+              <Col xs={24}>
+                <Form
+                  form={form}
+                  layout="vertical"
+                  onFinish={() => {
+                    getSourceTypeData();
+                  }}
+                >
+                  <Row gutter={[8, 8]}>
+                    <Col xs={12} sm={8} xl={6}>
+                      <Form.Item
+                        className="w-100"
+                        name="is_active"
+                        label="Status"
+                      >
+                        <Select
                           className="w-100"
-                          name="is_active"
-                          label="Status"
-                        >
-                          <Select
-                            className="w-100"
-                            onChange={() => {
-                              handleOnChange();
-                            }}
-                            options={[
-                              {
-                                value: 0,
-                                label: "All",
-                              },
-                              {
-                                value: true,
-                                label: "Active",
-                              },
-                              {
-                                value: false,
-                                label: "Inactive",
-                              },
-                            ]}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col className="d-flex justify-content-end align-items-end">
-                        <Form.Item>
-                          <Button type="primary" htmlType="submit">
-                            Filter
-                          </Button>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Form>
+                          onChange={() => {
+                            handleOnChange();
+                          }}
+                          options={[
+                            {
+                              value: 0,
+                              label: "All",
+                            },
+                            {
+                              value: true,
+                              label: "Active",
+                            },
+                            {
+                              value: false,
+                              label: "Inactive",
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col className="d-flex justify-content-end align-items-end">
+                      <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                          Filter
+                        </Button>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Form>
+              </Col>
+              {sourceTypeData ? (
+                <Col xs={24}>
+                  <Table
+                    dataSource={sourceTypeData || []}
+                    columns={columns}
+                    bordered={true}
+                    pagination={false}
+                  />
                 </Col>
-                {sourceTypeData ? (
-                  <Col xs={24}>
-                    <Table
-                      dataSource={sourceTypeData || []}
-                      columns={columns}
-                      bordered={true}
-                      pagination={false}
-                    />
-                  </Col>
-                ) : (
-                  <Col xs={24}>
-                    <CustomFilterText />
-                  </Col>
-                )}
-              </Row>
-            </Spin>
-          </CustomCard>
+              ) : (
+                <Col xs={24}>
+                  <CustomFilterText />
+                </Col>
+              )}
+            </Row>
+          </Spin>
         </Col>
       </Row>
       <AddEditSourceType
@@ -265,7 +263,7 @@ const SourceType = () => {
           setModalData({ show: false, data: null });
         }}
       />
-    </div>
+    </CustomCard>
   );
 };
 

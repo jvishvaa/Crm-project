@@ -619,7 +619,6 @@ const FollowUp = () => {
           height: 30,
           maxWidth: 250,
         }}
-        className="search-input-lead"
         value={searchInput}
         onChange={(e) => {
           setSearchInput(e.target.value);
@@ -957,7 +956,7 @@ const FollowUp = () => {
   ];
 
   return (
-    <div>
+    <CustomCard>
       <Row gutter={[8, 8]}>
         <Col xs={24}>
           <Row className="d-flex flex-column" gutter={[2, 2]}>
@@ -1091,7 +1090,7 @@ const FollowUp = () => {
                 </Col>
               ) : null}
               {leadData ? (
-                <Col xs={24} className={"mt-1"}>
+                <Col xs={24} className={"mt-2"}>
                   <Row gutter={[6, 6]}>
                     {followUpPendingList?.map((each) => (
                       <Col xs={12} sm={8} md={4}>
@@ -1161,14 +1160,14 @@ const FollowUp = () => {
                   <>
                     {leadData?.length === 0 ? (
                       <Col xs={24} className={"mt-2"}>
-                        <CustomCard
+                        <Row
                           style={{ minHeight: 200 }}
                           className={
                             "d-flex justify-content-center align-items-center"
                           }
                         >
                           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                        </CustomCard>
+                        </Row>
                       </Col>
                     ) : null}
                     {leadData?.length > 0 ? (
@@ -1309,7 +1308,7 @@ const FollowUp = () => {
           setDrawerData({ show: false, data: null });
         }}
       />
-    </div>
+    </CustomCard>
   );
 };
 

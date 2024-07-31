@@ -261,7 +261,7 @@ const DigitalEnquiryForm = () => {
   };
 
   return (
-    <div>
+    <CustomCard>
       <Row gutter={[8, 8]}>
         <Col xs={24}>
           <Row className="d-flex flex-column">
@@ -293,7 +293,7 @@ const DigitalEnquiryForm = () => {
                       <Form.Item name="academic_year" label="Academic Year">
                         <Select
                           style={{ width: "100%", marginTop: 3 }}
-                          className="enquiry-form-select-filter"
+                          className="enquiry-form-select"
                           showSearch
                           filterOption={(input, option) =>
                             option.label
@@ -321,7 +321,7 @@ const DigitalEnquiryForm = () => {
                             <Form.Item name="country_code">
                               <Select
                                 style={{ width: "100%" }}
-                                className="enquiry-form-select-country-code"
+                                className="enquiry-form-select"
                                 showSearch
                                 filterOption={(input, option) =>
                                   option.label
@@ -353,7 +353,6 @@ const DigitalEnquiryForm = () => {
                                   <Form.Item name="contact_no">
                                     <Input
                                       type="number"
-                                      className="enquiry-form-select-contact"
                                       autoComplete="off"
                                       onKeyDown={(e) => {
                                         ["e", "E", "+", "-", "."].includes(
@@ -454,7 +453,7 @@ const DigitalEnquiryForm = () => {
           </Spin>
         </Col>
       </Row>
-    </div>
+    </CustomCard>
   );
 };
 

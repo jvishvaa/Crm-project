@@ -5,10 +5,6 @@
     padding: 0px 5px !important;
 }
 
-.search-input-lead {
-    background-color: white !important;
-}
-
 @media (max-width: 600px) {
     .lead-button {
         height: 30px !important;
@@ -18,10 +14,6 @@
     .lead-radio .ant-radio-button-wrapper {
         padding-inline: 4px !important;
     }
-}
-
-.search-input-lead>input {
-    background-color: white !important;
 }
 
 .lead-filter-drawer .ant-drawer-header {
@@ -55,6 +47,7 @@
 .follow-up-stats-card {
     height: 100%;
     cursor: pointer;
+    background-color: $white-contrast-background;
 }
 
 .follow-up-stats-card:hover {

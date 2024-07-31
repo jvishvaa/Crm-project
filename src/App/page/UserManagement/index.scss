@@ -5,10 +5,6 @@
     padding: 0px 5px !important;
 }
 
-.search-input-lead {
-    background-color: white !important;
-}
-
 @media (max-width: 600px) {
     .lead-button {
         height: 30px !important;
@@ -19,7 +15,6 @@
         padding-inline: 4px !important;
     }
 }
-
 
 .lead-filter-drawer .ant-drawer-header {
     padding: 8px 16px !important;
@@ -60,6 +55,7 @@
 .user-count-card {
     height: 100%;
     cursor: pointer;
+    background-color: $white-contrast-background;
 }
 
 .user-count-card:hover {

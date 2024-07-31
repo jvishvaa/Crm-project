@@ -3,9 +3,6 @@
     padding: 0px 5px !important;
 }
 
-.search-input-lead {
-    background-color: white !important;
-}
 
 @media (max-width: 600px) {
     .lead-button {
@@ -16,10 +13,6 @@
     .lead-radio .ant-radio-button-wrapper {
         padding-inline: 4px !important;
     }
-}
-
-.search-input-lead>input {
-    background-color: white !important;
 }
 
 .lead-filter-drawer .ant-drawer-header {
@@ -37,10 +30,6 @@
 
 .lead-card-subheader-text {
     font-size: 12px;
-}
-
-.assign-filter-card .ant-card-body {
-    padding-top: 0px !important;
 }
 
 .assign-card-checkbox .ant-checkbox-inner {

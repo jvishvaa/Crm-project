@@ -1,17 +1,7 @@
 @import "../../../assest/css/mixins.scss";
 
-.enquiry-form-select-country-code .ant-select-selector {
-    height: 30px !important;
-    background: white !important;
-}
-
 .enquiry-form-select .ant-select-selector {
     height: 30px !important;
-}
-
-.enquiry-form-select-filter .ant-select-selector {
-    height: 30px !important;
-    background: white !important;
 }
 
 .enquiry-form-select-contact {
@@ -38,10 +28,11 @@
 .enquiry-form-no-lead-card {
     height: 100%;
     cursor: pointer;
+    background-color: $white-contrast-background;
 }
 
 .enquiry-form-no-lead-card:hover {
-    background-color: #F9F9FC;
+    background-color: $primary-ultra-light;
 }
 
 .enquiry-form-item-label {

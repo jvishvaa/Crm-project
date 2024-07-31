@@ -13,6 +13,7 @@ import {
   Popconfirm,
   Form,
   message,
+  Descriptions,
 } from "antd";
 import "./index.scss";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
@@ -37,35 +38,35 @@ const AddLead = () => {
   }, []);
 
   const getLeadData = () => {
-    setLeadData([]);
-    // setLeadData([
-    //   {
-    //     id: 4110494,
-    //     enquiry_no: "ENQ50517343223458",
-    //     lead_name: "Madhu Kumar S",
-    //     next_follow_date: null,
-    //     academic_year: "2023-24",
-    //     lead_created_date: "2024-02-02",
-    //     is_regen: false,
-    //     in_dormant: true,
-    //     is_enquiry: false,
-    //     is_live: true,
-    //     lead_status: {
-    //       id: 29,
-    //       status_name: "Call picked up",
-    //     },
-    //     lead_status_l2: null,
-    //     tagging: null,
-    //     contact_source: {
-    //       id: 381,
-    //       source_name: "Branch - ",
-    //     },
-    //     branch: {
-    //       id: 151,
-    //       branch_name: "Raja Test",
-    //     },
-    //   },
-    // ]);
+    // setLeadData([]);
+    setLeadData([
+      {
+        id: 4110494,
+        enquiry_no: "ENQ50517343223458",
+        lead_name: "Madhu Kumar S",
+        next_follow_date: null,
+        academic_year: "2023-24",
+        lead_created_date: "2024-02-02",
+        is_regen: false,
+        in_dormant: true,
+        is_enquiry: false,
+        is_live: true,
+        lead_status: {
+          id: 29,
+          status_name: "Call picked up",
+        },
+        lead_status_l2: null,
+        tagging: null,
+        contact_source: {
+          id: 381,
+          source_name: "Branch - ",
+        },
+        branch: {
+          id: 151,
+          branch_name: "Raja Test",
+        },
+      },
+    ]);
   };
 
   const onFinish = (values) => {
@@ -162,36 +163,38 @@ const AddLead = () => {
                   </Col>
                   <Divider />
                   <Col xs={24}>
-                    {getCardDataText(
-                      "Academic Year",
-                      each?.academic_year || "--"
-                    )}
-                    {getCardDataText(
-                      "Source",
-                      each?.contact_source?.source_name || "--"
-                    )}
-                    {getCardDataText(
-                      "Branch",
-                      each?.branch?.branch_name || "--"
-                    )}
-                    {getCardDataText(
-                      "Lead Status",
-                      `${each.lead_status?.status_name}
+                    <Descriptions column={1}>
+                      {getCardDataText(
+                        "Academic Year",
+                        each?.academic_year || "--"
+                      )}
+                      {getCardDataText(
+                        "Source",
+                        each?.contact_source?.source_name || "--"
+                      )}
+                      {getCardDataText(
+                        "Branch",
+                        each?.branch?.branch_name || "--"
+                      )}
+                      {getCardDataText(
+                        "Lead Status",
+                        `${each.lead_status?.status_name}
                           ${
                             each.lead_status2
                               ? ` -> ${each.lead_status2?.status_name}`
                               : ""
                           }`
-                    )}
+                      )}
 
-                    {getCardDataText(
-                      "Next Follow Up Date",
-                      each?.next_follow_date
-                        ? dayjs(each?.next_follow_date).format(
-                            "DD MMM YYYY hh:mm a"
-                          )
-                        : "--"
-                    )}
+                      {getCardDataText(
+                        "Next Follow Up Date",
+                        each?.next_follow_date
+                          ? dayjs(each?.next_follow_date).format(
+                              "DD MMM YYYY hh:mm a"
+                            )
+                          : "--"
+                      )}
+                    </Descriptions>
                   </Col>
                   <Divider />
                   <Col xs={24} className="mt-1">
@@ -225,307 +228,301 @@ const AddLead = () => {
             </Typography>
           </Col>
           <Col xs={24}>
-            <CustomCard>
-              <Form
-                form={form}
-                layout="vertical"
-                onFinish={onFinish}
-                disabled={submitLoading}
-                className="add-lead-form"
-              >
-                <Row>
-                  <Col xs={24}>
-                    <Typography className="add-lead-form-header">
-                      Lead Details
-                    </Typography>
-                  </Col>
-                  <Col xs={24}>
-                    <Row gutter={[12, 8]}>
-                      <Col xs={24} sm={12} md={8}>
-                        <Form.Item
-                          name="lead_name"
-                          label="Lead Name"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please Enter Lead Name",
-                            },
-                          ]}
-                        >
-                          <Input maxLength={48} autoComplete="off" />
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={12} md={8}>
-                        <Form.Item
-                          name="lead_email"
-                          label="Lead Email"
-                          rules={[
-                            {
-                              type: "email",
-                              message: "Invalid Email",
-                            },
-                          ]}
-                        >
-                          <Input
-                            type="email"
-                            maxLength={48}
-                            autoComplete="off"
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={12} md={8}>
-                        <Form.Item
-                          name="source"
-                          label="Lead Source"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please Select Lead Source",
-                            },
-                          ]}
-                        >
-                          <Select
-                            style={{ width: "100%" }}
-                            className="add-lead-select"
-                            showSearch
-                            filterOption={(input, option) =>
-                              option.label
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
-                            }
-                            options={[
-                              { label: "DM-Direct", value: "dm-direct" },
-                              {
-                                label: "PRO Data - Field Data",
-                                value: "pro data -field data",
-                              },
-                            ]}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={12} md={8}>
-                        <Form.Item label="Alternate Contact">
-                          <Row gutter={[4, 4]}>
-                            <Col xs={7} md={6}>
-                              <Form.Item name="country_code_alternate">
-                                <Select
-                                  style={{ width: "100%" }}
-                                  className="add-lead-select"
-                                  allowClear
-                                  showSearch
-                                  filterOption={(input, option) =>
-                                    option.label
-                                      .toLowerCase()
-                                      .includes(input.toLowerCase())
-                                  }
-                                  onChange={handleCountryCodeChange}
-                                  options={getCountryCode().map((each) => ({
-                                    label: each.country_code,
-                                    value: each.country_code,
-                                  }))}
-                                />
-                              </Form.Item>
-                            </Col>
-                            <Col xs={17} md={18}>
-                              <Form.Item shouldUpdate noStyle>
-                                {({ getFieldValue }) => {
-                                  const countryCode = getFieldValue(
-                                    "country_code_alternate"
-                                  );
-                                  return (
-                                    <Form.Item name="alternate_contact_no">
-                                      <Input
-                                        type="number"
-                                        autoComplete="off"
-                                        onKeyDown={(e) => {
-                                          ["e", "E", "+", "-", "."].includes(
-                                            e.key
-                                          ) && e.preventDefault();
-                                        }}
-                                        disabled={!countryCode}
-                                        onChange={(e) =>
-                                          handleContactNumberChange(
-                                            e,
-                                            countryCode
-                                          )
-                                        }
-                                      />
-                                    </Form.Item>
-                                  );
-                                }}
-                              </Form.Item>
-                            </Col>
-                          </Row>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Col>
-                  <Col xs={24} style={{ marginTop: 15 }}>
-                    <Typography className="add-lead-form-header">
-                      Child Details
-                    </Typography>
-                  </Col>
-                  <Col xs={24}>
-                    <Row gutter={[12, 8]}>
-                      <Col xs={24} sm={12} md={8}>
-                        <Form.Item
-                          name="child_name"
-                          label="Child Name"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please Enter Child Name",
-                            },
-                          ]}
-                        >
-                          <Input maxLength={48} autoComplete="off" />
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={12} md={8}>
-                        <Form.Item
-                          name="child_grade"
-                          label="Child Grade"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please Select Child Grade",
-                            },
-                          ]}
-                        >
-                          <Select
-                            style={{ width: "100%" }}
-                            className="add-lead-select"
-                            showSearch
-                            filterOption={(input, option) =>
-                              option.label
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
-                            }
-                            options={[
-                              { label: "Grade 1", value: "grade-1" },
-                              {
-                                label: "Grade 2",
-                                value: "grade-2",
-                              },
-                            ]}
-                          />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Col>
-                  <Col xs={24} style={{ marginTop: 15 }}>
-                    <Typography className="add-lead-form-header">
-                      School Details
-                    </Typography>
-                  </Col>
-                  <Col xs={24}>
-                    <Row gutter={[12, 8]}>
-                      <Col xs={24} sm={12} md={8}>
-                        <Form.Item
-                          name="academic_year"
-                          label="Academic Year"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please Select Academic Year",
-                            },
-                          ]}
-                        >
-                          <Select
-                            style={{ width: "100%" }}
-                            className="add-lead-select"
-                            showSearch
-                            filterOption={(input, option) =>
-                              option.label
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
-                            }
-                            options={[
-                              { label: "2023-24", value: "2023-24" },
-                              { label: "2024-25", value: "2024-25" },
-                            ]}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={12} md={8}>
-                        <Form.Item
-                          name="branch"
-                          label="Branch"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please Select Branch",
-                            },
-                          ]}
-                        >
-                          <Select
-                            style={{ width: "100%" }}
-                            className="add-lead-select"
-                            showSearch
-                            filterOption={(input, option) =>
-                              option.label
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
-                            }
-                            options={[
-                              {
-                                label: "Orchids BTM Layout",
-                                value: "btm-layout",
-                              },
-                              {
-                                label: "Orchids Banerghata",
-                                value: "banerghata",
-                              },
-                            ]}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={12} md={8}>
-                        <Form.Item
-                          name="school_type"
-                          label="School Type"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please Select School Type",
-                            },
-                          ]}
-                        >
-                          <Select
-                            style={{ width: "100%" }}
-                            className="add-lead-select"
-                            showSearch
-                            filterOption={(input, option) =>
-                              option.label
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
-                            }
-                            options={[
-                              { label: "Day", value: "day" },
-                              { label: "Boarding", value: "boarding" },
-                            ]}
-                          />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Col>
-                  <Col xs={24}>
-                    <Row className="d-flex justify-content-end mt-2">
-                      <Button
-                        size="medium"
-                        type="primary"
-                        loading={submitLoading}
-                        onClick={() => {
-                          form.submit();
-                        }}
+            <Form
+              form={form}
+              layout="vertical"
+              onFinish={onFinish}
+              disabled={submitLoading}
+              className="add-lead-form"
+            >
+              <Row>
+                <Col xs={24}>
+                  <Typography className="add-lead-form-header">
+                    Lead Details
+                  </Typography>
+                </Col>
+                <Col xs={24}>
+                  <Row gutter={[12, 8]}>
+                    <Col xs={24} sm={12} md={8}>
+                      <Form.Item
+                        name="lead_name"
+                        label="Lead Name"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Enter Lead Name",
+                          },
+                        ]}
                       >
-                        Submit
-                      </Button>
-                    </Row>
-                  </Col>
-                </Row>
-              </Form>
-            </CustomCard>
+                        <Input maxLength={48} autoComplete="off" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12} md={8}>
+                      <Form.Item
+                        name="lead_email"
+                        label="Lead Email"
+                        rules={[
+                          {
+                            type: "email",
+                            message: "Invalid Email",
+                          },
+                        ]}
+                      >
+                        <Input type="email" maxLength={48} autoComplete="off" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12} md={8}>
+                      <Form.Item
+                        name="source"
+                        label="Lead Source"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select Lead Source",
+                          },
+                        ]}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          className="add-lead-select"
+                          showSearch
+                          filterOption={(input, option) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                          }
+                          options={[
+                            { label: "DM-Direct", value: "dm-direct" },
+                            {
+                              label: "PRO Data - Field Data",
+                              value: "pro data -field data",
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12} md={8}>
+                      <Form.Item label="Alternate Contact">
+                        <Row gutter={[4, 4]}>
+                          <Col xs={7} md={6}>
+                            <Form.Item name="country_code_alternate">
+                              <Select
+                                style={{ width: "100%" }}
+                                className="add-lead-select"
+                                allowClear
+                                showSearch
+                                filterOption={(input, option) =>
+                                  option.label
+                                    .toLowerCase()
+                                    .includes(input.toLowerCase())
+                                }
+                                onChange={handleCountryCodeChange}
+                                options={getCountryCode().map((each) => ({
+                                  label: each.country_code,
+                                  value: each.country_code,
+                                }))}
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={17} md={18}>
+                            <Form.Item shouldUpdate noStyle>
+                              {({ getFieldValue }) => {
+                                const countryCode = getFieldValue(
+                                  "country_code_alternate"
+                                );
+                                return (
+                                  <Form.Item name="alternate_contact_no">
+                                    <Input
+                                      type="number"
+                                      autoComplete="off"
+                                      onKeyDown={(e) => {
+                                        ["e", "E", "+", "-", "."].includes(
+                                          e.key
+                                        ) && e.preventDefault();
+                                      }}
+                                      disabled={!countryCode}
+                                      onChange={(e) =>
+                                        handleContactNumberChange(
+                                          e,
+                                          countryCode
+                                        )
+                                      }
+                                    />
+                                  </Form.Item>
+                                );
+                              }}
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xs={24} style={{ marginTop: 15 }}>
+                  <Typography className="add-lead-form-header">
+                    Child Details
+                  </Typography>
+                </Col>
+                <Col xs={24}>
+                  <Row gutter={[12, 8]}>
+                    <Col xs={24} sm={12} md={8}>
+                      <Form.Item
+                        name="child_name"
+                        label="Child Name"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Enter Child Name",
+                          },
+                        ]}
+                      >
+                        <Input maxLength={48} autoComplete="off" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12} md={8}>
+                      <Form.Item
+                        name="child_grade"
+                        label="Child Grade"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select Child Grade",
+                          },
+                        ]}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          className="add-lead-select"
+                          showSearch
+                          filterOption={(input, option) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                          }
+                          options={[
+                            { label: "Grade 1", value: "grade-1" },
+                            {
+                              label: "Grade 2",
+                              value: "grade-2",
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xs={24} style={{ marginTop: 15 }}>
+                  <Typography className="add-lead-form-header">
+                    School Details
+                  </Typography>
+                </Col>
+                <Col xs={24}>
+                  <Row gutter={[12, 8]}>
+                    <Col xs={24} sm={12} md={8}>
+                      <Form.Item
+                        name="academic_year"
+                        label="Academic Year"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select Academic Year",
+                          },
+                        ]}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          className="add-lead-select"
+                          showSearch
+                          filterOption={(input, option) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                          }
+                          options={[
+                            { label: "2023-24", value: "2023-24" },
+                            { label: "2024-25", value: "2024-25" },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12} md={8}>
+                      <Form.Item
+                        name="branch"
+                        label="Branch"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select Branch",
+                          },
+                        ]}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          className="add-lead-select"
+                          showSearch
+                          filterOption={(input, option) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                          }
+                          options={[
+                            {
+                              label: "Orchids BTM Layout",
+                              value: "btm-layout",
+                            },
+                            {
+                              label: "Orchids Banerghata",
+                              value: "banerghata",
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12} md={8}>
+                      <Form.Item
+                        name="school_type"
+                        label="School Type"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select School Type",
+                          },
+                        ]}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          className="add-lead-select"
+                          showSearch
+                          filterOption={(input, option) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                          }
+                          options={[
+                            { label: "Day", value: "day" },
+                            { label: "Boarding", value: "boarding" },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xs={24}>
+                  <Row className="d-flex justify-content-end mt-2">
+                    <Button
+                      size="medium"
+                      type="primary"
+                      loading={submitLoading}
+                      onClick={() => {
+                        form.submit();
+                      }}
+                    >
+                      Submit
+                    </Button>
+                  </Row>
+                </Col>
+              </Row>
+            </Form>
           </Col>
         </Row>
       </Col>
@@ -533,7 +530,7 @@ const AddLead = () => {
   };
 
   return (
-    <div>
+    <CustomCard>
       <Row gutter={[8, 8]}>
         <Col xs={24}>
           <Row className="d-flex flex-column">
@@ -574,8 +571,8 @@ const AddLead = () => {
                             <Form.Item name="country_code">
                               <Select
                                 style={{ width: "100%" }}
-                                className="add-lead-select-country-code"
                                 showSearch
+                                className="add-lead-select"
                                 filterOption={(input, option) =>
                                   option.label
                                     .toLowerCase()
@@ -607,7 +604,6 @@ const AddLead = () => {
                                   <Form.Item name="contact_no">
                                     <Input
                                       type="number"
-                                      className="add-lead-select-contact"
                                       autoComplete="off"
                                       onKeyDown={(e) => {
                                         ["e", "E", "+", "-", "."].includes(
@@ -702,7 +698,7 @@ const AddLead = () => {
           </Spin>
         </Col>
       </Row>
-    </div>
+    </CustomCard>
   );
 };
 

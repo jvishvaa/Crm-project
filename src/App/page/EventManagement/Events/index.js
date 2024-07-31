@@ -357,7 +357,6 @@ const Events = () => {
           height: 30,
           maxWidth: 250,
         }}
-        className="search-input-lead"
         value={searchInput}
         onChange={(e) => {
           setSearchInput(e.target.value);
@@ -730,7 +729,7 @@ const Events = () => {
   ];
 
   return (
-    <div>
+    <CustomCard>
       <Row gutter={[8, 8]}>
         <Col xs={24}>
           <Row className="d-flex flex-column" gutter={[2, 2]}>
@@ -953,14 +952,14 @@ const Events = () => {
                   <>
                     {eventData?.length === 0 ? (
                       <Col xs={24} className={"mt-2"}>
-                        <CustomCard
+                        <Row
                           style={{ minHeight: 200 }}
                           className={
                             "d-flex justify-content-center align-items-center"
                           }
                         >
                           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                        </CustomCard>
+                        </Row>
                       </Col>
                     ) : null}
                     {eventData?.length > 0 ? (
@@ -1198,7 +1197,7 @@ const Events = () => {
         }}
         dropdownData={dropdownData}
       />
-    </div>
+    </CustomCard>
   );
 };
 

@@ -205,8 +205,8 @@ const Source = () => {
   };
 
   return (
-    <div>
-      <Row gutter={[8, 8]}>
+    <CustomCard>
+      <Row gutter={[8, 0]}>
         <Col span={24}>
           <Row className="d-flex flex-column">
             <Col xs={24}>
@@ -236,166 +236,164 @@ const Source = () => {
             </Col>
           </Row>
         </Col>
-        <Col xs={24}>
-          <CustomCard className="source-card">
-            <Spin spinning={loading} tip="Loading">
-              <Row gutter={[8, 8]}>
-                <Col xs={24}>
-                  <Form
-                    form={form}
-                    layout="vertical"
-                    onFinish={() => {
-                      setGetSelected(true);
-                      getSourceData(1, pageData?.pageSize);
-                    }}
-                  >
-                    <Row gutter={[8, 0]}>
-                      <Col xs={12} sm={7} xl={6}>
-                        <Form.Item
-                          className="w-100"
-                          name="source_type"
-                          label="Source Type"
-                        >
-                          <Select
-                            className="w-100"
-                            mode="multiple"
-                            allowClear
-                            onChange={(value) => {
-                              if (value.length === 0) {
-                                form.setFieldsValue({ source_type: [0] });
-                              }
-                            }}
-                            options={[
-                              {
-                                value: 0,
-                                label: "All",
-                              },
-                            ]}
-                            tagRender={(props) =>
-                              renderTagNotAll(
-                                props.label,
-                                props.value,
-                                props.index,
-                                "source_type"
-                              )
-                            }
-                            showSearch
-                            filterOption={(input, option) =>
-                              option.label
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
-                            }
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col xs={12} sm={7} xl={6}>
-                        <Form.Item
-                          className="w-100"
-                          name="is_active"
-                          label="Status"
-                        >
-                          <Select
-                            className="w-100"
-                            onChange={() => {
-                              handleOnChange();
-                            }}
-                            options={[
-                              {
-                                value: 0,
-                                label: "All",
-                              },
-                              {
-                                value: true,
-                                label: "Active",
-                              },
-                              {
-                                value: false,
-                                label: "Inactive",
-                              },
-                            ]}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col
-                        xs={5}
-                        sm={3}
-                        md={3}
-                        lg={1}
-                        className="d-flex align-items-end"
+        <Col xs={24} style={{ marginTop: -10 }}>
+          <Spin spinning={loading} tip="Loading">
+            <Row gutter={[8, 8]}>
+              <Col xs={24}>
+                <Form
+                  form={form}
+                  layout="vertical"
+                  onFinish={() => {
+                    setGetSelected(true);
+                    getSourceData(1, pageData?.pageSize);
+                  }}
+                >
+                  <Row gutter={[8, 0]}>
+                    <Col xs={12} sm={7} xl={6}>
+                      <Form.Item
+                        className="w-100"
+                        name="source_type"
+                        label="Source Type"
                       >
-                        <Form.Item>
-                          <Button type="primary" htmlType="submit">
-                            Filter
-                          </Button>
-                        </Form.Item>
-                      </Col>
-                      {getSelected ? (
-                        <Col
-                          xs={19}
-                          sm={7}
-                          md={7}
-                          lg={9}
-                          xl={11}
-                          className="d-flex justify-content-end"
-                        >
-                          <Input
-                            placeholder="Search Source"
-                            style={{
-                              height: 30,
-                              maxWidth: 220,
-                              marginTop: width < 576 ? 14 : 34,
-                            }}
-                            value={search}
-                            onChange={(e) => {
-                              setSearch(e.target.value);
-                              setSearchFetched(false);
-                            }}
-                            onPressEnter={() => {
-                              setSearchFetched(true);
-                            }}
-                            maxLength={48}
-                            suffix={
-                              searchFetched ? (
-                                <CloseOutlined
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => {
-                                    setSearchFetched(true);
-                                    setSearch("");
-                                  }}
-                                />
-                              ) : (
-                                <SearchOutlined
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => {
-                                    setSearchFetched(true);
-                                  }}
-                                />
-                              )
+                        <Select
+                          className="w-100"
+                          mode="multiple"
+                          allowClear
+                          onChange={(value) => {
+                            if (value.length === 0) {
+                              form.setFieldsValue({ source_type: [0] });
                             }
-                          />
-                        </Col>
-                      ) : null}
-                    </Row>
-                  </Form>
+                          }}
+                          options={[
+                            {
+                              value: 0,
+                              label: "All",
+                            },
+                          ]}
+                          tagRender={(props) =>
+                            renderTagNotAll(
+                              props.label,
+                              props.value,
+                              props.index,
+                              "source_type"
+                            )
+                          }
+                          showSearch
+                          filterOption={(input, option) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                          }
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={12} sm={7} xl={6}>
+                      <Form.Item
+                        className="w-100"
+                        name="is_active"
+                        label="Status"
+                      >
+                        <Select
+                          className="w-100"
+                          onChange={() => {
+                            handleOnChange();
+                          }}
+                          options={[
+                            {
+                              value: 0,
+                              label: "All",
+                            },
+                            {
+                              value: true,
+                              label: "Active",
+                            },
+                            {
+                              value: false,
+                              label: "Inactive",
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col
+                      xs={5}
+                      sm={3}
+                      md={3}
+                      lg={1}
+                      className="d-flex align-items-end"
+                    >
+                      <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                          Filter
+                        </Button>
+                      </Form.Item>
+                    </Col>
+                    {getSelected ? (
+                      <Col
+                        xs={19}
+                        sm={7}
+                        md={7}
+                        lg={9}
+                        xl={11}
+                        className="d-flex justify-content-end"
+                      >
+                        <Input
+                          placeholder="Search Source"
+                          style={{
+                            height: 30,
+                            maxWidth: 220,
+                            marginTop: width < 576 ? 14 : 34,
+                          }}
+                          value={search}
+                          onChange={(e) => {
+                            setSearch(e.target.value);
+                            setSearchFetched(false);
+                          }}
+                          onPressEnter={() => {
+                            setSearchFetched(true);
+                          }}
+                          maxLength={48}
+                          suffix={
+                            searchFetched ? (
+                              <CloseOutlined
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  setSearchFetched(true);
+                                  setSearch("");
+                                }}
+                              />
+                            ) : (
+                              <SearchOutlined
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  setSearchFetched(true);
+                                }}
+                              />
+                            )
+                          }
+                        />
+                      </Col>
+                    ) : null}
+                  </Row>
+                </Form>
+              </Col>
+              {sourceData ? (
+                <Col xs={24}>
+                  <Table
+                    dataSource={sourceData}
+                    columns={columns}
+                    bordered={true}
+                    pagination={pageData}
+                    onChange={handleTableChange}
+                  />
                 </Col>
-                {sourceData ? (
-                  <Col xs={24}>
-                    <Table
-                      dataSource={sourceData}
-                      columns={columns}
-                      bordered={true}
-                      pagination={pageData}
-                      onChange={handleTableChange}
-                    />
-                  </Col>
-                ) : (
-                  <Col xs={24}>
-                    <CustomFilterText />
-                  </Col>
-                )}
-              </Row>
-            </Spin>
-          </CustomCard>
+              ) : (
+                <Col xs={24}>
+                  <CustomFilterText />
+                </Col>
+              )}
+            </Row>
+          </Spin>
         </Col>
       </Row>
       <AddEditSource
@@ -405,7 +403,7 @@ const Source = () => {
           setModalData({ show: false, data: null });
         }}
       />
-    </div>
+    </CustomCard>
   );
 };
 
