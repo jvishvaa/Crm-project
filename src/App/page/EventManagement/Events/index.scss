@@ -1,3 +1,5 @@
+@import "../../../assest/css/mixins.scss";
+
 .lead-button {
     height: 30px !important;
     padding: 0px 5px !important;
@@ -41,4 +43,29 @@
 
 .update-event-description .ant-descriptions-row>td {
     padding-bottom: 8px !important;
+}
+
+.card-label-text-followup {
+    font-size: 10px;
+    color: #7e7e7e;
+    font-weight: 500;
+}
+
+.card-stats-icon-div {
+    padding: 1px 2px;
+    border-radius: 20px;
+}
+
+.event-stats-card {
+    height: 100%;
+    cursor: pointer;
+}
+
+.event-stats-card:hover {
+    background-color: $primary-ultra-light;
+}
+
+.event-stats-card-selected {
+    background-color: $primary-ultra-light;
+    border: 2px solid $primary !important;
 }

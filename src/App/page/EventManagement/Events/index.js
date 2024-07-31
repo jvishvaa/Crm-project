@@ -14,6 +14,7 @@ import {
   Pagination,
   Empty,
   Descriptions,
+  Statistic,
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -34,14 +35,25 @@ import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import { TbFileUpload } from "react-icons/tb";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
 import AddEditEvents from "./AddEditEvents";
+import { HiMiniUser } from "react-icons/hi2";
+import {
+  FaCheckCircle,
+  FaClock,
+  FaHourglassStart,
+  FaSpinner,
+  FaStopwatch,
+} from "react-icons/fa";
 
 const Events = () => {
   const defaultFilters = {
     city: [0],
     branch: [0],
     hotspot_type: [0],
+    assigned_user: [0],
+    date_range: [dayjs(), dayjs()],
   };
   const [loading, setLoading] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const [filterData, setFilterData] = useState({
@@ -86,6 +98,49 @@ const Events = () => {
     ],
   };
 
+  const eventStatusCountList = [
+    {
+      id: 1,
+      label: "Completed",
+      color: "#65c326",
+      value: 10,
+      icon: <FaCheckCircle size={20} style={{ color: "#65c326" }} />,
+      smallWidth: "33%",
+    },
+    {
+      id: 2,
+      label: "Pending",
+      color: "#ce994e",
+      value: 20,
+      icon: <FaClock size={20} style={{ color: "#ce994e" }} />,
+      smallWidth: "33%",
+    },
+    {
+      id: 3,
+      label: "Yet To Start",
+      color: "#EF5128",
+      value: 18,
+      icon: <FaHourglassStart size={20} style={{ color: "#EF5128" }} />,
+      smallWidth: "33%",
+    },
+    {
+      id: 4,
+      label: "In Progress",
+      color: "#246CDD",
+      value: 34,
+      icon: <FaSpinner size={20} style={{ color: "#246CDD" }} />,
+      smallWidth: "50%",
+    },
+    {
+      id: 5,
+      label: "Timed Out",
+      color: "#80427B",
+      value: 23,
+      icon: <FaStopwatch size={20} style={{ color: "#80427B" }} />,
+      smallWidth: "50%",
+    },
+  ];
+
   useEffect(() => {
     if (width <= 991) {
       setShowFilterView(false);
@@ -100,9 +155,17 @@ const Events = () => {
     return getChangedCountValues(
       {
         ...defaultFilters,
+        date_range: [
+          dayjs().format("YYYY-MM-DD"),
+          dayjs().format("YYYY-MM-DD"),
+        ],
       },
       {
         ...filterData,
+        date_range: [
+          dayjs(filterData?.date_range[0]).format("YYYY-MM-DD"),
+          dayjs(filterData?.date_range[1]).format("YYYY-MM-DD"),
+        ],
       }
     );
   };
@@ -263,6 +326,35 @@ const Events = () => {
             </Col>
           ) : null}
 
+          {!filterData?.assigned_user?.includes(0) ? (
+            <Col>
+              <RenderFilterTag
+                label="BDE"
+                value={getArrayValues(
+                  dropdownData?.assigned_user?.filter((each) =>
+                    filterData?.assigned_user?.includes(each?.value)
+                  ),
+                  "label"
+                )?.join(", ")}
+              />
+            </Col>
+          ) : null}
+          <Col>
+            <RenderFilterTag
+              label="Date"
+              value={
+                dayjs(filterData?.date_range[0]).isSame(
+                  filterData?.date_range[1]
+                )
+                  ? dayjs(filterData?.date_range[0]).format("DD MMM YYYY")
+                  : `${dayjs(filterData?.date_range[0]).format(
+                      "DD MMM YYYY"
+                    )} to ${dayjs(filterData?.date_range[1]).format(
+                      "DD MMM YYYY"
+                    )}`
+              }
+            />
+          </Col>
           {checkFilterDifference() && width > 768 ? (
             <Col className="pl-2">{getClearFilters()}</Col>
           ) : null}
@@ -424,6 +516,58 @@ const Events = () => {
                   {renderFilterView()}
                 </Col>
               ) : null}
+              <Col xs={24} className={"mt-2"}>
+                <Row gutter={[6, 6]}>
+                  {eventStatusCountList?.map((each) => (
+                    <Col
+                      style={{ width: width < 768 ? each?.smallWidth : "20%" }}
+                    >
+                      <CustomCard
+                        className={
+                          selectedStatus === each?.id
+                            ? "event-stats-card-selected"
+                            : "event-stats-card"
+                        }
+                        onClick={() => {
+                          if (selectedStatus === each.id) {
+                            setSelectedStatus(null);
+                          } else {
+                            setSelectedStatus(each.id);
+                          }
+                        }}
+                      >
+                        <Row>
+                          <Col xs={24}>
+                            <Row className="d-flex flex-row justify-content-between">
+                              <Col>
+                                <Typography
+                                  style={{
+                                    fontSize: 18,
+                                    fontWeight: 500,
+                                    color: each.color,
+                                  }}
+                                >
+                                  {each.value}
+                                </Typography>
+                              </Col>
+                              <Col>
+                                <div className="card-stats-icon-div">
+                                  {each?.icon}
+                                </div>
+                              </Col>
+                            </Row>
+                          </Col>
+                          <Col xs={24}>
+                            <Typography className="card-label-text-followup">
+                              {each.label}
+                            </Typography>
+                          </Col>
+                        </Row>
+                      </CustomCard>
+                    </Col>
+                  ))}
+                </Row>
+              </Col>
               {eventData ? (
                 isList ? (
                   <Col xs={24} className={"mt-2"}>

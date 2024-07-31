@@ -78,7 +78,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
       title={<CustomDrawerHeader label="Filter" onClose={closeDrawer} />}
       onClose={closeDrawer}
       open={drawerData?.show && drawerData?.type === "Filter"}
-      size="large"
+      size="small"
       closable={false}
       maskClosable={false}
       footer={
@@ -104,7 +104,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
       {visible ? (
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <Row gutter={[12, 0]}>
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="user_level" label="User Level">
                 <Select
                   className="w-100"
@@ -130,7 +130,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="zone" label="Zone">
                 <Select
                   className="w-100"
@@ -151,7 +151,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="branch" label="Branch">
                 <Select
                   className="w-100"

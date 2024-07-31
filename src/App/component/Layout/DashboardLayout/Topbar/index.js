@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CloseOutlined,
   LogoutOutlined,
@@ -32,6 +32,13 @@ import { useNavigate } from "react-router-dom";
 import getCountryCode from "../../../../utils/getCountryCode";
 import moment from "moment/moment";
 import { IoMdEye } from "react-icons/io";
+import axios from "axios";
+
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+import urls from "../../../../utils/urls";
+
+dayjs.extend(duration);
 const { Header } = Layout;
 
 const { Option } = Select;
@@ -45,6 +52,70 @@ const Topbar = ({ colorBgContainer, setCollapsed, collapsed }) => {
   const [search, setSearch] = useState("");
   const [searchSelect, setSearchSelect] = useState("+91");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const MINUTE_MS = 5000;
+  useEffect(() => {
+    if (authValue?.loginDetails) {
+      const interval = setInterval(() => {
+        isJwtExpired(authValue?.loginDetails);
+      }, MINUTE_MS);
+
+      return () => clearInterval(interval);
+    }
+  }, [authValue?.loginDetails]);
+
+  function isJwtExpired(loginDetails) {
+    const { token, refresh_token } = loginDetails?.user_details;
+    const tokenParts = token.split(".");
+    if (tokenParts.length !== 3) {
+      throw new Error("Invalid JWT format");
+    }
+    let payload = JSON.parse(atob(tokenParts[1]));
+    var dateString = dayjs.unix(payload?.exp);
+    var currentTimeSrting = dayjs();
+
+    if (currentTimeSrting && dateString && refresh_token) {
+      console.log(dayjs.duration(dateString.diff(currentTimeSrting)));
+
+      var duration = dayjs.duration(dateString.diff(currentTimeSrting));
+      var getMinutes = duration?.get("minutes");
+      var getSeconds = duration?.get("seconds");
+      if (getMinutes <= 0 && getSeconds <= 50) {
+        generateAccessToken(refresh_token);
+      }
+    }
+  }
+
+  const generateAccessToken = (refreshToken) => {
+    axios
+      .post(
+        urls?.login?.accessTokenApi,
+        {
+          refresh: refreshToken,
+        },
+        {
+          headers: {
+            Authorization: null,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.status == 200) {
+          let ud = {
+            ...authValue.loginDetails,
+            token: response?.data?.data,
+            force_update: response?.data?.force_update,
+          };
+          authValue.setLoginDetails(ud);
+          localStorage.setItem("loginDetails", JSON.stringify(ud));
+        } else {
+          logoutHandler();
+        }
+      })
+      .catch((error) => {
+        console.log("Error fetching config data:", error);
+      });
+  };
 
   const menu = [
     {

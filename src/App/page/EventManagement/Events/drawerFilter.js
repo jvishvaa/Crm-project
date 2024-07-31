@@ -1,18 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  Row,
-  Col,
-  Typography,
-  Divider,
-  Drawer,
-  Button,
-  Form,
-  Select,
-  Tag,
-  DatePicker,
-} from "antd";
+import { Row, Col, Drawer, Button, Form, Select, DatePicker } from "antd";
 import RenderTagMultiple from "../../../component/UtilComponents/RenderMultiple";
 import CustomDrawerHeader from "../../../component/UtilComponents/CustomDrawerHeader";
+
+const { RangePicker } = DatePicker;
 
 const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
   const [form] = Form.useForm();
@@ -36,6 +27,8 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
         city: drawerData?.data?.city,
         branch: drawerData?.data?.branch,
         hotspot_type: drawerData?.data?.hotspot_type,
+        assigned_user: drawerData?.data?.assigned_user,
+        date_range: drawerData?.data?.date_range,
       });
     }
   }, [drawerData]);
@@ -78,7 +71,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
       title={<CustomDrawerHeader label="Filter" onClose={closeDrawer} />}
       onClose={closeDrawer}
       open={drawerData?.show && drawerData?.type === "Filter"}
-      size="large"
+      size="small"
       closable={false}
       maskClosable={false}
       footer={
@@ -104,7 +97,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
       {visible ? (
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <Row gutter={[12, 0]}>
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="city" label="City">
                 <Select
                   className="w-100"
@@ -126,7 +119,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
               </Form.Item>
             </Col>
 
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="branch" label="Branch">
                 <Select
                   className="w-100"
@@ -152,7 +145,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
               </Form.Item>
             </Col>
 
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="hotspot_type" label="Hotspot Type">
                 <Select
                   className="w-100"
@@ -174,6 +167,50 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                   filterOption={(input, option) =>
                     option.label.toLowerCase().includes(input.toLowerCase())
                   }
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24}>
+              <Form.Item name="assigned_user" label="BDE">
+                <Select
+                  className="w-100"
+                  mode="multiple"
+                  options={[{ label: "All", value: 0 }]}
+                  tagRender={(props) =>
+                    renderTagAll(
+                      props.label,
+                      props.value,
+                      props.index,
+                      "assigned_user"
+                    )
+                  }
+                  onChange={(value) => {
+                    onChangeMultiple(value, "assigned_user");
+                  }}
+                  showSearch
+                  allowClear
+                  filterOption={(input, option) =>
+                    option.label.toLowerCase().includes(input.toLowerCase())
+                  }
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24}>
+              <Form.Item
+                name="date_range"
+                label="Date Range"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Select Date Range",
+                  },
+                ]}
+              >
+                <RangePicker
+                  className="w-100"
+                  format={"DD MMM YYYY"}
+                  inputReadOnly
+                  allowClear={false}
                 />
               </Form.Item>
             </Col>

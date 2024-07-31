@@ -3,10 +3,6 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { createContext, useContext, useEffect, useState } from "react";
 import urls from "../App/utils/urls";
-import dayjs from "dayjs";
-import duration from "dayjs/plugin/duration";
-
-dayjs.extend(duration);
 
 const AuthContext = createContext();
 
@@ -51,43 +47,9 @@ const AuthProvider = ({ children }) => {
   };
 
   const logoutHandler = () => {
-    setLoginDetails("");
     localStorage.clear();
+    setLoginDetails("");
   };
-
-  const MINUTE_MS = 5000;
-  useEffect(() => {
-    if (loginDetails) {
-      isJwtExpired(loginDetails);
-      const interval = setInterval(() => {
-        isJwtExpired(loginDetails);
-      }, MINUTE_MS);
-
-      return () => clearInterval(interval);
-    }
-  }, [loginDetails]);
-
-  function isJwtExpired(loginDetails) {
-    const { token, refresh_token } = loginDetails?.user_details;
-    const tokenParts = token.split(".");
-    if (tokenParts.length !== 3) {
-      throw new Error("Invalid JWT format");
-    }
-    let payload = JSON.parse(atob(tokenParts[1]));
-    var dateString = dayjs.unix(payload?.exp);
-    var currentTimeSrting = dayjs();
-
-    if (currentTimeSrting && dateString && refresh_token) {
-      console.log(dayjs.duration(dateString.diff(currentTimeSrting)));
-
-      var duration = dayjs.duration(dateString.diff(currentTimeSrting));
-      var getMinutes = duration?.get("minutes");
-      var getSeconds = duration?.get("seconds");
-      if (getMinutes <= 0 && getSeconds <= 50) {
-        generateAccessToken(refresh_token);
-      }
-    }
-  }
 
   const generateAccessToken = (refreshToken) => {
     axios
@@ -125,6 +87,7 @@ const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         loginDetails,
+        setLoginDetails,
         loginHandler,
         logoutHandler,
         loginLoading,
