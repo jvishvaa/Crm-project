@@ -14,13 +14,12 @@ import {
   Pagination,
   Empty,
   Descriptions,
+  Popover,
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
-import { RiDownloadCloudFill } from "react-icons/ri";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
 import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
-import { IoMdEye } from "react-icons/io";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import DrawerFilter from "./drawerFilter";
 import dayjs from "dayjs";
@@ -31,10 +30,8 @@ import CustomCard from "../../../component/UtilComponents/CustomCard";
 import { useLocation, useNavigate } from "react-router-dom";
 import getChangedCountValues from "../../../utils/getChangeCountObject";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
-import { TbFileUpload } from "react-icons/tb";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
 import AddEditEvents from "./AddEditEvents";
-import { HiMiniUser } from "react-icons/hi2";
 import {
   FaCheckCircle,
   FaClock,
@@ -75,8 +72,14 @@ const Events = () => {
   const [eventData, setEventData] = useState(null);
   const [isList, setIsList] = useState(true);
   const searchIconRef = useRef(null);
+  const [popoverVisible, setPopoverVisible] = useState(null);
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
+  const [selectedAssignId, setSelectedAssignId] = useState("");
+  const assignUserList = [
+    { id: 1, label: "Anik", erp: 2039484838 },
+    { id: 2, label: "Utpal", erp: 2039484838 },
+  ];
   const dropdownData = {
     city: [
       { label: "All", value: 0 },
@@ -103,41 +106,41 @@ const Events = () => {
     {
       id: 1,
       label: "Completed",
-      color: "#65c326",
+      color: "#4CAF50",
       value: 10,
-      icon: <FaCheckCircle size={20} style={{ color: "#65c326" }} />,
+      icon: <FaCheckCircle size={20} style={{ color: "#4CAF50" }} />,
       smallWidth: "33%",
     },
     {
       id: 2,
-      label: "Pending",
-      color: "#ce994e",
+      label: "In Progress",
+      color: "#8BC34A",
       value: 20,
-      icon: <FaClock size={20} style={{ color: "#ce994e" }} />,
+      icon: <FaSpinner size={20} style={{ color: "#8BC34A" }} />,
       smallWidth: "33%",
     },
     {
       id: 3,
       label: "Yet To Start",
-      color: "#EF5128",
+      color: "#e5d758",
       value: 30,
-      icon: <FaHourglassStart size={20} style={{ color: "#EF5128" }} />,
+      icon: <FaHourglassStart size={20} style={{ color: "#e5d758" }} />,
       smallWidth: "33%",
     },
     {
       id: 4,
-      label: "In Progress",
-      color: "#246CDD",
+      label: "Pending",
+      color: "#FF9800",
       value: 15,
-      icon: <FaSpinner size={20} style={{ color: "#246CDD" }} />,
+      icon: <FaClock size={20} style={{ color: "#FF9800" }} />,
       smallWidth: "50%",
     },
     {
       id: 5,
       label: "Timed Out",
-      color: "#80427B",
+      color: "#F44336",
       value: 25,
-      icon: <FaStopwatch size={20} style={{ color: "#80427B" }} />,
+      icon: <FaStopwatch size={20} style={{ color: "#F44336" }} />,
       smallWidth: "50%",
     },
   ];
@@ -169,6 +172,10 @@ const Events = () => {
         ],
       }
     );
+  };
+
+  const getAssignContent = () => {
+    return <h6>Hello</h6>;
   };
 
   const [searchFetched, setSearchFetched] = useState(false);
@@ -516,11 +523,28 @@ const Events = () => {
       title: "BDE",
       key: "assigned_user",
       render: (record) => (
-        <span>
-          {record?.assigned_user
-            ? getArrayValues(record?.assigned_user, "name")?.join(", ")
-            : "--"}
-        </span>
+        <>
+          <span>
+            {record?.assigned_user
+              ? getArrayValues(record?.assigned_user, "name")?.join(", ")
+              : "--"}
+          </span>{" "}
+          <br />
+          <Popover
+            content={getAssignContent(record)}
+            trigger="click"
+            placement="bottom"
+            open={popoverVisible === record.id ? true : false}
+            onOpenChange={() => {
+              setPopoverVisible(popoverVisible ? null : record.id);
+            }}
+            overlayClassName="assign-popover"
+          >
+            <Button type="link" size="small" className="view-date-wise-button">
+              Assign
+            </Button>
+          </Popover>
+        </>
       ),
       align: "center",
     },
