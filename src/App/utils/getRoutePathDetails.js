@@ -3,7 +3,8 @@
 import modules from "./moduleAccess";
 
 const getRoutePathDetails = (path = "") => {
-  let userLevelId = JSON.parse(localStorage.getItem("user"))?.user_level?.id;
+  let userLevelId = JSON.parse(localStorage.getItem("loginDetails"))
+    ?.user_details?.user_level;
 
   let pathName = path ? path : window.location.pathname;
   let myRouteData = [];

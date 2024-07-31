@@ -4,6 +4,9 @@ import jwtDecode from "jwt-decode";
 import { createContext, useContext, useEffect, useState } from "react";
 import urls from "../App/utils/urls";
 import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+
+dayjs.extend(duration);
 
 const AuthContext = createContext();
 
@@ -55,6 +58,7 @@ const AuthProvider = ({ children }) => {
   const MINUTE_MS = 5000;
   useEffect(() => {
     if (loginDetails) {
+      isJwtExpired(loginDetails);
       const interval = setInterval(() => {
         isJwtExpired(loginDetails);
       }, MINUTE_MS);
@@ -70,10 +74,12 @@ const AuthProvider = ({ children }) => {
       throw new Error("Invalid JWT format");
     }
     let payload = JSON.parse(atob(tokenParts[1]));
-
     var dateString = dayjs.unix(payload?.exp);
     var currentTimeSrting = dayjs();
+
     if (currentTimeSrting && dateString && refresh_token) {
+      console.log(dayjs.duration(dateString.diff(currentTimeSrting)));
+
       var duration = dayjs.duration(dateString.diff(currentTimeSrting));
       var getMinutes = duration?.get("minutes");
       var getSeconds = duration?.get("seconds");

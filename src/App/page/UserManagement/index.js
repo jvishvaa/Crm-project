@@ -466,38 +466,40 @@ const UserManagement = () => {
       align: "center",
       width: 120,
     },
-    {
-      title: "Action",
-      key: "action",
-      render: (record) => (
-        <Row
-          className={
-            "d-flex flex-row justify-content-center align-items-center flex-nowrap"
-          }
-          gutter={[4, 4]}
-        >
-          {getRoutePathDetails().modify ? (
-            <Col>
-              <Tooltip title="Edit">
-                <Button
-                  type="text"
-                  size="small"
-                  icon={<MdEdit size={18} />}
-                  onClick={() => {
-                    setDrawerData({
-                      show: true,
-                      type: "Update User",
-                      data: record,
-                    });
-                  }}
-                />
-              </Tooltip>
-            </Col>
-          ) : null}
-        </Row>
-      ),
-      align: "center",
-    },
+    ...(getRoutePathDetails().modify
+      ? [
+          {
+            title: "Action",
+            key: "action",
+            render: (record) => (
+              <Row
+                className={
+                  "d-flex flex-row justify-content-center align-items-center flex-nowrap"
+                }
+                gutter={[4, 4]}
+              >
+                <Col>
+                  <Tooltip title="Edit">
+                    <Button
+                      type="text"
+                      size="small"
+                      icon={<MdEdit size={18} />}
+                      onClick={() => {
+                        setDrawerData({
+                          show: true,
+                          type: "Update User",
+                          data: record,
+                        });
+                      }}
+                    />
+                  </Tooltip>
+                </Col>
+              </Row>
+            ),
+            align: "center",
+          },
+        ]
+      : []),
   ];
 
   return (
