@@ -1052,20 +1052,57 @@ const Events = () => {
                                         </Col>
                                         {getRoutePathDetails().modify ? (
                                           <Col xs={6}>
-                                            <Row className="d-flex flex-row justify-content-end">
-                                              <Tooltip title="Update Event">
-                                                <Button
-                                                  type="iconbutton"
-                                                  icon={<MdEdit size={20} />}
-                                                  onClick={() => {
-                                                    setDrawerData({
-                                                      show: true,
-                                                      type: "Update Event",
-                                                      data: each,
-                                                    });
+                                            <Row
+                                              className="d-flex flex-row justify-content-end align-items-center"
+                                              gutter={[8, 8]}
+                                            >
+                                              <Col>
+                                                <Tooltip title="Update Event">
+                                                  <Button
+                                                    type="iconbutton"
+                                                    icon={<MdEdit size={20} />}
+                                                    onClick={() => {
+                                                      setDrawerData({
+                                                        show: true,
+                                                        type: "Update Event",
+                                                        data: each,
+                                                      });
+                                                    }}
+                                                  />
+                                                </Tooltip>
+                                              </Col>
+                                              <Col>
+                                                <Popover
+                                                  content={getAssignContent(
+                                                    each
+                                                  )}
+                                                  trigger="click"
+                                                  placement="bottom"
+                                                  open={
+                                                    popoverVisible === each.id
+                                                      ? true
+                                                      : false
+                                                  }
+                                                  onOpenChange={() => {
+                                                    setPopoverVisible(
+                                                      popoverVisible
+                                                        ? null
+                                                        : each.id
+                                                    );
+                                                    setSearchAssignInput("");
+                                                    setSelectedAssignId([]);
                                                   }}
-                                                />
-                                              </Tooltip>
+                                                  overlayClassName="assign-popover"
+                                                >
+                                                  <Button
+                                                    type="primary"
+                                                    size="small"
+                                                    className="view-date-wise-button"
+                                                  >
+                                                    Assign
+                                                  </Button>
+                                                </Popover>
+                                              </Col>
                                             </Row>
                                           </Col>
                                         ) : null}
