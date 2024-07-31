@@ -24,15 +24,6 @@
     padding: 0px 16px !important;
 }
 
-.lead-card-header-name {
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.lead-card-subheader-text {
-    font-size: 12px;
-}
-
 .user-update-detail-card-data-text {
     font-size: 12px;
     line-height: 1.5;
@@ -41,10 +32,6 @@
 .user-update-detail-card-data-text>span {
     font-weight: 500;
     font-size: 11px !important;
-}
-
-.user-count-header {
-    font-size: 12px;
 }
 
 .user-count-value {
@@ -87,23 +74,6 @@
     font-size: 10px;
 }
 
-.header-profile {
-    font-weight: 500;
-    font-size: 14px;
-    text-decoration: underline;
-    color: $primary;
-}
-
-.profile-sub-header {
-    color: $gray-medium-high;
-    font-size: 12px;
-}
-
-.profile-value {
-    color: $gray-medium-high;
-    font-size: 12px;
-    font-weight: 500;
-}
 
 .update-user-description .ant-descriptions-row>td {
     padding-bottom: 8px !important;

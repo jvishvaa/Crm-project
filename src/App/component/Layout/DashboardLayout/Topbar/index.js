@@ -152,14 +152,14 @@ const Topbar = ({ colorBgContainer, setCollapsed, collapsed }) => {
             />
           }
         />
-        <Typography className="mt-2 name-text">
+        <Typography className="mt-2 name-text th-12 th-fw-600 text-center">
           {authValue?.loginDetails?.user_details?.first_name}{" "}
           {authValue?.loginDetails?.user_details?.last_name}
         </Typography>
-        <Typography className="user-level-text">
+        <Typography className="user-level-text th-11 th-fw-500 text-center">
           {authValue?.loginDetails?.user_details?.user_level}
         </Typography>
-        <Typography className="username-text">
+        <Typography className="username-text th-10 th-fw-500 text-center">
           @{authValue?.loginDetails?.user_details?.erp}
         </Typography>
         {!["/profile", "/profile/"].includes(window.location.pathname) ? (
@@ -287,12 +287,12 @@ const Topbar = ({ colorBgContainer, setCollapsed, collapsed }) => {
                                 <Col xs={21}>
                                   <Row className="d-flex flex-column">
                                     <Col xs={24}>
-                                      <Typography className="global-search-card-header-name">
+                                      <Typography className="th-12 th-fw-500">
                                         {each?.lead_name || "NA"}
                                       </Typography>
                                     </Col>
                                     <Col xs={24}>
-                                      <Typography className="global-search-card-subheader-text">
+                                      <Typography className="th-11">
                                         {"+917937363636"}
                                       </Typography>
                                     </Col>

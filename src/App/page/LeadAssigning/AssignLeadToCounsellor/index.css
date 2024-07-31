@@ -24,15 +24,6 @@
     padding: 0px 16px !important;
 }
 
-.lead-card-header-name {
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.lead-card-subheader-text {
-    font-size: 12px;
-}
-
 .assign-card-checkbox .ant-checkbox-inner {
     background-color: #EFEFEF;
     border-color: #EFEFEF;

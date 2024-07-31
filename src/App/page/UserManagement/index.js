@@ -661,7 +661,7 @@ const UserManagement = () => {
                                 <Typography
                                   className={`${
                                     width < 576 ? "text-center" : "text-left"
-                                  }  user-count-header mt-1`}
+                                  }  mt-1 th-12`}
                                 >
                                   {each?.label}
                                 </Typography>
@@ -729,18 +729,18 @@ const UserManagement = () => {
                                             }
                                           >
                                             <Col xs={24}>
-                                              <Typography className="lead-card-header-name">
+                                              <Typography className="th-13 th-fw-500">
                                                 {`${each?.first_name} ${each?.last_name}` ||
                                                   "NA"}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
-                                              <Typography className="lead-card-subheader-text">
+                                              <Typography className="th-12">
                                                 {each?.erp}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
-                                              <Typography className="lead-card-subheader-text">
+                                              <Typography className="th-12">
                                                 {each?.user_level?.name}
                                               </Typography>
                                             </Col>

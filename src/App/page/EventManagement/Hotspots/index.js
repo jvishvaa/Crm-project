@@ -580,12 +580,12 @@ const Hotspot = () => {
                                             }
                                           >
                                             <Col xs={24}>
-                                              <Typography className="lead-card-header-name">
+                                              <Typography className="th-13 th-fw-500">
                                                 {each?.hotspot_name || "NA"}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
-                                              <Typography className="lead-card-subheader-text">
+                                              <Typography className="th-12">
                                                 {each?.branch?.name}
                                               </Typography>
                                             </Col>

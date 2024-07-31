@@ -1132,7 +1132,7 @@ const FollowUp = () => {
                               </Row>
                             </Col>
                             <Col xs={24}>
-                              <Typography className="card-label-text-followup">
+                              <Typography className="card-label-text-followup th-10 th-fw-500">
                                 {each.label}
                               </Typography>
                             </Col>
@@ -1188,18 +1188,18 @@ const FollowUp = () => {
                                             }
                                           >
                                             <Col xs={24}>
-                                              <Typography className="lead-card-header-name">
+                                              <Typography className="th-13 th-fw-500">
                                                 {each?.lead_name || "NA"}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
-                                              <Typography className="lead-card-subheader-text">
+                                              <Typography className="th-12">
                                                 {"+917937363636"}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
                                               <Typography
-                                                className="lead-card-subheader-text"
+                                                className="th-12"
                                                 style={{
                                                   whiteSpace: "nowrap",
                                                 }}

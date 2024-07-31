@@ -21,12 +21,3 @@
 .lead-filter-drawer .ant-drawer-body {
     padding: 0px 16px !important;
 }
-
-.lead-card-header-name {
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.lead-card-subheader-text {
-    font-size: 12px;
-}

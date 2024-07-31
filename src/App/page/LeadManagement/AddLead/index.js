@@ -109,12 +109,12 @@ const AddLead = () => {
                       >
                         <Row className={"d-flex flex-column flex-nowrap"}>
                           <Col xs={24}>
-                            <Typography className="add-lead-card-header-name">
+                            <Typography className="th-13 th-fw-500">
                               {each?.lead_name || "NA"}
                             </Typography>
                           </Col>
                           <Col xs={24}>
-                            <Typography className="add-lead-card-subheader-text">
+                            <Typography className="th-12">
                               {"+917937363636"}
                             </Typography>
                           </Col>

@@ -984,17 +984,17 @@ const Events = () => {
                                             }
                                           >
                                             <Col xs={24}>
-                                              <Typography className="lead-card-header-name">
+                                              <Typography className="th-13 th-fw-500">
                                                 {each?.event_name || "NA"}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
-                                              <Typography className="lead-card-subheader-text">
+                                              <Typography className="th-12">
                                                 {each?.branch?.name}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
-                                              <Typography className="lead-card-subheader-text">
+                                              <Typography className="th-12">
                                                 {dayjs(each?.start_date).isSame(
                                                   dayjs(each?.end_date),
                                                   "day"
