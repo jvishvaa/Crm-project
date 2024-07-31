@@ -15,6 +15,7 @@ import {
   Empty,
   Descriptions,
   Statistic,
+  Progress,
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -119,7 +120,7 @@ const Events = () => {
       id: 3,
       label: "Yet To Start",
       color: "#EF5128",
-      value: 18,
+      value: 30,
       icon: <FaHourglassStart size={20} style={{ color: "#EF5128" }} />,
       smallWidth: "33%",
     },
@@ -127,7 +128,7 @@ const Events = () => {
       id: 4,
       label: "In Progress",
       color: "#246CDD",
-      value: 34,
+      value: 15,
       icon: <FaSpinner size={20} style={{ color: "#246CDD" }} />,
       smallWidth: "50%",
     },
@@ -135,7 +136,7 @@ const Events = () => {
       id: 5,
       label: "Timed Out",
       color: "#80427B",
-      value: 23,
+      value: 25,
       icon: <FaStopwatch size={20} style={{ color: "#80427B" }} />,
       smallWidth: "50%",
     },
@@ -177,9 +178,34 @@ const Events = () => {
     setEventData([
       {
         id: 1,
+        event_name: "Test Event",
+        hotspot: { id: 1, name: "Test Hotspot" },
+        branch: { id: 1, name: "Branch 1" },
+        source: { id: 1, name: "Source 1" },
+        start_date: "2024-01-01 12:12",
+        end_date: "2024-01-03 12:12",
+        event_cost: 100,
+        assigned_user: [
+          { id: 1, name: "Test 1" },
+          { id: 2, name: "Test 2" },
+        ],
+        status: "In Progress",
+        total_lead: 100,
+        created_by: "Admin",
       },
       {
         id: 2,
+        event_name: "Test Event2",
+        hotspot: { id: 1, name: "Test Hotspot" },
+        branch: { id: 1, name: "Branch 1" },
+        source: { id: 1, name: "Source 1" },
+        start_date: "2024-01-01 12:12",
+        end_date: "2024-01-01 12:12",
+        event_cost: 100,
+        assigned_user: null,
+        status: "Timed Out",
+        total_lead: 100,
+        created_by: "Admin",
       },
     ]);
     setPageData({
@@ -363,12 +389,131 @@ const Events = () => {
     );
   };
 
+  const renderProgressBar = (valueList) => {
+    return (
+      <>
+        {valueList
+          .filter((item1) => item1.value !== 0)
+          .map((item, index) => (
+            <>
+              <div
+                style={{
+                  width: `${item.widthPercentage}%`,
+                  backgroundColor: item.color,
+                  ...(index === 0
+                    ? { borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }
+                    : {}),
+                  ...(index ===
+                  valueList.filter((item1) => item1.value !== 0).length - 1
+                    ? { borderTopRightRadius: 10, borderBottomRightRadius: 10 }
+                    : {}),
+                }}
+              >
+                <div
+                  className={`d-flex flex-row ${
+                    item.value < 5
+                      ? "justify-content-start"
+                      : "justify-content-end"
+                  } align-items-center`}
+                  style={{ height: 20 }}
+                >
+                  <div>
+                    {item.widthPercentage > 5 ? (
+                      <Typography
+                        style={{
+                          color: "white",
+                          paddingRight: "5px",
+                          fontSize: "10px",
+                          paddingLeft: "2px",
+                          fontWeight: 500,
+                        }}
+                      >
+                        {item.value}%
+                      </Typography>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+            </>
+          ))}
+      </>
+    );
+  };
+
   const columns = [
     {
       title: "Sr. No.",
       key: "index",
       render: (text, record, index) =>
         index + 1 + (pageData?.current - 1) * pageData?.pageSize,
+      align: "center",
+    },
+    {
+      title: "Event Name",
+      key: "event_name",
+      render: (record) => <span>{record?.event_name || "--"}</span>,
+      align: "center",
+    },
+    {
+      title: "Hotspot",
+      key: "hotspot",
+      render: (record) => <span>{record?.hotspot?.name || "--"}</span>,
+      align: "center",
+    },
+    {
+      title: "Branch",
+      key: "branch",
+      render: (record) => <span>{record?.branch?.name || "--"}</span>,
+      align: "center",
+    },
+    {
+      title: "Hotspot Type",
+      key: "source",
+      render: (record) => <span>{record?.source?.name || "--"}</span>,
+      align: "center",
+    },
+    {
+      title: "Date",
+      key: "date",
+      render: (record) => (
+        <span>
+          {dayjs(record?.start_date).isSame(dayjs(record?.end_date), "day")
+            ? dayjs(record?.start_date).format("DD/MM/YYYY")
+            : `${dayjs(record?.start_date).format("DD/MM/YYYY")} To ${dayjs(
+                record?.end_date
+              ).format("DD/MM/YYYY")}`}
+        </span>
+      ),
+      align: "center",
+    },
+    {
+      title: "Event Cost",
+      key: "event_cost",
+      render: (record) => <span>{`${record?.event_cost} INR` || "0 INR"}</span>,
+      align: "center",
+    },
+    {
+      title: "BDE",
+      key: "assigned_user",
+      render: (record) => (
+        <span>
+          {record?.assigned_user
+            ? getArrayValues(record?.assigned_user, "name")?.join(", ")
+            : "--"}
+        </span>
+      ),
+      align: "center",
+    },
+    {
+      title: "Total Leads",
+      key: "total_leads",
+      render: (record) => <span>{record?.total_lead || "0"}</span>,
+      align: "center",
+    },
+    {
+      title: "Created By",
+      key: "created_by",
+      render: (record) => <span>{record?.created_by || "--"}</span>,
       align: "center",
     },
   ];
@@ -517,6 +662,20 @@ const Events = () => {
                 </Col>
               ) : null}
               <Col xs={24} className={"mt-2"}>
+                <Row className="d-flex flex-row">
+                  {renderProgressBar(
+                    eventStatusCountList?.map((each) => {
+                      return {
+                        label: each?.label,
+                        value: each?.value,
+                        widthPercentage: each?.value,
+                        color: each?.color,
+                      };
+                    })
+                  )}
+                </Row>
+              </Col>
+              <Col xs={24} className={"mt-2"}>
                 <Row gutter={[6, 6]}>
                   {eventStatusCountList?.map((each) => (
                     <Col
@@ -614,12 +773,30 @@ const Events = () => {
                                           >
                                             <Col xs={24}>
                                               <Typography className="lead-card-header-name">
-                                                {each?.hotspot_name || "NA"}
+                                                {each?.event_name || "NA"}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
                                               <Typography className="lead-card-subheader-text">
                                                 {each?.branch?.name}
+                                              </Typography>
+                                            </Col>
+                                            <Col xs={24}>
+                                              <Typography className="lead-card-subheader-text">
+                                                {dayjs(each?.start_date).isSame(
+                                                  dayjs(each?.end_date),
+                                                  "day"
+                                                )
+                                                  ? dayjs(
+                                                      each?.start_date
+                                                    ).format("DD/MM/YYYY")
+                                                  : `${dayjs(
+                                                      each?.start_date
+                                                    ).format(
+                                                      "DD/MM/YYYY"
+                                                    )} To ${dayjs(
+                                                      each?.end_date
+                                                    ).format("DD/MM/YYYY")}`}
                                               </Typography>
                                             </Col>
                                           </Row>
@@ -647,8 +824,33 @@ const Events = () => {
                                     <Col xs={24}>
                                       <Descriptions column={1}>
                                         {getCardDataText(
+                                          "Hotspot",
+                                          each?.hotspot?.name || "--"
+                                        )}
+                                        {getCardDataText(
                                           "Hotspot Type",
-                                          each?.hotspot_type?.name || "--"
+                                          each?.source?.name || "--"
+                                        )}
+                                        {getCardDataText(
+                                          "BDE",
+                                          each?.assigned_user
+                                            ? getArrayValues(
+                                                each?.assigned_user,
+                                                "name"
+                                              )?.join(", ")
+                                            : "--"
+                                        )}
+                                        {getCardDataText(
+                                          "Event Cost",
+                                          `${each?.event_cost} INR` || "0 INR"
+                                        )}
+                                        {getCardDataText(
+                                          "Total Leads",
+                                          each.total_lead || "0"
+                                        )}
+                                        {getCardDataText(
+                                          "Created By",
+                                          each.created_by || "0"
                                         )}
                                       </Descriptions>
                                     </Col>
