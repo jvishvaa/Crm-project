@@ -5,10 +5,8 @@ import {
   Col,
   Divider,
   Table,
-  Tabs,
   Spin,
   Button,
-  message,
   Form,
   Select,
   Switch,
@@ -269,7 +267,7 @@ const ActivityStatus = () => {
   ];
 
   return (
-    <div>
+    <CustomCard>
       <Row gutter={[8, 8]}>
         <Col span={24}>
           <Row className="d-flex flex-column">
@@ -298,166 +296,153 @@ const ActivityStatus = () => {
             </Col>
           </Row>
         </Col>
-        <Col xs={24}>
-          {/* <Tabs
-            type="card"
-            defaultActiveKey={1}
-            items={items}
-            onChange={onChangeTab}
-            className="role-tab"
-          /> */}
-          <CustomCard style={{ zIndex: 1 }} className="activity_type_card ">
-            {selectedTab === 1 ? (
-              <Spin spinning={loading} tip="Loading">
-                <Row gutter={[8, 8]}>
-                  <Col xs={24}>
-                    <Form
-                      form={form}
-                      layout="vertical"
-                      onFinish={() => {
-                        setGetSelected(true);
-                        getActivityData();
-                      }}
+        <Col xs={24} style={{ marginTop: -10 }}>
+          <Spin spinning={loading} tip="Loading">
+            <Row gutter={[8, 8]}>
+              <Col xs={24}>
+                <Form
+                  form={form}
+                  layout="vertical"
+                  onFinish={() => {
+                    setGetSelected(true);
+                    getActivityData();
+                  }}
+                >
+                  <Row gutter={[8, 0]}>
+                    <Col xs={12} sm={7} xl={6}>
+                      <Form.Item className="w-100" name="type" label="Type">
+                        <Select
+                          className="w-100"
+                          onChange={(value) => {
+                            handleOnChange();
+                          }}
+                          options={[
+                            {
+                              value: 0,
+                              label: "All",
+                            },
+                            {
+                              value: "level 1",
+                              label: "Level 1",
+                            },
+                            {
+                              value: "Level 2",
+                              label: "Level 2",
+                            },
+                          ]}
+                          showSearch
+                          filterOption={(input, option) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                          }
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={12} sm={7} xl={6}>
+                      <Form.Item
+                        className="w-100"
+                        name="is_active"
+                        label="Status"
+                      >
+                        <Select
+                          className="w-100"
+                          onChange={() => {
+                            handleOnChange();
+                          }}
+                          options={[
+                            {
+                              value: 0,
+                              label: "All",
+                            },
+                            {
+                              value: true,
+                              label: "Active",
+                            },
+                            {
+                              value: false,
+                              label: "Inactive",
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col
+                      xs={5}
+                      sm={3}
+                      md={3}
+                      lg={1}
+                      className="d-flex align-items-end"
                     >
-                      <Row gutter={[8, 0]}>
-                        <Col xs={12} sm={7} xl={6}>
-                          <Form.Item className="w-100" name="type" label="Type">
-                            <Select
-                              className="w-100"
-                              onChange={(value) => {
-                                handleOnChange();
-                              }}
-                              options={[
-                                {
-                                  value: 0,
-                                  label: "All",
-                                },
-                                {
-                                  value: "level 1",
-                                  label: "Level 1",
-                                },
-                                {
-                                  value: "Level 2",
-                                  label: "Level 2",
-                                },
-                              ]}
-                              showSearch
-                              filterOption={(input, option) =>
-                                option.label
-                                  .toLowerCase()
-                                  .includes(input.toLowerCase())
-                              }
-                            />
-                          </Form.Item>
-                        </Col>
-                        <Col xs={12} sm={7} xl={6}>
-                          <Form.Item
-                            className="w-100"
-                            name="is_active"
-                            label="Status"
-                          >
-                            <Select
-                              className="w-100"
-                              onChange={() => {
-                                handleOnChange();
-                              }}
-                              options={[
-                                {
-                                  value: 0,
-                                  label: "All",
-                                },
-                                {
-                                  value: true,
-                                  label: "Active",
-                                },
-                                {
-                                  value: false,
-                                  label: "Inactive",
-                                },
-                              ]}
-                            />
-                          </Form.Item>
-                        </Col>
-                        <Col
-                          xs={5}
-                          sm={3}
-                          md={3}
-                          lg={1}
-                          className="d-flex align-items-end"
-                        >
-                          <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                              Filter
-                            </Button>
-                          </Form.Item>
-                        </Col>
-                        {getSelected ? (
-                          <Col
-                            xs={19}
-                            sm={7}
-                            md={7}
-                            lg={9}
-                            xl={11}
-                            className="d-flex justify-content-end"
-                          >
-                            <Input
-                              placeholder="Search Status"
-                              style={{
-                                height: 30,
-                                maxWidth: 220,
-                                marginTop: width < 576 ? 14 : 34,
-                              }}
-                              value={search}
-                              onChange={(e) => {
-                                setSearch(e.target.value);
-                                setSearchFetched(false);
-                              }}
-                              onPressEnter={() => {
-                                setSearchFetched(true);
-                              }}
-                              maxLength={48}
-                              suffix={
-                                searchFetched ? (
-                                  <CloseOutlined
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() => {
-                                      setSearchFetched(true);
-                                      setSearch("");
-                                    }}
-                                  />
-                                ) : (
-                                  <SearchOutlined
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() => {
-                                      setSearchFetched(true);
-                                    }}
-                                  />
-                                )
-                              }
-                            />
-                          </Col>
-                        ) : null}
-                      </Row>
-                    </Form>
-                  </Col>
-                  <Col xs={24}>
-                    {statusData ? (
-                      <Table
-                        dataSource={statusData || []}
-                        columns={columns}
-                        pagination={false}
-                        bordered={true}
-                      />
-                    ) : (
-                      <CustomFilterText />
-                    )}
-                  </Col>
-                </Row>
-              </Spin>
-            ) : selectedTab === 2 ? (
-              <></>
-            ) : null}
-          </CustomCard>
+                      <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                          Filter
+                        </Button>
+                      </Form.Item>
+                    </Col>
+                    {getSelected ? (
+                      <Col
+                        xs={19}
+                        sm={7}
+                        md={7}
+                        lg={9}
+                        xl={11}
+                        className="d-flex justify-content-end"
+                      >
+                        <Input
+                          placeholder="Search Status"
+                          style={{
+                            height: 30,
+                            maxWidth: 220,
+                            marginTop: width < 576 ? 14 : 34,
+                          }}
+                          value={search}
+                          onChange={(e) => {
+                            setSearch(e.target.value);
+                            setSearchFetched(false);
+                          }}
+                          onPressEnter={() => {
+                            setSearchFetched(true);
+                          }}
+                          maxLength={48}
+                          suffix={
+                            searchFetched ? (
+                              <CloseOutlined
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  setSearchFetched(true);
+                                  setSearch("");
+                                }}
+                              />
+                            ) : (
+                              <SearchOutlined
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  setSearchFetched(true);
+                                }}
+                              />
+                            )
+                          }
+                        />
+                      </Col>
+                    ) : null}
+                  </Row>
+                </Form>
+              </Col>
+              <Col xs={24}>
+                {statusData ? (
+                  <Table
+                    dataSource={statusData || []}
+                    columns={columns}
+                    pagination={false}
+                    bordered={true}
+                  />
+                ) : (
+                  <CustomFilterText />
+                )}
+              </Col>
+            </Row>
+          </Spin>
         </Col>
       </Row>
       <AddEditActivityStatus
@@ -468,7 +453,7 @@ const ActivityStatus = () => {
         }}
         statusList={statusData}
       />
-    </div>
+    </CustomCard>
   );
 };
 

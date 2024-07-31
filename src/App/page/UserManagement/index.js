@@ -232,7 +232,6 @@ const UserManagement = () => {
           height: 30,
           maxWidth: 250,
         }}
-        className="search-input-lead"
         value={searchInput}
         onChange={(e) => {
           setSearchInput(e.target.value);
@@ -503,7 +502,7 @@ const UserManagement = () => {
   ];
 
   return (
-    <div>
+    <CustomCard>
       <Row gutter={[8, 8]}>
         <Col xs={24}>
           <Row className="d-flex flex-column" gutter={[2, 2]}>
@@ -920,7 +919,7 @@ const UserManagement = () => {
         }}
         dropdownData={dropdownData}
       />
-    </div>
+    </CustomCard>
   );
 };
 

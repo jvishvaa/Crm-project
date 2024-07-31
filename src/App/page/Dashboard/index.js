@@ -407,7 +407,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
+    <CustomCard>
       <Row gutter={[4, 4]}>
         <Col span={24}>
           <Row className="d-flex flex-column">
@@ -622,7 +622,7 @@ const Dashboard = () => {
               </Typography>
               {width >= 768 ? (
                 <Button
-                  type="outlined"
+                  type="primary"
                   size="small"
                   className="mt-2"
                   onClick={() => {
@@ -711,7 +711,7 @@ const Dashboard = () => {
           setModalData({ show: false, type: null, data: null });
         }}
       />
-    </div>
+    </CustomCard>
   );
 };
 

@@ -7,8 +7,7 @@
 }
 
 .ant-table-wrapper .ant-table-thead>tr>th {
-    color: #fff;
-    background: $primary;
+    color: $primary;
 }
 
 .ant-table-wrapper .ant-table-container table>thead>tr:first-child>*:first-child {
@@ -20,7 +19,7 @@
 }
 
 .ant-table-thead .ant-table-cell {
-    background-color: $primary !important;
+    background-color: $white-contrast-background !important;
 }
 
 .ant-table-wrapper .ant-table-container table>tbody>tr:last-child>*:first-child {
