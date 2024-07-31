@@ -143,7 +143,7 @@ const AddLead = () => {
                             </Popconfirm>
                           </Col>
                           <Col>
-                            <Tooltip title="View">
+                            <Tooltip title="View Lead">
                               <Button
                                 type="iconbutton"
                                 size="small"

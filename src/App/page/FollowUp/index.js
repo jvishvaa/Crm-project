@@ -942,7 +942,7 @@ const FollowUp = () => {
       title: "Action",
       key: "action",
       render: (record) => (
-        <Tooltip title="View">
+        <Tooltip title="View Lead">
           <Button
             type="text"
             icon={<IoMdEye size={20} />}
@@ -1216,7 +1216,7 @@ const FollowUp = () => {
                                         </Col>
                                         <Col xs={6}>
                                           <Row className="d-flex flex-row justify-content-end">
-                                            <Tooltip title="View">
+                                            <Tooltip title="View Lead">
                                               <Button
                                                 type="iconbutton"
                                                 icon={<IoMdEye size={25} />}

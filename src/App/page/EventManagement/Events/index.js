@@ -43,6 +43,7 @@ import {
   FaStopwatch,
 } from "react-icons/fa";
 import getFilterItemFromArray from "../../../utils/getFilterItemFromArray";
+import DateWiseEvent from "./DateWiseEvent";
 
 const Events = () => {
   const defaultFilters = {
@@ -475,15 +476,35 @@ const Events = () => {
       title: "Date",
       key: "date",
       render: (record) => (
-        <span>
-          {dayjs(record?.start_date).isSame(dayjs(record?.end_date), "day")
-            ? dayjs(record?.start_date).format("DD/MM/YYYY")
-            : `${dayjs(record?.start_date).format("DD/MM/YYYY")} To ${dayjs(
-                record?.end_date
-              ).format("DD/MM/YYYY")}`}
-        </span>
+        <>
+          <span>
+            {dayjs(record?.start_date).isSame(dayjs(record?.end_date), "day")
+              ? dayjs(record?.start_date).format("DD/MM/YYYY")
+              : `${dayjs(record?.start_date).format("DD/MM/YYYY")} To ${dayjs(
+                  record?.end_date
+                ).format("DD/MM/YYYY")}`}
+          </span>{" "}
+          <br />
+          {!dayjs(record?.start_date).isSame(dayjs(record?.end_date)) ? (
+            <Button
+              type="link"
+              size="small"
+              className="view-date-wise-button"
+              onClick={() => {
+                setDrawerData({
+                  show: true,
+                  type: "View Date Wise",
+                  data: record,
+                });
+              }}
+            >
+              View Date Wise
+            </Button>
+          ) : null}
+        </>
       ),
       align: "center",
+      width: 180,
     },
     {
       title: "Event Cost",
@@ -533,6 +554,40 @@ const Events = () => {
       render: (record) => <span>{record?.created_by || "--"}</span>,
       align: "center",
     },
+    ...(getRoutePathDetails().modify
+      ? [
+          {
+            title: "Action",
+            key: "action",
+            render: (record) => (
+              <Row
+                className={
+                  "d-flex flex-row justify-content-center align-items-center"
+                }
+                gutter={[4, 4]}
+              >
+                <Col>
+                  <Tooltip title="Update Event">
+                    <Button
+                      type="text"
+                      size="small"
+                      icon={<MdEdit size={18} />}
+                      onClick={() => {
+                        setDrawerData({
+                          show: true,
+                          type: "Update Event",
+                          data: record,
+                        });
+                      }}
+                    />
+                  </Tooltip>
+                </Col>
+              </Row>
+            ),
+            align: "center",
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -782,7 +837,13 @@ const Events = () => {
                                         gutter={[4, 4]}
                                         className={"d-flex flex-nowrap"}
                                       >
-                                        <Col xs={18}>
+                                        <Col
+                                          xs={
+                                            getRoutePathDetails().modify
+                                              ? 18
+                                              : 24
+                                          }
+                                        >
                                           <Row
                                             className={
                                               "d-flex flex-column flex-nowrap"
@@ -825,29 +886,50 @@ const Events = () => {
                                                     each.status
                                                   )[0].color
                                                 }
+                                                className="mr-1"
                                               >
                                                 {each?.status}
                                               </Tag>
+                                              {!dayjs(each?.start_date).isSame(
+                                                dayjs(each?.end_date)
+                                              ) ? (
+                                                <Button
+                                                  type="link"
+                                                  size="small"
+                                                  className="view-date-wise-button"
+                                                  onClick={() => {
+                                                    setDrawerData({
+                                                      show: true,
+                                                      type: "View Date Wise",
+                                                      data: each,
+                                                    });
+                                                  }}
+                                                >
+                                                  View Date Wise
+                                                </Button>
+                                              ) : null}
                                             </Col>
                                           </Row>
                                         </Col>
-                                        <Col xs={6}>
-                                          <Row className="d-flex flex-row justify-content-end">
-                                            <Tooltip title="Edit">
-                                              <Button
-                                                type="iconbutton"
-                                                icon={<MdEdit size={20} />}
-                                                onClick={() => {
-                                                  setDrawerData({
-                                                    show: true,
-                                                    type: "Update Hotspot",
-                                                    data: each,
-                                                  });
-                                                }}
-                                              />
-                                            </Tooltip>
-                                          </Row>
-                                        </Col>
+                                        {getRoutePathDetails().modify ? (
+                                          <Col xs={6}>
+                                            <Row className="d-flex flex-row justify-content-end">
+                                              <Tooltip title="Update Event">
+                                                <Button
+                                                  type="iconbutton"
+                                                  icon={<MdEdit size={20} />}
+                                                  onClick={() => {
+                                                    setDrawerData({
+                                                      show: true,
+                                                      type: "Update Event",
+                                                      data: each,
+                                                    });
+                                                  }}
+                                                />
+                                              </Tooltip>
+                                            </Row>
+                                          </Col>
+                                        ) : null}
                                       </Row>
                                     </Col>
                                     <Divider />
@@ -921,6 +1003,13 @@ const Events = () => {
         closeDrawer={() => {
           setDrawerData({ show: false, type: null, data: null });
         }}
+      />
+      <DateWiseEvent
+        drawerData={drawerData}
+        closeDrawer={() => {
+          setDrawerData({ show: false, type: null, data: null });
+        }}
+        eventStatusCountList={eventStatusCountList}
       />
       <AddEditEvents
         modalData={drawerData}

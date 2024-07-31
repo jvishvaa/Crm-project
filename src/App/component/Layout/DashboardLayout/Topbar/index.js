@@ -56,6 +56,7 @@ const Topbar = ({ colorBgContainer, setCollapsed, collapsed }) => {
   const MINUTE_MS = 5000;
   useEffect(() => {
     if (authValue?.loginDetails) {
+      isJwtExpired(authValue?.loginDetails);
       const interval = setInterval(() => {
         isJwtExpired(authValue?.loginDetails);
       }, MINUTE_MS);
@@ -75,11 +76,10 @@ const Topbar = ({ colorBgContainer, setCollapsed, collapsed }) => {
     var currentTimeSrting = dayjs();
 
     if (currentTimeSrting && dateString && refresh_token) {
-      console.log(dayjs.duration(dateString.diff(currentTimeSrting)));
-
       var duration = dayjs.duration(dateString.diff(currentTimeSrting));
       var getMinutes = duration?.get("minutes");
       var getSeconds = duration?.get("seconds");
+
       if (getMinutes <= 0 && getSeconds <= 50) {
         generateAccessToken(refresh_token);
       }
@@ -103,13 +103,16 @@ const Topbar = ({ colorBgContainer, setCollapsed, collapsed }) => {
         if (response.status == 200) {
           let ud = {
             ...authValue.loginDetails,
-            token: response?.data?.data,
-            force_update: response?.data?.force_update,
+            user_details: {
+              ...authValue.loginDetails.user_details,
+              token: response?.data?.data,
+              force_update: response?.data?.force_update,
+            },
           };
           authValue.setLoginDetails(ud);
           localStorage.setItem("loginDetails", JSON.stringify(ud));
         } else {
-          logoutHandler();
+          authValue.logoutHandler();
         }
       })
       .catch((error) => {

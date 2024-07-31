@@ -80,7 +80,7 @@ const AddEditEvent = ({
   };
 
   useEffect(() => {
-    if (modalData?.data && ["Edit Events"].includes(modalData?.type)) {
+    if (modalData?.data && ["Update Event"].includes(modalData?.type)) {
       form.setFieldsValue({
         event_name: modalData?.data?.event_name,
         branch: modalData?.data?.branch?.id,
@@ -132,7 +132,7 @@ const AddEditEvent = ({
       className="lead-filter-drawer"
       title={
         <CustomDrawerHeader
-          label={modalData?.data ? "Edit Event" : "Add Event"}
+          label={modalData?.data ? "Update Event" : "Add Event"}
           onClose={() => {
             closeModal();
             form.resetFields();
@@ -144,7 +144,8 @@ const AddEditEvent = ({
         form.resetFields();
       }}
       open={
-        modalData?.show && ["Add Event", "View Event"].includes(modalData?.type)
+        modalData?.show &&
+        ["Add Event", "Update Event"].includes(modalData?.type)
       }
       size="large"
       closable={false}
@@ -158,13 +159,7 @@ const AddEditEvent = ({
           <Button
             size="small"
             onClick={() => {
-              if (
-                ["Add Hotspot"].includes(modalData?.type) ||
-                (["View Hotspot"].includes(modalData?.type) &&
-                  modalData?.data?.is_edit)
-              ) {
-                closeModal();
-              }
+              closeModal();
               clearData();
               form.resetFields();
             }}

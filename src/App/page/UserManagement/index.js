@@ -479,7 +479,7 @@ const UserManagement = () => {
                 gutter={[4, 4]}
               >
                 <Col>
-                  <Tooltip title="Edit">
+                  <Tooltip title="Update User">
                     <Button
                       type="text"
                       size="small"
@@ -756,7 +756,7 @@ const UserManagement = () => {
                                           >
                                             {getRoutePathDetails().modify ? (
                                               <Col>
-                                                <Tooltip title="Edit">
+                                                <Tooltip title="Update User">
                                                   <Button
                                                     type="iconbutton"
                                                     icon={<MdEdit size={20} />}

@@ -35,7 +35,7 @@ import { TbFileUpload } from "react-icons/tb";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
 import AddEditHotspot from "./AddEditHotspot";
 
-const LeadManagement = () => {
+const Hotspot = () => {
   const defaultFilters = {
     city: [0],
     branch: [0],
@@ -355,7 +355,7 @@ const LeadManagement = () => {
         >
           {getRoutePathDetails().modify ? (
             <Col>
-              <Tooltip title="Edit">
+              <Tooltip title="Update Hotspot">
                 <Button
                   type="text"
                   size="small"
@@ -372,7 +372,7 @@ const LeadManagement = () => {
             </Col>
           ) : null}
           <Col>
-            <Tooltip title="View">
+            <Tooltip title="View Hotspot">
               <Button
                 type="text"
                 size="small"
@@ -601,7 +601,7 @@ const LeadManagement = () => {
                                           >
                                             {getRoutePathDetails().modify ? (
                                               <Col>
-                                                <Tooltip title="Edit">
+                                                <Tooltip title="Update Hotspot">
                                                   <Button
                                                     type="iconbutton"
                                                     icon={<MdEdit size={20} />}
@@ -620,7 +620,7 @@ const LeadManagement = () => {
                                               </Col>
                                             ) : null}
                                             <Col>
-                                              <Tooltip title="View">
+                                              <Tooltip title="View Hotspot">
                                                 <Button
                                                   type="iconbutton"
                                                   icon={<IoMdEye size={20} />}
@@ -709,4 +709,4 @@ const LeadManagement = () => {
   );
 };
 
-export default LeadManagement;
+export default Hotspot;
