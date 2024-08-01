@@ -1,0 +1,30 @@
+.lead-button {
+    height: 30px !important;
+    padding: 0px 5px !important;
+}
+
+
+@media (max-width: 600px) {
+    .lead-button {
+        height: 30px !important;
+        padding: 0px 4px !important;
+    }
+
+    .lead-radio .ant-radio-button-wrapper {
+        padding-inline: 4px !important;
+    }
+}
+
+
+.lead-filter-drawer .ant-drawer-header {
+    padding: 8px 16px !important;
+}
+
+.lead-filter-drawer .ant-drawer-body {
+    padding: 0px 16px !important;
+}
+
+.assign-card-checkbox .ant-checkbox-inner {
+    background-color: #EFEFEF;
+    border-color: #EFEFEF;
+}

@@ -1,0 +1,11 @@
+@import '../../../assest/css/mixins.scss';
+
+.edit-button {
+    outline: none;
+    border: none;
+}
+
+.activity-type-checkbox .ant-checkbox-inner {
+    background-color: #EFEFEF;
+    border-color: #EFEFEF;
+}

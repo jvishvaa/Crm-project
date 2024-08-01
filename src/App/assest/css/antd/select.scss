@@ -1,0 +1,20 @@
+.ant-select {
+    border-radius: 6px;
+}
+
+.ant-select .ant-select-selector {
+    background-color: #f0f0f0 !important;
+    /* Light grey background */
+    font-family: "Poppins" !important;
+}
+
+.ant-select .ant-select-selector .ant-select-selection-item {
+    font-size: 13px !important;
+}
+
+.ant-select-multiple .ant-select-selection-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+}

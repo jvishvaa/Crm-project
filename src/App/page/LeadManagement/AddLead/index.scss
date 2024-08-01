@@ -1,0 +1,20 @@
+@import "../../../assest/css/mixins.scss";
+
+
+.add-lead-select .ant-select-selector {
+    height: 30px !important;
+}
+
+.add-lead-reactivate>span {
+    font-size: 10px;
+}
+
+.add-lead-form-header {
+    font-size: 12px;
+    text-decoration: underline;
+    color: $primary;
+}
+
+.add-lead-form .ant-form-item {
+    margin-top: 0px;
+}

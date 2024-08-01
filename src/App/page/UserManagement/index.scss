@@ -1,0 +1,80 @@
+@import "../../assest/css/mixins.scss";
+
+.lead-button {
+    height: 30px !important;
+    padding: 0px 5px !important;
+}
+
+@media (max-width: 600px) {
+    .lead-button {
+        height: 30px !important;
+        padding: 0px 4px !important;
+    }
+
+    .lead-radio .ant-radio-button-wrapper {
+        padding-inline: 4px !important;
+    }
+}
+
+.lead-filter-drawer .ant-drawer-header {
+    padding: 8px 16px !important;
+}
+
+.lead-filter-drawer .ant-drawer-body {
+    padding: 0px 16px !important;
+}
+
+.user-update-detail-card-data-text {
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.user-update-detail-card-data-text>span {
+    font-weight: 500;
+    font-size: 11px !important;
+}
+
+.user-count-value {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.user-count-card {
+    height: 100%;
+    cursor: pointer;
+    background-color: $white-contrast-background;
+}
+
+.user-count-card:hover {
+    background-color: $primary-ultra-light;
+}
+
+.user-count-card-selected {
+    background-color: $primary-ultra-light;
+    border: 2px solid $primary !important;
+}
+
+.profile-card .ant-card-body {
+    padding: 0 !important;
+}
+
+.profile-name {
+    font-weight: 500;
+    font-size: 14px;
+    color: $primary;
+}
+
+.profile-userlevel {
+    color: $gray-medium-high;
+    font-size: 10px;
+}
+
+.profile-erp {
+    color: $gray-medium-high;
+    font-size: 10px;
+}
+
+
+.update-user-description .ant-descriptions-row>td {
+    padding-bottom: 8px !important;
+}

@@ -1,0 +1,32 @@
+@import '../../assest/css/mixins.scss';
+
+.profile-card .ant-card-body {
+    padding: 0 !important;
+}
+
+.profile-name {
+    font-weight: 500;
+    font-size: 14px;
+    color: $primary;
+}
+
+.profile-userlevel {
+    color: $gray-medium-high;
+    font-size: 10px;
+}
+
+.profile-erp {
+    color: $gray-medium-high;
+    font-size: 10px;
+}
+
+.header-profile {
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: underline;
+    color: $primary;
+}
+
+.profile-description .ant-descriptions-row>td {
+    padding-bottom: 8px !important;
+}

@@ -1,0 +1,29 @@
+@import '../mixins.scss';
+
+.ant-steps .ant-steps-item-content .ant-steps-item-title {
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    font-weight: 500 !important;
+}
+
+.ant-steps-label-vertical .ant-steps-item-content {
+    margin-top: 6px !important;
+}
+
+.ant-steps .ant-steps-item-process .ant-steps-item-icon {
+    background-color: $primary !important;
+    border-color: $primary !important;
+}
+
+.ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after {
+    background-color: $primary !important;
+}
+
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon {
+    background-color: #d8e9e8 !important;
+    border-color: #d8e9e8 !important;
+}
+
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon>.ant-steps-icon {
+    color: $primary !important;
+}

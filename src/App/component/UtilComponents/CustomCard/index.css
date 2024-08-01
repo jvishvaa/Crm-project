@@ -1,0 +1,8 @@
+.card-component {
+    box-shadow: 0 4px 10px 0 rgba(20,19,34,.03), 0 0 10px 0 rgba(20,19,34,.02);
+    border: 1px solid #DFE3E8;
+}
+
+.card-component .ant-card-body {
+    padding: 10px;
+}
