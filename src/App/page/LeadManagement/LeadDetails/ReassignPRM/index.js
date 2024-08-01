@@ -14,24 +14,20 @@ import "../index.scss";
 
 const { TextArea } = Input;
 
-const ReassignCounsellor = ({
-  modalData,
-  handleReassignCounsellor,
-  closeModal,
-}) => {
+const ReassignPRM = ({ modalData, handleReassignPRM, closeModal }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
   const onFinish = (values) => {
     console.log("Received values:", values);
-    handleReassignCounsellor(values);
+    handleReassignPRM(values);
     form.resetFields();
   };
 
   return (
     <Modal
       centered
-      open={modalData?.show && modalData?.type === "Reassign Counsellor"}
+      open={modalData?.show && modalData?.type === "Reassign PRM"}
       onCancel={() => {
         closeModal();
         form.resetFields();
@@ -60,9 +56,7 @@ const ReassignCounsellor = ({
     >
       <Row>
         <Col xs={24}>
-          <Typography className="th-14 th-fw-600">
-            Reassign Counsellor
-          </Typography>
+          <Typography className="th-14 th-fw-600">Reassign PRM</Typography>
           <Divider />
         </Col>
         <Col xs={24}>
@@ -70,12 +64,12 @@ const ReassignCounsellor = ({
             <Row gutter={[16, 4]}>
               <Col xs={24}>
                 <Form.Item
-                  name="counsellor"
-                  label="Counsellor"
+                  name="prm"
+                  label="PRM"
                   rules={[
                     {
                       required: true,
-                      message: "Please Select Counsellor",
+                      message: "Please Select PRM",
                     },
                   ]}
                 >
@@ -112,4 +106,4 @@ const ReassignCounsellor = ({
   );
 };
 
-export default ReassignCounsellor;
+export default ReassignPRM;

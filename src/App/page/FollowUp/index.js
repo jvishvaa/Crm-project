@@ -129,7 +129,7 @@ const FollowUp = () => {
     { id: 1, label: "Total Followup Pending", value: 25, color: "#AB89FF" },
     {
       id: 2,
-      label: "Fresh Lead Followup Pending",
+      label: "Fresh Lead",
       value: 25,
       color: "#F3917A",
     },

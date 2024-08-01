@@ -38,35 +38,35 @@ const AddLead = () => {
   }, []);
 
   const getLeadData = () => {
-    // setLeadData([]);
-    setLeadData([
-      {
-        id: 4110494,
-        enquiry_no: "ENQ50517343223458",
-        lead_name: "Madhu Kumar S",
-        next_follow_date: null,
-        academic_year: "2023-24",
-        lead_created_date: "2024-02-02",
-        is_regen: false,
-        in_dormant: true,
-        is_enquiry: false,
-        is_live: true,
-        lead_status: {
-          id: 29,
-          status_name: "Call picked up",
-        },
-        lead_status_l2: null,
-        tagging: null,
-        contact_source: {
-          id: 381,
-          source_name: "Branch - ",
-        },
-        branch: {
-          id: 151,
-          branch_name: "Raja Test",
-        },
-      },
-    ]);
+    setLeadData([]);
+    // setLeadData([
+    //   {
+    //     id: 4110494,
+    //     enquiry_no: "ENQ50517343223458",
+    //     lead_name: "Madhu Kumar S",
+    //     next_follow_date: null,
+    //     academic_year: "2023-24",
+    //     lead_created_date: "2024-02-02",
+    //     is_regen: false,
+    //     in_dormant: true,
+    //     is_enquiry: false,
+    //     is_live: true,
+    //     lead_status: {
+    //       id: 29,
+    //       status_name: "Call picked up",
+    //     },
+    //     lead_status_l2: null,
+    //     tagging: null,
+    //     contact_source: {
+    //       id: 381,
+    //       source_name: "Branch - ",
+    //     },
+    //     branch: {
+    //       id: 151,
+    //       branch_name: "Raja Test",
+    //     },
+    //   },
+    // ]);
   };
 
   const onFinish = (values) => {

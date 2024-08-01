@@ -21,6 +21,8 @@ import useWindowDimensions from "../../../component/UtilComponents/useWindowDime
 import UpdateLeadDetails from "./UpdateLeadDetails";
 import { useLocation, useNavigate } from "react-router-dom";
 import CustomCard from "../../../component/UtilComponents/CustomCard";
+import LeadAddedDetails from "./LeadAddedDetails";
+import ReEnquirySource from "./ReEnquirySource";
 
 const LeadDetails = () => {
   const navigate = useNavigate();
@@ -83,11 +85,7 @@ const LeadDetails = () => {
             <Row className="d-flex flex-row" gutter={[8, 4]}>
               <Col>
                 <Popconfirm title="Are you to mark lead as Hot?">
-                  <Button
-                    size="small"
-                    type="primary"
-                    className="lead-details-hot-lead-button"
-                  >
+                  <Button size="small" className="lead-details-hot-lead-button">
                     Mark as Hot
                   </Button>
                 </Popconfirm>
@@ -95,7 +93,6 @@ const LeadDetails = () => {
               <Col>
                 <Button
                   size="small"
-                  type="primary"
                   className="lead-details-reassign-prm"
                   onClick={() => {
                     setModalData({
@@ -111,7 +108,6 @@ const LeadDetails = () => {
               <Col>
                 <Button
                   size="small"
-                  type="primary"
                   className="lead-details-update-details-button"
                   onClick={() => {
                     setModalData({
@@ -151,9 +147,17 @@ const LeadDetails = () => {
                     <ActivityHistory />
                   </Col>
                   {width >= 768 && width <= 991 ? (
-                    <Col xs={24}>
-                      <AssigningDetailsCard />
-                    </Col>
+                    <>
+                      <Col xs={24}>
+                        <AssigningDetailsCard />
+                      </Col>
+                      <Col xs={24}>
+                        <LeadAddedDetails />
+                      </Col>
+                      <Col xs={24}>
+                        <ReEnquirySource />
+                      </Col>
+                    </>
                   ) : null}
                 </Row>
               </Col>
@@ -165,6 +169,12 @@ const LeadDetails = () => {
                     </Col>
                     <Col xs={24} md={12} lg={24}>
                       <AssigningDetailsCard />
+                    </Col>
+                    <Col xs={24} md={12} lg={24}>
+                      <LeadAddedDetails />
+                    </Col>
+                    <Col xs={24} md={12} lg={24}>
+                      <ReEnquirySource />
                     </Col>
                   </Row>
                 </Col>

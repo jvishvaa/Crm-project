@@ -51,7 +51,7 @@ const ActivityHistory = () => {
                       {[1, 2].map((each) => (
                         <Col xs={24}>
                           <Row
-                            className="d-flex flex-row align-items-center flex-nowrap"
+                            className="d-flex flex-row flex-nowrap"
                             gutter={[12, 12]}
                           >
                             <Col>

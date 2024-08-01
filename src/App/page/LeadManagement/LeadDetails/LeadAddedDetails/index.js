@@ -3,14 +3,14 @@ import CustomCard from "../../../../component/UtilComponents/CustomCard";
 import { Button, Col, Divider, Empty, Popconfirm, Row, Typography } from "antd";
 import "../index.scss";
 
-const AssigningDetailsCard = () => {
+const LeadAddedDetails = () => {
   return (
     <>
       <CustomCard>
         <Row className="d-flex flex-column flex-nowrap" gutter={[8, 8]}>
           <Col xs={24}>
             <Typography className="assign-details-card-header">
-              Assign Details
+              Lead Added By
             </Typography>
             <Divider />
           </Col>
@@ -18,26 +18,6 @@ const AssigningDetailsCard = () => {
             <Row className="d-flex flex-row" gutter={[16, 8]}>
               <Col xs={24} md={24} lg={24}>
                 <Row>
-                  <Col xs={24}>
-                    <Row className="d-flex flex-row justify-content-between align-items-center">
-                      <Col>
-                        <Typography className="assign-details-card-subheader">
-                          PRM
-                        </Typography>
-                      </Col>
-                      <Col>
-                        <Popconfirm title="Are you sure to remove prm?">
-                          <Button
-                            type="link"
-                            color="primary"
-                            className="lead-details-card-update-button assign-remove-button"
-                          >
-                            Remove
-                          </Button>
-                        </Popconfirm>
-                      </Col>
-                    </Row>
-                  </Col>
                   <Col
                     xs={24}
                     style={{ backgroundColor: "#F5F5F5", borderRadius: 5 }}
@@ -51,7 +31,12 @@ const AssigningDetailsCard = () => {
                       </Col>
                       <Col xs={24}>
                         <Typography className="assign-details-assign-date">
-                          Assign Date : {"30/06/2024"}
+                          Role : BDE
+                        </Typography>
+                      </Col>
+                      <Col xs={24}>
+                        <Typography className="assign-details-assign-date">
+                          ERP : 293837736655
                         </Typography>
                       </Col>
                     </Row>
@@ -72,4 +57,4 @@ const AssigningDetailsCard = () => {
   );
 };
 
-export default AssigningDetailsCard;
+export default LeadAddedDetails;
