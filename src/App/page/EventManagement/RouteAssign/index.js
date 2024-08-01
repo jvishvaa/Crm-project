@@ -32,16 +32,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import getChangedCountValues from "../../../utils/getChangeCountObject";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
-import AddEditEvents from "./AssignRoute";
-import {
-  FaCheckCircle,
-  FaClock,
-  FaHourglassStart,
-  FaSpinner,
-  FaStopwatch,
-} from "react-icons/fa";
 import getFilterItemFromArray from "../../../utils/getFilterItemFromArray";
-import DateWiseEvent from "./DateWiseEvent";
 import AssignRoute from "./AssignRoute";
 
 const RouteAssign = () => {
@@ -69,7 +60,7 @@ const RouteAssign = () => {
     pageSize: 15,
     total: 0,
   });
-  const [eventData, setEventData] = useState(null);
+  const [routeAssignData, setRouteAssignData] = useState(null);
   const [isList, setIsList] = useState(true);
   const searchIconRef = useRef(null);
   const { width } = useWindowDimensions();
@@ -88,12 +79,6 @@ const RouteAssign = () => {
       { label: "Orchids BTM Layout", value: "btm-layout" },
       { label: "Orchids Banerghata", value: "banerghata" },
       { label: "Orchids Newtown", value: "newtown" },
-    ],
-
-    source: [
-      { label: "All", value: 0 },
-      { label: "Apartment", value: "apartment" },
-      { label: "Branch", value: "branch" },
     ],
   };
 
@@ -128,14 +113,35 @@ const RouteAssign = () => {
 
   const [searchFetched, setSearchFetched] = useState(false);
 
-  const getEventData = (page, page_size, params = {}) => {
+  const getRouteAssignData = (page, page_size, params = {}) => {
     // setLoading(true);
-    setEventData([
+    setRouteAssignData([
       {
         id: 1,
+        bde_name: "ANIKUSER",
+        erp_no: "12345678900",
+        branch: { id: 1, name: "ORCHIDS BTM Layout" },
+        date: "01/08/2024",
+        route_count: 1,
+        lead_collected: 0,
       },
       {
         id: 2,
+        bde_name: "JOHNSMITH",
+        erp_no: "98765432100",
+        branch: { id: 1, name: "ORCHIDS BTM Layout" },
+        date: "02/08/2024",
+        route_count: 2,
+        lead_collected: 3,
+      },
+      {
+        id: 3,
+        bde_name: "SARAHLEE",
+        erp_no: "45678901234",
+        branch: { id: 1, name: "ORCHIDS BTM Layout" },
+        date: "03/08/2024",
+        route_count: 3,
+        lead_collected: 1,
       },
     ]);
     setPageData({
@@ -146,17 +152,17 @@ const RouteAssign = () => {
   };
 
   useEffect(() => {
-    getEventData(pageData?.current, pageData?.pageSize);
+    getRouteAssignData(pageData?.current, pageData?.pageSize);
   }, []);
 
   const handleTableChange = (pagination) => {
     window.scrollTo(0, 0);
-    getEventData(pagination?.current, pagination?.pageSize);
+    getRouteAssignData(pagination?.current, pagination?.pageSize);
   };
 
   const handleCardChange = (page) => {
     window.scrollTo(0, 0);
-    getEventData(page, pageData?.pageSize);
+    getRouteAssignData(page, pageData?.pageSize);
   };
 
   const getSearchInput = () => {
@@ -175,7 +181,7 @@ const RouteAssign = () => {
         onPressEnter={() => {
           setSearchFetched(true);
           setSearchValue(searchInput);
-          getEventData(1, pageData?.pageSize);
+          getRouteAssignData(1, pageData?.pageSize);
         }}
         onBlur={(e) => {
           if (
@@ -208,7 +214,7 @@ const RouteAssign = () => {
               onClick={() => {
                 setSearchFetched(true);
                 setSearchValue(searchInput);
-                getEventData(1, pageData?.pageSize);
+                getRouteAssignData(1, pageData?.pageSize);
               }}
             />
           )
@@ -225,7 +231,7 @@ const RouteAssign = () => {
         style={{ whiteSpace: "normal" }}
         onClick={() => {
           setFilterData({ ...defaultFilters });
-          getEventData(1, pageData?.pageSize);
+          getRouteAssignData(1, pageData?.pageSize);
         }}
       >
         Clear Filters
@@ -313,6 +319,60 @@ const RouteAssign = () => {
         index + 1 + (pageData?.current - 1) * pageData?.pageSize,
       align: "center",
     },
+    {
+      title: "BDE Name & ERP",
+      key: "bde_name",
+      render: (record) => (
+        <Row className={"d-flex flex-column flex-nowrap"}>
+          <Col>
+            <Typography className="th-12">{record.bde_name}</Typography>
+          </Col>
+          <Col>
+            <Typography style={{ whiteSpace: "nowrap" }} className="th-10">
+              ({record?.erp_no})
+            </Typography>
+          </Col>
+        </Row>
+      ),
+      align: "center",
+    },
+    {
+      title: "Branch",
+      key: "branch",
+      render: (record) => <span>{record?.branch?.name}</span>,
+      align: "center",
+    },
+    {
+      title: "Date",
+      key: "date",
+      render: (record) => <span>{record?.date}</span>,
+      align: "center",
+    },
+    {
+      title: "Routes",
+      key: "routes",
+      render: (record) => (
+        <>
+          <span>{record?.route_count || 0} assigned</span>
+          <br />
+          <Button
+            type="link"
+            size="small"
+            className="view-date-wise-button"
+            onClick={() => {}}
+          >
+            View Routes
+          </Button>
+        </>
+      ),
+      align: "center",
+    },
+    {
+      title: "Lead Collected",
+      key: "lead_collected",
+      render: (record) => <span>{record?.lead_collected}</span>,
+      align: "center",
+    },
   ];
 
   return (
@@ -323,7 +383,7 @@ const RouteAssign = () => {
             <Col xs={24}>
               <Row className="d-flex flex-row justify-content-between">
                 <Col>
-                  <CustomBreadCrumbs data={["Event"]} />
+                  <CustomBreadCrumbs data={["Route Assign"]} />
                 </Col>
                 <Col>
                   <Row className="d-flex flex-row" gutter={[8, 4]}>
@@ -336,11 +396,11 @@ const RouteAssign = () => {
                             setDrawerData({
                               show: true,
                               data: null,
-                              type: "Add Event",
+                              type: "Route Assign",
                             });
                           }}
                         >
-                          + Add Event
+                          + Route Assign
                         </Button>
                       </Col>
                     ) : null}
@@ -352,7 +412,7 @@ const RouteAssign = () => {
                           disabled={loading}
                           icon={<MdRefresh size={20} />}
                           onClick={() => {
-                            getEventData(1, pageData.pageSize);
+                            getRouteAssignData(1, pageData.pageSize);
                           }}
                         />
                       </Tooltip>
@@ -442,6 +502,7 @@ const RouteAssign = () => {
                     <Col style={{ textAlign: "right" }}>
                       <Button
                         type="link"
+                        size="small"
                         onClick={() => {
                           setShowFilterView(!showFilterView);
                         }}
@@ -458,20 +519,22 @@ const RouteAssign = () => {
                   {renderFilterView()}
                 </Col>
               ) : null}
-              {eventData ? (
+              {routeAssignData ? (
                 isList ? (
                   <Col xs={24} className={"mt-2"}>
                     <Table
-                      dataSource={eventData || []}
+                      dataSource={routeAssignData || []}
                       columns={columns}
                       bordered={true}
-                      pagination={eventData?.length > 0 ? pageData : false}
+                      pagination={
+                        routeAssignData?.length > 0 ? pageData : false
+                      }
                       onChange={handleTableChange}
                     />
                   </Col>
                 ) : (
                   <>
-                    {eventData?.length === 0 ? (
+                    {routeAssignData?.length === 0 ? (
                       <Col xs={24} className={"mt-2"}>
                         <Row
                           style={{ minHeight: 200 }}
@@ -483,11 +546,11 @@ const RouteAssign = () => {
                         </Row>
                       </Col>
                     ) : null}
-                    {eventData?.length > 0 ? (
+                    {routeAssignData?.length > 0 ? (
                       <>
                         <Col xs={24} className={"mt-2"}>
                           <Row className={"d-flex"} gutter={[8, 8]}>
-                            {eventData?.map((each, index) => (
+                            {routeAssignData?.map((each, index) => (
                               <Col xs={24} sm={12} lg={8} key={index}>
                                 <CustomCard style={{ height: "100%" }}>
                                   <Row gutter={[4, 4]} className={"d-flex"}>
@@ -496,13 +559,7 @@ const RouteAssign = () => {
                                         gutter={[4, 4]}
                                         className={"d-flex flex-nowrap"}
                                       >
-                                        <Col
-                                          xs={
-                                            getRoutePathDetails().modify
-                                              ? 18
-                                              : 24
-                                          }
-                                        >
+                                        <Col xs={24}>
                                           <Row
                                             className={
                                               "d-flex flex-column flex-nowrap"
@@ -510,12 +567,17 @@ const RouteAssign = () => {
                                           >
                                             <Col xs={24}>
                                               <Typography className="th-13 th-fw-500">
-                                                {each?.event_name || "NA"}
+                                                {each?.bde_name || "NA"}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
                                               <Typography className="th-12">
-                                                {each?.branch?.name}
+                                                ERP: {each?.erp_no}
+                                              </Typography>
+                                            </Col>
+                                            <Col xs={24}>
+                                              <Typography className="th-12">
+                                                {each?.date}
                                               </Typography>
                                             </Col>
                                           </Row>
@@ -525,10 +587,38 @@ const RouteAssign = () => {
                                     <Divider />
                                     <Col xs={24}>
                                       <Descriptions column={1}>
-                                        {/* {getCardDataText(
-                                          "Hotspot",
-                                          each?.hotspot?.name || "--"
-                                        )} */}
+                                        {getCardDataText(
+                                          "Branch",
+                                          each?.branch?.name || "--"
+                                        )}
+                                        {getCardDataText(
+                                          "Routes",
+                                          <Row
+                                            className="d-flex flex-row align-items-center"
+                                            gutter={[8, 0]}
+                                            style={{ marginTop: -3 }}
+                                          >
+                                            <Col>
+                                              <Typography className="th-12">{`${
+                                                each?.route_count || 0
+                                              } assigned`}</Typography>
+                                            </Col>
+                                            <Col>
+                                              <Button
+                                                type="link"
+                                                size="small"
+                                                className="view-date-wise-button"
+                                                onClick={() => {}}
+                                              >
+                                                View Routes
+                                              </Button>
+                                            </Col>
+                                          </Row>
+                                        )}
+                                        {getCardDataText(
+                                          "Lead Collected",
+                                          each?.lead_collected || 0
+                                        )}
                                       </Descriptions>
                                     </Col>
                                   </Row>
@@ -562,7 +652,7 @@ const RouteAssign = () => {
         onSubmit={(values) => {
           setDrawerData({ show: false, type: null, data: null });
           setFilterData({ ...filterData, ...values });
-          getEventData(1, pageData?.pageSize);
+          getRouteAssignData(1, pageData?.pageSize);
         }}
         dropdownData={dropdownData}
         closeDrawer={() => {

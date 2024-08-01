@@ -39,7 +39,7 @@ const AssignRoute = ({
       className="lead-filter-drawer"
       title={
         <CustomDrawerHeader
-          label={"Assign Route"}
+          label={"Route Assign"}
           onClose={() => {
             closeModal();
             clearData();
@@ -50,7 +50,7 @@ const AssignRoute = ({
         closeModal();
         clearData();
       }}
-      open={modalData?.show && ["Assign Route"].includes(modalData?.type)}
+      open={modalData?.show && ["Route Assign"].includes(modalData?.type)}
       size="large"
       closable={false}
       maskClosable={false}
