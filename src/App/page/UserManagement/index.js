@@ -625,7 +625,7 @@ const UserManagement = () => {
                   {renderFilterView()}
                 </Col>
               ) : null}
-              <Col xs={24} className={"mt-1"}>
+              <Col xs={24} className={"mt-2"}>
                 <Row className="d-flex flex-row" gutter={[8, 8]}>
                   {userCountData?.map((each) => (
                     <Col xs={8}>
@@ -661,7 +661,7 @@ const UserManagement = () => {
                                 <Typography
                                   className={`${
                                     width < 576 ? "text-center" : "text-left"
-                                  }  mt-1 th-12`}
+                                  }  mt-1 ${width < 576 ? "th-11" : "th-12"}`}
                                 >
                                   {each?.label}
                                 </Typography>

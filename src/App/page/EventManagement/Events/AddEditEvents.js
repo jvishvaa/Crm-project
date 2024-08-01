@@ -135,12 +135,14 @@ const AddEditEvent = ({
           label={modalData?.data ? "Update Event" : "Add Event"}
           onClose={() => {
             closeModal();
+            clearData();
             form.resetFields();
           }}
         />
       }
       onClose={() => {
         closeModal();
+        clearData();
         form.resetFields();
       }}
       open={

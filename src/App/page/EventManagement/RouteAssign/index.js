@@ -14,13 +14,13 @@ import {
   Pagination,
   Empty,
   Descriptions,
+  Popover,
+  Checkbox,
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
-import { RiDownloadCloudFill } from "react-icons/ri";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
 import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
-import { IoMdEye } from "react-icons/io";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import DrawerFilter from "./drawerFilter";
 import dayjs from "dayjs";
@@ -31,15 +31,25 @@ import CustomCard from "../../../component/UtilComponents/CustomCard";
 import { useLocation, useNavigate } from "react-router-dom";
 import getChangedCountValues from "../../../utils/getChangeCountObject";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
-import { TbFileUpload } from "react-icons/tb";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
-import AddEditHotspot from "./AddEditHotspot";
+import AddEditEvents from "./AssignRoute";
+import {
+  FaCheckCircle,
+  FaClock,
+  FaHourglassStart,
+  FaSpinner,
+  FaStopwatch,
+} from "react-icons/fa";
+import getFilterItemFromArray from "../../../utils/getFilterItemFromArray";
+import DateWiseEvent from "./DateWiseEvent";
+import AssignRoute from "./AssignRoute";
 
-const Hotspot = () => {
+const RouteAssign = () => {
   const defaultFilters = {
     city: [0],
     branch: [0],
-    hotspot_type: [0],
+    assigned_user: [0],
+    date_range: [dayjs(), dayjs()],
   };
   const [loading, setLoading] = useState(false);
   const location = useLocation();
@@ -59,11 +69,12 @@ const Hotspot = () => {
     pageSize: 15,
     total: 0,
   });
-  const [hotspotData, setHotspotData] = useState(null);
+  const [eventData, setEventData] = useState(null);
   const [isList, setIsList] = useState(true);
   const searchIconRef = useRef(null);
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
+
   const dropdownData = {
     city: [
       { label: "All", value: 0 },
@@ -100,47 +111,31 @@ const Hotspot = () => {
     return getChangedCountValues(
       {
         ...defaultFilters,
+        date_range: [
+          dayjs().format("YYYY-MM-DD"),
+          dayjs().format("YYYY-MM-DD"),
+        ],
       },
       {
         ...filterData,
+        date_range: [
+          dayjs(filterData?.date_range[0]).format("YYYY-MM-DD"),
+          dayjs(filterData?.date_range[1]).format("YYYY-MM-DD"),
+        ],
       }
     );
   };
 
   const [searchFetched, setSearchFetched] = useState(false);
 
-  const getHotspotData = (page, page_size, params = {}) => {
+  const getEventData = (page, page_size, params = {}) => {
     // setLoading(true);
-    setHotspotData([
+    setEventData([
       {
         id: 1,
-        hotspot_name: "Test",
-        branch: {
-          id: 1,
-          name: "Orchids BTM Layout",
-        },
-        contact_name: "Test",
-        contact_no: "2443242432",
-        hotspot_type: {
-          id: 1,
-          name: "Apartment",
-        },
-        entry_cost: 100,
       },
       {
         id: 2,
-        hotspot_name: "Test1",
-        branch: {
-          id: 1,
-          name: "Orchids BTM Layout",
-        },
-        contact_name: "Test",
-        contact_no: "2443242432",
-        hotspot_type: {
-          id: 1,
-          name: "Apartment",
-        },
-        entry_cost: 100,
       },
     ]);
     setPageData({
@@ -151,23 +146,23 @@ const Hotspot = () => {
   };
 
   useEffect(() => {
-    getHotspotData(pageData?.current, pageData?.pageSize);
+    getEventData(pageData?.current, pageData?.pageSize);
   }, []);
 
   const handleTableChange = (pagination) => {
     window.scrollTo(0, 0);
-    getHotspotData(pagination?.current, pagination?.pageSize);
+    getEventData(pagination?.current, pagination?.pageSize);
   };
 
   const handleCardChange = (page) => {
     window.scrollTo(0, 0);
-    getHotspotData(page, pageData?.pageSize);
+    getEventData(page, pageData?.pageSize);
   };
 
   const getSearchInput = () => {
     return (
       <Input
-        placeholder="Search Hotspot"
+        placeholder="Search BDE"
         style={{
           height: 30,
           maxWidth: 250,
@@ -180,7 +175,7 @@ const Hotspot = () => {
         onPressEnter={() => {
           setSearchFetched(true);
           setSearchValue(searchInput);
-          getHotspotData(1, pageData?.pageSize);
+          getEventData(1, pageData?.pageSize);
         }}
         onBlur={(e) => {
           if (
@@ -213,7 +208,7 @@ const Hotspot = () => {
               onClick={() => {
                 setSearchFetched(true);
                 setSearchValue(searchInput);
-                getHotspotData(1, pageData?.pageSize);
+                getEventData(1, pageData?.pageSize);
               }}
             />
           )
@@ -230,7 +225,7 @@ const Hotspot = () => {
         style={{ whiteSpace: "normal" }}
         onClick={() => {
           setFilterData({ ...defaultFilters });
-          getHotspotData(1, pageData?.pageSize);
+          getEventData(1, pageData?.pageSize);
         }}
       >
         Clear Filters
@@ -241,57 +236,71 @@ const Hotspot = () => {
   const renderFilterView = () => {
     return (
       <>
-        {checkFilterDifference() ? (
-          <Row className="d-flex flex-row align-items-center" gutter={[4, 4]}>
+        <Row className="d-flex flex-row align-items-center" gutter={[4, 4]}>
+          <Col>
+            <Typography style={{ marginTop: 2 }} className="th-12 th-fw-500">
+              Filter:
+            </Typography>
+          </Col>
+          {!filterData?.branch?.includes(0) ? (
             <Col>
-              <Typography style={{ marginTop: 2 }} className="th-12 th-fw-500">
-                Filter:
-              </Typography>
+              <RenderFilterTag
+                label="Branch"
+                value={getArrayValues(
+                  dropdownData?.branch?.filter((each) =>
+                    filterData?.branch?.includes(each?.value)
+                  ),
+                  "label"
+                )?.join(", ")}
+              />
             </Col>
-            {!filterData?.branch?.includes(0) ? (
-              <Col>
-                <RenderFilterTag
-                  label="Branch"
-                  value={getArrayValues(
-                    dropdownData?.branch?.filter((each) =>
-                      filterData?.branch?.includes(each?.value)
-                    ),
-                    "label"
-                  )?.join(", ")}
-                />
-              </Col>
-            ) : !filterData?.city?.includes(0) ? (
-              <Col>
-                <RenderFilterTag
-                  label="City"
-                  value={getArrayValues(
-                    dropdownData?.city?.filter((each) =>
-                      filterData?.city?.includes(each?.value)
-                    ),
-                    "label"
-                  )?.join(", ")}
-                />
-              </Col>
-            ) : null}
-            {!filterData?.hotspot_type?.includes(0) ? (
-              <Col>
-                <RenderFilterTag
-                  label="Hotspot Type"
-                  value={getArrayValues(
-                    dropdownData?.source?.filter((each) =>
-                      filterData?.hotspot_type?.includes(each?.value)
-                    ),
-                    "label"
-                  )?.join(", ")}
-                />
-              </Col>
-            ) : null}
+          ) : !filterData?.city?.includes(0) ? (
+            <Col>
+              <RenderFilterTag
+                label="City"
+                value={getArrayValues(
+                  dropdownData?.city?.filter((each) =>
+                    filterData?.city?.includes(each?.value)
+                  ),
+                  "label"
+                )?.join(", ")}
+              />
+            </Col>
+          ) : null}
 
-            {checkFilterDifference() && width > 768 ? (
-              <Col className="pl-2">{getClearFilters()}</Col>
-            ) : null}
-          </Row>
-        ) : null}
+          {!filterData?.assigned_user?.includes(0) ? (
+            <Col>
+              <RenderFilterTag
+                label="BDE"
+                value={getArrayValues(
+                  dropdownData?.assigned_user?.filter((each) =>
+                    filterData?.assigned_user?.includes(each?.value)
+                  ),
+                  "label"
+                )?.join(", ")}
+              />
+            </Col>
+          ) : null}
+          <Col>
+            <RenderFilterTag
+              label="Date"
+              value={
+                dayjs(filterData?.date_range[0]).isSame(
+                  filterData?.date_range[1]
+                )
+                  ? dayjs(filterData?.date_range[0]).format("DD MMM YYYY")
+                  : `${dayjs(filterData?.date_range[0]).format(
+                      "DD MMM YYYY"
+                    )} to ${dayjs(filterData?.date_range[1]).format(
+                      "DD MMM YYYY"
+                    )}`
+              }
+            />
+          </Col>
+          {checkFilterDifference() && width > 768 ? (
+            <Col className="pl-2">{getClearFilters()}</Col>
+          ) : null}
+        </Row>
       </>
     );
   };
@@ -304,90 +313,6 @@ const Hotspot = () => {
         index + 1 + (pageData?.current - 1) * pageData?.pageSize,
       align: "center",
     },
-    {
-      title: "Hotspot Name",
-      key: "hotspot_name",
-      render: (record) => <span>{record?.hotspot_name || "--"}</span>,
-      align: "center",
-    },
-    {
-      title: "Branch",
-      key: "branch",
-      render: (record) => <span>{record?.branch?.name || "--"}</span>,
-      align: "center",
-    },
-    {
-      title: "Hotspot Type",
-      key: "hotspot_type",
-      render: (record) => <span>{record?.hotspot_type?.name || "--"}</span>,
-      align: "center",
-    },
-    {
-      title: "Contact Name",
-      key: "contact_name",
-      render: (record) => <span>{record?.contact_name || "--"}</span>,
-      align: "center",
-    },
-    {
-      title: "Contact No.",
-      key: "contact_no",
-      render: (record) => <span>{record?.contact_no || "--"}</span>,
-      align: "center",
-    },
-    {
-      title: "Entry Cost",
-      key: "entry_cost",
-      render: (record) => <span>{record?.entry_cost || "0"}</span>,
-      align: "center",
-    },
-    {
-      title: "Action",
-      key: "action",
-      render: (record) => (
-        <Row
-          className={
-            "d-flex flex-row justify-content-center align-items-center"
-          }
-          gutter={[4, 4]}
-        >
-          {getRoutePathDetails().modify ? (
-            <Col>
-              <Tooltip title="Update Hotspot">
-                <Button
-                  type="text"
-                  size="small"
-                  icon={<MdEdit size={18} />}
-                  onClick={() => {
-                    setDrawerData({
-                      show: true,
-                      type: "View Hotspot",
-                      data: { ...record, is_edit: true },
-                    });
-                  }}
-                />
-              </Tooltip>
-            </Col>
-          ) : null}
-          <Col>
-            <Tooltip title="View Hotspot">
-              <Button
-                type="text"
-                size="small"
-                icon={<IoMdEye size={20} />}
-                onClick={() => {
-                  setDrawerData({
-                    show: true,
-                    type: "View Hotspot",
-                    data: record,
-                  });
-                }}
-              />
-            </Tooltip>
-          </Col>
-        </Row>
-      ),
-      align: "center",
-    },
   ];
 
   return (
@@ -398,7 +323,7 @@ const Hotspot = () => {
             <Col xs={24}>
               <Row className="d-flex flex-row justify-content-between">
                 <Col>
-                  <CustomBreadCrumbs data={["Hotspots"]} />
+                  <CustomBreadCrumbs data={["Event"]} />
                 </Col>
                 <Col>
                   <Row className="d-flex flex-row" gutter={[8, 4]}>
@@ -411,11 +336,11 @@ const Hotspot = () => {
                             setDrawerData({
                               show: true,
                               data: null,
-                              type: "Add Hotspot",
+                              type: "Add Event",
                             });
                           }}
                         >
-                          + Add Hotspots
+                          + Add Event
                         </Button>
                       </Col>
                     ) : null}
@@ -427,7 +352,7 @@ const Hotspot = () => {
                           disabled={loading}
                           icon={<MdRefresh size={20} />}
                           onClick={() => {
-                            getHotspotData(1, pageData.pageSize);
+                            getEventData(1, pageData.pageSize);
                           }}
                         />
                       </Tooltip>
@@ -514,20 +439,17 @@ const Hotspot = () => {
                         {getClearFilters()}
                       </Col>
                     ) : null}
-                    {checkFilterDifference() ? (
-                      <Col style={{ textAlign: "right" }}>
-                        <Button
-                          type="link"
-                          size="small"
-                          onClick={() => {
-                            setShowFilterView(!showFilterView);
-                          }}
-                          style={{ whiteSpace: "normal" }}
-                        >
-                          {showFilterView ? "Hide Filters" : "Show Filters"}
-                        </Button>
-                      </Col>
-                    ) : null}
+                    <Col style={{ textAlign: "right" }}>
+                      <Button
+                        type="link"
+                        onClick={() => {
+                          setShowFilterView(!showFilterView);
+                        }}
+                        style={{ whiteSpace: "normal" }}
+                      >
+                        {showFilterView ? "Hide Filters" : "Show Filters"}
+                      </Button>
+                    </Col>
                   </Row>
                 </Col>
               ) : null}
@@ -536,20 +458,20 @@ const Hotspot = () => {
                   {renderFilterView()}
                 </Col>
               ) : null}
-              {hotspotData ? (
+              {eventData ? (
                 isList ? (
                   <Col xs={24} className={"mt-2"}>
                     <Table
-                      dataSource={hotspotData || []}
+                      dataSource={eventData || []}
                       columns={columns}
                       bordered={true}
-                      pagination={hotspotData?.length > 0 ? pageData : false}
+                      pagination={eventData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />
                   </Col>
                 ) : (
                   <>
-                    {hotspotData?.length === 0 ? (
+                    {eventData?.length === 0 ? (
                       <Col xs={24} className={"mt-2"}>
                         <Row
                           style={{ minHeight: 200 }}
@@ -561,11 +483,11 @@ const Hotspot = () => {
                         </Row>
                       </Col>
                     ) : null}
-                    {hotspotData?.length > 0 ? (
+                    {eventData?.length > 0 ? (
                       <>
                         <Col xs={24} className={"mt-2"}>
                           <Row className={"d-flex"} gutter={[8, 8]}>
-                            {hotspotData?.map((each, index) => (
+                            {eventData?.map((each, index) => (
                               <Col xs={24} sm={12} lg={8} key={index}>
                                 <CustomCard style={{ height: "100%" }}>
                                   <Row gutter={[4, 4]} className={"d-flex"}>
@@ -574,7 +496,13 @@ const Hotspot = () => {
                                         gutter={[4, 4]}
                                         className={"d-flex flex-nowrap"}
                                       >
-                                        <Col xs={18}>
+                                        <Col
+                                          xs={
+                                            getRoutePathDetails().modify
+                                              ? 18
+                                              : 24
+                                          }
+                                        >
                                           <Row
                                             className={
                                               "d-flex flex-column flex-nowrap"
@@ -582,7 +510,7 @@ const Hotspot = () => {
                                           >
                                             <Col xs={24}>
                                               <Typography className="th-13 th-fw-500">
-                                                {each?.hotspot_name || "NA"}
+                                                {each?.event_name || "NA"}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
@@ -592,69 +520,15 @@ const Hotspot = () => {
                                             </Col>
                                           </Row>
                                         </Col>
-                                        <Col xs={6}>
-                                          <Row
-                                            className="d-flex flex-row justify-content-end"
-                                            gutter={[4, 4]}
-                                          >
-                                            {getRoutePathDetails().modify ? (
-                                              <Col>
-                                                <Tooltip title="Update Hotspot">
-                                                  <Button
-                                                    type="iconbutton"
-                                                    icon={<MdEdit size={20} />}
-                                                    onClick={() => {
-                                                      setDrawerData({
-                                                        show: true,
-                                                        type: "View Hotspot",
-                                                        data: {
-                                                          ...each,
-                                                          is_edit: true,
-                                                        },
-                                                      });
-                                                    }}
-                                                  />
-                                                </Tooltip>
-                                              </Col>
-                                            ) : null}
-                                            <Col>
-                                              <Tooltip title="View Hotspot">
-                                                <Button
-                                                  type="iconbutton"
-                                                  icon={<IoMdEye size={20} />}
-                                                  onClick={() => {
-                                                    setDrawerData({
-                                                      show: true,
-                                                      type: "View Hotspot",
-                                                      data: each,
-                                                    });
-                                                  }}
-                                                />
-                                              </Tooltip>
-                                            </Col>
-                                          </Row>
-                                        </Col>
                                       </Row>
                                     </Col>
                                     <Divider />
                                     <Col xs={24}>
                                       <Descriptions column={1}>
-                                        {getCardDataText(
-                                          "Hotspot Type",
-                                          each?.hotspot_type?.name || "--"
-                                        )}
-                                        {getCardDataText(
-                                          "Contact Name",
-                                          each?.contact_name || "--"
-                                        )}
-                                        {getCardDataText(
-                                          "Contact No.",
-                                          each?.contact_no || "--"
-                                        )}
-                                        {getCardDataText(
-                                          "Entry Cost",
-                                          each?.entry_cost || "0"
-                                        )}
+                                        {/* {getCardDataText(
+                                          "Hotspot",
+                                          each?.hotspot?.name || "--"
+                                        )} */}
                                       </Descriptions>
                                     </Col>
                                   </Row>
@@ -688,16 +562,16 @@ const Hotspot = () => {
         onSubmit={(values) => {
           setDrawerData({ show: false, type: null, data: null });
           setFilterData({ ...filterData, ...values });
-          getHotspotData(1, pageData?.pageSize);
+          getEventData(1, pageData?.pageSize);
         }}
         dropdownData={dropdownData}
         closeDrawer={() => {
           setDrawerData({ show: false, type: null, data: null });
         }}
       />
-      <AddEditHotspot
+      <AssignRoute
         modalData={drawerData}
-        handleAddEditHotspot={() => {}}
+        handleAssignRoute={() => {}}
         closeModal={() => {
           setDrawerData({ show: false, type: null, data: null });
         }}
@@ -707,4 +581,4 @@ const Hotspot = () => {
   );
 };
 
-export default Hotspot;
+export default RouteAssign;

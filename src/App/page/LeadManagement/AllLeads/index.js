@@ -1006,7 +1006,7 @@ const LeadManagement = () => {
                           navigate("/lead-management/bulk-upload-lead");
                         }}
                       >
-                        Bulk Upload Lead
+                        Bulk Upload
                       </Button>
                     </Col>
                     {getRoutePathDetails().add ? (

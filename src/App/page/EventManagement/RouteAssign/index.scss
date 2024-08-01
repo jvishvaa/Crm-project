@@ -1,0 +1,68 @@
+@import "../../../assest/css/mixins.scss";
+
+.lead-button {
+    height: 30px !important;
+    padding: 0px 5px !important;
+}
+
+@media (max-width: 600px) {
+    .lead-button {
+        height: 30px !important;
+        padding: 0px 4px !important;
+    }
+
+    .lead-radio .ant-radio-button-wrapper {
+        padding-inline: 4px !important;
+    }
+}
+
+.lead-filter-drawer .ant-drawer-header {
+    padding: 8px 16px !important;
+}
+
+.lead-filter-drawer .ant-drawer-body {
+    padding: 0px 16px !important;
+}
+
+.update-event-description .ant-descriptions-row>td {
+    padding-bottom: 8px !important;
+}
+
+
+.card-stats-icon-div {
+    padding: 1px 2px;
+    border-radius: 20px;
+}
+
+.event-stats-card {
+    height: 100%;
+    cursor: pointer;
+    background-color: $white-contrast-background;
+}
+
+.event-stats-card:hover {
+    background-color: $primary-ultra-light;
+}
+
+.event-stats-card-selected {
+    background-color: $primary-ultra-light;
+    border: 2px solid $primary !important;
+}
+
+.view-date-wise-button {
+    font-size: 11px !important;
+}
+
+.assign-popover .ant-popover-content .ant-popover-inner {
+    padding: 10px;
+}
+
+.assign-user-list:hover {
+    cursor: pointer;
+    background-color: $white-contrast-background;
+}
+
+.selected-count-assign {
+    color: $primary;
+    font-size: 10px;
+}

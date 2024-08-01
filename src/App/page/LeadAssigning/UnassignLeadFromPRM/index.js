@@ -910,19 +910,17 @@ const UnassignLeadFromPRM = () => {
                 <>
                   <Col xs={24}>
                     <Row className="d-flex flex-row justify-content-between align-items-center">
-                      {width >= 576 ? (
-                        <Col xs={24} sm={8} md={8} lg={14}>
-                          <Row
-                            className="d-flex flex-row align-items-center"
-                            gutter={[8, 8]}
-                          >
-                            <Col xs={24} md={22} lg={12}>
-                              {getSearchInput()}
-                            </Col>
-                          </Row>
-                        </Col>
-                      ) : null}
-                      <Col xs={24} sm={16} md={16} lg={10}>
+                      <Col xs={13} sm={8} md={8} lg={14}>
+                        <Row
+                          className="d-flex flex-row align-items-center"
+                          gutter={[8, 8]}
+                        >
+                          <Col xs={24} md={22} lg={12}>
+                            {getSearchInput()}
+                          </Col>
+                        </Row>
+                      </Col>
+                      <Col xs={11} sm={16} md={16} lg={10}>
                         <Row
                           className="d-flex flex-row justify-content-end align-items-center"
                           gutter={[8, 8]}
@@ -963,29 +961,20 @@ const UnassignLeadFromPRM = () => {
                     </Row>
                   </Col>
                   {width <= 768 ? (
-                    <Col xs={24} className={width < 576 ? "mt-2" : "mt-0"}>
+                    <Col xs={24} className={width < 576 ? "mt-1" : "mt-0"}>
                       <Row
                         className="d-flex flex-row justify-content-end align-items-center"
-                        gutter={[4, 4]}
+                        gutter={[8, 8]}
                       >
-                        {width < 576 ? (
-                          <>
-                            <Col
-                              xs={16}
-                              className="d-flex flex-row justify-content-end"
-                            >
-                              {getSearchInput()}
-                            </Col>
-                          </>
-                        ) : null}
                         {checkFilterDifference() ? (
-                          <Col xs={4} style={{ textAlign: "right" }}>
+                          <Col style={{ textAlign: "right" }}>
                             {getClearFilters()}
                           </Col>
                         ) : null}
-                        <Col xs={4} style={{ textAlign: "right" }}>
+                        <Col style={{ textAlign: "right" }}>
                           <Button
                             type="link"
+                            size="small"
                             onClick={() => {
                               setShowFilterView(!showFilterView);
                             }}

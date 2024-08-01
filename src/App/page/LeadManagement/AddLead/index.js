@@ -238,6 +238,103 @@ const AddLead = () => {
               <Row>
                 <Col xs={24}>
                   <Typography className="add-lead-form-header">
+                    School Details
+                  </Typography>
+                </Col>
+                <Col xs={24}>
+                  <Row gutter={[12, 8]}>
+                    <Col xs={24} sm={12} md={8}>
+                      <Form.Item
+                        name="academic_year"
+                        label="Academic Year"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select Academic Year",
+                          },
+                        ]}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          className="add-lead-select"
+                          showSearch
+                          filterOption={(input, option) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                          }
+                          options={[
+                            { label: "2023-24", value: "2023-24" },
+                            { label: "2024-25", value: "2024-25" },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12} md={8}>
+                      <Form.Item
+                        name="branch"
+                        label="Branch"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select Branch",
+                          },
+                        ]}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          className="add-lead-select"
+                          showSearch
+                          filterOption={(input, option) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                          }
+                          options={[
+                            {
+                              label: "Orchids BTM Layout",
+                              value: "btm-layout",
+                            },
+                            {
+                              label: "Orchids Banerghata",
+                              value: "banerghata",
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12} md={8}>
+                      <Form.Item
+                        name="school_type"
+                        label="School Type"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please Select School Type",
+                          },
+                        ]}
+                      >
+                        <Select
+                          style={{ width: "100%" }}
+                          className="add-lead-select"
+                          showSearch
+                          filterOption={(input, option) =>
+                            option.label
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                          }
+                          options={[
+                            { label: "Day", value: "day" },
+                            { label: "Boarding", value: "boarding" },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Col>
+
+                <Col xs={24} style={{ marginTop: 15 }}>
+                  <Typography className="add-lead-form-header">
                     Lead Details
                   </Typography>
                 </Col>
@@ -405,102 +502,6 @@ const AddLead = () => {
                               label: "Grade 2",
                               value: "grade-2",
                             },
-                          ]}
-                        />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                </Col>
-                <Col xs={24} style={{ marginTop: 15 }}>
-                  <Typography className="add-lead-form-header">
-                    School Details
-                  </Typography>
-                </Col>
-                <Col xs={24}>
-                  <Row gutter={[12, 8]}>
-                    <Col xs={24} sm={12} md={8}>
-                      <Form.Item
-                        name="academic_year"
-                        label="Academic Year"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please Select Academic Year",
-                          },
-                        ]}
-                      >
-                        <Select
-                          style={{ width: "100%" }}
-                          className="add-lead-select"
-                          showSearch
-                          filterOption={(input, option) =>
-                            option.label
-                              .toLowerCase()
-                              .includes(input.toLowerCase())
-                          }
-                          options={[
-                            { label: "2023-24", value: "2023-24" },
-                            { label: "2024-25", value: "2024-25" },
-                          ]}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col xs={24} sm={12} md={8}>
-                      <Form.Item
-                        name="branch"
-                        label="Branch"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please Select Branch",
-                          },
-                        ]}
-                      >
-                        <Select
-                          style={{ width: "100%" }}
-                          className="add-lead-select"
-                          showSearch
-                          filterOption={(input, option) =>
-                            option.label
-                              .toLowerCase()
-                              .includes(input.toLowerCase())
-                          }
-                          options={[
-                            {
-                              label: "Orchids BTM Layout",
-                              value: "btm-layout",
-                            },
-                            {
-                              label: "Orchids Banerghata",
-                              value: "banerghata",
-                            },
-                          ]}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col xs={24} sm={12} md={8}>
-                      <Form.Item
-                        name="school_type"
-                        label="School Type"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please Select School Type",
-                          },
-                        ]}
-                      >
-                        <Select
-                          style={{ width: "100%" }}
-                          className="add-lead-select"
-                          showSearch
-                          filterOption={(input, option) =>
-                            option.label
-                              .toLowerCase()
-                              .includes(input.toLowerCase())
-                          }
-                          options={[
-                            { label: "Day", value: "day" },
-                            { label: "Boarding", value: "boarding" },
                           ]}
                         />
                       </Form.Item>

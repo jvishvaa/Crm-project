@@ -402,7 +402,7 @@ const BulkUploadLead = () => {
                           gutter={[8, 8]}
                           style={{ marginTop: -10 }}
                         >
-                          <Col xs={16} sm={13} md={12} lg={12} xl={10}>
+                          <Col xs={18} sm={13} md={12} lg={12} xl={10}>
                             <Form.Item
                               name="date_range"
                               label={"Date Range"}
@@ -423,7 +423,7 @@ const BulkUploadLead = () => {
                               />
                             </Form.Item>
                           </Col>
-                          <Col xs={4} sm={5} lg={4} xl={3}>
+                          <Col xs={6} sm={5} lg={4} xl={3}>
                             <Form.Item>
                               <Button
                                 type="primary"
@@ -436,7 +436,14 @@ const BulkUploadLead = () => {
                             </Form.Item>
                           </Col>
                           {historyData ? (
-                            <Col xs={4} sm={6} md={7} lg={8} xl={11}>
+                            <Col
+                              xs={24}
+                              sm={6}
+                              md={7}
+                              lg={8}
+                              xl={11}
+                              style={width < 576 ? { marginTop: -30 } : {}}
+                            >
                               <Row className="d-flex justify-content-end">
                                 <Col>
                                   <Radio.Group
