@@ -306,7 +306,7 @@ const UserManagement = () => {
         {checkFilterDifference() ? (
           <Row className="d-flex flex-row align-items-center" gutter={[4, 4]}>
             <Col>
-              <Typography style={{ marginTop: 2 }} className="th-12 th-fw-500">
+              <Typography style={{ marginTop: 4 }} className="th-12 th-fw-500">
                 Filter:
               </Typography>
             </Col>
@@ -350,7 +350,9 @@ const UserManagement = () => {
             ) : null}
 
             {checkFilterDifference() && width > 768 ? (
-              <Col className="pl-2">{getClearFilters()}</Col>
+              <Col className="pl-2" style={{ marginTop: 4 }}>
+                {getClearFilters()}
+              </Col>
             ) : null}
           </Row>
         ) : null}
