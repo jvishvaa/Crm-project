@@ -34,7 +34,7 @@ import CustomFilterText from "../../../component/UtilComponents/CustomFilterText
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
 import SelectAssign from "./selectAssign";
 
-const ReAssignLeadToCounsellor = () => {
+const ReAssignLeadToPRM = () => {
   const [form] = Form.useForm();
   const defaultFilters = {
     academic_year: ["2024-25"],
@@ -47,8 +47,8 @@ const ReAssignLeadToCounsellor = () => {
     lead_category: [0],
     event_name: [0],
     pending_type: 0,
-    counsellor: [0],
-    counsellor_is_active: true,
+    prm: [0],
+    prm_is_active: true,
     date_type: "lead_created_date",
     date_range: [dayjs(), dayjs()],
   };
@@ -131,7 +131,7 @@ const ReAssignLeadToCounsellor = () => {
       { label: "16-30 Days Pending", value: "16_30_days_pending" },
       { label: "30+ Days Pending", value: "30_gt_days_pending" },
     ],
-    counsellorList: [{ label: "All", value: 0 }],
+    prmList: [{ label: "All", value: 0 }],
   };
 
   useEffect(() => {
@@ -169,8 +169,8 @@ const ReAssignLeadToCounsellor = () => {
       date_range: formData?.date_range,
       event_name: formData?.event_name,
       pending_type: formData?.pending_type,
-      counsellor: formData?.counsellor,
-      counsellor_is_active: formData?.counsellor_is_active,
+      prm: formData?.prm,
+      prm_is_active: formData?.prm_is_active,
     });
   };
 
@@ -703,17 +703,13 @@ const ReAssignLeadToCounsellor = () => {
             />
           </Col>
         ) : null}
-        {!filterData?.counsellor?.includes(0) ? (
+        {!filterData?.prm?.includes(0) ? (
           <Col>
             <RenderFilterTag
-              label={
-                filterData?.counsellor_is_active
-                  ? "Active Counsellor"
-                  : "Inactive Counsellor"
-              }
+              label={filterData?.prm_is_active ? "Active PRM" : "Inactive PRM"}
               value={getArrayValues(
-                dropdownData?.counsellorList?.filter((each) =>
-                  filterData?.counsellor?.includes(each?.value)
+                dropdownData?.prmList?.filter((each) =>
+                  filterData?.prm?.includes(each?.value)
                 ),
                 "label"
               )?.join(", ")}
@@ -791,9 +787,9 @@ const ReAssignLeadToCounsellor = () => {
       ),
     },
     {
-      title: "Assigned Counsellor",
-      key: "assign_counsellor",
-      dataIndex: "assign_counsellor",
+      title: "Assigned PRM",
+      key: "assign_prm",
+      dataIndex: "assign_prm",
       render: (text) => (text ? text : "--"),
       align: "center",
     },
@@ -896,7 +892,7 @@ const ReAssignLeadToCounsellor = () => {
             <Col xs={24}>
               <Row className="d-flex flex-row justify-content-between">
                 <Col>
-                  <CustomBreadCrumbs data={["Reassign Leads To Counsellor"]} />
+                  <CustomBreadCrumbs data={["Reassign Leads To PRM"]} />
                 </Col>
                 <Col>
                   <Row className="d-flex flex-row" gutter={[8, 4]}>
@@ -1398,4 +1394,4 @@ const ReAssignLeadToCounsellor = () => {
   );
 };
 
-export default ReAssignLeadToCounsellor;
+export default ReAssignLeadToPRM;

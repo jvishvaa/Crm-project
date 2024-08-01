@@ -187,27 +187,25 @@ const modules = [
       {
         key: "12",
         icon: <AiOutlineUsergroupAdd />,
-        label: "Assign Leads To Counsellor",
-        route: "/lead-assigning/assign-leads-to-counsellor",
+        label: "Assign Leads To PRM",
+        route: "/lead-assigning/assign-leads-to-prm",
         permission: {
           is_view: [1, 2, 3, 4, 5],
         },
-        component: lazy(() =>
-          import("../page/LeadAssigning/AssignLeadToCounsellor")
-        ),
+        component: lazy(() => import("../page/LeadAssigning/AssignLeadToPRM")),
         is_route: true,
         is_sidebar: true,
       },
       {
         key: "13",
         icon: <AiOutlineUserSwitch />,
-        label: "Ressign Leads To Counsellor",
-        route: "/lead-assigning/reassign-leads-to-counsellor",
+        label: "Ressign Leads To PRM",
+        route: "/lead-assigning/reassign-leads-to-prm",
         permission: {
           is_view: [1, 2, 3, 4, 5],
         },
         component: lazy(() =>
-          import("../page/LeadAssigning/ReassignLeadToCounsellor")
+          import("../page/LeadAssigning/ReassignLeadToPRM")
         ),
         is_route: true,
         is_sidebar: true,
@@ -215,13 +213,13 @@ const modules = [
       {
         key: "14",
         icon: <AiOutlineUsergroupDelete />,
-        label: "Unassign Leads From Counsellor",
-        route: "/lead-assigning/unassign-leads-from-counsellor",
+        label: "Unassign Leads From PRM",
+        route: "/lead-assigning/unassign-leads-from-prm",
         permission: {
           is_view: [1, 2, 3, 4, 5],
         },
         component: lazy(() =>
-          import("../page/LeadAssigning/UnassignLeadFromCounsellor")
+          import("../page/LeadAssigning/UnassignLeadFromPRM")
         ),
         is_route: true,
         is_sidebar: true,
@@ -229,13 +227,13 @@ const modules = [
       {
         key: "15",
         icon: <RiUserStarLine />,
-        label: "Regen and Assign Leads To Counsellor",
-        route: "/lead-assigning/regen-and-assign-leads-to-counsellor",
+        label: "Regen and Assign Leads To PRM",
+        route: "/lead-assigning/regen-and-assign-leads-to-prm",
         permission: {
           is_view: [1, 2, 3, 4, 5],
         },
         component: lazy(() =>
-          import("../page/LeadAssigning/RegenAndAssignDormantLeadToCounsellor")
+          import("../page/LeadAssigning/RegenAndAssignDormantLeadToPRM")
         ),
         is_route: true,
         is_sidebar: true,

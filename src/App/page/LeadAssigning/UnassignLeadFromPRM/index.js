@@ -15,6 +15,7 @@ import {
   Empty,
   Form,
   Checkbox,
+  Popconfirm,
   Descriptions,
 } from "antd";
 import "./index.css";
@@ -32,9 +33,8 @@ import getChangedCountValues from "../../../utils/getChangeCountObject";
 import FilterForm from "./filterForm";
 import CustomFilterText from "../../../component/UtilComponents/CustomFilterText";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
-import SelectAssign from "./selectAssign";
 
-const AssignLeadToCounsellor = () => {
+const UnassignLeadFromPRM = () => {
   const [form] = Form.useForm();
   const defaultFilters = {
     academic_year: ["2024-25"],
@@ -46,6 +46,8 @@ const AssignLeadToCounsellor = () => {
     lead_type: [0],
     lead_category: [0],
     event_name: [0],
+    prm: [0],
+    prm_is_active: true,
     date_type: "lead_created_date",
     date_range: [dayjs(), dayjs()],
   };
@@ -55,7 +57,6 @@ const AssignLeadToCounsellor = () => {
   });
   const [searchValue, setSearchValue] = useState("");
   const [drawerData, setDrawerData] = useState({ show: false, data: null });
-  const [modalData, setModalData] = useState({ show: false, data: null });
   const [showFilterView, setShowFilterView] = useState(false);
   const [pageData, setPageData] = useState({
     current: 1,
@@ -118,8 +119,11 @@ const AssignLeadToCounsellor = () => {
     ],
     dateType: [
       { label: "Lead Created Date", value: "lead_created_date" },
+      { label: "Next Follow Up Date", value: "next_follow_up_date" },
       { label: "Regen Date", value: "regen_date" },
     ],
+
+    prmList: [{ label: "All", value: 0 }],
   };
 
   useEffect(() => {
@@ -156,6 +160,8 @@ const AssignLeadToCounsellor = () => {
       date_type: formData?.date_type,
       date_range: formData?.date_range,
       event_name: formData?.event_name,
+      prm: formData?.prm,
+      prm_is_active: formData?.prm_is_active,
     });
   };
 
@@ -675,6 +681,19 @@ const AssignLeadToCounsellor = () => {
             }
           />
         </Col>
+        {!filterData?.prm?.includes(0) ? (
+          <Col>
+            <RenderFilterTag
+              label={filterData?.prm_is_active ? "Active PRM" : "Inactive PRM"}
+              value={getArrayValues(
+                dropdownData?.prmList?.filter((each) =>
+                  filterData?.prm?.includes(each?.value)
+                ),
+                "label"
+              )?.join(", ")}
+            />
+          </Col>
+        ) : null}
         {checkFilterDifference() && width > 768 ? (
           <Col className="pl-2">{getClearFilters()}</Col>
         ) : null}
@@ -686,6 +705,7 @@ const AssignLeadToCounsellor = () => {
     return (
       <>
         {each?.is_regen ? <Tag color="magenta">Regen</Tag> : null}
+        {each?.in_dormant ? <Tag color="gold">Dormant</Tag> : null}
         {!each?.is_dormant && each?.is_enquiry ? (
           <Tag color="green">ReEnquiry (A)</Tag>
         ) : null}
@@ -744,6 +764,13 @@ const AssignLeadToCounsellor = () => {
           </Col>
         </Row>
       ),
+    },
+    {
+      title: "Assigned PRM",
+      key: "assign_prm",
+      dataIndex: "assign_prm",
+      render: (text) => (text ? text : "--"),
+      align: "center",
     },
     {
       title: "Source",
@@ -844,7 +871,7 @@ const AssignLeadToCounsellor = () => {
             <Col xs={24}>
               <Row className="d-flex flex-row justify-content-between">
                 <Col>
-                  <CustomBreadCrumbs data={["Assign Leads To Counsellor"]} />
+                  <CustomBreadCrumbs data={["Unassign Leads From PRM"]} />
                 </Col>
                 <Col>
                   <Row className="d-flex flex-row" gutter={[8, 4]}>
@@ -1082,18 +1109,14 @@ const AssignLeadToCounsellor = () => {
                                     </Typography>
                                   </Col>
                                   <Col>
-                                    <Button
-                                      size="small"
-                                      type="primary"
-                                      onClick={() => {
-                                        setModalData({
-                                          show: true,
-                                          data: null,
-                                        });
-                                      }}
+                                    <Popconfirm
+                                      title="Are you sure to unassign selected lead?"
+                                      onConfirm={() => {}}
                                     >
-                                      Assign
-                                    </Button>
+                                      <Button size="small" type="primary">
+                                        Unassign
+                                      </Button>
+                                    </Popconfirm>
                                   </Col>
                                 </Row>
                               </Col>
@@ -1302,7 +1325,7 @@ const AssignLeadToCounsellor = () => {
                 </>
               ) : (
                 <>
-                  <Col xs={24} style={{ marginTop: -10 }}>
+                  <Col xs={24}>
                     <Row gutter={[8, 8]}>
                       <Col xs={24}>
                         <Form form={form} layout="vertical" onFinish={onFinish}>
@@ -1335,15 +1358,8 @@ const AssignLeadToCounsellor = () => {
           setDrawerData({ show: false, data: null });
         }}
       />
-      <SelectAssign
-        modalData={modalData}
-        handleAssign={() => {}}
-        closeModal={() => {
-          setModalData({ show: false, data: null });
-        }}
-      />
     </CustomCard>
   );
 };
 
-export default AssignLeadToCounsellor;
+export default UnassignLeadFromPRM;

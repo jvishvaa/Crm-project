@@ -7,7 +7,7 @@ const { RangePicker } = DatePicker;
 
 const FilterForm = ({ form, dropdownData, isDrawer }) => {
   const { width } = useWindowDimensions();
-  const isActive = Form.useWatch("counsellor_is_active", form);
+  const isActive = Form.useWatch("prm_is_active", form);
   const renderTagNotAll = (label, value, index, key) => {
     let selectedItems = form.getFieldsValue()?.[key];
     const showCloseIcon = selectedItems?.length > 1;
@@ -94,8 +94,8 @@ const FilterForm = ({ form, dropdownData, isDrawer }) => {
             onChange={() => {
               form.setFieldsValue({
                 branch: null,
-                counsellor: [0],
-                counsellor_is_active: true,
+                prm: [0],
+                prm_is_active: true,
               });
             }}
             showSearch
@@ -116,8 +116,8 @@ const FilterForm = ({ form, dropdownData, isDrawer }) => {
             options={dropdownData?.branch}
             onChange={() => {
               form.setFieldsValue({
-                counsellor: [0],
-                counsellor_is_active: true,
+                prm: [0],
+                prm_is_active: true,
               });
             }}
             showSearch
@@ -266,16 +266,16 @@ const FilterForm = ({ form, dropdownData, isDrawer }) => {
         </Form.Item>
       </Col>
       <Col xs={18} sm={8} md={isDrawer ? 9 : 4} lg={isDrawer ? 9 : 4}>
-        <Form.Item name="counsellor" label="Counsellor">
+        <Form.Item name="prm" label="PRM">
           <Select
             className="w-100"
             mode="multiple"
-            options={dropdownData?.counsellorList}
+            options={dropdownData?.prmList}
             tagRender={(props) =>
-              renderTagAll(props.label, props.value, props.index, "counsellor")
+              renderTagAll(props.label, props.value, props.index, "prm")
             }
             onChange={(value) => {
-              onChangeMultiple(value, "counsellor");
+              onChangeMultiple(value, "prm");
             }}
             showSearch
             allowClear
@@ -287,7 +287,7 @@ const FilterForm = ({ form, dropdownData, isDrawer }) => {
       </Col>
       <Col xs={6} sm={4} md={isDrawer ? 3 : 2} lg={isDrawer ? 3 : 2}>
         <Form.Item
-          name="counsellor_is_active"
+          name="prm_is_active"
           valuePropName="checked"
           initialValue={true}
         >
@@ -306,7 +306,7 @@ const FilterForm = ({ form, dropdownData, isDrawer }) => {
               marginTop: 26,
             }}
             onChange={(value) => {
-              form.setFieldsValue({ counsellor: [0] });
+              form.setFieldsValue({ prm: [0] });
             }}
             checkedChildren="Active"
             unCheckedChildren="Inactive"

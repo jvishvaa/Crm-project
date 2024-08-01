@@ -22,11 +22,11 @@ const AssigningDetailsCard = () => {
                     <Row className="d-flex flex-row justify-content-between align-items-center">
                       <Col>
                         <Typography className="assign-details-card-subheader">
-                          Counsellor
+                          PRM
                         </Typography>
                       </Col>
                       <Col>
-                        <Popconfirm title="Are you sure to remove counsellor?">
+                        <Popconfirm title="Are you sure to remove prm?">
                           <Button
                             type="link"
                             color="primary"

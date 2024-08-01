@@ -826,9 +826,7 @@ const RegenAndAssignDormantLead = () => {
             <Col xs={24}>
               <Row className="d-flex flex-row justify-content-between">
                 <Col>
-                  <CustomBreadCrumbs
-                    data={["Regen and Assign Leads To Counsellor"]}
-                  />
+                  <CustomBreadCrumbs data={["Regen and Assign Leads To PRM"]} />
                 </Col>
                 <Col>
                   <Row className="d-flex flex-row" gutter={[8, 4]}>

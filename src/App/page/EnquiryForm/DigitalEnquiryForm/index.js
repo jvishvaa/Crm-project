@@ -233,10 +233,7 @@ const DigitalEnquiryForm = () => {
                         "Branch",
                         each?.branch?.branch_name || "--"
                       )}
-                      {getCardDataText(
-                        "Counsellor Name",
-                        "Test Counsellor" || ""
-                      )}
+                      {getCardDataText("PRM Name", "Test PRM" || "")}
                     </Descriptions>
                   </Col>
                   <Divider />

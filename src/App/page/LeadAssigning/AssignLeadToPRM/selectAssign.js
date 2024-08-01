@@ -52,7 +52,7 @@ const SelectAssign = ({ modalData, handleAssign, closeModal }) => {
     >
       <Row>
         <Col xs={24}>
-          <Typography className="th-14 th-fw-600">Assign Counsellor</Typography>
+          <Typography className="th-14 th-fw-600">Assign PRM</Typography>
           <Divider />
         </Col>
         <Col xs={24}>
@@ -60,11 +60,9 @@ const SelectAssign = ({ modalData, handleAssign, closeModal }) => {
             <Row>
               <Col xs={24}>
                 <Form.Item
-                  name="counsellor"
-                  label="Counsellor"
-                  rules={[
-                    { required: true, message: "Please Enter Source Name" },
-                  ]}
+                  name="prm"
+                  label="PRM"
+                  rules={[{ required: true, message: "Please Select PRM" }]}
                 >
                   <Select
                     disabled={loading}

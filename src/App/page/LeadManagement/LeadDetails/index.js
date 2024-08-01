@@ -15,7 +15,7 @@ import LeadDetailsCard from "./LeadDetailsCard";
 import AssigningDetailsCard from "./AssigningDetailsCard";
 import ActivityHistory from "./ActivityHistory";
 import ChildDetails from "./ChildDetails";
-import ReassignCounsellor from "./ReassignCounsellor";
+import ReassignPRM from "./ReassignPRM";
 import { MdArrowBack, MdRefresh } from "react-icons/md";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import UpdateLeadDetails from "./UpdateLeadDetails";
@@ -96,16 +96,16 @@ const LeadDetails = () => {
                 <Button
                   size="small"
                   type="primary"
-                  className="lead-details-reassign-counsellor"
+                  className="lead-details-reassign-prm"
                   onClick={() => {
                     setModalData({
                       show: true,
-                      type: "Reassign Counsellor",
+                      type: "Reassign PRM",
                       data: null,
                     });
                   }}
                 >
-                  Reassign Counsellor
+                  Reassign PRM
                 </Button>
               </Col>
               <Col>
@@ -173,9 +173,9 @@ const LeadDetails = () => {
           </Col>
         </Spin>
       </Row>
-      <ReassignCounsellor
+      <ReassignPRM
         modalData={modalData}
-        handleReassignCounsellor={() => {}}
+        handleReassignPRM={() => {}}
         closeModal={() => {
           setModalData({ show: false, type: null, data: null });
         }}
