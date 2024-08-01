@@ -34,6 +34,7 @@ import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
 import getFilterItemFromArray from "../../../utils/getFilterItemFromArray";
 import AssignRoute from "./AssignRoute";
+import ViewRoutes from "./ViewRoutes";
 
 const RouteAssign = () => {
   const defaultFilters = {
@@ -81,6 +82,34 @@ const RouteAssign = () => {
       { label: "Orchids Newtown", value: "newtown" },
     ],
   };
+
+  const eventStatusCountList = [
+    {
+      id: 1,
+      label: "Completed",
+      color: "#4CAF50",
+    },
+    {
+      id: 2,
+      label: "In Progress",
+      color: "#8BC34A",
+    },
+    {
+      id: 3,
+      label: "Yet To Start",
+      color: "#fdb614",
+    },
+    {
+      id: 4,
+      label: "Pending",
+      color: "#FF9800",
+    },
+    {
+      id: 5,
+      label: "Timed Out",
+      color: "#F44336",
+    },
+  ];
 
   useEffect(() => {
     if (width <= 991) {
@@ -361,7 +390,9 @@ const RouteAssign = () => {
             type="link"
             size="small"
             className="view-date-wise-button"
-            onClick={() => {}}
+            onClick={() => {
+              setDrawerData({ show: true, data: record, type: "View Route" });
+            }}
           >
             View Routes
           </Button>
@@ -610,7 +641,13 @@ const RouteAssign = () => {
                                                 type="link"
                                                 size="small"
                                                 className="view-date-wise-button"
-                                                onClick={() => {}}
+                                                onClick={() => {
+                                                  setDrawerData({
+                                                    show: true,
+                                                    data: each,
+                                                    type: "View Route",
+                                                  });
+                                                }}
                                               >
                                                 View Routes
                                               </Button>
@@ -668,6 +705,14 @@ const RouteAssign = () => {
           setDrawerData({ show: false, type: null, data: null });
         }}
         dropdownData={dropdownData}
+      />
+      <ViewRoutes
+        drawerData={drawerData}
+        closeDrawer={() => {
+          setDrawerData({ show: false, type: null, data: null });
+        }}
+        dropdownData={dropdownData}
+        eventStatusCountList={eventStatusCountList}
       />
     </CustomCard>
   );
