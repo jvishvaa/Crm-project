@@ -42,14 +42,14 @@ const DateWiseEvent = ({
         id: 2,
         date: "2024-01-02",
         assigned_user: null,
-        status: "Timed Out",
+        status: "Pending",
         total_lead: 100,
       },
       {
         id: 3,
         date: "2024-01-03",
         assigned_user: null,
-        status: "Timed Out",
+        status: "Completed",
         total_lead: 100,
       },
     ]);

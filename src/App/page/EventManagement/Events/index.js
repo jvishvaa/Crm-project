@@ -115,41 +115,25 @@ const Events = () => {
       id: 1,
       label: "Completed",
       color: "#4CAF50",
-      value: 10,
+      value: 40,
       icon: <FaCheckCircle size={20} style={{ color: "#4CAF50" }} />,
       smallWidth: "33%",
     },
     {
       id: 2,
       label: "In Progress",
-      color: "#8BC34A",
-      value: 20,
-      icon: <FaSpinner size={20} style={{ color: "#8BC34A" }} />,
-      smallWidth: "33%",
-    },
-    {
-      id: 3,
-      label: "Yet To Start",
       color: "#fdb614",
       value: 30,
       icon: <FaHourglassStart size={20} style={{ color: "#fdb614" }} />,
       smallWidth: "33%",
     },
     {
-      id: 4,
-      label: "Pending",
-      color: "#FF9800",
-      value: 15,
-      icon: <FaClock size={20} style={{ color: "#FF9800" }} />,
-      smallWidth: "50%",
-    },
-    {
-      id: 5,
-      label: "Timed Out",
+      id: 3,
+      label: "Yet To Start",
       color: "#F44336",
-      value: 25,
-      icon: <FaStopwatch size={20} style={{ color: "#F44336" }} />,
-      smallWidth: "50%",
+      value: 30,
+      icon: <FaHourglassStart size={20} style={{ color: "#F44336" }} />,
+      smallWidth: "33%",
     },
   ];
 
@@ -320,7 +304,7 @@ const Events = () => {
         end_date: "2024-01-01 12:12",
         event_cost: 100,
         assigned_user: null,
-        status: "Timed Out",
+        status: "Completed",
         total_lead: 100,
         created_by: "Admin",
       },
@@ -888,9 +872,7 @@ const Events = () => {
               <Col xs={24} className={"mt-2"}>
                 <Row gutter={[6, 6]}>
                   {eventStatusCountList?.map((each) => (
-                    <Col
-                      style={{ width: width < 768 ? each?.smallWidth : "20%" }}
-                    >
+                    <Col xs={8}>
                       <CustomCard
                         className={
                           selectedStatus === each?.id
@@ -926,7 +908,11 @@ const Events = () => {
                             </Row>
                           </Col>
                           <Col xs={24}>
-                            <Typography className="card-label-text-followup">
+                            <Typography
+                              className={`${
+                                width < 576 ? "th-13" : "th-14"
+                              } th-fw-400`}
+                            >
                               {each.label}
                             </Typography>
                           </Col>
