@@ -44,7 +44,7 @@ const ViewRoutes = ({
       {
         hotspot_name: "Test Hotspot 3",
         time: "05:00pm - 06:00pm",
-        status: "Pending",
+        status: "Yet To Start",
       },
     ]);
   };
