@@ -16,12 +16,7 @@ import getFilterItemFromArray from "../../../utils/getFilterItemFromArray";
 import { ClockCircleFilled, ClockCircleOutlined } from "@ant-design/icons";
 import AssignRoute from "./AssignRoute";
 
-const ViewRoutes = ({
-  drawerData,
-  closeDrawer,
-  eventStatusCountList,
-  dropdownData,
-}) => {
+const ViewRoutes = ({ drawerData, closeDrawer, dropdownData }) => {
   const [routeData, setRouteData] = useState(null);
   const [modalData, setModalData] = useState({
     show: false,
@@ -56,20 +51,7 @@ const ViewRoutes = ({
           <Descriptions.Item label={"Hotspot"}>
             {each?.hotspot_name}
           </Descriptions.Item>
-          <Descriptions.Item label={"Status"}>
-            <span
-              style={{
-                color: getFilterItemFromArray(
-                  eventStatusCountList,
-                  "label",
-                  each.status
-                )[0].color,
-              }}
-              className="th-fw-600"
-            >
-              {each?.status}
-            </span>
-          </Descriptions.Item>
+
           <Descriptions.Item>
             <Popconfirm title="Are you sure to remove assigned hotspot?">
               <Button
@@ -112,24 +94,7 @@ const ViewRoutes = ({
             </Descriptions.Item>
           </Descriptions>
         </Col>
-        <Col xs={24}>
-          <Descriptions column={2} layout="vertical">
-            <Descriptions.Item label={"Status"}>
-              <span
-                style={{
-                  color: getFilterItemFromArray(
-                    eventStatusCountList,
-                    "label",
-                    "In Progress"
-                  )[0].color,
-                }}
-                className="th-fw-500"
-              >
-                In Progress
-              </span>
-            </Descriptions.Item>
-          </Descriptions>
-        </Col>
+
         <Col xs={24}>
           <Divider />
         </Col>
@@ -147,11 +112,6 @@ const ViewRoutes = ({
                   <ClockCircleFilled
                     style={{
                       fontSize: "16px",
-                      color: getFilterItemFromArray(
-                        eventStatusCountList,
-                        "label",
-                        each.status
-                      )[0].color,
                     }}
                   />
                 ),

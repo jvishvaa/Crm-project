@@ -34,6 +34,7 @@ import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
 import getFilterItemFromArray from "../../../utils/getFilterItemFromArray";
 import AssignRoute from "./AssignRoute";
+import ViewRoutes from "./ViewRoutes";
 
 const RouteAssign = () => {
   const defaultFilters = {
@@ -677,6 +678,13 @@ const RouteAssign = () => {
         modalData={drawerData}
         handleAssignRoute={() => {}}
         closeModal={() => {
+          setDrawerData({ show: false, type: null, data: null });
+        }}
+        dropdownData={dropdownData}
+      />
+      <ViewRoutes
+        drawerData={drawerData}
+        closeDrawer={() => {
           setDrawerData({ show: false, type: null, data: null });
         }}
         dropdownData={dropdownData}
