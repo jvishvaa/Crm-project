@@ -296,7 +296,7 @@ const modules = [
         is_sidebar: true,
       },
       {
-        key: "24",
+        key: "25",
         icon: <TbRouteSquare />,
         label: "Route Assign",
         route: "/event_management/route_assign",
