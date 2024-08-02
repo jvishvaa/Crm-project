@@ -9,7 +9,6 @@ let process = {
     REACT_APP_UI_ENV: "stage",
   },
 };
-
 if (process.env.REACT_APP_UI_ENV === "stage") {
   HOSTERP = window.location.hostname?.replace(".finance", "");
   BASEERP = `${PROTO_HTTPS}://${HOSTERP}/qbox`;

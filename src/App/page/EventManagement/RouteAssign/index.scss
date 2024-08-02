@@ -66,25 +66,3 @@
     color: $primary;
     font-size: 10px;
 }
-
-.route-timeline {
-    font-size: 12px !important;
-    font-family: Poppins !important;
-}
-
-.route-timeline .ant-timeline-item .ant-timeline-item-tail {
-    display: block;
-    height: 100%;
-    top: -25px;
-}
-
-.route-timeline .ant-timeline-item .ant-timeline-item-label {
-    font-size: 12px !important;
-    margin-top: 2px !important;
-}
-
-.remove-assign-hotspot {
-    margin-top: -2px;
-    font-size: 11px !important;
-    height: 22px !important;
-}
