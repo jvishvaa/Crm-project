@@ -50,7 +50,7 @@ const AddEditNewspaperInsert = ({
       form.setFieldsValue({});
     }
     if (!modalData?.data) {
-      form.setFieldValue({ date: dayjs("2022-02-02") });
+      form.setFieldsValue({ date: dayjs("2022-02-02", "YYYY-MM-DD") });
     }
   }, [modalData]);
 
@@ -116,7 +116,7 @@ const AddEditNewspaperInsert = ({
             <Row gutter={[8, 0]}>
               <Col xs={24} md={12}>
                 <Form.Item name="date" label="Date">
-                  <DatePicker className="w-100" />
+                  <DatePicker className="w-100" format={"DD/MM/YYYY"} />
                 </Form.Item>
               </Col>
             </Row>
