@@ -299,7 +299,7 @@ const Events = () => {
         hotspot: { id: 1, name: "Test Hotspot" },
         branch: { id: 1, name: "Branch 1" },
         source: { id: 1, name: "Source 1" },
-        start_date: "2024-01-01 12:12",
+        start_date: "2024-01-01 13:12",
         end_date: "2024-01-03 12:12",
         event_cost: 100,
         assigned_user: [

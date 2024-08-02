@@ -87,6 +87,11 @@ const AddEditEvent = ({
         hotspot_type: modalData?.data?.hotspot_type?.id,
         hotspot: modalData?.data?.hotspot?.id,
         event_cost: modalData?.data?.event_cost,
+        event_start_date: dayjs(
+          modalData?.data?.start_date,
+          "YYYY-MM-DD HH:mm"
+        ),
+        event_end_date: dayjs(modalData?.data?.end_date, "YYYY-MM-DD HH:mm"),
       });
     } else {
       form.setFieldsValue({ event_start_date: null, event_end_date: null });
