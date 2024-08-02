@@ -12,7 +12,7 @@ RUN npm ci  --unsafe-perm
 #RUN npm ci && npm cache clean --force
 COPY . ./
 # EXPOSE 80
-RUN npm run build
+RUN npm run build && ls -l /app/build
 
 # production environment
 FROM nginx:stable-alpine
