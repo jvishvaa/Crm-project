@@ -6,7 +6,7 @@ const PROTO = "http";
 let PORT;
 let process = {
   env: {
-    REACT_APP_UI_ENV: "stage",
+    REACT_APP_UI_ENV: "dev",
   },
 };
 if (process.env.REACT_APP_UI_ENV === "stage") {
