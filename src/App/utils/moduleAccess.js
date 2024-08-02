@@ -7,7 +7,7 @@ import {
   TbUserSquare,
 } from "react-icons/tb";
 import { GrGroup, GrMapLocation, GrStatusPlaceholder } from "react-icons/gr";
-import { LuNewspaper, LuUserPlus } from "react-icons/lu";
+import { LuUserPlus } from "react-icons/lu";
 import { lazy } from "react";
 import { RiOpenSourceLine, RiUserStarLine } from "react-icons/ri";
 import { SiCoinmarketcap } from "react-icons/si";
@@ -20,7 +20,6 @@ import {
   AiOutlineUsergroupDelete,
 } from "react-icons/ai";
 import { MdOutlineEventNote, MdRoute } from "react-icons/md";
-import { CgUserList, CgFileDocument } from "react-icons/cg";
 
 const modules = [
   {
@@ -346,34 +345,6 @@ const modules = [
           import("../page/EnquiryForm/DigitalEnquiryForm/CreateEnquiry")
         ),
         is_route: true,
-      },
-    ],
-  },
-  {
-    key: "26",
-    icon: <CgFileDocument />,
-    label: "Forms",
-    permission: {
-      is_view: [1, 2, 3, 4, 5],
-      is_add: [1, 2, 3, 4, 5],
-      is_modify: [1, 2, 3, 4, 5],
-    },
-    is_route: true,
-    is_sidebar: true,
-    children: [
-      {
-        key: "27",
-        icon: <LuNewspaper />,
-        label: "Newspaper Insert",
-        route: "/forms/newspaper_insert",
-        permission: {
-          is_view: [1, 2, 3, 4, 5],
-          is_add: [1, 2, 3, 4, 5],
-          is_modify: [1, 2, 3, 4, 5],
-        },
-        component: lazy(() => import("../page/Forms/NewspaperInsert")),
-        is_route: true,
-        is_sidebar: true,
       },
     ],
   },
