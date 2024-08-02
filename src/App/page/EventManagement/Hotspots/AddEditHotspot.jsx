@@ -69,7 +69,7 @@ const AddEditHotspot = ({
     google_address: "",
   });
   const { width } = useWindowDimensions();
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
 
   const defaultCenter = {
@@ -119,7 +119,7 @@ const AddEditHotspot = ({
       google_lng: "",
       google_address: "",
     });
-    setSelectedFile(null);
+    setSelectedFile([]);
   };
 
   useEffect(() => {
@@ -164,7 +164,7 @@ const AddEditHotspot = ({
         google_lng: "",
         google_address: "",
       });
-      setSelectedFile(null);
+      setSelectedFile([]);
     }
   }, [isEdit]);
 
@@ -510,7 +510,7 @@ const AddEditHotspot = ({
                                 onConfirm={() => {
                                   let fileList = [...selectedFile];
                                   fileList.splice(index, 1);
-                                  selectedFile(fileList);
+                                  setSelectedFile(fileList);
                                 }}
                               >
                                 <Button
