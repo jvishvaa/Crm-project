@@ -1,4 +1,4 @@
-FROM node:13.12.0-alpine as build
+FROM node:18.17.0-alpine as build
 ARG REACT_APP_UI_ENV=development
 ENV REACT_APP_UI_ENV ${REACT_APP_UI_ENV}
 WORKDIR /app
