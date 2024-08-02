@@ -1,0 +1,25 @@
+build_docker_image_stage_gcp:
+  variables:
+    #GIT_CLONE_PATH: $CI_BUILDS_DIR/docker/$CI_PROJECT_NAME/$CI_COMMIT_BRANCH
+    DOCKER_REGISTRY: asia-south1-docker.pkg.dev/prj-stage-service-k12
+    AWS_DEFAULT_REGION: ap-south1
+    APP_NAME: crm-new
+  before_script:
+    - sudo gcloud auth print-access-token | sudo docker login -u oauth2accesstoken --password-stdin https://asia-south1-docker.pkg.dev
+  stage: deploy
+  script: 
+    - whoami
+    - sudo docker build --build-arg REACT_APP_UI_ENV=stage -t $DOCKER_REGISTRY/$APP_NAME/$APP_NAME:$CI_COMMIT_SHORT_SHA-fe-stage -t $DOCKER_REGISTRY/$APP_NAME/$APP_NAME:latest-fe-stage .
+    - sudo docker push $DOCKER_REGISTRY/$APP_NAME/$APP_NAME:$CI_COMMIT_SHORT_SHA-fe-stage
+    - sudo docker push $DOCKER_REGISTRY/$APP_NAME/$APP_NAME:latest-fe-stage
+    - cd /home/gitlab-runner/deployment-yamls/ && git reset --hard HEAD && git pull && cd marketing/$APP_NAME/frontend/stage && kustomize edit set image $DOCKER_REGISTRY/$APP_NAME/$APP_NAME:$CI_COMMIT_SHORT_SHA-fe-stage && git add . && git commit -m "$APP_NAME:$CI_COMMIT_SHORT_SHA-fe-stage" && git push
+    - sleep 60
+    - sudo argocd login gitops.stage-gke.letseduvate.com --grpc-web --username admin --password NH7xapwKag6lWK4Q
+    - sudo argocd app sync --force $APP_NAME-fe-stage
+    - sudo argocd app wait $APP_NAME-fe-stage
+
+  tags:
+    - docker-build-gcp
+  only:
+    - stage-gcp
+
