@@ -47,7 +47,13 @@ const AddEditNewspaperInsert = ({
 
   useEffect(() => {
     if (modalData?.data) {
-      form.setFieldsValue({});
+      form.setFieldsValue({
+        date: modalData.data?.date,
+        newspaper: getArrayValues(modalData.data?.newspaper, "id"),
+        branch: modalData.data?.branch?.id,
+        target_area: modalData.data?.target_area,
+        amount_paid: modalData.data?.amount_paid,
+      });
     }
     if (!modalData?.data) {
       form.setFieldsValue({ date: dayjs("2022-02-02", "YYYY-MM-DD") });
@@ -116,7 +122,57 @@ const AddEditNewspaperInsert = ({
             <Row gutter={[8, 0]}>
               <Col xs={24} md={12}>
                 <Form.Item name="date" label="Date">
-                  <DatePicker className="w-100" format={"DD/MM/YYYY"} />
+                  <DatePicker
+                    className="w-100"
+                    format={"DD/MM/YYYY"}
+                    disabled
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} md={12}>
+                <Form.Item name="branch" label="Branch">
+                  <Select
+                    className="w-100"
+                    options={dropdownData?.branch?.filter(
+                      (each) => each.value !== 0
+                    )}
+                    allowClear
+                    showSearch
+                    filterOption={(input, option) =>
+                      option.label.toLowerCase().includes(input.toLowerCase())
+                    }
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} md={12}>
+                <Form.Item name="newspaper" label="Newspaper">
+                  <Select
+                    className="w-100"
+                    options={dropdownData?.newspaper?.filter(
+                      (each) => each.value !== 0
+                    )}
+                    allowClear
+                    showSearch
+                    filterOption={(input, option) =>
+                      option.label.toLowerCase().includes(input.toLowerCase())
+                    }
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} md={12}>
+                <Form.Item name="target_area" label="Target Area">
+                  <Input maxLength={64} autoComplete="off" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} md={12}>
+                <Form.Item name="amount_paid" label="Amount Paid(Rs.)">
+                  <Input
+                    type="number"
+                    onKeyDown={(e) => {
+                      ["e", "E", "+", "-", "."].includes(e.key) &&
+                        e.preventDefault();
+                    }}
+                  />
                 </Form.Item>
               </Col>
             </Row>

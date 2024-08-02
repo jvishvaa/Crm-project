@@ -23,7 +23,7 @@ const AddEditSourceType = ({ modalData, onSubmit, closeModal }) => {
     setLoading(true);
     if (modalData?.data) {
       axios
-        .post(`${urls.masterData.sourceType}${modalData.data?.id}`, payload)
+        .put(`${urls.masterData.sourceType}${modalData.data?.id}`, payload)
         .then((res) => {
           let response = res.data;
           if ([200, 201].includes(response?.status_code)) {
@@ -34,6 +34,7 @@ const AddEditSourceType = ({ modalData, onSubmit, closeModal }) => {
             message.error(response?.message);
           }
         })
+        .catch(() => {})
         .finally(() => {
           setLoading(false);
         });
@@ -50,6 +51,7 @@ const AddEditSourceType = ({ modalData, onSubmit, closeModal }) => {
             message.error(response?.message);
           }
         })
+        .catch(() => {})
         .finally(() => {
           setLoading(false);
         });

@@ -361,7 +361,13 @@ const RouteAssign = () => {
             type="link"
             size="small"
             className="view-date-wise-button"
-            onClick={() => {}}
+            onClick={() => {
+              setDrawerData({
+                show: true,
+                type: "View Route",
+                data: record,
+              });
+            }}
           >
             View Routes
           </Button>
@@ -610,7 +616,13 @@ const RouteAssign = () => {
                                                 type="link"
                                                 size="small"
                                                 className="view-date-wise-button"
-                                                onClick={() => {}}
+                                                onClick={() => {
+                                                  setDrawerData({
+                                                    show: true,
+                                                    type: "View Route",
+                                                    data: each,
+                                                  });
+                                                }}
                                               >
                                                 View Routes
                                               </Button>

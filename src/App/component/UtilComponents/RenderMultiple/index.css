@@ -5,4 +5,6 @@
 .render-tag-not-all-single {
     background-color: transparent;
     border: none;
+    font-size: 12px !important;
+    font-weight: normal !important;
 }
