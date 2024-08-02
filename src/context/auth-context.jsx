@@ -50,38 +50,6 @@ const AuthProvider = ({ children }) => {
     setLoginDetails("");
   };
 
-  const generateAccessToken = (refreshToken) => {
-    axios
-      .post(
-        urls?.login?.accessTokenApi,
-        {
-          refresh: refreshToken,
-        },
-        {
-          headers: {
-            Authorization: null,
-          },
-        }
-      )
-      .then((response) => {
-        if (response.status == 200) {
-          let ud = {
-            ...loginDetails,
-            token: response?.data?.data,
-            force_update: response?.data?.force_update,
-          };
-          setLoginDetails(ud);
-          localStorage.setItem("loginDetails", JSON.stringify(ud));
-        } else {
-          localStorage.clear();
-          logoutHandler();
-        }
-      })
-      .catch((error) => {
-        console.log("Error fetching config data:", error);
-      });
-  };
-
   return (
     <AuthContext.Provider
       value={{

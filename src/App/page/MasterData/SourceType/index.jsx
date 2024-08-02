@@ -258,7 +258,7 @@ const SourceType = () => {
       </Row>
       <AddEditSourceType
         modalData={modalData}
-        handleAddEditSourceType={() => {}}
+        onSubmit={() => {}}
         closeModal={() => {
           setModalData({ show: false, data: null });
         }}
