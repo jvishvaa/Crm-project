@@ -34,15 +34,6 @@ const AssignRoute = ({
   dropdownData,
 }) => {
   const [form] = Form.useForm();
-  const [hotspots, setHotspots] = useState([{ id: 0 }]);
-
-  const addHotspot = () => {
-    setHotspots([...hotspots, { id: hotspots.length }]);
-  };
-
-  const removeHotspot = (id) => {
-    setHotspots(hotspots.filter((hotspot) => hotspot.id !== id));
-  };
 
   const onFinish = (values) => {
     handleAssignRoute(values);
@@ -152,110 +143,122 @@ const AssignRoute = ({
               </Col>
               <Col xs={24}>
                 <Row gutter={[4, 4]}>
-                  {hotspots.map((hotspot, index) => (
-                    <Col xs={24} key={hotspot.id}>
-                      <Row gutter={[8, 0]}>
-                        <Col xs={1} className="d-flex flex-row align-items-end">
-                          <Typography className="th-12 mb-2">
-                            {index + 1}
-                          </Typography>
-                        </Col>
-                        <Col xs={11} sm={7}>
-                          <Form.Item
-                            name={["hotspots", index, "name"]}
-                            label={`Hotspot Name ${index + 1}`}
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please Select Hotspot",
-                              },
-                            ]}
-                          >
-                            <Select
-                              className="w-100"
-                              options={[]}
-                              allowClear
-                              showSearch
-                              filterOption={(input, option) =>
-                                option.label
-                                  .toLowerCase()
-                                  .includes(input.toLowerCase())
-                              }
-                            />
-                          </Form.Item>
-                        </Col>
-                        <Col xs={12} sm={6}>
-                          <Form.Item
-                            name={["hotspots", index, "startTime"]}
-                            label="Start Time"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please Select Start Time",
-                              },
-                            ]}
-                          >
-                            <TimePicker
-                              format="HH:mm"
-                              style={{ width: "100%" }}
-                            />
-                          </Form.Item>
-                        </Col>
-                        <Col xs={12} sm={6}>
-                          <Form.Item
-                            name={["hotspots", index, "endTime"]}
-                            label="End Time"
-                            rules={[
-                              {
-                                required: true,
-                                message: "Please Select End Time",
-                              },
-                            ]}
-                          >
-                            <TimePicker
-                              format="HH:mm"
-                              style={{ width: "100%" }}
-                            />
-                          </Form.Item>
-                        </Col>
-                        <Col xs={12} sm={4}>
-                          <Row
-                            className="d-flex flex-row align-items-end h-100"
-                            gutter={[8, 8]}
-                          >
-                            {index === hotspots.length - 1 ? (
-                              <Col>
-                                <Tooltip title="Add Hotspot">
-                                  <Button
-                                    type="outlined"
-                                    onClick={addHotspot}
-                                    icon={<PlusOutlined />}
+                  <Form.List name="hotspots" initialValue={[{}]}>
+                    {(fields, { add, remove }) => (
+                      <>
+                        {fields.map((field, index) => (
+                          <Col xs={24} key={field.key}>
+                            <Row gutter={[8, 0]}>
+                              <Col
+                                xs={1}
+                                className="d-flex flex-row align-items-end"
+                              >
+                                <Typography className="th-12 mb-2">
+                                  {index + 1}
+                                </Typography>
+                              </Col>
+                              <Col xs={11} sm={7}>
+                                <Form.Item
+                                  {...field}
+                                  name={[field.name, "hotspotName"]}
+                                  label="Hotspot Name"
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: "Hotspot name is required",
+                                    },
+                                  ]}
+                                >
+                                  <Select
+                                    className="w-100"
+                                    options={[]}
+                                    allowClear
+                                    showSearch
+                                    filterOption={(input, option) =>
+                                      option.label
+                                        .toLowerCase()
+                                        .includes(input.toLowerCase())
+                                    }
                                   />
-                                </Tooltip>
+                                </Form.Item>
                               </Col>
-                            ) : null}
-                            {hotspots?.length > 1 ? (
-                              <Col>
-                                <Tooltip title="Delete Hotspot">
-                                  <Popconfirm
-                                    title="Are You Sure to remove hotspot? "
-                                    onConfirm={() => {
-                                      removeHotspot(hotspot.id);
-                                    }}
-                                  >
-                                    <Button
-                                      type="outlined"
-                                      icon={<DeleteOutlined />}
-                                    />
-                                  </Popconfirm>
-                                </Tooltip>
+                              <Col xs={12} sm={6}>
+                                <Form.Item
+                                  {...field}
+                                  name={[field.name, "startTime"]}
+                                  label="Start Time"
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: "Please Select Start Time",
+                                    },
+                                  ]}
+                                >
+                                  <TimePicker
+                                    format="HH:mm"
+                                    style={{ width: "100%" }}
+                                  />
+                                </Form.Item>
                               </Col>
-                            ) : null}
-                          </Row>
-                        </Col>
-                      </Row>
-                    </Col>
-                  ))}
+                              <Col xs={12} sm={6}>
+                                <Form.Item
+                                  {...field}
+                                  label="End Time"
+                                  name={[field.name, "endTime"]}
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: "Please Select End Time",
+                                    },
+                                  ]}
+                                >
+                                  <TimePicker
+                                    format="HH:mm"
+                                    style={{ width: "100%" }}
+                                  />
+                                </Form.Item>
+                              </Col>
+                              <Col xs={12} sm={4}>
+                                <Row
+                                  className="d-flex flex-row align-items-end h-100"
+                                  gutter={[8, 8]}
+                                >
+                                  {index === fields.length - 1 ? (
+                                    <Col>
+                                      <Tooltip title="Add Hotspot">
+                                        <Button
+                                          type="outlined"
+                                          onClick={() => add()}
+                                          icon={<PlusOutlined />}
+                                        />
+                                      </Tooltip>
+                                    </Col>
+                                  ) : null}
+                                  {fields?.length > 1 ? (
+                                    <Col>
+                                      <Tooltip title="Delete Hotspot">
+                                        <Popconfirm
+                                          title="Are You Sure to remove hotspot? "
+                                          onConfirm={() => {
+                                            remove(field.name);
+                                          }}
+                                        >
+                                          <Button
+                                            type="outlined"
+                                            icon={<DeleteOutlined />}
+                                          />
+                                        </Popconfirm>
+                                      </Tooltip>
+                                    </Col>
+                                  ) : null}
+                                </Row>
+                              </Col>
+                            </Row>
+                          </Col>
+                        ))}
+                      </>
+                    )}
+                  </Form.List>
                 </Row>
               </Col>
             </Row>
