@@ -92,21 +92,11 @@ const RouteAssign = () => {
     {
       id: 2,
       label: "In Progress",
-      color: "#8BC34A",
+      color: "#fdb614",
     },
     {
       id: 3,
       label: "Yet To Start",
-      color: "#fdb614",
-    },
-    {
-      id: 4,
-      label: "Pending",
-      color: "#FF9800",
-    },
-    {
-      id: 5,
-      label: "Timed Out",
       color: "#F44336",
     },
   ];

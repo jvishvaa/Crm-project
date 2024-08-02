@@ -120,12 +120,12 @@ const ViewRoutes = ({
                   color: getFilterItemFromArray(
                     eventStatusCountList,
                     "label",
-                    "Timed Out"
+                    "In Progress"
                   )[0].color,
                 }}
                 className="th-fw-500"
               >
-                Timed Out
+                In Progress
               </span>
             </Descriptions.Item>
           </Descriptions>
