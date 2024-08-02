@@ -12,11 +12,11 @@ RUN npm ci  --unsafe-perm
 #RUN npm ci && npm cache clean --force
 COPY . ./
 # EXPOSE 80
-RUN npm run build && ls -l /app/build
+RUN npm run build && ls -l /app/dist
 
 # production environment
 FROM nginx:stable-alpine
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
