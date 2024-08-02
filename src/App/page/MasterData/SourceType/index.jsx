@@ -21,6 +21,8 @@ import useWindowDimensions from "../../../component/UtilComponents/useWindowDime
 import AddEditSourceType from "./addEditSourceType";
 import CustomFilterText from "../../../component/UtilComponents/CustomFilterText";
 import getColour from "../../../utils/getColour";
+import axios from "axios";
+import urls from "../../../utils/urls";
 
 const SourceType = () => {
   const [form] = Form.useForm();
@@ -31,11 +33,12 @@ const SourceType = () => {
 
   useEffect(() => {
     form.setFieldsValue({ is_active: true });
+    getSourceTypeData({ is_active: true });
   }, []);
 
   const { width } = useWindowDimensions();
 
-  const getSourceTypeData = () => {
+  const getSourceTypeData = (values) => {
     // setLoading(true);
     setSourceTypeData([
       { id: 1, source_type: "Digital Marketing", is_active: true },
@@ -50,13 +53,45 @@ const SourceType = () => {
         is_active: false,
       },
     ]);
+    let params = {
+      ...(values.is_active !== 0 ? { is_active: values.is_active } : {}),
+    };
+    setLoading(true);
+    axios
+      .get(`${urls.masterData.sourceType}`, {
+        params: params,
+      })
+      .then((res) => {
+        let response = res.data;
+        if ([200, 201].includes(response?.status_code)) {
+          setSourceTypeData(response?.result);
+        } else {
+          message.error(response?.message);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
-  useEffect(() => {
-    getSourceTypeData();
-  }, []);
-
-  const handleStatusChange = (data) => {};
+  const handleStatusChange = (data, value) => {
+    setLoading(true);
+    axios
+      .put(`${urls.masterData.sourceType}${data?.id}`, { is_active: value })
+      .then((res) => {
+        let response = res.data;
+        if ([200, 201].includes(response?.status_code)) {
+          getSourceTypeData(form.getFieldsValue());
+        } else {
+          message.error(response?.message);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const handleHover = (record) => {
     if (getRoutePathDetails().modify) {
@@ -125,7 +160,7 @@ const SourceType = () => {
               title={`Are you sure to update "${record?.source_type}" as ${
                 record?.is_active ? "inactive" : "active"
               }?`}
-              onConfirm={() => handleStatusChange(record)}
+              onConfirm={() => handleStatusChange(record, !record?.is_active)}
               okText="Yes"
               cancelText="No"
             >
@@ -195,8 +230,8 @@ const SourceType = () => {
                 <Form
                   form={form}
                   layout="vertical"
-                  onFinish={() => {
-                    getSourceTypeData();
+                  onFinish={(values) => {
+                    getSourceTypeData(values);
                   }}
                 >
                   <Row gutter={[8, 8]}>
@@ -258,7 +293,9 @@ const SourceType = () => {
       </Row>
       <AddEditSourceType
         modalData={modalData}
-        handleAddEditSourceType={() => {}}
+        onSubmit={() => {
+          getSourceTypeData(form.getFieldsValue());
+        }}
         closeModal={() => {
           setModalData({ show: false, data: null });
         }}

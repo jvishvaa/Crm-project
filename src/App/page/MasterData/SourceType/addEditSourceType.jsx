@@ -9,24 +9,58 @@ import {
   Typography,
 } from "antd";
 import React, { useEffect, useState } from "react";
+import urls from "../../../utils/urls";
+import axios from "axios";
 
-const AddEditSourceType = ({
-  modalData,
-  handleAddEditSourceType,
-  closeModal,
-}) => {
+const AddEditSourceType = ({ modalData, onSubmit, closeModal }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
   const onFinish = (values) => {
-    console.log("Received values:", values);
-    handleAddEditSourceType(values);
-    form.resetFields();
+    let payload = {
+      source_name: values.source_type,
+    };
+    setLoading(true);
+    if (modalData?.data) {
+      axios
+        .put(`${urls.masterData.sourceType}${modalData.data?.id}`, payload)
+        .then((res) => {
+          let response = res.data;
+          if ([200, 201].includes(response?.status_code)) {
+            form.resetFields();
+            onSubmit();
+            closeModal();
+          } else {
+            message.error(response?.message);
+          }
+        })
+        .catch(() => {})
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      axios
+        .post(urls.masterData.sourceType, payload)
+        .then((res) => {
+          let response = res.data;
+          if ([200, 201].includes(response?.status_code)) {
+            form.resetFields();
+            onSubmit();
+            closeModal();
+          } else {
+            message.error(response?.message);
+          }
+        })
+        .catch(() => {})
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
 
   useEffect(() => {
     if (modalData?.data) {
-      form.setFieldsValue({ academic_year: modalData?.data?.academic_year });
+      form.setFieldsValue({ source_type: modalData?.data?.source_name });
     }
   }, [modalData]);
 
@@ -38,6 +72,7 @@ const AddEditSourceType = ({
         closeModal();
         form.resetFields();
       }}
+      maskClosable={false}
       footer={[
         <Button
           key="back"

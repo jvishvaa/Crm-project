@@ -32,12 +32,37 @@ import ResetPassword from "./page/LoginPage/ResetPassword";
 import PublicRoutes from "./utils/PublicRoutes";
 import PrivateRoutes from "./utils/PrivateRoutes";
 
+function getHostname(url) {
+  try {
+    const parsedUrl = new URL(url);
+    return parsedUrl.hostname;
+  } catch (e) {
+    console.error("Invalid URL", e);
+    return null;
+  }
+}
+
+axios.interceptors.request.use(
+  (config) => {
+    // Check if the URL contains a specific string
+    if (getHostname(config.url) === urls.HOSTCRM) {
+      // Add additional headers
+      config.headers["X-DTS-SCHEMA"] = urls.XDTSHOST;
+    }
+
+    return config;
+  },
+  (error) => {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
+
 axios.interceptors.response.use(
   async (response) => {
     return response;
   },
   (error) => {
-    console.log("execute");
     if (error.code === "ECONNABORTED") {
       message.error("Connection Timed Out");
     } else {
