@@ -74,7 +74,7 @@ const UpdateEnrollment = ({
       ]}
     >
       <Row>
-        <Col xs={24}>
+        <Col xs={24} className="mt-1">
           <Typography className="th-14 th-fw-600">{modalData?.type}</Typography>
           <Divider />
         </Col>

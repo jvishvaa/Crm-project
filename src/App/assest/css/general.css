@@ -1,23 +1,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
 
 :root {
-  --secondary-color: linear-gradient(
-    to right,
-    rgba(8, 155, 171, 1) 1%,
-    rgba(13, 181, 200, 1) 5%
-  );
+  --secondary-color: linear-gradient(to right,
+      rgba(8, 155, 171, 1) 1%,
+      rgba(13, 181, 200, 1) 5%);
 
   --color-primary: #293648;
 }
 
 body {
   overflow-x: hidden !important;
-  -ms-overflow-style: none !important; /* IE and Edge */
-  scrollbar-width: none !important; /* Firefox */
-  font-family: "Poppins", sans-serif;
+  -ms-overflow-style: none !important;
+  /* IE and Edge */
+  scrollbar-width: none !important;
+  /* Firefox */
+  font-family: Poppins, sans-serif;
   color: #000000;
   background-color: #f2f4f8;
 }
+
 @media only screen and (min-width: 768px) {
   ::-webkit-scrollbar {
     width: 6px;
@@ -39,26 +40,38 @@ body {
     background: #555;
   }
 }
+
 @media screen and (max-width: 767px) {
   body {
-    user-select: none; /* supported by Chrome and Opera */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+    /* supported by Chrome and Opera */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
   }
+
   body::-webkit-scrollbar {
     display: none !important;
   }
 }
+
 .expanding-div {
   background-color: #f0f0f0;
   padding: 20px;
   border-radius: 10px;
-  transition: height 0.3s ease; /* Add a smooth transition effect for the height change */
-  overflow: hidden; /* Prevent content from overflowing when the div expands */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add some shadow for a visual effect */
-  margin: 20px auto; /* Adjust the positioning as needed */
+  transition: height 0.3s ease;
+  /* Add a smooth transition effect for the height change */
+  overflow: hidden;
+  /* Prevent content from overflowing when the div expands */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Add some shadow for a visual effect */
+  margin: 20px auto;
+  /* Adjust the positioning as needed */
 }
 
 .expanding-div.fixed {
@@ -68,7 +81,8 @@ body {
   right: 0;
   z-index: 100;
   border-radius: 0px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Adjust the shadow for the fixed state */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  /* Adjust the shadow for the fixed state */
 }
 
 .th-flex-center {
@@ -86,6 +100,7 @@ body {
   0% {
     transform: translateX(100%);
   }
+
   100% {
     transform: translateX(0);
   }
@@ -111,6 +126,7 @@ body {
   height: 600px !important;
   width: 100%;
 }
+
 .overlayy {
   position: absolute;
   top: 0;
@@ -146,9 +162,11 @@ a:hover {
   text-decoration: none;
   color: inherit;
 }
+
 button:focus {
   outline: none;
 }
+
 .th-roboto {
   font-family: "Roboto", sans-serif;
 }
@@ -178,15 +196,19 @@ button:focus {
 .th-yellow {
   color: #ffb500;
 }
+
 .th-blue {
   color: #3f4d90;
 }
+
 .th-clinic {
   color: #547af5;
 }
+
 .th-text-hint {
   color: #747b8d;
 }
+
 .th-text-hint-1 {
   color: #5d5d5d;
 }
@@ -258,6 +280,7 @@ button:focus {
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
+
 .th-btn-black {
   background-color: #000000;
   color: #ffffff;
@@ -265,6 +288,7 @@ button:focus {
   border-radius: 4px;
   border: none;
 }
+
 .th-btn-white:focus,
 .th-btn-primary:focus,
 .th-btn-black:focus {
@@ -275,30 +299,39 @@ button:focus {
 .th-bg-white {
   background: #ffffff;
 }
+
 .th-bg-primary {
   background: #2d7966;
 }
+
 .th-bg-color-1 {
   background: #d9dded;
 }
+
 .th-bg-main {
   background: #efefef;
 }
+
 .th-bg-grey-1 {
   background: #f4f4f4;
 }
+
 .th-bg-yellow {
   background: #ffc81a;
 }
+
 .th-bg-clinic {
   background: #004cff;
 }
+
 .th-bg-appointment {
   background: #059086;
 }
+
 .th-bg-blue {
   background: #52509d;
 }
+
 /* Input */
 .th-input :focus {
   box-shadow: none !important;
@@ -310,10 +343,12 @@ button:focus {
   background: linear-gradient(145.22deg, #ffc033 62.28%, #609a33 100%);
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 }
+
 .th-blue-gradient {
   background: linear-gradient(145.22deg, #49549a 62.28%, #191f44 100%);
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 }
+
 .th-search-input:focus {
   outline: none;
 }
@@ -335,6 +370,7 @@ button:focus {
     display: none !important;
   }
 }
+
 @media screen and (min-width: 991px) {
   .th-hidden-lg {
     display: none !important;
@@ -348,8 +384,10 @@ button:focus {
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .th-no-scroll {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 label {
@@ -359,11 +397,13 @@ label {
 .th-contact-margin {
   margin-top: -180px;
 }
+
 @media screen and (min-width: 768px) {
   .th-contact-margin {
     margin-top: -210px;
   }
 }
+
 .th-pb-0 {
   padding-bottom: 0px !important;
 }
@@ -445,15 +485,19 @@ label {
 .th-border-patch-blue {
   border-left: 8px solid #3f4d90;
 }
+
 .th-border-patch-yellow {
   border-left: 8px solid #ffc81a;
 }
+
 .th-border-patch-clinic {
   border-left: 8px solid #004cff;
 }
+
 .th-border-patch-orange {
   border-left: 8px solid #609a33;
 }
+
 .th-side-drawer.open {
   transform: translateX(0%);
 }
@@ -466,6 +510,7 @@ label {
   border-radius: 25px;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
 }
+
 .slick-prev:before {
   content: "\2039" !important;
   color: #000 !important;
@@ -474,6 +519,7 @@ label {
   border-radius: 25px;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
 }
+
 .th-school-bg-color {
   background-color: #ffffff;
 }
@@ -481,10 +527,12 @@ label {
 .checkout-main-box {
   width: 60%;
 }
+
 @media screen and (max-width: 768px) {
   .th-school-bg-color {
     background-color: #f3f3f3;
   }
+
   .checkout-main-box {
     width: 90%;
   }
@@ -514,6 +562,7 @@ label {
   margin-right: auto;
   margin-left: auto;
 }
+
 @media only screen and (min-width: 1400px) {
   .th-container {
     padding-left: 8%;
@@ -572,8 +621,7 @@ label {
   /* padding: 1.5rem; */
 }
 
-.th-modal-content {
-}
+.th-modal-content {}
 
 .th-vt-hr {
   border-left: 1px solid rgb(0 0 0 / 8%);
@@ -696,9 +744,11 @@ button[disabled] {
   .th-doc-details-desktop {
     display: none !important;
   }
+
   .th-doc-profile {
     justify-content: center;
   }
+
   .th-doc-img {
     height: 150px;
     width: 150px;
@@ -746,6 +796,7 @@ button[disabled] {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0px);
@@ -757,6 +808,7 @@ button[disabled] {
     opacity: 1;
     transform: translateY(0px);
   }
+
   to {
     transform: translateY(-20px);
     opacity: 0;

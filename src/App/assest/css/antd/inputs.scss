@@ -5,7 +5,7 @@
   border-radius: 6px;
   background-color: $white-contrast-background;
   /* Light grey background */
-  font-family: "Poppins";
+  font-family: Poppins;
   font-size: 13px !important;
 
   &:hover,
@@ -20,7 +20,7 @@
 .ant-input-affix-wrapper {
   border-radius: 6px;
   background-color: $white-contrast-background;
-  font-family: "Poppins";
+  font-family: Poppins;
 
   &:hover,
   &:focus,
@@ -32,7 +32,7 @@
 }
 
 .ant-picker {
-  background-color: $white-contrast-background;
+  background-color: $white-contrast-background !important;
 }
 
 .ant-picker>div>input {

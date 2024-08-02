@@ -20,7 +20,13 @@
 }
 
 .ant-checkbox-indeterminate .ant-checkbox-inner {
-  background-color: #66788A !important
+  background-color: #66788A !important;
+  border-color: #66788A !important;
+}
+
+.ant-checkbox-indeterminate .ant-checkbox-inner:hover {
+  background-color: #66788A !important;
+  border-color: #66788A !important;
 }
 
 .ant-checkbox-indeterminate .ant-checkbox-inner::after {
@@ -36,6 +42,11 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.ant-checkbox-inner {
+  background-color: #EFEFEF !important;
+  border-color: #EFEFEF !important;
 }
 
 .ant-checkbox-checked .ant-checkbox-inner {

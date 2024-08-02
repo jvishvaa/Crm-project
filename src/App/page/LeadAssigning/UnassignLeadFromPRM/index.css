@@ -22,9 +22,3 @@
 .lead-filter-drawer .ant-drawer-body {
     padding: 0px 16px !important;
 }
-
-
-.assign-card-checkbox .ant-checkbox-inner {
-    background-color: #EFEFEF;
-    border-color: #EFEFEF;
-}

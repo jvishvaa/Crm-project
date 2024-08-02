@@ -2,6 +2,7 @@ import {
   Button,
   Checkbox,
   Col,
+  DatePicker,
   Descriptions,
   Divider,
   Drawer,
@@ -22,6 +23,7 @@ import { MdClose, MdDelete, MdEdit, MdLink } from "react-icons/md";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import CustomDrawerHeader from "../../../component/UtilComponents/CustomDrawerHeader";
+import dayjs from "dayjs";
 
 const { TextArea } = Input;
 
@@ -46,6 +48,9 @@ const AddEditNewspaperInsert = ({
   useEffect(() => {
     if (modalData?.data) {
       form.setFieldsValue({});
+    }
+    if (!modalData?.data) {
+      form.setFieldValue({ date: dayjs("2022-02-02") });
     }
   }, [modalData]);
 
@@ -110,14 +115,8 @@ const AddEditNewspaperInsert = ({
           <Form form={form} layout="vertical" onFinish={onFinish}>
             <Row gutter={[8, 0]}>
               <Col xs={24} md={12}>
-                <Form.Item
-                  name="hotspot_name"
-                  label="Hotspot Name"
-                  rules={[
-                    { required: true, message: "Please Enter Hotspot Name" },
-                  ]}
-                >
-                  <Input maxLength={48} autoComplete="off" />
+                <Form.Item name="date" label="Date">
+                  <DatePicker className="w-100" />
                 </Form.Item>
               </Col>
             </Row>

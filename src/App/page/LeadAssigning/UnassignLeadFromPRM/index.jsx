@@ -1026,7 +1026,7 @@ const UnassignLeadFromPRM = () => {
                                       leadData?.length !==
                                         selectedRowKeys?.length
                                     }
-                                    className="pl-3 assign-card-checkbox"
+                                    className="pl-3"
                                     onChange={onChangeSelectAll}
                                   >
                                     <Typography
@@ -1221,7 +1221,6 @@ const UnassignLeadFromPRM = () => {
                                               <Col xs={4}>
                                                 <Row className="d-flex  flex-row justify-content-end">
                                                   <Checkbox
-                                                    className="assign-card-checkbox"
                                                     checked={
                                                       isSelectAllPages ||
                                                       selectedRowKeys.includes(

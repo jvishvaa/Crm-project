@@ -5,7 +5,7 @@
 .ant-select .ant-select-selector {
     background-color: #f0f0f0 !important;
     /* Light grey background */
-    font-family: "Poppins" !important;
+    font-family: Poppins !important;
 }
 
 .ant-select .ant-select-selector .ant-select-selection-item {
@@ -16,5 +16,5 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white;
+    background-color: white !important;
 }
