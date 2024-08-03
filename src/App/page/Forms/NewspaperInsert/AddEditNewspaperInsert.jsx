@@ -7,9 +7,11 @@ import {
   Divider,
   Drawer,
   Form,
+  Image,
   Input,
   Modal,
   Popconfirm,
+  Progress,
   Radio,
   Row,
   Select,
@@ -24,6 +26,9 @@ import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import CustomDrawerHeader from "../../../component/UtilComponents/CustomDrawerHeader";
 import dayjs from "dayjs";
+import UploadFile from "../../../component/UtilComponents/UploadFile";
+import getExtensions from "../../../utils/getExtensions";
+import VideoPreview from "../../../assest/images/video-thumbnail.png";
 
 const { TextArea } = Input;
 
@@ -34,7 +39,9 @@ const AddEditNewspaperInsert = ({
   dropdownData,
 }) => {
   const [form] = Form.useForm();
-
+  const [selectedFile, setSelectedFile] = useState([]);
+  const fileUploadLimit = 25;
+  const [fileSize, setFileSize] = useState([]);
   const { width } = useWindowDimensions();
 
   const onFinish = (values) => {
@@ -59,6 +66,39 @@ const AddEditNewspaperInsert = ({
       form.setFieldsValue({ date: dayjs("2022-02-02", "YYYY-MM-DD") });
     }
   }, [modalData]);
+
+  const fileUploadChangeHandler = (e) => {
+    if (
+      fileSize.reduce((acc, curr) => acc + curr, 0) +
+        [...Array.from(e.target.files).map((files) => files.size)].reduce(
+          (acc, curr) => acc + curr,
+          0
+        ) >
+      fileUploadLimit * 1024 * 1024
+    ) {
+      message.error("File Size Limit Exceeded");
+      return;
+    }
+    let isValidFileExtension = true;
+    for (let i = 0; i < e.target.files.length; i++) {
+      if (
+        ![...getExtensions("image"), ...getExtensions("video")].includes(
+          `.${e.target.files[i]?.name?.split(".")?.pop()}`
+        )
+      ) {
+        isValidFileExtension = false;
+      }
+    }
+    if (!isValidFileExtension) {
+      message.error("Invalid File Extension");
+      return;
+    }
+    setSelectedFile([...selectedFile, ...Array.from(e.target.files)]);
+    setFileSize([
+      ...fileSize,
+      ...getArrayValues(Array.from(e.target.files), "size"),
+    ]);
+  };
 
   return (
     <Drawer
@@ -148,6 +188,7 @@ const AddEditNewspaperInsert = ({
                 <Form.Item name="newspaper" label="Newspaper">
                   <Select
                     className="w-100"
+                    mode="multiple"
                     options={dropdownData?.newspaper?.filter(
                       (each) => each.value !== 0
                     )}
@@ -174,6 +215,124 @@ const AddEditNewspaperInsert = ({
                     }}
                   />
                 </Form.Item>
+              </Col>
+              <Col xs={24} className="mt-3">
+                <Row className="d-flex flex-column flex-nowrap">
+                  <Col>
+                    <Typography className="th-11 th-fw-400">
+                      Upload File(only image and video total size limit of{" "}
+                      {fileUploadLimit}MB)
+                    </Typography>
+                  </Col>
+                  <Col xs={24} sm={18}>
+                    <Row
+                      className="d-flex flex-row align-items-center"
+                      gutter={[8, 8]}
+                    >
+                      <Col xs={16}>
+                        <Progress
+                          percent={
+                            (fileSize.reduce((acc, curr) => acc + curr, 0) /
+                              (fileUploadLimit * 1024 * 1024)) *
+                            100
+                          }
+                          showInfo={false}
+                        />
+                      </Col>
+                      <Col xs={8}>
+                        <Typography
+                          className="th-10 th-fw-400"
+                          style={{ marginTop: 2 }}
+                        >
+                          {(
+                            (fileSize.reduce((acc, curr) => acc + curr, 0) ||
+                              0) /
+                            (1024 * 1024)
+                          ).toFixed(2)}{" "}
+                          MB / {fileUploadLimit} MB
+                        </Typography>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col xs={24} sm={12}>
+                    <UploadFile
+                      selectedFile={selectedFile}
+                      fileUploadChangeHandler={fileUploadChangeHandler}
+                      accept="image/*, video/*"
+                      type={"multiple"}
+                    />
+                  </Col>
+                  <Col xs={24} className="mt-3">
+                    <Row className="d-flex flex-row" gutter={[16, 8]}>
+                      {selectedFile?.map((each, index) => (
+                        <Col style={{ position: "relative" }}>
+                          <Image
+                            width={75}
+                            height={75}
+                            style={{ objectFit: "contain" }}
+                            preview={{
+                              ...(getExtensions("video").includes(
+                                typeof each === "string"
+                                  ? `.${each?.split(".")?.pop()}`
+                                  : `.${each?.name?.split(".")?.pop()}`
+                              )
+                                ? {
+                                    imageRender: () => (
+                                      <video
+                                        width="90%"
+                                        height="90%"
+                                        controls
+                                        autoPlay
+                                        src={URL.createObjectURL(each)}
+                                      />
+                                    ),
+                                  }
+                                : {}),
+                              toolbarRender: () => null,
+                            }}
+                            src={
+                              typeof each === "string"
+                                ? getExtensions("video").includes(
+                                    `.${each?.split(".")?.pop()}`
+                                  )
+                                  ? VideoPreview
+                                  : each
+                                : getExtensions("video").includes(
+                                    `.${each?.name?.split(".")?.pop()}`
+                                  )
+                                ? VideoPreview
+                                : URL.createObjectURL(each)
+                            }
+                          />
+                          <Popconfirm
+                            title="Are you sure to remove selected file?"
+                            onConfirm={() => {
+                              let mySelectedFile = selectedFile?.filter(
+                                (eachItem, eachIndex) => eachIndex !== index
+                              );
+                              let myFileSize = fileSize?.filter(
+                                (eachItem, eachIndex) => eachIndex !== index
+                              );
+                              setSelectedFile(mySelectedFile);
+                              setFileSize(myFileSize);
+                            }}
+                          >
+                            <Button
+                              type="text"
+                              size="small"
+                              style={{
+                                position: "absolute",
+                                top: -12,
+                                right: -2,
+                              }}
+                              icon={<MdClose size={20} />}
+                            />
+                          </Popconfirm>
+                        </Col>
+                      ))}
+                    </Row>
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </Form>

@@ -353,7 +353,9 @@ const BulkUploadLead = () => {
                         fileUploadChangeHandler={fileUploadChangeHandler}
                         accept={".xlsx"}
                         type={"single"}
+                        required={true}
                         disabled={submitLoading}
+                        inputClassName={"mt-3"}
                       />
                       <div className="helpertext-div">
                         <span className="upload-xlsx-text">

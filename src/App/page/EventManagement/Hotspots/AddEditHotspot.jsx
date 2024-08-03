@@ -23,6 +23,7 @@ import UploadFile from "../../../component/UtilComponents/UploadFile";
 import { MdClose, MdDelete, MdEdit, MdLink } from "react-icons/md";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
+import getExtensions from "../../../utils/getExtensions";
 
 const { TextArea } = Input;
 
@@ -169,6 +170,14 @@ const AddEditHotspot = ({
   }, [isEdit]);
 
   const fileUploadChangeHandler = (e) => {
+    if (
+      ![...getExtensions("image")].includes(
+        `.${e.target.files[i]?.name?.split(".")?.pop()}`
+      )
+    ) {
+      message.error("Invalid File Extension");
+      return;
+    }
     setSelectedFile(Array.from(e.target.files));
   };
 
@@ -476,6 +485,7 @@ const AddEditHotspot = ({
                     accept="video/*,image/*"
                     type="multiple"
                     label="Upload File"
+                    labelClassName={"mt-3"}
                     // disabled={submitLoading}
                   />
 
