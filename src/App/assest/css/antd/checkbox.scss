@@ -34,24 +34,15 @@
   border-color: $primary !important;
 }
 
-.ant-checkbox-indeterminate .ant-checkbox-inner {
-  background: #66788A !important;
-  border-color: #66788A !important;
-}
-
-.ant-checkbox-indeterminate .ant-checkbox-input {
-  display: none;
-}
-
 
 .ant-checkbox-indeterminate .ant-checkbox-inner::after {
   content: '';
   display: block;
-  width: 8px;
+  width: 10px;
   /* Adjust width as needed */
-  height: 2px;
+  height: 3px;
   /* Adjust height as needed */
-  background-color: white;
+  background-color: #66788A;
   /* Color for the minus icon */
   position: absolute;
   top: 50%;
