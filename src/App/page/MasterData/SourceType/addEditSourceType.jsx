@@ -7,6 +7,7 @@ import {
   Modal,
   Row,
   Typography,
+  message,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import urls from "../../../utils/urls";
@@ -18,7 +19,7 @@ const AddEditSourceType = ({ modalData, onSubmit, closeModal }) => {
 
   const onFinish = (values) => {
     let payload = {
-      source_name: values.source_type,
+      source_name: values.source_type?.trim(),
     };
     setLoading(true);
     if (modalData?.data) {
@@ -30,6 +31,7 @@ const AddEditSourceType = ({ modalData, onSubmit, closeModal }) => {
             form.resetFields();
             onSubmit();
             closeModal();
+            message.success(response.message);
           } else {
             message.error(response?.message);
           }
@@ -47,6 +49,7 @@ const AddEditSourceType = ({ modalData, onSubmit, closeModal }) => {
             form.resetFields();
             onSubmit();
             closeModal();
+            message.success(response?.message);
           } else {
             message.error(response?.message);
           }
@@ -107,9 +110,23 @@ const AddEditSourceType = ({ modalData, onSubmit, closeModal }) => {
             <Form.Item
               name="source_type"
               label="Source Type"
-              rules={[{ required: true, message: "Please Enter Source Type" }]}
+              rules={[
+                {
+                  required: true,
+                  message: "Please Input Source Type",
+                },
+              ]}
             >
-              <Input maxLength={48} autoComplete="off" disabled={loading} />
+              <Input
+                maxLength={48}
+                autoComplete="off"
+                disabled={loading}
+                onChange={(e) => {
+                  form.setFieldsValue({
+                    source_type: e.target.value?.trimStart(),
+                  });
+                }}
+              />
             </Form.Item>
           </Form>
         </Col>
