@@ -202,7 +202,17 @@ const AddEditNewspaperInsert = ({
               </Col>
               <Col xs={24} md={12}>
                 <Form.Item name="target_area" label="Target Area">
-                  <Input maxLength={64} autoComplete="off" />
+                  <Input
+                    maxLength={64}
+                    autoComplete="off"
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        target_area: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
+                    }}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} md={12}>

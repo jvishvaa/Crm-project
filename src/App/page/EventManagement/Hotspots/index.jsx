@@ -174,7 +174,7 @@ const Hotspot = () => {
         }}
         value={searchInput}
         onChange={(e) => {
-          setSearchInput(e.target.value);
+          setSearchInput(e.target.value?.trimStart()?.replace("  ", " "));
           setSearchFetched(false);
         }}
         onPressEnter={() => {

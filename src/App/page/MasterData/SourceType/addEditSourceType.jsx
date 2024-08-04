@@ -123,7 +123,9 @@ const AddEditSourceType = ({ modalData, onSubmit, closeModal }) => {
                 disabled={loading}
                 onChange={(e) => {
                   form.setFieldsValue({
-                    source_type: e.target.value?.trimStart(),
+                    source_type: e.target.value
+                      ?.trimStart()
+                      ?.replace("  ", " "),
                   });
                 }}
               />

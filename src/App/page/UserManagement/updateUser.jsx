@@ -148,7 +148,14 @@ const UpdateUser = ({
                     { type: "email", message: "Please enter a valid email!" },
                   ]}
                 >
-                  <Input type="email" />
+                  <Input
+                    type="email"
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        email: e.target.value?.trimStart()?.replace("  ", " "),
+                      });
+                    }}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} md={12}>

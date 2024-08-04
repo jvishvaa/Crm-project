@@ -171,7 +171,7 @@ const NewspaperInsert = () => {
         }}
         value={searchInput}
         onChange={(e) => {
-          setSearchInput(e.target.value);
+          setSearchInput(e.target.value?.trimStart()?.replace("  ", " "));
           setSearchFetched(false);
         }}
         onPressEnter={() => {
@@ -409,7 +409,7 @@ const NewspaperInsert = () => {
                             });
                           }}
                         >
-                          + Add Newspaper Insert
+                          + Newspaper Insert
                         </Button>
                       </Col>
                     ) : null}

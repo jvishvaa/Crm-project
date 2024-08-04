@@ -69,7 +69,9 @@ const PreviousSchoolDetails = ({ enquiryFormData, setEnquiryFormData }) => {
                     value={each?.child_previous_school}
                     onChange={(e) => {
                       let myChildData = [...enquiryFormData?.child_data];
-                      myChildData[index].child_previous_school = e.target.value;
+                      myChildData[index].child_previous_school = e.target.value
+                        ?.trimStart()
+                        ?.replace("  ", " ");
                       setEnquiryFormData({
                         ...enquiryFormData,
                         child_data: myChildData,
@@ -88,7 +90,7 @@ const PreviousSchoolDetails = ({ enquiryFormData, setEnquiryFormData }) => {
                     onChange={(e) => {
                       let myChildData = [...enquiryFormData?.child_data];
                       myChildData[index].reason_for_leave_school =
-                        e.target.value;
+                        e.target.value?.trimStart()?.replace("  ", " ");
                       setEnquiryFormData({
                         ...enquiryFormData,
                         child_data: myChildData,
@@ -132,7 +134,9 @@ const PreviousSchoolDetails = ({ enquiryFormData, setEnquiryFormData }) => {
                     value={each?.previous_board}
                     onChange={(e) => {
                       let myChildData = [...enquiryFormData?.child_data];
-                      myChildData[index].previous_board = e.target.value;
+                      myChildData[index].previous_board = e.target.value
+                        ?.trimStart()
+                        ?.replace("  ", " ");
                       setEnquiryFormData({
                         ...enquiryFormData,
                         child_data: myChildData,

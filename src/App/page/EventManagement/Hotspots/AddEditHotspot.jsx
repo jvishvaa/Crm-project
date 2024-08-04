@@ -274,7 +274,17 @@ const AddEditHotspot = ({
                       { required: true, message: "Please Enter Hotspot Name" },
                     ]}
                   >
-                    <Input maxLength={48} autoComplete="off" />
+                    <Input
+                      maxLength={48}
+                      autoComplete="off"
+                      onChange={(e) => {
+                        form.setFieldsValue({
+                          hotspot_name: e.target.value
+                            ?.trimStart()
+                            ?.replace("  ", " "),
+                        });
+                      }}
+                    />
                   </Form.Item>
                 </Col>
                 <Col xs={24} md={12}>
@@ -348,7 +358,17 @@ const AddEditHotspot = ({
                 </Col>
                 <Col xs={24} md={12}>
                   <Form.Item name="contact_name" label="Contact Name">
-                    <Input maxLength={48} autoComplete="off" />
+                    <Input
+                      maxLength={48}
+                      autoComplete="off"
+                      onChange={(e) => {
+                        form.setFieldsValue({
+                          contact_name: e.target.value
+                            ?.trimStart()
+                            ?.replace("  ", " "),
+                        });
+                      }}
+                    />
                   </Form.Item>
                 </Col>
                 <Col xs={24} md={12}>
@@ -386,7 +406,18 @@ const AddEditHotspot = ({
                       },
                     ]}
                   >
-                    <Input type="email" maxLength={48} autoComplete="off" />
+                    <Input
+                      type="email"
+                      maxLength={48}
+                      autoComplete="off"
+                      onChange={(e) => {
+                        form.setFieldsValue({
+                          contact_email: e.target.value
+                            ?.trimStart()
+                            ?.replace("  ", " "),
+                        });
+                      }}
+                    />
                   </Form.Item>
                 </Col>
                 <Col xs={24} className="mt-2">
@@ -413,7 +444,17 @@ const AddEditHotspot = ({
                     </Col>
                     <Col xs={12} md={8}>
                       <Form.Item label="Flat Series " name="flat_series">
-                        <Input maxLength={48} autoComplete="off" />
+                        <Input
+                          maxLength={48}
+                          autoComplete="off"
+                          onChange={(e) => {
+                            form.setFieldsValue({
+                              flat_series: e.target.value
+                                ?.trimStart()
+                                ?.replace("  ", " "),
+                            });
+                          }}
+                        />
                       </Form.Item>
                     </Col>
                     <Col xs={12} md={8}>
@@ -430,7 +471,17 @@ const AddEditHotspot = ({
                     </Col>
                     <Col xs={12} md={8}>
                       <Form.Item label="Block Series" name="block_series">
-                        <Input maxLength={48} autoComplete="off" />
+                        <Input
+                          maxLength={48}
+                          autoComplete="off"
+                          onChange={(e) => {
+                            form.setFieldsValue({
+                              block_series: e.target.value
+                                ?.trimStart()
+                                ?.replace("  ", " "),
+                            });
+                          }}
+                        />
                       </Form.Item>
                     </Col>
                     <Col xs={12} md={8}>

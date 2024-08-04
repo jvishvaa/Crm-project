@@ -417,7 +417,9 @@ const Source = () => {
                           }}
                           value={search}
                           onChange={(e) => {
-                            setSearch(e.target.value);
+                            setSearch(
+                              e.target.value?.trimStart()?.replace("  ", " ")
+                            );
                             setSearchFetched(false);
                           }}
                           onPressEnter={() => {

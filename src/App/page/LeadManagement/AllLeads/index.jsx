@@ -615,7 +615,7 @@ const LeadManagement = () => {
         }}
         value={searchInput}
         onChange={(e) => {
-          setSearchInput(e.target.value);
+          setSearchInput(e.target.value?.trimStart()?.replace("  ", " "));
           setSearchFetched(false);
         }}
         onPressEnter={() => {
@@ -998,7 +998,10 @@ const LeadManagement = () => {
                   <CustomBreadCrumbs data={["All Leads"]} />
                 </Col>
                 <Col>
-                  <Row className="d-flex flex-row" gutter={[8, 4]}>
+                  <Row
+                    className="d-flex flex-row align-items-center"
+                    gutter={[8, 4]}
+                  >
                     <Col>
                       <Button
                         size="small"

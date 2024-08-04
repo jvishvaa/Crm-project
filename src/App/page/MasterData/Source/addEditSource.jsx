@@ -135,7 +135,9 @@ const AddEditSource = ({ modalData, onSubmit, closeModal, dropdownData }) => {
                     disabled={loading}
                     onChange={(e) => {
                       form.setFieldsValue({
-                        source_name: e.target.value?.trimStart(),
+                        source_name: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
                       });
                     }}
                   />
@@ -164,7 +166,7 @@ const AddEditSource = ({ modalData, onSubmit, closeModal, dropdownData }) => {
                     disabled={loading}
                     onChange={(e) => {
                       form.setFieldsValue({
-                        utm_source: e.target.value?.trimStart(),
+                        utm_source: e.target.value?.trim(),
                       });
                       if (!e.target.value?.trim()) {
                         form.setFieldsValue({ utm_medium: null });
@@ -182,7 +184,7 @@ const AddEditSource = ({ modalData, onSubmit, closeModal, dropdownData }) => {
                       disabled={loading}
                       onChange={(e) => {
                         form.setFieldsValue({
-                          utm_medium: e.target.value?.trimStart(),
+                          utm_medium: e.target.value?.trim(),
                         });
                       }}
                     />

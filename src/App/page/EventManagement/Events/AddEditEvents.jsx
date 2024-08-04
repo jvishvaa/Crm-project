@@ -198,7 +198,17 @@ const AddEditEvent = ({
                     { required: true, message: "Please Enter Event Name" },
                   ]}
                 >
-                  <Input maxLength={48} autoComplete="off" />
+                  <Input
+                    maxLength={48}
+                    autoComplete="off"
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        event_name: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
+                    }}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} md={12}>

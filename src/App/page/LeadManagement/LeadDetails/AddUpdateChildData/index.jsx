@@ -83,7 +83,18 @@ const AddUpdateChild = ({ modalData, handleAddUpdateChild, closeModal }) => {
                     { required: true, message: "Please Enter Child Name" },
                   ]}
                 >
-                  <Input maxLength={48} autoComplete="off" disabled={loading} />
+                  <Input
+                    maxLength={48}
+                    autoComplete="off"
+                    disabled={loading}
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        child_name: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
+                    }}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24}>

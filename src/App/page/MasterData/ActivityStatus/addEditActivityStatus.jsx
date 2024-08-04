@@ -92,7 +92,17 @@ const AddEditActivityStatus = ({
                     { required: true, message: "Please Enter Status Name" },
                   ]}
                 >
-                  <Input maxLength={48} autoComplete="off" />
+                  <Input
+                    maxLength={48}
+                    autoComplete="off"
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        status_name: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
+                    }}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24}>
