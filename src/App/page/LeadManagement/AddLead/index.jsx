@@ -102,7 +102,6 @@ const AddLead = () => {
   };
 
   const handleAddLead = (values) => {
-    console.log(values, "valllll");
     let data = {
       name: values?.lead_name,
       contact_no: filterForm?.getFieldValue("contact_no"),
@@ -126,10 +125,12 @@ const AddLead = () => {
       .then((res) => {
         let response = res.data;
         // Handle the response as needed
+        message.success(response.message);
       })
       .catch((error) => {
         // Handle any errors
         console.error("Error adding lead:", error);
+        message.error(error.message ?? "Failed to add lead");
       })
       .finally(() => {
         form.resetFields();
@@ -478,10 +479,10 @@ const AddLead = () => {
                               .includes(input.toLowerCase())
                           }
                           options={[
-                            { label: "DM-Direct", value: "dm-direct" },
+                            { label: "DM-Direct", value: 1 },
                             {
                               label: "PRO Data - Field Data",
-                              value: "pro data -field data",
+                              value: 2,
                             },
                           ]}
                         />
