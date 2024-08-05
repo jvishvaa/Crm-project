@@ -52,6 +52,7 @@ const urls = {
     gradeList: `${BASEERP}/erp_user/grademapping/`,
     userDataList: `${BASEERP}/communication/v1/view-users/`,
     userLevelList: `${BASEMARKETING}/central-admin/user_level_list/`,
+    bulkUpload: `${BASECRM}/lead_mgmt/lead_bulk_upload/`,
   },
 };
 
