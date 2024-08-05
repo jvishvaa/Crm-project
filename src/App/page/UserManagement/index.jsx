@@ -35,6 +35,8 @@ import getRoutePathDetails from "../../utils/getRoutePathDetails";
 import getCardDataText from "../../component/UtilComponents/CardDataText";
 import UpdateUser from "./updateUser";
 import getColour from "../../utils/getColour";
+import urls from "../../utils/urls";
+import axios from "axios";
 
 const UserManagement = () => {
   const defaultFilters = {
@@ -66,7 +68,7 @@ const UserManagement = () => {
   const searchIconRef = useRef(null);
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
-  const dropdownData = {
+  const [dropdownData, setDropdownData] = useState({
     userLevel: [
       { label: "All", value: 0 },
       { label: "Admin", value: "Admin" },
@@ -87,7 +89,7 @@ const UserManagement = () => {
       { label: "Active", value: true },
       { label: "Inactive", value: false },
     ],
-  };
+  });
 
   const userCountData = [
     {
@@ -135,7 +137,10 @@ const UserManagement = () => {
       setSearchInput(location?.state?.data?.searchInput);
     }
   }, [location]);
-
+  useEffect(() => {
+    getZoneList();
+    getBranchList();
+  }, []);
   const checkFilterDifference = () => {
     return getChangedCountValues(
       {
@@ -218,7 +223,41 @@ const UserManagement = () => {
     window.scrollTo(0, 0);
     getUserData(pagination?.current, pagination?.pageSize);
   };
-
+  const getZoneList = (values) => {
+    axios
+      .get(`${urls.masterData.zoneList}`)
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setDropdownData((p) => {
+          return {
+            ...p,
+            zone: [{ label: "All", value: 0 }, ...response?.result],
+          };
+        });
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
+  const getBranchList = (values) => {
+    let params = { zone_id: 2, city_id: 1 };
+    axios
+      .get(`${urls.masterData.branchList}`, {
+        params: params,
+      })
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setDropdownData((p) => {
+          return {
+            ...p,
+            branch: [{ label: "All", value: 0 }, ...response?.result],
+          };
+        });
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
   const handleCardChange = (page) => {
     window.scrollTo(0, 0);
     getUserData(page, pageData?.pageSize);

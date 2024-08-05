@@ -24,6 +24,8 @@ import dayjs from "dayjs";
 import { MdSearch } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
+import axios from "axios";
+import urls from "../../../utils/urls";
 
 const AddLead = () => {
   const [form] = Form.useForm();
@@ -69,9 +71,53 @@ const AddLead = () => {
     // ]);
   };
 
+  const handleAddLead = (values) => {
+    console.log(values, "valllll");
+    let params = {
+      name: values?.lead_name,
+      contact_no: filterForm?.getFieldValue("contact_no"),
+      alternate_no: values?.alternate_contact_no,
+      email: values?.lead_email,
+      // relation: "Friend",
+      // address: "123 Main St, Anytown, USA",
+      // remarks: "Interested in the program",
+      school_type: values?.school_type,
+      source_id: values?.source,
+      // sub_source_id: 3,
+      // type: 3,
+      // status: 5,
+      // tag: 6,
+      // pro_status: 3,
+      academic_year: values?.academic_year,
+      // city_id: 8,
+      // zone_id: 9,
+      branch_id: values?.branch,
+      // next_followup_at: "2024-08-01T12:00:00Z",
+      // dormented_date: "2024-07-01",
+      // regenerated_date: "2024-07-15",
+      // re_enquiry_date: "2024-07-20",
+      // event_id: 12,
+    };
+    console.log(params, "valllll");
+    return;
+    setSubmitLoading(true);
+    axios
+      .get(`${urls.masterData.addLead}`, {
+        params: params,
+      })
+      .then((res) => {
+        let response = res.data;
+      })
+      .catch(() => {})
+      .finally(() => {
+        form.resetFields();
+        setLeadData(null);
+        setSubmitLoading(false);
+      });
+  };
+
   const onFinish = (values) => {
-    form.resetFields();
-    setLeadData(null);
+    handleAddLead(values);
   };
 
   const handleCountryCodeChange = (value) => {

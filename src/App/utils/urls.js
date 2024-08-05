@@ -39,6 +39,10 @@ const urls = {
   masterData: {
     sourceType: `${BASECRM}/user_management/source_types/`,
     source: `${BASECRM}/user_management/source/`,
+    addLead: `${BASECRM}/lead_mgmt/lead_info/`,
+    cityList: `${BASEERP}/erp_user/city-list/`,
+    zoneList: `${BASEERP}/erp_user/zone-list/`,
+    branchList: `${BASEERP}/erp_user/branch-view/`,
   },
 };
 
