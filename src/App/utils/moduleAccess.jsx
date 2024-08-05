@@ -105,8 +105,8 @@ const modules = [
     label: "User Management",
     route: "/user-management",
     permission: {
-      is_view: [1, 2, 3, 4, 5],
-      is_modify: [1, 2, 3, 4, 5],
+      is_view: [1, 2, 3, 4, 5, 8, 9],
+      is_modify: [1, 2, 3, 4, 5, 8, 9],
     },
     component: lazy(() => import("../page/UserManagement")),
     is_route: true,
@@ -117,9 +117,9 @@ const modules = [
     icon: <TbUserSquare />,
     label: "Lead Management",
     permission: {
-      is_view: [1, 2, 3, 4, 5],
-      is_add: [1, 2, 3, 4, 5],
-      is_modify: [1, 2, 3, 4, 5],
+      is_view: [1, 2, 3, 4, 5, 8, 9],
+      is_add: [1, 2, 3, 4, 5, 8, 9],
+      is_modify: [1, 2, 3, 4, 5, 8, 9],
     },
     is_route: true,
     is_sidebar: true,
@@ -130,7 +130,7 @@ const modules = [
         label: "Add Lead",
         route: "/lead-management/add-lead",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8],
         },
         component: lazy(() => import("../page/LeadManagement/AddLead")),
         is_route: true,
@@ -142,7 +142,7 @@ const modules = [
         label: "Bulk Upload Lead",
         route: "/lead-management/bulk-upload-lead",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8],
         },
         component: lazy(() => import("../page/LeadManagement/BulkUploadLead")),
         is_route: true,
@@ -152,7 +152,7 @@ const modules = [
         key: "10",
         route: "/lead-management/lead-details/:id",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8],
         },
         component: lazy(() => import("../page/LeadManagement/LeadDetails")),
         is_route: true,
@@ -164,9 +164,9 @@ const modules = [
         label: "All Leads",
         route: "/lead-management/all-leads",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
-          is_add: [1, 2, 3, 4, 5],
-          is_modify: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8],
+          is_add: [1, 2, 3, 4, 5, 8],
+          is_modify: [1, 2, 3, 4, 5, 8],
         },
         component: lazy(() => import("../page/LeadManagement/AllLeads")),
         is_route: true,

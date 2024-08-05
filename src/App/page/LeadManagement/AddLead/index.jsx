@@ -24,6 +24,8 @@ import dayjs from "dayjs";
 import { MdSearch } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
+import axios from "axios";
+import urls from "../../../utils/urls";
 
 const AddLead = () => {
   const [form] = Form.useForm();
@@ -31,12 +33,42 @@ const AddLead = () => {
   const [loading, setLoading] = useState(false);
   const [leadData, setLeadData] = useState(null);
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [branchList, setBranchList] = useState([]);
+  const [gradeList, setGradeList] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     filterForm.setFieldsValue({ country_code: "+91" });
   }, []);
 
+  const getBranchList = () => {
+    let params = { session_year: 4 };
+    axios
+      .get(`${urls.masterData.branchList}`, {
+        params: params,
+      })
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setBranchList(response?.result);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
+  const getGradeList = (branchId) => {
+    let params = { session_year: 4, branch_id: branchId };
+    axios
+      .get(`${urls.masterData.gradeList}`, {
+        params: params,
+      })
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setGradeList(response?.data);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
   const getLeadData = () => {
     setLeadData([]);
     // setLeadData([
@@ -69,9 +101,45 @@ const AddLead = () => {
     // ]);
   };
 
+  const handleAddLead = (values) => {
+    console.log(values, "valllll");
+    let data = {
+      name: values?.lead_name,
+      contact_no: filterForm?.getFieldValue("contact_no"),
+      alternate_no: values?.alternate_contact_no,
+      email: values?.lead_email,
+      lead_childs: [
+        {
+          name: values?.child_name,
+          grade: values?.child_grade,
+        },
+      ],
+      school_type: values?.school_type,
+      source_id: values?.source,
+      academic_year: values?.academic_year,
+      branch_id: values?.branch,
+    };
+
+    setSubmitLoading(true);
+    axios
+      .post(`${urls.masterData.addLead}`, data)
+      .then((res) => {
+        let response = res.data;
+        // Handle the response as needed
+      })
+      .catch((error) => {
+        // Handle any errors
+        console.error("Error adding lead:", error);
+      })
+      .finally(() => {
+        form.resetFields();
+        setLeadData(null);
+        setSubmitLoading(false);
+      });
+  };
+
   const onFinish = (values) => {
-    form.resetFields();
-    setLeadData(null);
+    handleAddLead(values);
   };
 
   const handleCountryCodeChange = (value) => {
@@ -263,6 +331,9 @@ const AddLead = () => {
                               .toLowerCase()
                               .includes(input.toLowerCase())
                           }
+                          onChange={() => {
+                            getBranchList();
+                          }}
                           options={[
                             { label: "2023-24", value: "2023-24" },
                             { label: "2024-25", value: "2024-25" },
@@ -290,16 +361,15 @@ const AddLead = () => {
                               .toLowerCase()
                               .includes(input.toLowerCase())
                           }
-                          options={[
-                            {
-                              label: "Orchids BTM Layout",
-                              value: "btm-layout",
-                            },
-                            {
-                              label: "Orchids Banerghata",
-                              value: "banerghata",
-                            },
-                          ]}
+                          options={branchList?.map((item, ind) => {
+                            return {
+                              label: item?.branch_name,
+                              value: item?.id,
+                            };
+                          })}
+                          onChange={(value) => {
+                            getGradeList(value);
+                          }}
                         />
                       </Form.Item>
                     </Col>
@@ -324,8 +394,8 @@ const AddLead = () => {
                               .includes(input.toLowerCase())
                           }
                           options={[
-                            { label: "Day", value: "day" },
-                            { label: "Boarding", value: "boarding" },
+                            { label: "Day", value: 1 },
+                            { label: "Boarding", value: 2 },
                           ]}
                         />
                       </Form.Item>
@@ -525,13 +595,12 @@ const AddLead = () => {
                               .toLowerCase()
                               .includes(input.toLowerCase())
                           }
-                          options={[
-                            { label: "Grade 1", value: "grade-1" },
-                            {
-                              label: "Grade 2",
-                              value: "grade-2",
-                            },
-                          ]}
+                          options={gradeList?.map((item, ind) => {
+                            return {
+                              value: item?.id,
+                              label: item?.grade_name,
+                            };
+                          })}
                         />
                       </Form.Item>
                     </Col>

@@ -109,7 +109,12 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 <Select
                   className="w-100"
                   mode="multiple"
-                  options={dropdownData?.userLevel}
+                  options={dropdownData?.userLevel?.map((item, ind) => {
+                    return {
+                      value: item?.id,
+                      label: item?.level_name,
+                    };
+                  })}
                   tagRender={(props) =>
                     renderTagAll(
                       props.label,
@@ -135,7 +140,12 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 <Select
                   className="w-100"
                   mode="multiple"
-                  options={dropdownData?.zone}
+                  options={dropdownData?.zone?.map((item, ind) => {
+                    return {
+                      value: item?.id,
+                      label: item?.zone_name,
+                    };
+                  })}
                   tagRender={(props) =>
                     renderTagAll(props.label, props.value, props.index, "zone")
                   }
@@ -156,7 +166,12 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 <Select
                   className="w-100"
                   mode="multiple"
-                  options={dropdownData?.branch}
+                  options={dropdownData?.branch?.map((item, ind) => {
+                    return {
+                      value: item?.id,
+                      label: item?.branch_name,
+                    };
+                  })}
                   tagRender={(props) =>
                     renderTagAll(
                       props.label,
