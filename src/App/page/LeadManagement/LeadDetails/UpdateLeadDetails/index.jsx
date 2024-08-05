@@ -140,12 +140,32 @@ const UpdateLeadDetails = ({
               </Col>
               <Col xs={24} sm={12}>
                 <Form.Item name="lead_address" label="Lead Address">
-                  <TextArea rows={3} disabled={loading} />
+                  <TextArea
+                    rows={3}
+                    disabled={loading}
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        lead_address: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
+                    }}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={12}>
                 <Form.Item name="lead_remarks" label="Lead Remarks">
-                  <TextArea rows={3} disabled={loading} />
+                  <TextArea
+                    rows={3}
+                    disabled={loading}
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        lead_remarks: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
+                    }}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24}>

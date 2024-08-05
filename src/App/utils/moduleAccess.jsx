@@ -19,7 +19,7 @@ import {
   AiOutlineUsergroupAdd,
   AiOutlineUsergroupDelete,
 } from "react-icons/ai";
-import { MdOutlineEventNote, MdRoute } from "react-icons/md";
+import { MdOutlineEvent, MdOutlineEventNote, MdRoute } from "react-icons/md";
 import { CgUserList, CgFileDocument } from "react-icons/cg";
 
 const modules = [
@@ -372,6 +372,20 @@ const modules = [
           is_modify: [1, 2, 3, 4, 5],
         },
         component: lazy(() => import("../page/Forms/NewspaperInsert")),
+        is_route: true,
+        is_sidebar: true,
+      },
+      {
+        key: "28",
+        icon: <MdOutlineEvent />,
+        label: "RWA Event",
+        route: "/forms/rwa_event",
+        permission: {
+          is_view: [1, 2, 3, 4, 5],
+          is_add: [1, 2, 3, 4, 5],
+          is_modify: [1, 2, 3, 4, 5],
+        },
+        component: lazy(() => import("../page/Forms/RWAEvent")),
         is_route: true,
         is_sidebar: true,
       },

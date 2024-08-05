@@ -196,6 +196,19 @@ const AddEditActivityStatus = ({
                             ["e", "E", "+", "-", "."].includes(e.key) &&
                               e.preventDefault();
                           }}
+                          onChange={(e) => {
+                            if (Number(e.target.value) <= 99999999999999) {
+                              form.setFieldsValue({
+                                no_of_time_to_dormant: e.target.value,
+                              });
+                            } else {
+                              form.setFieldsValue({
+                                no_of_time_to_dormant: Number(
+                                  e.target.value?.toString()?.slice(0, -1)
+                                ),
+                              });
+                            }
+                          }}
                         />
                       </Form.Item>
                     </Col>

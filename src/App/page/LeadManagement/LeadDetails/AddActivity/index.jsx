@@ -194,7 +194,17 @@ const AddActivity = ({ modalData, handleAddActivity, closeModal }) => {
                     },
                   ]}
                 >
-                  <TextArea rows={3} disabled={loading} />
+                  <TextArea
+                    rows={3}
+                    disabled={loading}
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        remarks: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
+                    }}
+                  />
                 </Form.Item>
               </Col>
             </Row>
