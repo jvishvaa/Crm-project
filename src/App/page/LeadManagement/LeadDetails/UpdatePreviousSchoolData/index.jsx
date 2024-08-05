@@ -94,7 +94,17 @@ const UpdatePreviousSchoolData = ({
                   name="previous_school_name"
                   label="Previous School Name"
                 >
-                  <Input maxLength={48} autoComplete="off" />
+                  <Input
+                    maxLength={48}
+                    autoComplete="off"
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        previous_school_name: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
+                    }}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24}>
@@ -115,7 +125,17 @@ const UpdatePreviousSchoolData = ({
                   name="previous_board_name"
                   label="Previous Board Name"
                 >
-                  <Input maxLength={48} autoComplete="off" />
+                  <Input
+                    maxLength={48}
+                    autoComplete="off"
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        previous_board_name: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
+                    }}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24}>
@@ -125,6 +145,7 @@ const UpdatePreviousSchoolData = ({
                   rules={[{ validator: validateMax }]}
                 >
                   <Input
+                    type="number"
                     autoComplete="off"
                     onKeyDown={(e) => {
                       ["e", "E", "+", "-", "."].includes(e.key) &&

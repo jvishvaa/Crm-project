@@ -9,6 +9,9 @@ const UploadFile = ({
   accept,
   type,
   label,
+  required,
+  labelClassName,
+  inputClassName,
 }) => {
   return (
     <>
@@ -25,12 +28,14 @@ const UploadFile = ({
         }}
       />
       {label ? (
-        <Typography className="mt-3 th-10 th-fw-400">{label}</Typography>
+        <Typography className={`${labelClassName || ""} th-10 th-fw-400`}>
+          {label}
+        </Typography>
       ) : null}
       <label
         htmlFor="outlined-button-file"
         style={{ width: "100%" }}
-        className={label ? "mt-0" : "mt-3"}
+        className={`${inputClassName || ""} ${label ? `mt-0` : ``}`}
       >
         <div
           className={disabled ? "file-upload-div-disabled" : "file-upload-div"}
@@ -41,10 +46,10 @@ const UploadFile = ({
             textOverflow: "clip",
           }}
         >
-          <Button type="primary" className="file-upload-button" size="small">
+          <div className="file-upload-button" size="small">
             Choose file&nbsp;
-            <span style={{ color: "red" }}>*</span>
-          </Button>
+            {required ? <span style={{ color: "red" }}>*</span> : null}
+          </div>
           <Typography className="file-name-text">
             {type === "multiple"
               ? "Choose File"

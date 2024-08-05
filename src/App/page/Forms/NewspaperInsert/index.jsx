@@ -17,10 +17,8 @@ import {
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
-import { RiDownloadCloudFill } from "react-icons/ri";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
 import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
-import { IoMdEye } from "react-icons/io";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import DrawerFilter from "./drawerFilter";
 import dayjs from "dayjs";
@@ -33,6 +31,8 @@ import getChangedCountValues from "../../../utils/getChangeCountObject";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
 import AddEditNewspaperInsert from "./AddEditNewspaperInsert";
+import { GoFileDirectoryFill } from "react-icons/go";
+import PreviewMedia from "../../../component/UtilComponents/PreviewMedia";
 
 const NewspaperInsert = () => {
   const defaultFilters = {
@@ -64,6 +64,7 @@ const NewspaperInsert = () => {
   const searchIconRef = useRef(null);
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
+  const [previewData, setPreviewData] = useState({ show: false, urls: [] });
   const dropdownData = {
     zone: [
       { label: "All", value: 0 },
@@ -170,7 +171,7 @@ const NewspaperInsert = () => {
         }}
         value={searchInput}
         onChange={(e) => {
-          setSearchInput(e.target.value);
+          setSearchInput(e.target.value?.trimStart()?.replace("  ", " "));
           setSearchFetched(false);
         }}
         onPressEnter={() => {
@@ -358,6 +359,29 @@ const NewspaperInsert = () => {
       ),
       align: "center",
     },
+    {
+      title: "File",
+      key: "file",
+      render: (record) => (
+        <>
+          <Button
+            size="small"
+            type="text"
+            onClick={() => {
+              setPreviewData({
+                show: true,
+                urls: [
+                  "https://kinsta.com/wp-content/uploads/2017/05/how-to-optimize-images-for-web-and-performance-1024x512.jpg",
+                  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                ],
+              });
+            }}
+            icon={<GoFileDirectoryFill size={20} />}
+          />
+        </>
+      ),
+      align: "center",
+    },
   ];
 
   return (
@@ -385,7 +409,7 @@ const NewspaperInsert = () => {
                             });
                           }}
                         >
-                          + Add Newspaper Insert
+                          + Newspaper Insert
                         </Button>
                       </Col>
                     ) : null}
@@ -589,6 +613,25 @@ const NewspaperInsert = () => {
                                                 </Tooltip>
                                               </Col>
                                             ) : null}
+                                            <Col>
+                                              <Button
+                                                type="iconbutton"
+                                                icon={
+                                                  <GoFileDirectoryFill
+                                                    size={20}
+                                                  />
+                                                }
+                                                onClick={() => {
+                                                  setPreviewData({
+                                                    show: true,
+                                                    urls: [
+                                                      "https://kinsta.com/wp-content/uploads/2017/05/how-to-optimize-images-for-web-and-performance-1024x512.jpg",
+                                                      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                                                    ],
+                                                  });
+                                                }}
+                                              />
+                                            </Col>
                                           </Row>
                                         </Col>
                                       </Row>
@@ -665,6 +708,12 @@ const NewspaperInsert = () => {
           setDrawerData({ show: false, type: null, data: null });
         }}
         dropdownData={dropdownData}
+      />
+      <PreviewMedia
+        modalData={previewData}
+        closeModal={() => {
+          setPreviewData({ show: false, urls: [] });
+        }}
       />
     </CustomCard>
   );

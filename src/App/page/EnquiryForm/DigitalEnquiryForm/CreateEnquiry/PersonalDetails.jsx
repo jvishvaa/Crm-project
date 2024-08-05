@@ -215,7 +215,9 @@ const PersonalDetails = ({ enquiryFormData, setEnquiryFormData }) => {
                               let myChildData = [
                                 ...enquiryFormData?.child_data,
                               ];
-                              myChildData[index].child_name = e.target.value;
+                              myChildData[index].child_name = e.target.value
+                                ?.trimStart()
+                                ?.replace("  ", " ");
                               setEnquiryFormData({
                                 ...enquiryFormData,
                                 child_data: myChildData,
@@ -374,7 +376,9 @@ const PersonalDetails = ({ enquiryFormData, setEnquiryFormData }) => {
                   onChange={(e) => {
                     setEnquiryFormData({
                       ...enquiryFormData,
-                      lead_name: e.target.value,
+                      lead_name: e.target.value
+                        ?.trimStart()
+                        ?.replace("  ", " "),
                     });
                   }}
                   maxLength={48}
@@ -529,7 +533,7 @@ const PersonalDetails = ({ enquiryFormData, setEnquiryFormData }) => {
                   onChange={(e) => {
                     setEnquiryFormData({
                       ...enquiryFormData,
-                      lead_email: e.target.value,
+                      lead_email: e.target.value?.trim(),
                     });
                   }}
                   maxLength={48}
@@ -545,7 +549,9 @@ const PersonalDetails = ({ enquiryFormData, setEnquiryFormData }) => {
                   onChange={(e) => {
                     setEnquiryFormData({
                       ...enquiryFormData,
-                      lead_occupation: e.target.value,
+                      lead_occupation: e.target.value
+                        ?.trimStart()
+                        ?.replace("  ", " "),
                     });
                   }}
                   maxLength={48}

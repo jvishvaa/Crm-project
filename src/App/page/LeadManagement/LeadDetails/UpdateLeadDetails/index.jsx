@@ -101,7 +101,18 @@ const UpdateLeadDetails = ({
             <Row gutter={[16, 4]}>
               <Col xs={24} sm={12}>
                 <Form.Item name="lead_name" label="Lead Name">
-                  <Input maxLength={48} autoComplete="off" disabled={loading} />
+                  <Input
+                    maxLength={48}
+                    autoComplete="off"
+                    disabled={loading}
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        lead_name: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
+                    }}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={12}>
@@ -115,7 +126,16 @@ const UpdateLeadDetails = ({
                     },
                   ]}
                 >
-                  <Input maxLength={48} autoComplete="off" disabled={loading} />
+                  <Input
+                    maxLength={48}
+                    autoComplete="off"
+                    disabled={loading}
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        lead_email: e.target.value?.trim(),
+                      });
+                    }}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={12}>

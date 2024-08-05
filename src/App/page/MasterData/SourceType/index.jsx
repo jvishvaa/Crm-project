@@ -12,6 +12,7 @@ import {
   Select,
   Form,
   Tag,
+  message,
 } from "antd";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
 import CustomCard from "../../../component/UtilComponents/CustomCard";
@@ -39,20 +40,6 @@ const SourceType = () => {
   const { width } = useWindowDimensions();
 
   const getSourceTypeData = (values) => {
-    // setLoading(true);
-    setSourceTypeData([
-      { id: 1, source_type: "Digital Marketing", is_active: true },
-      {
-        id: 2,
-        source_type: "Field Marketing",
-        is_active: true,
-      },
-      {
-        id: 3,
-        source_type: "Affiliate Marketing",
-        is_active: false,
-      },
-    ]);
     let params = {
       ...(values.is_active !== 0 ? { is_active: values.is_active } : {}),
     };
@@ -83,6 +70,7 @@ const SourceType = () => {
         let response = res.data;
         if ([200, 201].includes(response?.status_code)) {
           getSourceTypeData(form.getFieldsValue());
+          message.success(response.message);
         } else {
           message.error(response?.message);
         }
@@ -129,7 +117,7 @@ const SourceType = () => {
             }}
             icon={<EditOutlined style={{ paddingRight: 5, marginLeft: 5 }} />}
           />
-          <span>{record?.source_type}</span>
+          <span>{record?.source_name}</span>
           <Button
             type="link"
             size="small"
@@ -194,7 +182,7 @@ const SourceType = () => {
   return (
     <CustomCard>
       <Row gutter={[8, 0]}>
-        <Col span={24}>
+        <Col span={24} style={{ zIndex: 1 }}>
           <Row className="d-flex flex-column">
             <Col xs={24}>
               <Row className="d-flex flex-row justify-content-between">
@@ -223,7 +211,7 @@ const SourceType = () => {
             </Col>
           </Row>
         </Col>
-        <Col xs={24} style={{ marginTop: -10 }}>
+        <Col xs={24} style={{ marginTop: -10, zIndex: 0 }}>
           <Spin spinning={loading} tip="Loading">
             <Row gutter={[8, 8]}>
               <Col xs={24}>

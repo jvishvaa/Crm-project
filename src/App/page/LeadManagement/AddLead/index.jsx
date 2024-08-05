@@ -351,7 +351,17 @@ const AddLead = () => {
                           },
                         ]}
                       >
-                        <Input maxLength={48} autoComplete="off" />
+                        <Input
+                          maxLength={48}
+                          autoComplete="off"
+                          onChange={(e) => {
+                            form.setFieldsValue({
+                              lead_name: e.target.value
+                                ?.trimStart()
+                                ?.replace("  ", " "),
+                            });
+                          }}
+                        />
                       </Form.Item>
                     </Col>
                     <Col xs={24} sm={12} md={8}>
@@ -365,7 +375,16 @@ const AddLead = () => {
                           },
                         ]}
                       >
-                        <Input type="email" maxLength={48} autoComplete="off" />
+                        <Input
+                          type="email"
+                          maxLength={48}
+                          autoComplete="off"
+                          onChange={(e) => {
+                            form.setFieldsValue({
+                              lead_email: e.target.value?.trim(),
+                            });
+                          }}
+                        />
                       </Form.Item>
                     </Col>
                     <Col xs={24} sm={12} md={8}>
@@ -473,7 +492,17 @@ const AddLead = () => {
                           },
                         ]}
                       >
-                        <Input maxLength={48} autoComplete="off" />
+                        <Input
+                          maxLength={48}
+                          autoComplete="off"
+                          onChange={(e) => {
+                            form.setFieldsValue({
+                              child_name: e.target.value
+                                ?.trimStart()
+                                ?.replace("  ", " "),
+                            });
+                          }}
+                        />
                       </Form.Item>
                     </Col>
                     <Col xs={24} sm={12} md={8}>

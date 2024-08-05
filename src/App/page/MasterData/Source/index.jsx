@@ -14,6 +14,7 @@ import {
   Tabs,
   Input,
   Tag,
+  message,
 } from "antd";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
 import CustomCard from "../../../component/UtilComponents/CustomCard";
@@ -25,8 +26,12 @@ import useWindowDimensions from "../../../component/UtilComponents/useWindowDime
 import RenderTagMultiple from "../../../component/UtilComponents/RenderMultiple";
 import { MdEdit } from "react-icons/md";
 import getColour from "../../../utils/getColour";
+import axios from "axios";
+import urls from "../../../utils/urls";
+import getSelectArray from "../../../utils/getSelectArray";
 
 const Source = () => {
+  const defaultValue = { is_active: true, source_type: [0] };
   const [form] = Form.useForm();
   const [pageData, setPageData] = useState({
     current: 1,
@@ -34,6 +39,7 @@ const Source = () => {
     total: 0,
   });
   const [search, setSearch] = useState("");
+  const [sourceTypeList, setSourceTypeList] = useState([]);
   const [searchFetched, setSearchFetched] = useState(false);
   const [sourceData, setSourceData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -42,43 +48,78 @@ const Source = () => {
 
   const { width } = useWindowDimensions();
 
-  useEffect(() => {
-    form.setFieldsValue({ is_active: true, source_type: [0] });
-  }, []);
-
-  const getSourceData = (page, page_size) => {
-    setPageData({
-      current: page,
-      pageSize: page_size,
-      total: 2,
-    });
-    // setLoading(true);
-    setSourceData([
-      {
-        id: 1,
-        source_name: "DM-Google",
-        is_active: true,
-        utm_source: "",
-        utm_medium: "",
-        source_type: { id: 1, name: "Digital Marketing" },
-      },
-      {
-        id: 2,
-        source_name: "DM-Direct",
-        is_active: true,
-        utm_source: "direct",
-        utm_medium: "test",
-        source_type: { id: 1, name: "Digital Marketing" },
-      },
-    ]);
+  const getValues = (obj) => {
+    return {
+      ...form.getFieldsValue(),
+      search: search,
+      ...obj,
+    };
   };
 
   useEffect(() => {
-    getSourceData(pageData?.current, pageData?.pageSize);
+    form.setFieldsValue(defaultValue);
+    getSourceTypeList();
+    getSourceData(
+      pageData?.current,
+      pageData?.pageSize,
+      getValues({
+        ...defaultValue,
+      })
+    );
   }, []);
 
+  const getSourceData = (page, page_size, values) => {
+    let params = {
+      ...(values.is_active !== 0 ? { is_active: values.is_active } : {}),
+      ...(values.source_type.includes(0)
+        ? { source_type: values?.source_type?.join(",") }
+        : {}),
+      ...(values?.search?.trim() ? { search: values?.search?.trim() } : {}),
+      page: page,
+      page_size: page_size,
+    };
+    setLoading(true);
+    axios
+      .get(`${urls.masterData.source}`, {
+        params: params,
+      })
+      .then((res) => {
+        let response = res.data;
+        if ([200, 201].includes(response?.status_code)) {
+          setSourceData(response?.result?.result);
+          setPageData({
+            current: page,
+            pageSize: page_size,
+            total: response?.result?.count,
+          });
+        } else {
+          message.error(response?.message);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const getSourceTypeList = () => {
+    axios
+      .get(`${urls.masterData.sourceType}`, {
+        params: { is_active: true },
+      })
+      .then((res) => {
+        let response = res.data;
+        if ([200, 201].includes(response?.status_code)) {
+          setSourceTypeList(response?.result);
+        } else {
+          message.error(response?.message);
+        }
+      })
+      .catch(() => {});
+  };
+
   const handleTableChange = (pagination) => {
-    getSourceData(pagination?.current, pagination?.pageSize);
+    getSourceData(pagination?.current, pagination?.pageSize, getValues());
   };
 
   const handleOnChange = () => {
@@ -89,7 +130,32 @@ const Source = () => {
     setGetSelected(false);
   };
 
-  const handleStatusChange = (data) => {};
+  const handleStatusChange = (data, value) => {
+    setLoading(true);
+    axios
+      .put(`${urls.masterData.source}${data?.id}`, { is_active: value })
+      .then((res) => {
+        let response = res.data;
+        if ([200, 201].includes(response?.status_code)) {
+          getSourceData(
+            pageData?.current > 0 &&
+              sourceData?.length === 1 &&
+              form?.getFieldsValue()?.is_active !== 0
+              ? pageData?.current - 1
+              : pageData?.current,
+            pageData?.pageSize,
+            getValues()
+          );
+          message.success(response.message);
+        } else {
+          message.error(response?.message);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const columns = [
     {
@@ -134,7 +200,7 @@ const Source = () => {
               title={`Are you sure to update "${
                 record?.source_type
               }" sorce as ${record?.is_active ? "inactive" : "active"}?`}
-              onConfirm={() => handleStatusChange(record)}
+              onConfirm={() => handleStatusChange(record, !record?.is_active)}
               okText="Yes"
               cancelText="No"
             >
@@ -207,7 +273,7 @@ const Source = () => {
   return (
     <CustomCard>
       <Row gutter={[8, 0]}>
-        <Col span={24}>
+        <Col span={24} style={{ zIndex: 1 }}>
           <Row className="d-flex flex-column">
             <Col xs={24}>
               <Row className="d-flex flex-row justify-content-between">
@@ -236,7 +302,7 @@ const Source = () => {
             </Col>
           </Row>
         </Col>
-        <Col xs={24} style={{ marginTop: -10 }}>
+        <Col xs={24} style={{ marginTop: -10, zIndex: 0 }}>
           <Spin spinning={loading} tip="Loading">
             <Row gutter={[8, 8]}>
               <Col xs={24}>
@@ -245,7 +311,7 @@ const Source = () => {
                   layout="vertical"
                   onFinish={() => {
                     setGetSelected(true);
-                    getSourceData(1, pageData?.pageSize);
+                    getSourceData(1, pageData?.pageSize, getValues());
                   }}
                 >
                   <Row gutter={[8, 0]}>
@@ -269,6 +335,11 @@ const Source = () => {
                               value: 0,
                               label: "All",
                             },
+                            ...getSelectArray(
+                              sourceTypeList,
+                              "source_name",
+                              "id"
+                            ),
                           ]}
                           tagRender={(props) =>
                             renderTagNotAll(
@@ -346,11 +417,16 @@ const Source = () => {
                           }}
                           value={search}
                           onChange={(e) => {
-                            setSearch(e.target.value);
+                            setSearch(
+                              e.target.value?.trimStart()?.replace("  ", " ")
+                            );
                             setSearchFetched(false);
                           }}
                           onPressEnter={() => {
-                            setSearchFetched(true);
+                            if (search?.trim()) {
+                              setSearchFetched(true);
+                              getSourceData(1, pageData?.pageSize, getValues());
+                            }
                           }}
                           maxLength={48}
                           suffix={
@@ -367,6 +443,11 @@ const Source = () => {
                                 style={{ cursor: "pointer" }}
                                 onClick={() => {
                                   setSearchFetched(true);
+                                  getSourceData(
+                                    1,
+                                    pageData?.pageSize,
+                                    getValues()
+                                  );
                                 }}
                               />
                             )
@@ -398,10 +479,29 @@ const Source = () => {
       </Row>
       <AddEditSource
         modalData={modalData}
-        handleAddEditSource={() => {}}
+        onSubmit={(values) => {
+          getSourceData(
+            modalData?.data &&
+              pageData?.current > 0 &&
+              sourceData?.length === 1 &&
+              ((!form.getFieldsValue()?.source_type?.includes(0) &&
+                !form
+                  .getFieldsValue()
+                  ?.source_type?.includes(values?.source_type)) ||
+                (search?.trim() &&
+                  !values.source_name
+                    ?.toLowerCase()
+                    ?.includes(search?.toLowerCase())))
+              ? pageData?.current - 1
+              : pageData?.current,
+            pageData?.pageSize,
+            getValues()
+          );
+        }}
         closeModal={() => {
           setModalData({ show: false, data: null });
         }}
+        dropdownData={{ sourceTypeList: sourceTypeList }}
       />
     </CustomCard>
   );

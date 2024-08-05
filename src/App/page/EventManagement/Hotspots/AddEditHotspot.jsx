@@ -23,6 +23,7 @@ import UploadFile from "../../../component/UtilComponents/UploadFile";
 import { MdClose, MdDelete, MdEdit, MdLink } from "react-icons/md";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
+import getExtensions from "../../../utils/getExtensions";
 
 const { TextArea } = Input;
 
@@ -169,6 +170,14 @@ const AddEditHotspot = ({
   }, [isEdit]);
 
   const fileUploadChangeHandler = (e) => {
+    if (
+      ![...getExtensions("image")].includes(
+        `.${e.target.files[i]?.name?.split(".")?.pop()}`
+      )
+    ) {
+      message.error("Invalid File Extension");
+      return;
+    }
     setSelectedFile(Array.from(e.target.files));
   };
 
@@ -265,7 +274,17 @@ const AddEditHotspot = ({
                       { required: true, message: "Please Enter Hotspot Name" },
                     ]}
                   >
-                    <Input maxLength={48} autoComplete="off" />
+                    <Input
+                      maxLength={48}
+                      autoComplete="off"
+                      onChange={(e) => {
+                        form.setFieldsValue({
+                          hotspot_name: e.target.value
+                            ?.trimStart()
+                            ?.replace("  ", " "),
+                        });
+                      }}
+                    />
                   </Form.Item>
                 </Col>
                 <Col xs={24} md={12}>
@@ -339,7 +358,17 @@ const AddEditHotspot = ({
                 </Col>
                 <Col xs={24} md={12}>
                   <Form.Item name="contact_name" label="Contact Name">
-                    <Input maxLength={48} autoComplete="off" />
+                    <Input
+                      maxLength={48}
+                      autoComplete="off"
+                      onChange={(e) => {
+                        form.setFieldsValue({
+                          contact_name: e.target.value
+                            ?.trimStart()
+                            ?.replace("  ", " "),
+                        });
+                      }}
+                    />
                   </Form.Item>
                 </Col>
                 <Col xs={24} md={12}>
@@ -377,7 +406,18 @@ const AddEditHotspot = ({
                       },
                     ]}
                   >
-                    <Input type="email" maxLength={48} autoComplete="off" />
+                    <Input
+                      type="email"
+                      maxLength={48}
+                      autoComplete="off"
+                      onChange={(e) => {
+                        form.setFieldsValue({
+                          contact_email: e.target.value
+                            ?.trimStart()
+                            ?.replace("  ", " "),
+                        });
+                      }}
+                    />
                   </Form.Item>
                 </Col>
                 <Col xs={24} className="mt-2">
@@ -404,7 +444,17 @@ const AddEditHotspot = ({
                     </Col>
                     <Col xs={12} md={8}>
                       <Form.Item label="Flat Series " name="flat_series">
-                        <Input maxLength={48} autoComplete="off" />
+                        <Input
+                          maxLength={48}
+                          autoComplete="off"
+                          onChange={(e) => {
+                            form.setFieldsValue({
+                              flat_series: e.target.value
+                                ?.trimStart()
+                                ?.replace("  ", " "),
+                            });
+                          }}
+                        />
                       </Form.Item>
                     </Col>
                     <Col xs={12} md={8}>
@@ -421,7 +471,17 @@ const AddEditHotspot = ({
                     </Col>
                     <Col xs={12} md={8}>
                       <Form.Item label="Block Series" name="block_series">
-                        <Input maxLength={48} autoComplete="off" />
+                        <Input
+                          maxLength={48}
+                          autoComplete="off"
+                          onChange={(e) => {
+                            form.setFieldsValue({
+                              block_series: e.target.value
+                                ?.trimStart()
+                                ?.replace("  ", " "),
+                            });
+                          }}
+                        />
                       </Form.Item>
                     </Col>
                     <Col xs={12} md={8}>
@@ -476,6 +536,7 @@ const AddEditHotspot = ({
                     accept="video/*,image/*"
                     type="multiple"
                     label="Upload File"
+                    labelClassName={"mt-3"}
                     // disabled={submitLoading}
                   />
 

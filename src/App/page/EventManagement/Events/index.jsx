@@ -205,7 +205,9 @@ const Events = () => {
             }}
             value={searchAssignInput}
             onChange={(e) => {
-              setSearchAssignInput(e.target.value);
+              setSearchAssignInput(
+                e.target.value?.trimStart()?.replace("  ", " ")
+              );
             }}
             maxLength={48}
             suffix={
@@ -356,7 +358,7 @@ const Events = () => {
         }}
         value={searchInput}
         onChange={(e) => {
-          setSearchInput(e.target.value);
+          setSearchInput(e.target.value?.trimStart()?.replace("  ", " "));
           setSearchFetched(false);
         }}
         onPressEnter={() => {
