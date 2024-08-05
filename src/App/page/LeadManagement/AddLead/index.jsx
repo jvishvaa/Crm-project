@@ -125,10 +125,12 @@ const AddLead = () => {
       .then((res) => {
         let response = res.data;
         // Handle the response as needed
+        message.success(response.message);
       })
       .catch((error) => {
         // Handle any errors
         console.error("Error adding lead:", error);
+        message.error(error.message ?? "Failed to add lead");
       })
       .finally(() => {
         form.resetFields();
