@@ -337,7 +337,16 @@ const AddEditHotspot = ({
                       { required: true, message: "Please Enter Address" },
                     ]}
                   >
-                    <TextArea rows={2} />
+                    <TextArea
+                      rows={2}
+                      onChange={(e) => {
+                        form.setFieldsValue({
+                          address: e.target.value
+                            ?.trimStart()
+                            ?.replace("  ", " "),
+                        });
+                      }}
+                    />
                   </Form.Item>
                 </Col>
                 <Col xs={24}>
@@ -380,6 +389,19 @@ const AddEditHotspot = ({
                         ["e", "E", "+", "-", "."].includes(e.key) &&
                           e.preventDefault();
                       }}
+                      onChange={(e) => {
+                        if (Number(e.target.value) <= 99999999999999) {
+                          form.setFieldsValue({
+                            entry_cost: e.target.value,
+                          });
+                        } else {
+                          form.setFieldsValue({
+                            entry_cost: Number(
+                              e.target.value?.toString()?.slice(0, -1)
+                            ),
+                          });
+                        }
+                      }}
                     />
                   </Form.Item>
                 </Col>
@@ -391,6 +413,19 @@ const AddEditHotspot = ({
                       onKeyDown={(e) => {
                         ["e", "E", "+", "-", "."].includes(e.key) &&
                           e.preventDefault();
+                      }}
+                      onChange={(e) => {
+                        if (Number(e.target.value) <= 9999999999) {
+                          form.setFieldsValue({
+                            contact_no: e.target.value,
+                          });
+                        } else {
+                          form.setFieldsValue({
+                            contact_no: Number(
+                              e.target.value?.toString()?.slice(0, -1)
+                            ),
+                          });
+                        }
                       }}
                     />
                   </Form.Item>
@@ -439,6 +474,19 @@ const AddEditHotspot = ({
                             ["e", "E", "+", "-", "."].includes(e.key) &&
                               e.preventDefault();
                           }}
+                          onChange={(e) => {
+                            if (Number(e.target.value) <= 99999999999999) {
+                              form.setFieldsValue({
+                                no_of_flats: e.target.value,
+                              });
+                            } else {
+                              form.setFieldsValue({
+                                no_of_flats: Number(
+                                  e.target.value?.toString()?.slice(0, -1)
+                                ),
+                              });
+                            }
+                          }}
                         />
                       </Form.Item>
                     </Col>
@@ -466,6 +514,19 @@ const AddEditHotspot = ({
                             ["e", "E", "+", "-", "."].includes(e.key) &&
                               e.preventDefault();
                           }}
+                          onChange={(e) => {
+                            if (Number(e.target.value) <= 99999999999999) {
+                              form.setFieldsValue({
+                                no_of_blocks: e.target.value,
+                              });
+                            } else {
+                              form.setFieldsValue({
+                                no_of_blocks: Number(
+                                  e.target.value?.toString()?.slice(0, -1)
+                                ),
+                              });
+                            }
+                          }}
                         />
                       </Form.Item>
                     </Col>
@@ -492,6 +553,19 @@ const AddEditHotspot = ({
                           onKeyDown={(e) => {
                             ["e", "E", "+", "-", "."].includes(e.key) &&
                               e.preventDefault();
+                          }}
+                          onChange={(e) => {
+                            if (Number(e.target.value) <= 99999999999999) {
+                              form.setFieldsValue({
+                                no_of_kids: e.target.value,
+                              });
+                            } else {
+                              form.setFieldsValue({
+                                no_of_kids: Number(
+                                  e.target.value?.toString()?.slice(0, -1)
+                                ),
+                              });
+                            }
                           }}
                         />
                       </Form.Item>
@@ -521,12 +595,34 @@ const AddEditHotspot = ({
                         ["e", "E", "+", "-", "."].includes(e.key) &&
                           e.preventDefault();
                       }}
+                      onChange={(e) => {
+                        if (Number(e.target.value) <= 99999999999999) {
+                          form.setFieldsValue({
+                            no_of_footfall: e.target.value,
+                          });
+                        } else {
+                          form.setFieldsValue({
+                            no_of_footfall: Number(
+                              e.target.value?.toString()?.slice(0, -1)
+                            ),
+                          });
+                        }
+                      }}
                     />
                   </Form.Item>
                 </Col>
                 <Col xs={24} md={12}>
                   <Form.Item name="remarks" label="Remarks/Additional Info">
-                    <TextArea rows={2} />
+                    <TextArea
+                      rows={2}
+                      onChange={(e) => {
+                        form.setFieldsValue({
+                          remarks: e.target.value
+                            ?.trimStart()
+                            ?.replace("  ", " "),
+                        });
+                      }}
+                    />
                   </Form.Item>
                 </Col>
                 <Col xs={24} md={12}>
