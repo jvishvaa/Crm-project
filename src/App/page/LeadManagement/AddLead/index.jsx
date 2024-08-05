@@ -33,12 +33,42 @@ const AddLead = () => {
   const [loading, setLoading] = useState(false);
   const [leadData, setLeadData] = useState(null);
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [branchList, setBranchList] = useState([]);
+  const [gradeList, setGradeList] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     filterForm.setFieldsValue({ country_code: "+91" });
   }, []);
 
+  const getBranchList = () => {
+    let params = { session_year: 4 };
+    axios
+      .get(`${urls.masterData.branchList}`, {
+        params: params,
+      })
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setBranchList(response?.result);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
+  const getGradeList = (branchId) => {
+    let params = { session_year: 4, branch_id: branchId };
+    axios
+      .get(`${urls.masterData.gradeList}`, {
+        params: params,
+      })
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setGradeList(response?.data);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
   const getLeadData = () => {
     setLeadData([]);
     // setLeadData([
@@ -73,42 +103,34 @@ const AddLead = () => {
 
   const handleAddLead = (values) => {
     console.log(values, "valllll");
-    let params = {
+    let data = {
       name: values?.lead_name,
       contact_no: filterForm?.getFieldValue("contact_no"),
       alternate_no: values?.alternate_contact_no,
       email: values?.lead_email,
-      // relation: "Friend",
-      // address: "123 Main St, Anytown, USA",
-      // remarks: "Interested in the program",
+      lead_childs: [
+        {
+          name: values?.child_name,
+          grade: values?.child_grade,
+        },
+      ],
       school_type: values?.school_type,
       source_id: values?.source,
-      // sub_source_id: 3,
-      // type: 3,
-      // status: 5,
-      // tag: 6,
-      // pro_status: 3,
       academic_year: values?.academic_year,
-      // city_id: 8,
-      // zone_id: 9,
       branch_id: values?.branch,
-      // next_followup_at: "2024-08-01T12:00:00Z",
-      // dormented_date: "2024-07-01",
-      // regenerated_date: "2024-07-15",
-      // re_enquiry_date: "2024-07-20",
-      // event_id: 12,
     };
-    console.log(params, "valllll");
-    return;
+
     setSubmitLoading(true);
     axios
-      .get(`${urls.masterData.addLead}`, {
-        params: params,
-      })
+      .post(`${urls.masterData.addLead}`, data)
       .then((res) => {
         let response = res.data;
+        // Handle the response as needed
       })
-      .catch(() => {})
+      .catch((error) => {
+        // Handle any errors
+        console.error("Error adding lead:", error);
+      })
       .finally(() => {
         form.resetFields();
         setLeadData(null);
@@ -309,6 +331,9 @@ const AddLead = () => {
                               .toLowerCase()
                               .includes(input.toLowerCase())
                           }
+                          onChange={() => {
+                            getBranchList();
+                          }}
                           options={[
                             { label: "2023-24", value: "2023-24" },
                             { label: "2024-25", value: "2024-25" },
@@ -336,16 +361,15 @@ const AddLead = () => {
                               .toLowerCase()
                               .includes(input.toLowerCase())
                           }
-                          options={[
-                            {
-                              label: "Orchids BTM Layout",
-                              value: "btm-layout",
-                            },
-                            {
-                              label: "Orchids Banerghata",
-                              value: "banerghata",
-                            },
-                          ]}
+                          options={branchList?.map((item, ind) => {
+                            return {
+                              label: item?.branch_name,
+                              value: item?.id,
+                            };
+                          })}
+                          onChange={(value) => {
+                            getGradeList(value);
+                          }}
                         />
                       </Form.Item>
                     </Col>
@@ -370,8 +394,8 @@ const AddLead = () => {
                               .includes(input.toLowerCase())
                           }
                           options={[
-                            { label: "Day", value: "day" },
-                            { label: "Boarding", value: "boarding" },
+                            { label: "Day", value: 1 },
+                            { label: "Boarding", value: 2 },
                           ]}
                         />
                       </Form.Item>
@@ -571,13 +595,12 @@ const AddLead = () => {
                               .toLowerCase()
                               .includes(input.toLowerCase())
                           }
-                          options={[
-                            { label: "Grade 1", value: "grade-1" },
-                            {
-                              label: "Grade 2",
-                              value: "grade-2",
-                            },
-                          ]}
+                          options={gradeList?.map((item, ind) => {
+                            return {
+                              value: item?.id,
+                              label: item?.grade_name,
+                            };
+                          })}
                         />
                       </Form.Item>
                     </Col>

@@ -63,26 +63,26 @@ const UserManagement = () => {
     pageSize: 15,
     total: 0,
   });
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState([]);
   const [isList, setIsList] = useState(true);
   const searchIconRef = useRef(null);
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
   const [dropdownData, setDropdownData] = useState({
     userLevel: [
-      { label: "All", value: 0 },
-      { label: "Admin", value: "Admin" },
-      { label: "PRM", value: "PRM" },
+      // { label: "All", value: 0 },
+      // { label: "Admin", value: "Admin" },
+      // { label: "PRM", value: "PRM" },
     ],
     zone: [
-      { label: "All", value: 0 },
-      { label: "Zone 1", value: "Zone 1" },
-      { label: "Zone 2", value: "Zone 2" },
+      // { label: "All", value: 0 },
+      // { label: "Zone 1", value: "Zone 1" },
+      // { label: "Zone 2", value: "Zone 2" },
     ],
     branch: [
-      { label: "All", value: 0 },
-      { label: "Branch 1", value: "Branch 1" },
-      { label: "Branch 2", value: "Branch 2" },
+      // { label: "All", value: 0 },
+      // { label: "Branch 1", value: "Branch 1" },
+      // { label: "Branch 2", value: "Branch 2" },
     ],
     status: [
       { label: "All", value: 0 },
@@ -136,10 +136,12 @@ const UserManagement = () => {
       setIsList(location?.state?.data?.isList);
       setSearchInput(location?.state?.data?.searchInput);
     }
+    getUserData();
   }, [location]);
   useEffect(() => {
     getZoneList();
     getBranchList();
+    getUserLevelList();
   }, []);
   const checkFilterDifference = () => {
     return getChangedCountValues(
@@ -153,66 +155,82 @@ const UserManagement = () => {
   };
 
   const [searchFetched, setSearchFetched] = useState(false);
-
   const getUserData = (page, page_size, params = {}) => {
+    let param = {
+      ...params,
+      page: page,
+      session_year: 4,
+      page_size: 15,
+    };
     // setLoading(true);
-    setUserData([
-      {
-        id: 1,
-        first_name: "Anik",
-        last_name: "Chowdhury",
-        email: "anik@gmail.com",
-        contact: "3646462736",
-        erp: "2838373636_OLV",
-        user_level: {
-          id: 2,
-          name: "Admin",
-        },
-        zone: [
-          { id: 1, name: "Zone1" },
-          { id: 2, name: "Zone2" },
-        ],
-        branch: [
-          { id: 1, name: "Branch1" },
-          { id: 2, name: "Branch2" },
-        ],
-        field_type: [
-          { id: 1, name: "Field Marketing" },
-          { id: 2, name: "Email Marketing" },
-        ],
-        is_active: true,
-      },
-      {
-        id: 2,
-        first_name: "Utpal",
-        last_name: "Maji",
-        email: "maji@gmail.com",
-        contact: "3646462436",
-        erp: "2838373636_OLV",
-        user_level: {
-          id: 1,
-          name: "Super Admin",
-        },
-        zone: [
-          { id: 1, name: "Zone1" },
-          { id: 2, name: "Zone2" },
-        ],
-        branch: [
-          { id: 1, name: "Branch1" },
-          { id: 2, name: "Branch2" },
-        ],
-        field_type: [
-          { id: 1, name: "Field Marketing" },
-          { id: 2, name: "Email Marketing" },
-        ],
-        is_active: false,
-      },
-    ]);
-    setPageData({
-      current: page,
-      pageSize: page_size,
-      total: 2,
-    });
+    // setUserData([
+    //   {
+    //     id: 1,
+    //     first_name: "Anik",
+    //     last_name: "Chowdhury",
+    //     email: "anik@gmail.com",
+    //     contact: "3646462736",
+    //     erp: "2838373636_OLV",
+    //     user_level: {
+    //       id: 2,
+    //       name: "Admin",
+    //     },
+    //     zone: [
+    //       { id: 1, name: "Zone1" },
+    //       { id: 2, name: "Zone2" },
+    //     ],
+    //     branch: [
+    //       { id: 1, name: "Branch1" },
+    //       { id: 2, name: "Branch2" },
+    //     ],
+    //     field_type: [
+    //       { id: 1, name: "Field Marketing" },
+    //       { id: 2, name: "Email Marketing" },
+    //     ],
+    //     is_active: true,
+    //   },
+    //   {
+    //     id: 2,
+    //     first_name: "Utpal",
+    //     last_name: "Maji",
+    //     email: "maji@gmail.com",
+    //     contact: "3646462436",
+    //     erp: "2838373636_OLV",
+    //     user_level: {
+    //       id: 1,
+    //       name: "Super Admin",
+    //     },
+    //     zone: [
+    //       { id: 1, name: "Zone1" },
+    //       { id: 2, name: "Zone2" },
+    //     ],
+    //     branch: [
+    //       { id: 1, name: "Branch1" },
+    //       { id: 2, name: "Branch2" },
+    //     ],
+    //     field_type: [
+    //       { id: 1, name: "Field Marketing" },
+    //       { id: 2, name: "Email Marketing" },
+    //     ],
+    //     is_active: false,
+    //   },
+    // ]);
+    axios
+      .get(`${urls.masterData.userDataList}`, {
+        params: param,
+      })
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setUserData(response?.results);
+        setPageData({
+          current: response?.current_page,
+          pageSize: 15,
+          total: response?.count,
+        });
+      })
+      .catch(() => {})
+      .finally(() => {});
   };
 
   useEffect(() => {
@@ -232,15 +250,15 @@ const UserManagement = () => {
         setDropdownData((p) => {
           return {
             ...p,
-            zone: [{ label: "All", value: 0 }, ...response?.result],
+            zone: [{ zone_name: "All", id: 0 }, ...response?.result],
           };
         });
       })
       .catch(() => {})
       .finally(() => {});
   };
-  const getBranchList = (values) => {
-    let params = { zone_id: 2, city_id: 1 };
+  const getBranchList = (zoneId = 2, cityId = 1) => {
+    let params = { zone_id: zoneId, city_id: cityId };
     axios
       .get(`${urls.masterData.branchList}`, {
         params: params,
@@ -251,12 +269,38 @@ const UserManagement = () => {
         setDropdownData((p) => {
           return {
             ...p,
-            branch: [{ label: "All", value: 0 }, ...response?.result],
+            branch: [{ branch_name: "All", id: 0 }, ...response?.result],
           };
         });
       })
       .catch(() => {})
       .finally(() => {});
+  };
+
+  const getUserLevelList = () => {
+    axios
+      .get(`${urls.masterData.userLevelList}`, {
+        headers: {
+          "x-api-key": "vikash@12345#1231",
+          authorization: null,
+        },
+      })
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setDropdownData((p) => {
+          return {
+            ...p,
+            userLevel: [{ level_name: "All", id: 0 }, ...response?.result],
+          };
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching user level list:", error);
+      })
+      .finally(() => {
+        // Any cleanup or final operations
+      });
   };
   const handleCardChange = (page) => {
     window.scrollTo(0, 0);
@@ -414,12 +458,12 @@ const UserManagement = () => {
         <Row className={"d-flex flex-column flex-nowrap"}>
           <Col>
             <Typography className="th-12">
-              {record.first_name} {record.last_name}
+              {record?.user?.first_name} {record?.user?.last_name}
             </Typography>
           </Col>
           <Col>
             <Typography style={{ whiteSpace: "nowrap" }} className="th-10">
-              ({record?.erp})
+              ({record?.erp_id})
             </Typography>
           </Col>
         </Row>
@@ -446,25 +490,25 @@ const UserManagement = () => {
     {
       title: "UserLevel",
       key: "userlevel",
-      render: (record) => <span>{record.user_level?.name}</span>,
+      render: (record) => <span>{record?.roles?.role_name}</span>,
       align: "center",
     },
-    {
-      title: "Branch",
-      key: "branch",
-      render: (record) => (
-        <span>{getArrayValues(record?.branch, "name")?.join(", ")}</span>
-      ),
-      align: "center",
-    },
-    {
-      title: "Marketing Type",
-      key: "field_type",
-      render: (record) => (
-        <span>{getArrayValues(record?.field_type, "name")?.join(", ")}</span>
-      ),
-      align: "center",
-    },
+    // {
+    //   title: "Branch",
+    //   key: "branch",
+    //   render: (record) => (
+    //     <span>{getArrayValues(record?.branch, "name")?.join(", ")}</span>
+    //   ),
+    //   align: "center",
+    // },
+    // {
+    //   title: "Marketing Type",
+    //   key: "field_type",
+    //   render: (record) => (
+    //     <span>{getArrayValues(record?.field_type, "name")?.join(", ")}</span>
+    //   ),
+    //   align: "center",
+    // },
     {
       title: "Status",
       key: "is_active",
@@ -472,8 +516,8 @@ const UserManagement = () => {
         <>
           {getRoutePathDetails().modify ? (
             <Popconfirm
-              title={`Are you sure to update "${record?.erp}" user as ${
-                record?.is_active ? "inactive" : "active"
+              title={`Are you sure to update "${record?.erp_id}" user as ${
+                record?.status == "active" ? "inactive" : "active"
               }?`}
               onConfirm={() => handleStatusChange(record)}
               okText="Yes"
@@ -482,21 +526,15 @@ const UserManagement = () => {
               <Switch
                 checked={record?.is_active}
                 style={{
-                  backgroundColor: record.is_active
-                    ? getColour("active")
-                    : getColour("inactive"),
+                  backgroundColor: getColour(record?.status),
                 }}
                 checkedChildren="Active"
                 unCheckedChildren="Inactive"
               />
             </Popconfirm>
           ) : (
-            <Tag
-              color={
-                record?.is_active ? getColour("active") : getColour("inactive")
-              }
-            >
-              {record?.is_active ? "Active" : "Inactive"}
+            <Tag color={getColour(record?.status)}>
+              {record?.status == "inactive" ? "Inactive" : "Active"}
             </Tag>
           )}
         </>
@@ -729,7 +767,7 @@ const UserManagement = () => {
                 isList ? (
                   <Col xs={24} className={"mt-2"}>
                     <Table
-                      dataSource={userData || []}
+                      dataSource={userData ?? []}
                       columns={columns}
                       bordered={true}
                       pagination={userData?.length > 0 ? pageData : false}
@@ -771,18 +809,18 @@ const UserManagement = () => {
                                           >
                                             <Col xs={24}>
                                               <Typography className="th-13 th-fw-500">
-                                                {`${each?.first_name} ${each?.last_name}` ||
+                                                {`${each?.user?.first_name} ${each?.user?.last_name}` ||
                                                   "NA"}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
                                               <Typography className="th-12">
-                                                {each?.erp}
+                                                {each?.erp_id}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
                                               <Typography className="th-12">
-                                                {each?.user_level?.name}
+                                                {each?.roles?.role_name}
                                               </Typography>
                                             </Col>
                                           </Row>
@@ -825,27 +863,27 @@ const UserManagement = () => {
                                             "Email",
                                             each?.email || "--"
                                           )}
-                                          {getCardDataText(
+                                          {/* {getCardDataText(
                                             "Zone",
                                             getArrayValues(
                                               each?.zone,
                                               "name"
                                             )?.join(", ")
-                                          )}
-                                          {getCardDataText(
+                                          )} */}
+                                          {/* {getCardDataText(
                                             "Branch",
                                             getArrayValues(
                                               each?.branch,
                                               "name"
                                             )?.join(", ")
-                                          )}
-                                          {getCardDataText(
+                                          )} */}
+                                          {/* {getCardDataText(
                                             "Marketing Type",
                                             getArrayValues(
                                               each?.field_type,
                                               "name"
                                             )?.join(", ")
-                                          )}
+                                          )} */}
                                         </Descriptions>
                                         <Col xs={24}>
                                           <Row
@@ -867,9 +905,9 @@ const UserManagement = () => {
                                               {getRoutePathDetails().modify ? (
                                                 <Popconfirm
                                                   title={`Are you sure to update "${
-                                                    each?.erp
+                                                    each?.erp_id
                                                   }" user as ${
-                                                    each?.is_active
+                                                    each?.status == "active"
                                                       ? "inactive"
                                                       : "active"
                                                   }?`}
