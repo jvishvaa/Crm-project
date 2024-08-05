@@ -20,7 +20,12 @@ import {
   AiOutlineUsergroupDelete,
 } from "react-icons/ai";
 import { MdOutlineEvent, MdOutlineEventNote, MdRoute } from "react-icons/md";
-import { CgUserList, CgFileDocument } from "react-icons/cg";
+import {
+  CgUserList,
+  CgFileDocument,
+  CgImage,
+  CgCircleci,
+} from "react-icons/cg";
 
 const modules = [
   {
@@ -390,6 +395,34 @@ const modules = [
         is_sidebar: true,
       },
     ],
+  },
+  {
+    key: "27",
+    icon: <CgImage />,
+    label: "Image Gallery",
+    permission: {
+      is_view: [1, 2, 3, 4, 5],
+      is_add: [1, 2, 3, 4, 5],
+      is_modify: [1, 2, 3, 4, 5],
+    },
+    is_route: true,
+    is_sidebar: true,
+    route: "/image_gallery",
+    component: lazy(() => import("../page/ImageGallery")),
+  },
+  {
+    key: "28",
+    icon: <CgCircleci />,
+    label: "Source Data List",
+    permission: {
+      is_view: [1, 2, 3, 4, 5],
+      is_add: [1, 2, 3, 4, 5],
+      is_modify: [1, 2, 3, 4, 5],
+    },
+    is_route: true,
+    is_sidebar: true,
+    route: "/source_data_list",
+    component: lazy(() => import("../page/SourceDataList")),
   },
 ];
 
