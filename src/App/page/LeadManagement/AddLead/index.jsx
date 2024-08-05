@@ -102,7 +102,6 @@ const AddLead = () => {
   };
 
   const handleAddLead = (values) => {
-    console.log(values, "valllll");
     let data = {
       name: values?.lead_name,
       contact_no: filterForm?.getFieldValue("contact_no"),
@@ -478,10 +477,10 @@ const AddLead = () => {
                               .includes(input.toLowerCase())
                           }
                           options={[
-                            { label: "DM-Direct", value: "dm-direct" },
+                            { label: "DM-Direct", value: 1 },
                             {
                               label: "PRO Data - Field Data",
-                              value: "pro data -field data",
+                              value: 2,
                             },
                           ]}
                         />
