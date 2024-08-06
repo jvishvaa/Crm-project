@@ -232,7 +232,7 @@ const LeadManagement = () => {
   };
   const getLeadTypeList = (values) => {
     axios
-      .get(`${urls.masterData.leadTypeList}`)
+      .get(`${urls.leadManagement.leadTypeList}`)
       .then((res) => {
         let response = res.data;
         console.log(response);
@@ -248,7 +248,7 @@ const LeadManagement = () => {
   };
   const getSourceTypeList = (values) => {
     axios
-      .get(`${urls.masterData.sourceTypeList}`)
+      .get(`${urls.leadManagement.sourceTypeList}`)
       .then((res) => {
         let response = res.data;
         console.log(response);
@@ -282,7 +282,7 @@ const LeadManagement = () => {
     });
     console.log(filteredParams, param, "pp");
     axios
-      .get(`${urls.masterData.leadInfo}`, {
+      .get(`${urls.leadManagement.leadInfo}`, {
         params: param,
       })
       .then((res) => {
