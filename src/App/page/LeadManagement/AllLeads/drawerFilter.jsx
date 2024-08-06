@@ -342,7 +342,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                   mode="multiple"
                   options={dropdownData?.leadType?.map((item, ind) => {
                     return {
-                      label: item?.lead_name,
+                      label: item?.name,
                       value: item?.id,
                     };
                   })}
