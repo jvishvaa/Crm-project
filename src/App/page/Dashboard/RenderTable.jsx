@@ -81,7 +81,6 @@ const RenderTable = ({
           <Table
             dataSource={tableData || []}
             columns={columns}
-            bordered={true}
             pagination={false}
             className="p-1"
           />

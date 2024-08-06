@@ -536,7 +536,6 @@ const RWAEvent = () => {
                     <Table
                       dataSource={rwaEventData || []}
                       columns={columns}
-                      bordered={true}
                       pagination={rwaEventData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />

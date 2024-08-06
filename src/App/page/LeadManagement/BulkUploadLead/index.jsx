@@ -609,7 +609,7 @@ const BulkUploadLead = () => {
                         <Table
                           dataSource={historyData}
                           columns={columns}
-                          // bordered={true}
+                          // }
                           pagination={pageData}
                           onChange={handleTableChange}
                         />

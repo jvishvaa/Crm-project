@@ -551,7 +551,6 @@ const Hotspot = () => {
                     <Table
                       dataSource={hotspotData || []}
                       columns={columns}
-                      bordered={true}
                       pagination={hotspotData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />

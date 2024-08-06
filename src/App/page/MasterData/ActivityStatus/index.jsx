@@ -437,7 +437,6 @@ const ActivityStatus = () => {
                     dataSource={statusData || []}
                     columns={columns}
                     pagination={false}
-                    bordered={true}
                   />
                 ) : (
                   <CustomFilterText />

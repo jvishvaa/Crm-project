@@ -542,7 +542,6 @@ const RouteAssign = () => {
                     <Table
                       dataSource={routeAssignData || []}
                       columns={columns}
-                      bordered={true}
                       pagination={
                         routeAssignData?.length > 0 ? pageData : false
                       }

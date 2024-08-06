@@ -187,7 +187,7 @@ const LeadManagement = () => {
       {
         ...defaultFilters,
         date_range: [
-          dayjs().format("YYYY-MM-DD"),
+          dayjs().subtract(1, "month").format("YYYY-MM-DD"),
           dayjs().format("YYYY-MM-DD"),
         ],
       },
@@ -311,6 +311,7 @@ const LeadManagement = () => {
   };
   const getLeadData = (page, page_size, filteredParams = filterData) => {
     let param = {};
+    setLoading(true);
     Object.entries(filteredParams)?.forEach(([key, value]) => {
       if (key === "date_range" && Array.isArray(value) && value?.length === 2) {
         const [startDate, endDate] = value?.map(
@@ -335,14 +336,13 @@ const LeadManagement = () => {
       })
       .then((res) => {
         let response = res?.data;
-        console.log(response, "lead");
         setLeadData(response?.data);
         message.success("Lead info fetched successfully.");
-        // setPageData({
-        //   current: response?.current_page,
-        //   pageSize: 15,
-        //   total: response?.count,
-        // });
+        setPageData({
+          current: 1,
+          pageSize: response?.data?.length,
+          total: response?.data?.length,
+        });
       })
       .catch((err) => {
         message.error(err?.message ?? "Failed to fetched lead info");
@@ -350,11 +350,6 @@ const LeadManagement = () => {
       .finally(() => {
         setLoading(false);
       });
-    setPageData({
-      current: page,
-      pageSize: page_size,
-      total: 15,
-    });
   };
 
   useEffect(() => {
@@ -763,35 +758,41 @@ const LeadManagement = () => {
       title: "Action",
       key: "action",
       render: (record) => (
-        <>
-          <Tooltip title="Mark as Hot">
-            <Popconfirm title="Are you to mark lead as Hot?">
+        <Row className={"d-flex flex-row align-items-center flex-nowrap"}>
+          <Col>
+            <Tooltip title="Mark as Hot">
+              <Popconfirm title="Are you to mark lead as Hot?">
+                <Button
+                  type="text"
+                  icon={<FireFilled size={20} style={{ color: "#BB2139" }} />}
+                />
+              </Popconfirm>
+            </Tooltip>
+          </Col>
+          <Col>
+            <Tooltip title="Update Lead Details">
               <Button
                 type="text"
-                icon={<FireFilled size={20} style={{ color: "#BB2139" }} />}
+                icon={<EditFilled size={20} />}
+                onClick={() => {
+                  handleUpdateLeadDetails(record);
+                }}
               />
-            </Popconfirm>
-          </Tooltip>
-          <Tooltip title="Update Lead Details">
-            <Button
-              type="text"
-              icon={<EditFilled size={20} />}
-              onClick={() => {
-                handleUpdateLeadDetails(record);
-              }}
-            />
-          </Tooltip>
-          <Tooltip title="View Lead">
-            <Button
-              type="text"
-              icon={<IoMdEye size={20} />}
-              onClick={() => {
-                navigate(`/lead-management/lead-details/1`);
-                // navigate(`/lead-management/lead-details/${record?.id}`);
-              }}
-            />
-          </Tooltip>
-        </>
+            </Tooltip>
+          </Col>
+          <Col>
+            <Tooltip title="View Lead">
+              <Button
+                type="text"
+                icon={<IoMdEye size={20} />}
+                onClick={() => {
+                  navigate(`/lead-management/lead-details/1`);
+                  // navigate(`/lead-management/lead-details/${record?.id}`);
+                }}
+              />
+            </Tooltip>
+          </Col>
+        </Row>
       ),
       align: "center",
       width: 130,
@@ -985,18 +986,17 @@ const LeadManagement = () => {
                   </Row>
                 </Col>
               ) : null}
-              {/* {showFilterView ? (
+              {showFilterView ? (
                 <Col xs={24} className={"mt-1"}>
                   {renderFilterView()}
                 </Col>
-              ) : null} */}
+              ) : null}
               {leadData ? (
                 isList ? (
                   <Col xs={24} className={"mt-2"}>
                     <Table
                       dataSource={leadData || []}
                       columns={columns}
-                      // bordered={true}
                       loading={loading}
                       pagination={leadData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
@@ -1060,21 +1060,63 @@ const LeadManagement = () => {
                                           </Row>
                                         </Col>
                                         <Col xs={6}>
-                                          <Row className="d-flex flex-row justify-content-end">
-                                            <Tooltip title="View Lead">
-                                              <Button
-                                                type="iconbutton"
-                                                icon={<IoMdEye size={25} />}
-                                                onClick={() => {
-                                                  navigate(
-                                                    "/lead-management/lead-details/1",
-                                                    {
-                                                      state: { is_back: true },
+                                          <Row
+                                            className="d-flex flex-row justify-content-end"
+                                            gutter={[4, 4]}
+                                          >
+                                            <Col>
+                                              <Tooltip title="Mark as Hot">
+                                                <Popconfirm title="Are you to mark lead as Hot?">
+                                                  <Button
+                                                    type="iconbutton"
+                                                    size="small"
+                                                    icon={
+                                                      <FireFilled
+                                                        size={20}
+                                                        style={{
+                                                          color: "#BB2139",
+                                                        }}
+                                                      />
                                                     }
-                                                  );
-                                                }}
-                                              />
-                                            </Tooltip>
+                                                  />
+                                                </Popconfirm>
+                                              </Tooltip>
+                                            </Col>
+                                            <Col>
+                                              <Tooltip title="Update Lead Details">
+                                                <Button
+                                                  type="iconbutton"
+                                                  size="small"
+                                                  icon={
+                                                    <EditFilled size={20} />
+                                                  }
+                                                  onClick={() => {
+                                                    handleUpdateLeadDetails(
+                                                      record
+                                                    );
+                                                  }}
+                                                />
+                                              </Tooltip>
+                                            </Col>
+                                            <Col>
+                                              <Tooltip title="View Lead">
+                                                <Button
+                                                  type="iconbutton"
+                                                  size="small"
+                                                  icon={<IoMdEye size={20} />}
+                                                  onClick={() => {
+                                                    navigate(
+                                                      "/lead-management/lead-details/1",
+                                                      {
+                                                        state: {
+                                                          is_back: true,
+                                                        },
+                                                      }
+                                                    );
+                                                  }}
+                                                />
+                                              </Tooltip>
+                                            </Col>
                                           </Row>
                                         </Col>
                                       </Row>

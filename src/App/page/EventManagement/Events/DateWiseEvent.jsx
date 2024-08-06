@@ -162,7 +162,6 @@ const DateWiseEvent = ({
           <Table
             dataSource={dateWiseEventData || []}
             columns={columns}
-            bordered={true}
             pagination={false}
           />
         </Col>

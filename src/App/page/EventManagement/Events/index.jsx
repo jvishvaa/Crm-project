@@ -933,7 +933,6 @@ const Events = () => {
                     <Table
                       dataSource={eventData || []}
                       columns={columns}
-                      bordered={true}
                       pagination={eventData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />

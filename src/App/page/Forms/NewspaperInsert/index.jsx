@@ -543,7 +543,6 @@ const NewspaperInsert = () => {
                     <Table
                       dataSource={newspaperData || []}
                       columns={columns}
-                      bordered={true}
                       pagination={newspaperData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />

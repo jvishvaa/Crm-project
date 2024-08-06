@@ -861,7 +861,6 @@ const UserManagement = () => {
                     <Table
                       dataSource={userData ?? []}
                       columns={columns}
-                      // bordered={true}
                       pagination={userData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />

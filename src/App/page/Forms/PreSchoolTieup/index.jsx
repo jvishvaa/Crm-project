@@ -592,7 +592,6 @@ const PreSchoolTieup = () => {
                     <Table
                       dataSource={preSchoolData || []}
                       columns={columns}
-                      bordered={true}
                       pagination={preSchoolData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />

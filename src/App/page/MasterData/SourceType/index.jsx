@@ -266,7 +266,6 @@ const SourceType = () => {
                   <Table
                     dataSource={sourceTypeData || []}
                     columns={columns}
-                    bordered={true}
                     pagination={false}
                   />
                 </Col>

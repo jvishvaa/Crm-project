@@ -1100,7 +1100,6 @@ const AssignLeadToPRM = () => {
                             dataSource={leadData || []}
                             columns={columns}
                             rowSelection={rowSelection}
-                            bordered={true}
                             pagination={
                               leadData?.length > 0
                                 ? {
