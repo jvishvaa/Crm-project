@@ -522,7 +522,7 @@ const BulkUploadLead = () => {
                   <Col xs={24}>
                     <Form
                       form={filterForm}
-                      layout="vertical"
+                      layout="horizontal"
                       onFinish={() => {
                         getHistoryData(1, pageData?.pageSize);
                       }}
@@ -559,7 +559,7 @@ const BulkUploadLead = () => {
                               type="primary"
                               htmlType="submit"
                               size="middle"
-                              style={{ marginTop: 23, height: 30 }}
+                              // style={{ height: 30 }}
                             >
                               Filter
                             </Button>
@@ -572,12 +572,12 @@ const BulkUploadLead = () => {
                             md={7}
                             lg={8}
                             xl={11}
-                            style={width < 576 ? { marginTop: -30 } : {}}
+                            // style={width < 576 ? { marginTop: -30 } : {}}
                           >
                             <Row className="d-flex justify-content-end">
-                              <Col>
+                              <Form.Item>
                                 <Radio.Group
-                                  style={{ marginTop: 32 }}
+                                  // style={{ marginTop: 32 }}
                                   className="lead-radio"
                                   options={[
                                     {
@@ -596,7 +596,7 @@ const BulkUploadLead = () => {
                                   optionType="button"
                                   buttonStyle="solid"
                                 />
-                              </Col>
+                              </Form.Item>
                             </Row>
                           </Col>
                         ) : null}
