@@ -621,7 +621,9 @@ const PersonalDetails = ({ enquiryFormData, setEnquiryFormData }) => {
                   onChange={(e) => {
                     setEnquiryFormData({
                       ...enquiryFormData,
-                      lead_address: e.target.value,
+                      lead_address: e.target.value
+                        ?.trimStart()
+                        ?.replace("  ", " "),
                     });
                   }}
                 />

@@ -30,15 +30,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import getChangedCountValues from "../../../utils/getChangeCountObject";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
-import AddEditNewspaperInsert from "./AddEditNewspaperInsert";
 import { GoFileDirectoryFill } from "react-icons/go";
 import PreviewMedia from "../../../component/UtilComponents/PreviewMedia";
+import AddEditRWAEvent from "./AddEditRWAEvent";
 
-const NewspaperInsert = () => {
+const RWAEvent = () => {
   const defaultFilters = {
     zone: [0],
     branch: [0],
-    newspaper: [0],
+    city: [0],
     date_range: [dayjs(), dayjs()],
   };
   const [loading, setLoading] = useState(false);
@@ -59,13 +59,18 @@ const NewspaperInsert = () => {
     pageSize: 15,
     total: 0,
   });
-  const [newspaperData, setNewspaperData] = useState(null);
+  const [rwaEventData, setRWAEventData] = useState(null);
   const [isList, setIsList] = useState(true);
   const searchIconRef = useRef(null);
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
-  const [previewData, setPreviewData] = useState({ show: false, urls: [] });
   const dropdownData = {
+    city: [
+      { label: "All", value: 0 },
+      { label: "City 1", value: "city 1" },
+      { label: "City 2", value: "city 2" },
+      { label: "City 3", value: "city 3" },
+    ],
     zone: [
       { label: "All", value: 0 },
       { label: "Zone 1", value: "zone 1" },
@@ -78,12 +83,6 @@ const NewspaperInsert = () => {
       { label: "Orchids BTM Layout", value: "btm-layout" },
       { label: "Orchids Banerghata", value: "banerghata" },
       { label: "Orchids Newtown", value: "newtown" },
-    ],
-
-    newspaper: [
-      { label: "All", value: 0 },
-      { label: "Newspaper 1", value: "newspaper_1" },
-      { label: "Newspaper 2", value: "newspaper_2" },
     ],
   };
 
@@ -118,26 +117,29 @@ const NewspaperInsert = () => {
 
   const [searchFetched, setSearchFetched] = useState(false);
 
-  const getNewspaperData = (page, page_size, params = {}) => {
+  const getRWAEventData = (page, page_size, params = {}) => {
     // setLoading(true);
-    setNewspaperData([
+    setRWAEventData([
       {
         id: 1,
+        event_name: "Test Event",
         date: "02/08/2024",
         branch: { name: "ORCHIDS Yelahanka", id: 2 },
-        newspaper: "Bangalore Times, Times of India",
-        targetArea: "Yelahanka New Town, Judicial Layout",
-        amountPaid: 500,
-        insertedBy: { name: "Anik Chowdhury", erp: 24713623634 },
+        total_event_cost: 100,
+        total_lead_collected: 1000,
+        total_handi_lead_collected: 1000,
+        cpr: 100,
       },
       {
         id: 2,
         date: "02/08/2024",
+        event_name: "Test Event 2",
         branch: { name: "ORCHIDS Yelahanka", id: 2 },
-        newspaper: "Bangalore Times, Times of India",
-        targetArea: "Yelahanka New Town, Judicial Layout",
-        amountPaid: 500,
-        insertedBy: { name: "Anik Chowdhury", erp: 24713623634 },
+        branch: { name: "ORCHIDS Yelahanka", id: 2 },
+        total_event_cost: 100,
+        total_lead_collected: 1000,
+        total_handi_lead_collected: 1000,
+        cpr: 100,
       },
     ]);
     setPageData({
@@ -148,23 +150,23 @@ const NewspaperInsert = () => {
   };
 
   useEffect(() => {
-    getNewspaperData(pageData?.current, pageData?.pageSize);
+    getRWAEventData(pageData?.current, pageData?.pageSize);
   }, []);
 
   const handleTableChange = (pagination) => {
     window.scrollTo(0, 0);
-    getNewspaperData(pagination?.current, pagination?.pageSize);
+    getRWAEventData(pagination?.current, pagination?.pageSize);
   };
 
   const handleCardChange = (page) => {
     window.scrollTo(0, 0);
-    getNewspaperData(page, pageData?.pageSize);
+    getRWAEventData(page, pageData?.pageSize);
   };
 
   const getSearchInput = () => {
     return (
       <Input
-        placeholder="Search Newspaper"
+        placeholder="Search Event Name"
         style={{
           height: 30,
           maxWidth: 250,
@@ -177,7 +179,7 @@ const NewspaperInsert = () => {
         onPressEnter={() => {
           setSearchFetched(true);
           setSearchValue(searchInput);
-          getNewspaperData(1, pageData?.pageSize);
+          getRWAEventData(1, pageData?.pageSize);
         }}
         onBlur={(e) => {
           if (
@@ -210,7 +212,7 @@ const NewspaperInsert = () => {
               onClick={() => {
                 setSearchFetched(true);
                 setSearchValue(searchInput);
-                getNewspaperData(1, pageData?.pageSize);
+                getRWAEventData(1, pageData?.pageSize);
               }}
             />
           )
@@ -227,7 +229,7 @@ const NewspaperInsert = () => {
         style={{ whiteSpace: "normal" }}
         onClick={() => {
           setFilterData({ ...defaultFilters });
-          getNewspaperData(1, pageData?.pageSize);
+          getRWAEventData(1, pageData?.pageSize);
         }}
       >
         Clear Filters
@@ -270,19 +272,6 @@ const NewspaperInsert = () => {
             </Col>
           ) : null}
 
-          {!filterData?.newspaper?.includes(0) ? (
-            <Col>
-              <RenderFilterTag
-                label="Newspaper"
-                value={getArrayValues(
-                  dropdownData?.newspaper?.filter((each) =>
-                    filterData?.newspaper?.includes(each?.value)
-                  ),
-                  "label"
-                )?.join(", ")}
-              />
-            </Col>
-          ) : null}
           <Col>
             <RenderFilterTag
               label="Date"
@@ -318,6 +307,12 @@ const NewspaperInsert = () => {
       align: "center",
     },
     {
+      title: "Event Name",
+      key: "event_name",
+      render: (record) => <span>{record?.event_name || "--"}</span>,
+      align: "center",
+    },
+    {
       title: "Date",
       key: "date",
       render: (record) => <span>{record?.date || "--"}</span>,
@@ -330,58 +325,56 @@ const NewspaperInsert = () => {
       align: "center",
     },
     {
-      title: "Newspaper",
-      key: "newspaper",
-      render: (record) => <span>{record?.newspaper || "--"}</span>,
+      title: "Total Cost (Rs.)",
+      key: "total_cost",
+      render: (record) => <span>{record?.total_event_cost || "--"}</span>,
       align: "center",
     },
     {
-      title: "Target Area",
-      key: "target_area",
-      render: (record) => <span>{record?.targetArea || "--"}</span>,
+      title: "Total Lead Collected",
+      key: "total_lead_collected",
+      render: (record) => <span>{record?.total_lead_collected || "--"}</span>,
       align: "center",
     },
     {
-      title: "Amount Paid(Rs.)",
-      key: "amount_paid",
-      render: (record) => <span>{record?.amountPaid || "--"}</span>,
-      align: "center",
-    },
-    {
-      title: "Inserted By",
-      key: "inserted_by",
+      title: "Total H&I Lead Collected",
+      key: "total_handi_lead_collected",
       render: (record) => (
-        <>
-          <span>{record?.insertedBy?.name}</span>
-          <br />
-          <span>({record?.insertedBy?.erp})</span>
-        </>
+        <span>{record?.total_handi_lead_collected || "--"}</span>
       ),
       align: "center",
     },
     {
-      title: "File",
-      key: "file",
-      render: (record) => (
-        <>
-          <Button
-            size="small"
-            type="text"
-            onClick={() => {
-              setPreviewData({
-                show: true,
-                urls: [
-                  "https://kinsta.com/wp-content/uploads/2017/05/how-to-optimize-images-for-web-and-performance-1024x512.jpg",
-                  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                ],
-              });
-            }}
-            icon={<GoFileDirectoryFill size={20} />}
-          />
-        </>
-      ),
+      title: "CPR",
+      key: "cpr",
+      render: (record) => <span>{record?.cpr || "--"}</span>,
       align: "center",
     },
+    ...(getRoutePathDetails().modify
+      ? [
+          {
+            title: "Action",
+            key: "action",
+            render: (record) => (
+              <Tooltip title="Update RWA Event">
+                <Button
+                  type="text"
+                  size="small"
+                  icon={<MdEdit size={18} />}
+                  onClick={() => {
+                    setDrawerData({
+                      show: true,
+                      type: "Update RWA Event",
+                      data: record,
+                    });
+                  }}
+                />
+              </Tooltip>
+            ),
+            align: "center",
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -392,7 +385,7 @@ const NewspaperInsert = () => {
             <Col xs={24}>
               <Row className="d-flex flex-row justify-content-between">
                 <Col>
-                  <CustomBreadCrumbs data={["Newspaper Insert"]} />
+                  <CustomBreadCrumbs data={["RWA Event"]} />
                 </Col>
                 <Col>
                   <Row className="d-flex flex-row" gutter={[8, 4]}>
@@ -405,11 +398,11 @@ const NewspaperInsert = () => {
                             setDrawerData({
                               show: true,
                               data: null,
-                              type: "Add Newspaper Insert",
+                              type: "Add RWA Event",
                             });
                           }}
                         >
-                          + Newspaper Insert
+                          + RWA Event
                         </Button>
                       </Col>
                     ) : null}
@@ -421,7 +414,7 @@ const NewspaperInsert = () => {
                           disabled={loading}
                           icon={<MdRefresh size={20} />}
                           onClick={() => {
-                            getNewspaperData(1, pageData.pageSize);
+                            getRWAEventData(1, pageData.pageSize);
                           }}
                         />
                       </Tooltip>
@@ -530,20 +523,20 @@ const NewspaperInsert = () => {
                   {renderFilterView()}
                 </Col>
               ) : null}
-              {newspaperData ? (
+              {rwaEventData ? (
                 isList ? (
                   <Col xs={24} className={"mt-2"}>
                     <Table
-                      dataSource={newspaperData || []}
+                      dataSource={rwaEventData || []}
                       columns={columns}
                       bordered={true}
-                      pagination={newspaperData?.length > 0 ? pageData : false}
+                      pagination={rwaEventData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />
                   </Col>
                 ) : (
                   <>
-                    {newspaperData?.length === 0 ? (
+                    {rwaEventData?.length === 0 ? (
                       <Col xs={24} className={"mt-2"}>
                         <Row
                           style={{ minHeight: 200 }}
@@ -555,11 +548,11 @@ const NewspaperInsert = () => {
                         </Row>
                       </Col>
                     ) : null}
-                    {newspaperData?.length > 0 ? (
+                    {rwaEventData?.length > 0 ? (
                       <>
                         <Col xs={24} className={"mt-2"}>
                           <Row className={"d-flex"} gutter={[8, 8]}>
-                            {newspaperData?.map((each, index) => (
+                            {rwaEventData?.map((each, index) => (
                               <Col xs={24} sm={12} lg={8} key={index}>
                                 <CustomCard style={{ height: "100%" }}>
                                   <Row gutter={[4, 4]} className={"d-flex"}>
@@ -576,7 +569,7 @@ const NewspaperInsert = () => {
                                           >
                                             <Col xs={24}>
                                               <Typography className="th-13 th-fw-500">
-                                                {each?.newspaper || "NA"}
+                                                {each?.event_name || "NA"}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
@@ -596,25 +589,23 @@ const NewspaperInsert = () => {
                                             className="d-flex flex-row justify-content-end"
                                             gutter={[4, 4]}
                                           >
-                                            <Col>
-                                              <Button
-                                                type="iconbutton"
-                                                icon={
-                                                  <GoFileDirectoryFill
-                                                    size={20}
+                                            {getRoutePathDetails().modify ? (
+                                              <Col>
+                                                <Tooltip title="Update RWA Event">
+                                                  <Button
+                                                    type="iconbutton"
+                                                    icon={<MdEdit size={20} />}
+                                                    onClick={() => {
+                                                      setDrawerData({
+                                                        show: true,
+                                                        type: "Update RWA Event",
+                                                        data: each,
+                                                      });
+                                                    }}
                                                   />
-                                                }
-                                                onClick={() => {
-                                                  setPreviewData({
-                                                    show: true,
-                                                    urls: [
-                                                      "https://kinsta.com/wp-content/uploads/2017/05/how-to-optimize-images-for-web-and-performance-1024x512.jpg",
-                                                      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                                                    ],
-                                                  });
-                                                }}
-                                              />
-                                            </Col>
+                                                </Tooltip>
+                                              </Col>
+                                            ) : null}
                                           </Row>
                                         </Col>
                                       </Row>
@@ -623,26 +614,23 @@ const NewspaperInsert = () => {
                                     <Col xs={24}>
                                       <Descriptions column={1}>
                                         {getCardDataText(
-                                          "Target Area",
-                                          each?.targetArea || "--"
-                                        )}
-                                        {getCardDataText(
-                                          "Amount Paid",
-                                          each?.amountPaid
-                                            ? `Rs. ${each?.amountPaid}`
+                                          "Total Cost",
+                                          each?.total_event_cost
+                                            ? `Rs. ${each?.total_event_cost}`
                                             : "--"
                                         )}
                                         {getCardDataText(
-                                          "Inserted By",
-                                          <>
-                                            <span>
-                                              {each?.insertedBy?.name}&nbsp;
-                                            </span>
-                                            <br />
-                                            <span>
-                                              ({each?.insertedBy?.erp})
-                                            </span>
-                                          </>
+                                          "Total Lead Collected",
+                                          each?.total_lead_collected || "--"
+                                        )}
+                                        {getCardDataText(
+                                          "Total H&I Lead Collected",
+                                          each?.total_handi_lead_collected ||
+                                            "--"
+                                        )}
+                                        {getCardDataText(
+                                          "CPR",
+                                          each?.cpr || "--"
                                         )}
                                       </Descriptions>
                                     </Col>
@@ -677,29 +665,23 @@ const NewspaperInsert = () => {
         onSubmit={(values) => {
           setDrawerData({ show: false, type: null, data: null });
           setFilterData({ ...filterData, ...values });
-          getNewspaperData(1, pageData?.pageSize);
+          getRWAEventData(1, pageData?.pageSize);
         }}
         dropdownData={dropdownData}
         closeDrawer={() => {
           setDrawerData({ show: false, type: null, data: null });
         }}
       />
-      <AddEditNewspaperInsert
+      <AddEditRWAEvent
         modalData={drawerData}
-        handleAddEditNewspaperInsert={() => {}}
+        handleAddEditRWAEvent={() => {}}
         closeModal={() => {
           setDrawerData({ show: false, type: null, data: null });
         }}
         dropdownData={dropdownData}
       />
-      <PreviewMedia
-        modalData={previewData}
-        closeModal={() => {
-          setPreviewData({ show: false, urls: [] });
-        }}
-      />
     </CustomCard>
   );
 };
 
-export default NewspaperInsert;
+export default RWAEvent;

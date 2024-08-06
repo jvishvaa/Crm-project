@@ -142,6 +142,19 @@ const UpdateUser = ({
                       ["e", "E", "+", "-"].includes(e.key) &&
                         e.preventDefault();
                     }}
+                    onChange={(e) => {
+                      if (Number(e.target.value) <= 9999999999) {
+                        form.setFieldsValue({
+                          contact_no: e.target.value,
+                        });
+                      } else {
+                        form.setFieldsValue({
+                          contact_no: Number(
+                            e.target.value?.toString()?.slice(0, -1)
+                          ),
+                        });
+                      }
+                    }}
                   />
                 </Form.Item>
               </Col>

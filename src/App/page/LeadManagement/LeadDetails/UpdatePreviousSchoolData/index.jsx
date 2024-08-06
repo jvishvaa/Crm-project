@@ -161,7 +161,16 @@ const UpdatePreviousSchoolData = ({
                   name="reason_for_leaving_school"
                   label="Reason For Leaving School"
                 >
-                  <TextArea rows={3} />
+                  <TextArea
+                    rows={3}
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        reason_for_leaving_school: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
+                    }}
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24}>

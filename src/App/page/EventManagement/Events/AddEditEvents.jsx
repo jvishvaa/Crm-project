@@ -317,6 +317,19 @@ const AddEditEvent = ({
                       ["e", "E", "+", "-"].includes(e.key) &&
                         e.preventDefault();
                     }}
+                    onChange={(e) => {
+                      if (Number(e.target.value) <= 99999999999999) {
+                        form.setFieldsValue({
+                          event_cost: e.target.value,
+                        });
+                      } else {
+                        form.setFieldsValue({
+                          event_cost: Number(
+                            e.target.value?.toString()?.slice(0, -1)
+                          ),
+                        });
+                      }
+                    }}
                   />
                 </Form.Item>
               </Col>

@@ -17,6 +17,7 @@ import {
   Empty,
   Pagination,
   Descriptions,
+  Tag
 } from "antd";
 import "./index.scss";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
@@ -28,7 +29,11 @@ import { MdListAlt } from "react-icons/md";
 import { BiIdCard } from "react-icons/bi";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
+import axios from "axios";
+import urls from "../../../utils/urls";
 const { RangePicker } = DatePicker;
+
+
 
 const BulkUploadLead = () => {
   const [form] = Form.useForm();
@@ -44,6 +49,9 @@ const BulkUploadLead = () => {
     total: 0,
   });
   const [isList, setIsList] = useState(false);
+  const [branchList, setBranchList] = useState([])
+  const [academicYear, setAcademicYear] = useState(23);
+  const [schoolType, setSchoolType] = useState(1);
 
   useEffect(() => {
     if (width <= 991) {
@@ -53,15 +61,52 @@ const BulkUploadLead = () => {
     }
   }, [width]);
 
+  const getBranch = async () => {
+    try {
+      const response = await axios.get(urls.masterData.branchList);
+      const data = response?.data;
+      setBranchList(data?.result)
+      // console.log(response, 'branchList')
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const branchOption = branchList?.map((each) => (
+    <Select.Option key={each?.id} value={each?.id}>
+      {each?.branch_name}
+      </Select.Option>
+  ))
+
+  console.log(branchList, 'branchList')
+
   const onFinish = (values) => {
     if (!selectedFile) {
       message.error("Please Select File");
       return;
     }
+    const formData = new FormData();
+    formData.append("academic_year_id", academicYear);
+    formData.append("source_id", values?.lead_source);
+    formData.append("branch_id", values?.branch);
+    formData.append("school_type", schoolType);
+    formData.append("file", selectedFile);
+
+    console.log(values, 'values')
+    setLoading(true)
+    axios
+      .post(urls.masterData.bulkUpload, formData)
+      .then((resp) => {
+        console.log(resp, 'bulkuploadResp')
+      })
+      .catch((e) => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
     filterForm.setFieldsValue({ date_range: [dayjs(), dayjs()] });
+    getBranch();
   }, []);
 
   const getHistoryData = (page, page_size) => {
@@ -210,7 +255,7 @@ const BulkUploadLead = () => {
   };
 
   return (
-    <CustomCard>
+    // <CustomCard>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Row className="d-flex flex-column">
@@ -234,8 +279,8 @@ const BulkUploadLead = () => {
                   className="w-100"
                 >
                   <Row>
-                    <Col xs={24}>
-                      <Form.Item
+                    <Col xs={12}>
+                      {/* <Form.Item
                         name="academic_year"
                         label="Academic Year"
                         rules={[
@@ -254,12 +299,73 @@ const BulkUploadLead = () => {
                               .includes(input.toLowerCase())
                           }
                           options={[
-                            { label: "2023-24", value: "2023-24" },
-                            { label: "2024-25", value: "2024-25" },
+                            { label: "2023-24", value: 23 },
+                            { label: "2024-25", value: 24 },
                           ]}
                         />
-                      </Form.Item>
-                    </Col>
+                      </Form.Item> */}
+                    <Form.Item
+                      name="academic_year"
+                      label="Academic Year"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select Academic Year",
+                        },
+                      ]}
+                    >
+                      <div>
+                            {[
+                              {
+                                label: "2023-24",
+                                id: 23
+                              },
+                              {
+                                label: "2024-25",
+                                id: 24
+                            }].map((year) => (
+                          <Tag.CheckableTag
+                            key={year}
+                            checked={academicYear === year.id}
+                            onChange={() => {
+                              setAcademicYear(year.id);
+                            }
+                            }
+                          >
+                            {year.label}
+                          </Tag.CheckableTag>
+                        ))}
+                      </div>
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={12} md={8}>
+                    <Form.Item
+                      name={"school_type"}
+                      label="School Type"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select School Type",
+                        },
+                      ]}
+                    >
+                      <div>
+                        {[
+                          { label: "Day", value: 1 },
+                          { label: "Boarding", value: 2 },
+                        ].map((type) => (
+                          <Tag.CheckableTag
+                            key={type.value}
+                            checked={schoolType === type.value}
+                            onChange={() => setSchoolType(type.value)}
+                          >
+                            {type.label}
+                          </Tag.CheckableTag>
+                        ))}
+                      </div>
+                    </Form.Item>
+                  </Col>
+                  
                     <Col xs={24}>
                       <Form.Item
                         name="lead_source"
@@ -280,10 +386,10 @@ const BulkUploadLead = () => {
                               .includes(input.toLowerCase())
                           }
                           options={[
-                            { label: "DM-Direct", value: "dm-direct" },
+                            { label: "DM-Direct", value: 1 },
                             {
                               label: "PRO Data - Field Data",
-                              value: "pro data -field data",
+                              value: 2,
                             },
                           ]}
                         />
@@ -303,25 +409,29 @@ const BulkUploadLead = () => {
                         <Select
                           style={{ width: "100%" }}
                           showSearch
-                          filterOption={(input, option) =>
-                            option.label
-                              .toLowerCase()
-                              .includes(input.toLowerCase())
-                          }
-                          options={[
-                            {
-                              label: "Orchids BTM Layout",
-                              value: "btm-layout",
-                            },
-                            {
-                              label: "Orchids Banerghata",
-                              value: "banerghata",
-                            },
-                          ]}
-                        />
+                          optionFilterProp='children'
+                          filterOption={(input, options) => {
+                            return (
+                              options.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                              0
+                            );
+                          }}
+                          // options={[
+                          //   {
+                          //     label: "Orchids BTM Layout",
+                          //     value: "btm-layout",
+                          //   },
+                          //   {
+                          //     label: "Orchids Banerghata",
+                          //     value: "banerghata",
+                          //   },
+                          // ]}
+                        >
+                          {branchOption}
+                          </Select>
                       </Form.Item>
                     </Col>
-                    <Col xs={24}>
+                    {/* <Col xs={24}>
                       <Form.Item
                         name="school_type"
                         label="School Type"
@@ -341,12 +451,12 @@ const BulkUploadLead = () => {
                               .includes(input.toLowerCase())
                           }
                           options={[
-                            { label: "Day", value: "day" },
-                            { label: "Boarding", value: "boarding" },
+                            { label: "Day", value: 1 },
+                            { label: "Boarding", value: 2 },
                           ]}
                         />
                       </Form.Item>
-                    </Col>
+                    </Col> */}
                     <Col xs={24}>
                       <UploadFile
                         selectedFile={selectedFile}
@@ -361,7 +471,11 @@ const BulkUploadLead = () => {
                         <span className="upload-xlsx-text">
                           Upload File xlsx format only
                         </span>
-                        <a className="download-sample-format" download>
+                        <a
+                          className="download-sample-format"
+                          download
+                          href="/lead_template.xlsx"
+                        >
                           Download Sample Format
                         </a>
                       </div>
@@ -481,7 +595,7 @@ const BulkUploadLead = () => {
                           <Table
                             dataSource={historyData}
                             columns={columns}
-                            bordered={true}
+                            // bordered={true}
                             pagination={pageData}
                             onChange={handleTableChange}
                           />
@@ -507,6 +621,18 @@ const BulkUploadLead = () => {
                                       <Col xs={24} lg={12} key={index}>
                                         <CustomCard style={{ height: "100%" }}>
                                           <Descriptions column={1}>
+                                            
+                                            {getCardDataText(
+                                              "",
+                                              <span style={{fontWeight:500, fontSize: 15, marginBottom: 10, color: '#821727'}}>
+
+                                                {each?.file_name || "--"}
+                                              </span>
+                                            )}
+                                            {getCardDataText(
+                                              "Uploaded By",
+                                              each?.uploaded_by || "--"
+                                            )}
                                             {getCardDataText(
                                               "Upload Date",
                                               each?.upload_date
@@ -514,14 +640,6 @@ const BulkUploadLead = () => {
                                                     each.upload_date
                                                   ).format("DD/MM/YYYY hh:mma")
                                                 : "--"
-                                            )}
-                                            {getCardDataText(
-                                              "File Name",
-                                              each?.file_name || "--"
-                                            )}
-                                            {getCardDataText(
-                                              "Uploaded By",
-                                              each?.uploaded_by || "--"
                                             )}
                                             {getCardDataText(
                                               "Success Count",
@@ -609,7 +727,7 @@ const BulkUploadLead = () => {
           </Row>
         </Col>
       </Row>
-    </CustomCard>
+    // </CustomCard>
   );
 };
 

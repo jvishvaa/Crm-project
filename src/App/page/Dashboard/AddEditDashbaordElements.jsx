@@ -685,7 +685,9 @@ const AddEditDashboardElements = ({
                     rows={2}
                     value={reportDescription}
                     onChange={(e) => {
-                      setReportDescription(e.target.value);
+                      setReportDescription(
+                        e.target.value?.trimStart()?.replace("  ", " ")
+                      );
                     }}
                   />
                 </Col>

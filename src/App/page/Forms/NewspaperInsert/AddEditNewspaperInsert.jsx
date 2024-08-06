@@ -161,7 +161,16 @@ const AddEditNewspaperInsert = ({
           <Form form={form} layout="vertical" onFinish={onFinish}>
             <Row gutter={[8, 0]}>
               <Col xs={24} md={12}>
-                <Form.Item name="date" label="Date">
+                <Form.Item
+                  name="date"
+                  label="Date"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Select Date",
+                    },
+                  ]}
+                >
                   <DatePicker
                     className="w-100"
                     format={"DD/MM/YYYY"}
@@ -170,7 +179,16 @@ const AddEditNewspaperInsert = ({
                 </Form.Item>
               </Col>
               <Col xs={24} md={12}>
-                <Form.Item name="branch" label="Branch">
+                <Form.Item
+                  name="branch"
+                  label="Branch"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Select Branch",
+                    },
+                  ]}
+                >
                   <Select
                     className="w-100"
                     options={dropdownData?.branch?.filter(
@@ -185,7 +203,16 @@ const AddEditNewspaperInsert = ({
                 </Form.Item>
               </Col>
               <Col xs={24} md={12}>
-                <Form.Item name="newspaper" label="Newspaper">
+                <Form.Item
+                  name="newspaper"
+                  label="Newspaper"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Select Newspaper",
+                    },
+                  ]}
+                >
                   <Select
                     className="w-100"
                     mode="multiple"
@@ -201,7 +228,16 @@ const AddEditNewspaperInsert = ({
                 </Form.Item>
               </Col>
               <Col xs={24} md={12}>
-                <Form.Item name="target_area" label="Target Area">
+                <Form.Item
+                  name="target_area"
+                  label="Target Area"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Input Target Area",
+                    },
+                  ]}
+                >
                   <Input
                     maxLength={64}
                     autoComplete="off"
@@ -216,12 +252,34 @@ const AddEditNewspaperInsert = ({
                 </Form.Item>
               </Col>
               <Col xs={24} md={12}>
-                <Form.Item name="amount_paid" label="Amount Paid(Rs.)">
+                <Form.Item
+                  name="amount_paid"
+                  label="Amount Paid(Rs.)"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Input Amount Paid",
+                    },
+                  ]}
+                >
                   <Input
                     type="number"
                     onKeyDown={(e) => {
                       ["e", "E", "+", "-", "."].includes(e.key) &&
                         e.preventDefault();
+                    }}
+                    onChange={(e) => {
+                      if (Number(e.target.value) <= 99999999999999) {
+                        form.setFieldsValue({
+                          amount_paid: e.target.value,
+                        });
+                      } else {
+                        form.setFieldsValue({
+                          amount_paid: Number(
+                            e.target.value?.toString()?.slice(0, -1)
+                          ),
+                        });
+                      }
                     }}
                   />
                 </Form.Item>
@@ -231,7 +289,8 @@ const AddEditNewspaperInsert = ({
                   <Col>
                     <Typography className="th-11 th-fw-400">
                       Upload File(only image and video total size limit of{" "}
-                      {fileUploadLimit}MB)
+                      {fileUploadLimit}MB){" "}
+                      <span style={{ color: "red" }}>*</span>
                     </Typography>
                   </Col>
                   <Col xs={24} sm={18}>
