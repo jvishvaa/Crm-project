@@ -14,6 +14,7 @@ import {
   Pagination,
   Empty,
   Descriptions,
+  Drawer
 } from "antd";
 import "./index.css";
 import { MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -32,6 +33,8 @@ import getChangedCountValues from "../../../utils/getChangeCountObject";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import { TbFileUpload } from "react-icons/tb";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
+import AddLead from "../AddLead";
+import CustomDrawerHeader from "../../../component/UtilComponents/CustomDrawerHeader";
 
 const LeadManagement = () => {
   const defaultFilters = {
@@ -68,6 +71,7 @@ const LeadManagement = () => {
   const searchIconRef = useRef(null);
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
+  const [drawerVisible, setDrawerVisible] = useState(false);
   const dropdownData = {
     academicYear: [
       { label: "2023-24", value: "2023-24" },
@@ -1019,9 +1023,10 @@ const LeadManagement = () => {
                         <Button
                           size="small"
                           type="primary"
-                          onClick={() => {
-                            navigate("/lead-management/add-lead");
-                          }}
+                          // onClick={() => {
+                          //   navigate("/lead-management/add-lead");
+                          // }}
+                          onClick={() => setDrawerVisible(true)} 
                         >
                           + Add Lead
                         </Button>
@@ -1334,6 +1339,18 @@ const LeadManagement = () => {
           setDrawerData({ show: false, data: null });
         }}
       />
+      <Drawer
+        title={<CustomDrawerHeader label="Add Lead" onClose={() => setDrawerVisible(false)} />}
+        placement="right"
+        onClose={() => setDrawerVisible(false)}
+        visible={drawerVisible}
+        width={720}
+        closable={false}
+        maskClosable={false}
+      >
+        <AddLead onClose={() => setDrawerVisible(false)} />
+      </Drawer>
+
     </CustomCard>
   );
 };
