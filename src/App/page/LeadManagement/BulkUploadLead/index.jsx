@@ -79,6 +79,14 @@ const BulkUploadLead = () => {
   console.log(branchList, "branchList");
 
   const onFinish = (values) => {
+    if (!academicYear) {
+      message.error("Please Select academic year");
+      return;
+    }
+    if (!schoolType) {
+      message.error("Please Select school type");
+      return;
+    }
     if (!selectedFile) {
       message.error("Please Select File");
       return;
@@ -91,14 +99,21 @@ const BulkUploadLead = () => {
     formData.append("file", selectedFile);
 
     console.log(values, "values");
-    setLoading(true);
+    setSubmitLoading(true);
     axios
-      .post(urls.masterData.bulkUpload, formData)
-      .then((resp) => {
-        console.log(resp, "bulkuploadResp");
+      .post(urls.leadManagement.bulkUpload, formData)
+      .then((res) => {
+        let response = res.data;
+        message.success(response.message);
+        setSelectedFile(null);
+        form.resetFields();
       })
-      .catch((e) => {
-        setLoading(false);
+      .catch((error) => {
+        console.error("Error bulk uploading lead:", error);
+        message.error(error.message ?? "Failed to bulk upload lead");
+      })
+      .finally(() => {
+        setSubmitLoading(false);
       });
   };
 
@@ -267,7 +282,7 @@ const BulkUploadLead = () => {
       </Col>
       <Col xs={24}>
         <Row className="d-flex flex-row" gutter={[8, 8]}>
-          <Col xs={24} sm={10} lg={8}>
+          <Col xs={24} sm={24} lg={8}>
             <CustomCard className="bulk-upload-lead-card">
               <Form
                 form={form}
@@ -277,7 +292,7 @@ const BulkUploadLead = () => {
                 className="w-100"
               >
                 <Row>
-                  <Col xs={12}>
+                  <Col xs={12} sm={12} md={12}>
                     {/* <Form.Item
                         name="academic_year"
                         label="Academic Year"
@@ -303,7 +318,7 @@ const BulkUploadLead = () => {
                         />
                       </Form.Item> */}
                     <Form.Item
-                      name="academic_year"
+                      // name="academic_year"
                       label="Academic Year"
                       rules={[
                         {
@@ -336,9 +351,9 @@ const BulkUploadLead = () => {
                       </div>
                     </Form.Item>
                   </Col>
-                  <Col xs={24} sm={12} md={8}>
+                  <Col xs={12} sm={12} md={12}>
                     <Form.Item
-                      name={"school_type"}
+                      // name={"school_type"}
                       label="School Type"
                       rules={[
                         {
@@ -494,7 +509,7 @@ const BulkUploadLead = () => {
               </Form>
             </CustomCard>
           </Col>
-          <Col xs={24} sm={14} lg={16}>
+          <Col xs={24} sm={24} lg={16}>
             <CustomCard>
               <Spin spinning={loading} tip="Loading">
                 <Row gutter={[8, 8]}>

@@ -384,6 +384,31 @@ const RouteAssign = () => {
     },
   ];
 
+  const renderRouteAssign = () => {
+    return (
+      <>
+        {" "}
+        {getRoutePathDetails().add ? (
+          <Col>
+            <Button
+              size="small"
+              type="primary"
+              onClick={() => {
+                setDrawerData({
+                  show: true,
+                  data: null,
+                  type: "Route Assign",
+                });
+              }}
+            >
+              + Route Assign
+            </Button>
+          </Col>
+        ) : null}
+      </>
+    );
+  };
+
   return (
     <CustomCard>
       <Row gutter={[8, 8]}>
@@ -396,23 +421,7 @@ const RouteAssign = () => {
                 </Col>
                 <Col>
                   <Row className="d-flex flex-row" gutter={[8, 4]}>
-                    {getRoutePathDetails().add ? (
-                      <Col>
-                        <Button
-                          size="small"
-                          type="primary"
-                          onClick={() => {
-                            setDrawerData({
-                              show: true,
-                              data: null,
-                              type: "Route Assign",
-                            });
-                          }}
-                        >
-                          + Route Assign
-                        </Button>
-                      </Col>
-                    ) : null}
+                    {width < 768 ? renderRouteAssign() : null}
                     <Col>
                       <Tooltip title="Refresh">
                         <Button
@@ -443,17 +452,16 @@ const RouteAssign = () => {
             >
               <Col xs={24}>
                 <Row className="d-flex flex-row justify-content-between align-items-center">
-                  <Col xs={13} sm={8} md={8} lg={14}>
+                  <Col xs={13} sm={8} md={14} lg={14}>
                     <Row
                       className="d-flex flex-row align-items-center"
                       gutter={[8, 8]}
                     >
-                      <Col xs={24} md={22} lg={12}>
-                        {getSearchInput()}
-                      </Col>
+                      <Col>{getSearchInput()}</Col>
+                      {width >= 768 ? renderRouteAssign() : null}
                     </Row>
                   </Col>
-                  <Col xs={11} sm={16} md={16} lg={10}>
+                  <Col xs={11} sm={16} md={10} lg={10}>
                     <Row
                       className="d-flex flex-row justify-content-end align-items-center"
                       gutter={[8, 8]}

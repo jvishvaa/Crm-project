@@ -1,3 +1,5 @@
+@import '../mixins.scss';
+
 .ant-tag {
     line-height: 1.4 !important;
     padding-inline: 5px !important;
@@ -5,4 +7,18 @@
     font-weight: 500 !important;
     font-size: 11px !important;
     font-family: Poppins !important;
+}
+
+.ant-tag-checkable-checked {
+    background-color: $primary !important;
+}
+
+.ant-tag-checkable:hover {
+    background-color: $primarylight !important;
+    color: $primary !important;
+}
+
+.ant-tag-checkable-checked:hover {
+    background-color: $primary !important;
+    color: white !important;
 }

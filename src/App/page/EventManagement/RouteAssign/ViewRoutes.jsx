@@ -104,8 +104,7 @@ const ViewRoutes = ({ drawerData, closeDrawer, dropdownData }) => {
           </Typography>
           <Timeline
             className="route-timeline"
-            style={{ marginTop: 30, marginLeft: "-30%" }}
-            mode={"left"}
+            style={{ marginTop: 30, marginLeft: "30%" }}
             items={routeData?.map((each) => {
               return {
                 dot: (
@@ -115,7 +114,7 @@ const ViewRoutes = ({ drawerData, closeDrawer, dropdownData }) => {
                     }}
                   />
                 ),
-                label: each?.time,
+
                 children: renderContent(each),
               };
             })}

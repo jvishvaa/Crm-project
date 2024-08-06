@@ -273,18 +273,19 @@ const AddLead = () => {
         onFinish={onFinish}
         disabled={submitLoading}
         className="add-lead-form"
+        style={{ padding: "0px 10px" }}
       >
         <Row>
-          <Col xs={24} style={{marginBottom: 10}}>
+          <Col xs={24} style={{ marginBottom: 10 }}>
             <Typography className="add-lead-form-header">
               School Details
             </Typography>
           </Col>
-          <Col xs={24} style={{marginBottom:'10px'}}>
+          <Col xs={24} style={{ marginBottom: "10px" }}>
             <Row gutter={[12, 8]}>
               <Col xs={24} sm={12} md={8}>
                 <Form.Item
-                  name={"academic_year"}
+                  // name={"academic_year"}
                   label="Academic Year"
                   rules={[
                     {
@@ -294,22 +295,22 @@ const AddLead = () => {
                   ]}
                 >
                   <div>
-                        {[
-                          {
-                            label: "2023-24",
-                            id: 23
-                          },
-                          {
-                            label: "2024-25",
-                            id: 24
-                        }].map((year) => (
+                    {[
+                      {
+                        label: "2023-24",
+                        id: 23,
+                      },
+                      {
+                        label: "2024-25",
+                        id: 24,
+                      },
+                    ].map((year) => (
                       <Tag.CheckableTag
                         key={year}
                         checked={academicYear === year.id}
                         onChange={() => {
                           setAcademicYear(year.id);
-                        }
-                        }
+                        }}
                       >
                         {year.label}
                       </Tag.CheckableTag>
@@ -319,7 +320,7 @@ const AddLead = () => {
               </Col>
               <Col xs={24} sm={12} md={8}>
                 <Form.Item
-                  name={"school_type"}
+                  // name={"school_type"}
                   label="School Type"
                   rules={[
                     {
@@ -358,6 +359,7 @@ const AddLead = () => {
                   <Select
                     style={{ width: "100%" }}
                     className="add-lead-select"
+                    placeholder="Select Branch"
                     showSearch
                     filterOption={(input, option) =>
                       option.label.toLowerCase().includes(input.toLowerCase())
@@ -374,17 +376,16 @@ const AddLead = () => {
                   />
                 </Form.Item>
               </Col>
-              
             </Row>
           </Col>
-          <Divider/>
+          <Divider />
 
           <Col xs={24} style={{ marginTop: 15, marginBottom: 10 }}>
             <Typography className="add-lead-form-header">
               Lead Details
             </Typography>
           </Col>
-          <Col xs={24} style={{marginBottom: '10px'}}>
+          <Col xs={24} style={{ marginBottom: "10px" }}>
             <Row gutter={[12, 8]}>
               <Col xs={24} sm={12} md={8}>
                 <Form.Item
@@ -399,6 +400,7 @@ const AddLead = () => {
                 >
                   <Input
                     maxLength={48}
+                    placeholder="Enter Lead Name"
                     autoComplete="off"
                     onChange={(e) => {
                       form.setFieldsValue({
@@ -423,6 +425,7 @@ const AddLead = () => {
                 >
                   <Input
                     type="email"
+                    placeholder="Enter Lead Email"
                     maxLength={48}
                     autoComplete="off"
                     onChange={(e) => {
@@ -447,6 +450,7 @@ const AddLead = () => {
                   <Select
                     style={{ width: "100%" }}
                     className="add-lead-select"
+                    placeholder="Select Lead Source"
                     showSearch
                     filterOption={(input, option) =>
                       option.label.toLowerCase().includes(input.toLowerCase())
@@ -487,8 +491,9 @@ const AddLead = () => {
                     <Col xs={17} md={13}>
                       <Form.Item shouldUpdate noStyle>
                         {({ getFieldValue }) => {
-                          const countryCode =
-                            getFieldValue("country_code_alternate");
+                          const countryCode = getFieldValue(
+                            "country_code_alternate"
+                          );
                           return (
                             <Form.Item name="alternate_contact_no">
                               <Input
@@ -513,7 +518,7 @@ const AddLead = () => {
               </Col>
             </Row>
           </Col>
-          <Divider/>
+          <Divider />
           <Col xs={24} style={{ marginTop: 15, marginBottom: 10 }}>
             <Typography className="add-lead-form-header">
               Child Details
@@ -534,6 +539,7 @@ const AddLead = () => {
                 >
                   <Input
                     maxLength={48}
+                    placeholder="Enter Child Name"
                     autoComplete="off"
                     onChange={(e) => {
                       form.setFieldsValue({
@@ -559,6 +565,7 @@ const AddLead = () => {
                   <Select
                     style={{ width: "100%" }}
                     className="add-lead-select"
+                    placeholder="Select Child Grade"
                     showSearch
                     filterOption={(input, option) =>
                       option.label.toLowerCase().includes(input.toLowerCase())
@@ -575,7 +582,7 @@ const AddLead = () => {
             </Row>
           </Col>
           <Col xs={24}>
-            <Row className="d-flex justify-content-end mt-2">
+            <Row className="d-flex justify-content-end mt-5">
               <Button
                 size="medium"
                 type="primary"
@@ -608,12 +615,12 @@ const AddLead = () => {
                 }}
               >
                 <Row
-                  gutter={[12, 8]}
+                  gutter={[12, 4]}
                   className="d-flex flex-row"
                   style={{ marginTop: -10 }}
                 >
                   {/* <Col xs={18} sm={12} md={8} lg={9} xl={8}> */}
-                  <Col xs={18} sm={12} md={15} lg={18} xl={16}>
+                  <Col xs={24} sm={13} md={15}>
                     <Form.Item
                       label={
                         <span>
@@ -622,7 +629,7 @@ const AddLead = () => {
                       }
                     >
                       <Row gutter={[4, 4]} style={{ marginTop: -10 }}>
-                        <Col xs={8} md={4}>
+                        <Col xs={8} md={5}>
                           <Form.Item name="country_code">
                             <Select
                               style={{ width: "100%" }}
@@ -650,7 +657,7 @@ const AddLead = () => {
                             />
                           </Form.Item>
                         </Col>
-                        <Col xs={18} md={14}>
+                        <Col xs={16} md={19}>
                           <Form.Item shouldUpdate noStyle>
                             {({ getFieldValue }) => {
                               const countryCode = getFieldValue("country_code");
@@ -658,6 +665,7 @@ const AddLead = () => {
                                 <Form.Item name="contact_no">
                                   <Input
                                     type="number"
+                                    placeholder="Enter Contact Number"
                                     autoComplete="off"
                                     onKeyDown={(e) => {
                                       ["e", "E", "+", "-", "."].includes(
@@ -709,8 +717,7 @@ const AddLead = () => {
                                 leadData ||
                                 contactNo?.length !==
                                   getCountryCode()?.filter(
-                                    (each) =>
-                                      each.country_code === countryCode
+                                    (each) => each.country_code === countryCode
                                   )[0]?.max_length
                               }
                               size="middle"
@@ -726,7 +733,7 @@ const AddLead = () => {
                 </Row>
               </Form>
             </Col>
-            <Col xs={24}>
+            <Col xs={24} style={{ marginBottom: "10px" }}>
               <Divider />
             </Col>
             {leadData ? (
@@ -740,9 +747,7 @@ const AddLead = () => {
                 className="d-flex justify-content-center align-items-center flex-column"
                 style={{ height: "30vh", width: "100%" }}
               >
-                <MdSearch
-                  style={{ color: "#a9a7a7", height: 50, width: 50 }}
-                />
+                <MdSearch style={{ color: "#a9a7a7", height: 50, width: 50 }} />
                 <Typography style={{ color: "#a9a7a7" }} className="th-16">
                   Search Number To Add Lead
                 </Typography>

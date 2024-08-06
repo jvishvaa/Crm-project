@@ -62,7 +62,11 @@ const LeadManagement = () => {
   });
   const [searchValue, setSearchValue] = useState("");
   const [leadType, setLeadType] = useState("fresh");
-  const [drawerData, setDrawerData] = useState({ show: false, data: null });
+  const [drawerData, setDrawerData] = useState({
+    show: false,
+    type: null,
+    data: null,
+  });
   const [showFilterView, setShowFilterView] = useState(false);
   const [pageData, setPageData] = useState({
     current: 1,
@@ -706,6 +710,42 @@ const LeadManagement = () => {
     },
   ];
 
+  const renderAddLead = () => {
+    return (
+      <>
+        <Col>
+          <Button
+            size="small"
+            type="primary"
+            icon={<TbFileUpload size={18} />}
+            onClick={() => {
+              navigate("/lead-management/bulk-upload-lead");
+            }}
+          >
+            Bulk Upload
+          </Button>
+        </Col>
+        {getRoutePathDetails().add ? (
+          <Col>
+            <Button
+              size="small"
+              type="primary"
+              onClick={() => {
+                setDrawerData({
+                  show: true,
+                  type: "Add Lead",
+                  data: null,
+                });
+              }}
+            >
+              + Add Lead
+            </Button>
+          </Col>
+        ) : null}
+      </>
+    );
+  };
+
   return (
     <CustomCard>
       <Row gutter={[8, 8]}>
@@ -721,6 +761,7 @@ const LeadManagement = () => {
                     className="d-flex flex-row align-items-center"
                     gutter={[8, 4]}
                   >
+                    {width <= 840 ? renderAddLead() : null}
                     <Col>
                       <Tooltip title="Refresh">
                         <Button
@@ -753,42 +794,17 @@ const LeadManagement = () => {
               <Col xs={24}>
                 <Row className="d-flex flex-row justify-content-between align-items-center">
                   {width >= 576 ? (
-                    <Col xs={24} sm={8} md={8} lg={14}>
+                    <Col xs={24} sm={8} md={14} lg={14}>
                       <Row
                         className="d-flex flex-row align-items-center"
                         gutter={[8, 8]}
                       >
                         <Col>{getSearchInput()}</Col>
-                        <Col>
-                          <Button
-                            size="small"
-                            type="primary"
-                            icon={<TbFileUpload size={18} />}
-                            onClick={() => {
-                              navigate("/lead-management/bulk-upload-lead");
-                            }}
-                          >
-                            Bulk Upload
-                          </Button>
-                        </Col>
-                        {getRoutePathDetails().add ? (
-                          <Col>
-                            <Button
-                              size="small"
-                              type="primary"
-                              // onClick={() => {
-                              //   navigate("/lead-management/add-lead");
-                              // }}
-                              onClick={() => setDrawerVisible(true)}
-                            >
-                              + Add Lead
-                            </Button>
-                          </Col>
-                        ) : null}
+                        {width > 840 ? renderAddLead() : null}
                       </Row>
                     </Col>
                   ) : null}
-                  <Col xs={24} sm={16} md={16} lg={10}>
+                  <Col xs={24} sm={16} md={10} lg={10}>
                     <Row
                       className="d-flex flex-row justify-content-end align-items-center"
                       gutter={[8, 8]}
@@ -827,7 +843,11 @@ const LeadManagement = () => {
                           type="primary"
                           className="lead-button"
                           onClick={() => {
-                            setDrawerData({ show: true, data: filterData });
+                            setDrawerData({
+                              show: true,
+                              type: "Filter",
+                              data: filterData,
+                            });
                           }}
                           icon={<MdFilterAlt size={14} />}
                         >
@@ -855,31 +875,6 @@ const LeadManagement = () => {
                         >
                           {getSearchInput()}
                         </Col>
-                        <Col>
-                          <Button
-                            size="small"
-                            type="primary"
-                            icon={<TbFileUpload size={18} />}
-                            onClick={() => {
-                              navigate("/lead-management/bulk-upload-lead");
-                            }}
-                          >
-                            Bulk Upload
-                          </Button>
-                        </Col>
-                        {getRoutePathDetails().add ? (
-                          <Col>
-                            <Button
-                              size="small"
-                              type="primary"
-                              onClick={() => {
-                                navigate("/lead-management/add-lead");
-                              }}
-                            >
-                              + Add Lead
-                            </Button>
-                          </Col>
-                        ) : null}
                       </>
                     ) : null}
                     {checkFilterDifference() ? (
@@ -890,6 +885,7 @@ const LeadManagement = () => {
                     <Col xs={4} style={{ textAlign: "right" }}>
                       <Button
                         type="link"
+                        size="small"
                         onClick={() => {
                           setShowFilterView(!showFilterView);
                         }}
@@ -1070,30 +1066,51 @@ const LeadManagement = () => {
       <DrawerFilter
         drawerData={drawerData}
         onSubmit={(values) => {
-          setDrawerData({ show: false, data: null });
+          setDrawerData({ show: false, type: null, data: null });
           setFilterData({ ...filterData, ...values });
           getLeadData(1, pageData?.pageSize, { ...filterData, ...values });
         }}
         dropdownData={dropdownData}
         closeDrawer={() => {
-          setDrawerData({ show: false, data: null });
+          setDrawerData({ show: false, type: null, data: null });
         }}
       />
       <Drawer
         title={
           <CustomDrawerHeader
             label="Add Lead"
-            onClose={() => setDrawerVisible(false)}
+            onClose={() =>
+              setDrawerData({
+                show: false,
+                type: null,
+                data: null,
+              })
+            }
           />
         }
         placement="right"
-        onClose={() => setDrawerVisible(false)}
-        visible={drawerVisible}
-        width={720}
+        onClose={() =>
+          setDrawerData({
+            show: false,
+            type: null,
+            data: null,
+          })
+        }
+        open={drawerData?.show && drawerData?.type === "Add Lead"}
+        size="large"
         closable={false}
         maskClosable={false}
+        className="lead-filter-drawer"
       >
-        <AddLead onClose={() => setDrawerVisible(false)} />
+        <AddLead
+          onClose={() =>
+            setDrawerData({
+              show: false,
+              type: null,
+              data: null,
+            })
+          }
+        />
       </Drawer>
     </CustomCard>
   );

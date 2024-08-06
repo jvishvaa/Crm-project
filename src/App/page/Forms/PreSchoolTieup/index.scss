@@ -1,0 +1,29 @@
+.lead-button {
+    height: 30px !important;
+    padding: 0px 5px !important;
+}
+
+@media (max-width: 600px) {
+    .lead-button {
+        height: 30px !important;
+        padding: 0px 4px !important;
+    }
+
+    .lead-radio .ant-radio-button-wrapper {
+        padding-inline: 4px !important;
+    }
+}
+
+.lead-filter-drawer .ant-drawer-header {
+    padding: 8px 16px !important;
+}
+
+.lead-filter-drawer .ant-drawer-body {
+    padding: 0px 16px !important;
+}
+
+
+
+.update-hotspot-description .ant-descriptions-row>td {
+    padding-bottom: 8px !important;
+}
