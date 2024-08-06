@@ -672,7 +672,8 @@ const UserManagement = () => {
                           key={0}
                           className={`tab ${
                             activeStatus === 0 ? "active" : ""
-                          }`}
+                            }`}
+                          style={activeStatus === 0 ? { color: "white", backgroundColor: '#BB2139' } : {}}
                           onClick={() => setActiveStatus(0)}
                         >
                           All (1000)
@@ -681,7 +682,8 @@ const UserManagement = () => {
                           key={1}
                           className={`tab ${
                             activeStatus === 1 ? "active" : ""
-                          }`}
+                            }`}
+                            style={activeStatus === 1 ? { color: "white", backgroundColor: '#BB2139' } : {}}
                           onClick={() => setActiveStatus(1)}
                         >
                           Active (800)
@@ -690,7 +692,8 @@ const UserManagement = () => {
                           key={2}
                           className={`tab ${
                             activeStatus === 2 ? "active" : ""
-                          }`}
+                            }`}
+                            style={activeStatus === 2 ? { color: "white", backgroundColor: '#BB2139' } : {}}
                           onClick={() => setActiveStatus(2)}
                         >
                           Inactive (200)

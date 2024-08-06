@@ -1374,9 +1374,10 @@ const LeadManagement = () => {
         placement="right"
         onClose={() => setDrawerVisible(false)}
         visible={drawerVisible}
-        width={720}
+        size="large"
         closable={false}
         maskClosable={false}
+        className="lead-filter-drawer"
       >
         <AddLead onClose={() => setDrawerVisible(false)} />
       </Drawer>

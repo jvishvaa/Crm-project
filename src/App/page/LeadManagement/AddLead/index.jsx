@@ -273,6 +273,7 @@ const AddLead = () => {
         onFinish={onFinish}
         disabled={submitLoading}
         className="add-lead-form"
+        style={{padding: '0px 10px'}}
       >
         <Row>
           <Col xs={24} style={{marginBottom: 10}}>
@@ -358,6 +359,7 @@ const AddLead = () => {
                   <Select
                     style={{ width: "100%" }}
                     className="add-lead-select"
+                    placeholder="Select Branch"
                     showSearch
                     filterOption={(input, option) =>
                       option.label.toLowerCase().includes(input.toLowerCase())
@@ -399,6 +401,7 @@ const AddLead = () => {
                 >
                   <Input
                     maxLength={48}
+                    placeholder="Enter Lead Name"
                     autoComplete="off"
                     onChange={(e) => {
                       form.setFieldsValue({
@@ -423,6 +426,7 @@ const AddLead = () => {
                 >
                   <Input
                     type="email"
+                    placeholder="Enter Lead Email"
                     maxLength={48}
                     autoComplete="off"
                     onChange={(e) => {
@@ -447,6 +451,7 @@ const AddLead = () => {
                   <Select
                     style={{ width: "100%" }}
                     className="add-lead-select"
+                    placeholder="Select Lead Source"
                     showSearch
                     filterOption={(input, option) =>
                       option.label.toLowerCase().includes(input.toLowerCase())
@@ -534,6 +539,7 @@ const AddLead = () => {
                 >
                   <Input
                     maxLength={48}
+                    placeholder="Enter Child Name"
                     autoComplete="off"
                     onChange={(e) => {
                       form.setFieldsValue({
@@ -559,6 +565,7 @@ const AddLead = () => {
                   <Select
                     style={{ width: "100%" }}
                     className="add-lead-select"
+                    placeholder="Select Child Grade"
                     showSearch
                     filterOption={(input, option) =>
                       option.label.toLowerCase().includes(input.toLowerCase())
@@ -575,7 +582,7 @@ const AddLead = () => {
             </Row>
           </Col>
           <Col xs={24}>
-            <Row className="d-flex justify-content-end mt-2">
+            <Row className="d-flex justify-content-end mt-5">
               <Button
                 size="medium"
                 type="primary"
@@ -658,6 +665,7 @@ const AddLead = () => {
                                 <Form.Item name="contact_no">
                                   <Input
                                     type="number"
+                                    placeholder="Enter Contact Number"
                                     autoComplete="off"
                                     onKeyDown={(e) => {
                                       ["e", "E", "+", "-", "."].includes(
@@ -726,7 +734,7 @@ const AddLead = () => {
                 </Row>
               </Form>
             </Col>
-            <Col xs={24}>
+            <Col xs={24} style={{marginBottom: '10px'}}>
               <Divider />
             </Col>
             {leadData ? (
