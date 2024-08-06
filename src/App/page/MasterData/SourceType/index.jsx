@@ -68,12 +68,8 @@ const SourceType = () => {
       .put(`${urls.masterData.sourceType}${data?.id}`, { is_active: value })
       .then((res) => {
         let response = res.data;
-        if ([200, 201].includes(response?.status_code)) {
-          getSourceTypeData(form.getFieldsValue());
-          message.success(response.message);
-        } else {
-          message.error(response?.message);
-        }
+        getSourceTypeData(form.getFieldsValue());
+        message.success(response.message);
       })
       .catch(() => {})
       .finally(() => {

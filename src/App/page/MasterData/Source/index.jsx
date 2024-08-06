@@ -104,7 +104,7 @@ const Source = () => {
 
   const getSourceTypeList = () => {
     axios
-      .get(`${urls.leadManagement.sourceTypeList}`, {
+      .get(`${urls.masterData.sourceType}`, {
         params: { is_active: true },
       })
       .then((res) => {

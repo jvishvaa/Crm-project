@@ -279,7 +279,7 @@ const LeadManagement = () => {
   };
   const getLeadTypeList = (values) => {
     axios
-      .get(`${urls.leadManagement.leadTypeList}`)
+      .get(`${urls.masterData.leadTypeList}`)
       .then((res) => {
         let response = res.data;
         console.log(response);
@@ -295,7 +295,7 @@ const LeadManagement = () => {
   };
   const getSourceTypeList = (values) => {
     axios
-      .get(`${urls.leadManagement.sourceTypeList}`)
+      .get(`${urls.masterData.sourceType}`)
       .then((res) => {
         let response = res.data;
         console.log(response);
@@ -337,7 +337,7 @@ const LeadManagement = () => {
       .then((res) => {
         let response = res?.data;
         setLeadData(response?.data);
-        message.success("Lead info fetched successfully.");
+        // message.success("Lead info fetched successfully.");
         setPageData({
           current: 1,
           pageSize: response?.data?.length,
