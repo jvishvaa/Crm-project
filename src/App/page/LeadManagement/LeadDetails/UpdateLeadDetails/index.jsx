@@ -60,9 +60,7 @@ const UpdateLeadDetails = ({
         closeModal();
         form.resetFields();
       }}
-      open={
-        modalData?.show && ["Update Lead Details"].includes(modalData?.type)
-      }
+      open={modalData.show && modalData.type === "UpdateLeadDetails"}
       size="large"
       closable={false}
       maskClosable={false}
