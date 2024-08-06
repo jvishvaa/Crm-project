@@ -327,7 +327,7 @@ const LeadManagement = () => {
         param[key] = value;
       }
     });
-    params["academic_year"] = 23;
+    param["academic_year"] = 23;
     console.log(filteredParams, param, "pp");
     axios
       .get(`${urls.leadManagement.leadInfo}`, {
