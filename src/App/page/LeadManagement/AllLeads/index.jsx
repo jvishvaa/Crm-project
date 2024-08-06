@@ -19,6 +19,7 @@ import {
   Modal,
   Select,
   Popconfirm,
+  message,
 } from "antd";
 import "./index.css";
 import { MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -127,7 +128,7 @@ const LeadManagement = () => {
         value: "admission-done",
       },
     ],
-    leadType: [{ lead_name: "All", id: 0 }],
+    leadType: [{ name: "All", id: 0 }],
     leadCategory: [
       { label: "All", value: 0 },
       { label: "Hot", value: 1 },
@@ -285,7 +286,7 @@ const LeadManagement = () => {
         setDropdownData((p) => {
           return {
             ...p,
-            leadType: [{ lead_name: "All", id: 0 }, ...response?.result],
+            leadType: [{ name: "All", id: 0 }, ...response?.result],
           };
         });
       })
@@ -326,6 +327,7 @@ const LeadManagement = () => {
         param[key] = value;
       }
     });
+    params["academic_year"] = 23;
     console.log(filteredParams, param, "pp");
     axios
       .get(`${urls.leadManagement.leadInfo}`, {
