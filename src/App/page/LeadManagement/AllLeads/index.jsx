@@ -103,8 +103,8 @@ const LeadManagement = () => {
     ],
     schoolType: [
       { label: "All", value: 0 },
-      { label: "Day", value: "day" },
-      { label: "Boarding", value: "boarding" },
+      { label: "Day", value: 1 },
+      { label: "Boarding", value: 2 },
     ],
     city: [{ city_name: "All", id: 0 }],
     zone: [{ zone_name: "All", id: 0 }],
@@ -345,7 +345,7 @@ const LeadManagement = () => {
         // });
       })
       .catch((err) => {
-        message.error(err?.message ?? "Failed to fetched lead info");
+        message.error("Failed to fetched lead info");
       })
       .finally(() => {
         setLoading(false);
@@ -734,6 +734,7 @@ const LeadManagement = () => {
       align: "center",
     },
     {
+      title: "Created Date",
       title: "Created Date",
       key: "created_date",
       render: (record) => (
