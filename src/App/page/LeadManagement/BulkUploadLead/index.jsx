@@ -17,6 +17,7 @@ import {
   Empty,
   Pagination,
   Descriptions,
+  Tag
 } from "antd";
 import "./index.scss";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
@@ -49,6 +50,8 @@ const BulkUploadLead = () => {
   });
   const [isList, setIsList] = useState(false);
   const [branchList, setBranchList] = useState([])
+  const [academicYear, setAcademicYear] = useState(23);
+  const [schoolType, setSchoolType] = useState(1);
 
   useEffect(() => {
     if (width <= 991) {
@@ -83,22 +86,24 @@ const BulkUploadLead = () => {
       return;
     }
     const formData = new FormData();
-    formData.append("academic_year_id", values?.academic_year);
+    formData.append("academic_year_id", academicYear);
     formData.append("source_id", values?.lead_source);
     formData.append("branch_id", values?.branch);
-    formData.append("school_type", values?.school_type);
+    formData.append("school_type", schoolType);
     formData.append("file", selectedFile);
 
     console.log(values, 'values')
-
+    setLoading(true)
     axios
       .post(urls.masterData.bulkUpload, formData)
-      .then((resp) => {
-        console.log(resp, 'bulkuploadResp')
+      .then((res) => {
+        let response = res.data;
+        message.success(response.message);
       })
-      .catch((e) => {
-        setLoading(false);
-      });
+      .catch((error) => {
+        console.error("Error bulk uploading lead:", error);
+        message.error(error.message ?? "Failed to bulk upload lead");
+      })
   };
 
   useEffect(() => {
@@ -252,7 +257,7 @@ const BulkUploadLead = () => {
   };
 
   return (
-    <CustomCard>
+    // <CustomCard>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Row className="d-flex flex-column">
@@ -276,8 +281,8 @@ const BulkUploadLead = () => {
                   className="w-100"
                 >
                   <Row>
-                    <Col xs={24}>
-                      <Form.Item
+                    <Col xs={12}>
+                      {/* <Form.Item
                         name="academic_year"
                         label="Academic Year"
                         rules={[
@@ -300,8 +305,69 @@ const BulkUploadLead = () => {
                             { label: "2024-25", value: 24 },
                           ]}
                         />
-                      </Form.Item>
-                    </Col>
+                      </Form.Item> */}
+                    <Form.Item
+                      name="academic_year"
+                      label="Academic Year"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select Academic Year",
+                        },
+                      ]}
+                    >
+                      <div>
+                            {[
+                              {
+                                label: "2023-24",
+                                id: 23
+                              },
+                              {
+                                label: "2024-25",
+                                id: 24
+                            }].map((year) => (
+                          <Tag.CheckableTag
+                            key={year}
+                            checked={academicYear === year.id}
+                            onChange={() => {
+                              setAcademicYear(year.id);
+                            }
+                            }
+                          >
+                            {year.label}
+                          </Tag.CheckableTag>
+                        ))}
+                      </div>
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={12} md={8}>
+                    <Form.Item
+                      name={"school_type"}
+                      label="School Type"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select School Type",
+                        },
+                      ]}
+                    >
+                      <div>
+                        {[
+                          { label: "Day", value: 1 },
+                          { label: "Boarding", value: 2 },
+                        ].map((type) => (
+                          <Tag.CheckableTag
+                            key={type.value}
+                            checked={schoolType === type.value}
+                            onChange={() => setSchoolType(type.value)}
+                          >
+                            {type.label}
+                          </Tag.CheckableTag>
+                        ))}
+                      </div>
+                    </Form.Item>
+                  </Col>
+                  
                     <Col xs={24}>
                       <Form.Item
                         name="lead_source"
@@ -367,7 +433,7 @@ const BulkUploadLead = () => {
                           </Select>
                       </Form.Item>
                     </Col>
-                    <Col xs={24}>
+                    {/* <Col xs={24}>
                       <Form.Item
                         name="school_type"
                         label="School Type"
@@ -392,7 +458,7 @@ const BulkUploadLead = () => {
                           ]}
                         />
                       </Form.Item>
-                    </Col>
+                    </Col> */}
                     <Col xs={24}>
                       <UploadFile
                         selectedFile={selectedFile}
@@ -531,7 +597,7 @@ const BulkUploadLead = () => {
                           <Table
                             dataSource={historyData}
                             columns={columns}
-                            bordered={true}
+                            // bordered={true}
                             pagination={pageData}
                             onChange={handleTableChange}
                           />
@@ -557,6 +623,18 @@ const BulkUploadLead = () => {
                                       <Col xs={24} lg={12} key={index}>
                                         <CustomCard style={{ height: "100%" }}>
                                           <Descriptions column={1}>
+                                            
+                                            {getCardDataText(
+                                              "",
+                                              <span style={{fontWeight:500, fontSize: 15, marginBottom: 10, color: '#821727'}}>
+
+                                                {each?.file_name || "--"}
+                                              </span>
+                                            )}
+                                            {getCardDataText(
+                                              "Uploaded By",
+                                              each?.uploaded_by || "--"
+                                            )}
                                             {getCardDataText(
                                               "Upload Date",
                                               each?.upload_date
@@ -564,14 +642,6 @@ const BulkUploadLead = () => {
                                                     each.upload_date
                                                   ).format("DD/MM/YYYY hh:mma")
                                                 : "--"
-                                            )}
-                                            {getCardDataText(
-                                              "File Name",
-                                              each?.file_name || "--"
-                                            )}
-                                            {getCardDataText(
-                                              "Uploaded By",
-                                              each?.uploaded_by || "--"
                                             )}
                                             {getCardDataText(
                                               "Success Count",
@@ -659,7 +729,7 @@ const BulkUploadLead = () => {
           </Row>
         </Col>
       </Row>
-    </CustomCard>
+    // </CustomCard>
   );
 };
 

@@ -124,18 +124,18 @@ const modules = [
     is_route: true,
     is_sidebar: true,
     children: [
-      {
-        key: "5",
-        icon: <LuUserPlus />,
-        label: "Add Lead",
-        route: "/lead-management/add-lead",
-        permission: {
-          is_view: [1, 2, 3, 4, 5, 8],
-        },
-        component: lazy(() => import("../page/LeadManagement/AddLead")),
-        is_route: true,
-        is_sidebar: true,
-      },
+      // {
+      //   key: "5",
+      //   icon: <LuUserPlus />,
+      //   label: "Add Lead",
+      //   route: "/lead-management/add-lead",
+      //   permission: {
+      //     is_view: [1, 2, 3, 4, 5, 8],
+      //   },
+      //   component: lazy(() => import("../page/LeadManagement/AddLead")),
+      //   is_route: true,
+      //   is_sidebar: true,
+      // },
       {
         key: "9",
         icon: <TbFileUpload />,

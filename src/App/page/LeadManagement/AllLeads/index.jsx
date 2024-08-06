@@ -14,6 +14,7 @@ import {
   Pagination,
   Empty,
   Descriptions,
+  Drawer,
 } from "antd";
 import "./index.css";
 import { MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -32,6 +33,8 @@ import getChangedCountValues from "../../../utils/getChangeCountObject";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import { TbFileUpload } from "react-icons/tb";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
+import AddLead from "../AddLead";
+import CustomDrawerHeader from "../../../component/UtilComponents/CustomDrawerHeader";
 
 const LeadManagement = () => {
   const defaultFilters = {
@@ -68,6 +71,7 @@ const LeadManagement = () => {
   const searchIconRef = useRef(null);
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
+  const [drawerVisible, setDrawerVisible] = useState(false);
   const dropdownData = {
     academicYear: [
       { label: "2023-24", value: "2023-24" },
@@ -1003,31 +1007,6 @@ const LeadManagement = () => {
                     gutter={[8, 4]}
                   >
                     <Col>
-                      <Button
-                        size="small"
-                        type="primary"
-                        icon={<TbFileUpload size={18} />}
-                        onClick={() => {
-                          navigate("/lead-management/bulk-upload-lead");
-                        }}
-                      >
-                        Bulk Upload
-                      </Button>
-                    </Col>
-                    {getRoutePathDetails().add ? (
-                      <Col>
-                        <Button
-                          size="small"
-                          type="primary"
-                          onClick={() => {
-                            navigate("/lead-management/add-lead");
-                          }}
-                        >
-                          + Add Lead
-                        </Button>
-                      </Col>
-                    ) : null}
-                    <Col>
                       <Tooltip title="Refresh">
                         <Button
                           size="small"
@@ -1049,6 +1028,7 @@ const LeadManagement = () => {
             </Col>
           </Row>
         </Col>
+
         <Col xs={24}>
           <Spin spinning={loading} tip="Loading">
             <Row
@@ -1063,9 +1043,33 @@ const LeadManagement = () => {
                         className="d-flex flex-row align-items-center"
                         gutter={[8, 8]}
                       >
-                        <Col xs={24} md={22} lg={12}>
-                          {getSearchInput()}
+                        <Col>{getSearchInput()}</Col>
+                        <Col>
+                          <Button
+                            size="small"
+                            type="primary"
+                            icon={<TbFileUpload size={18} />}
+                            onClick={() => {
+                              navigate("/lead-management/bulk-upload-lead");
+                            }}
+                          >
+                            Bulk Upload
+                          </Button>
                         </Col>
+                        {getRoutePathDetails().add ? (
+                          <Col>
+                            <Button
+                              size="small"
+                              type="primary"
+                              // onClick={() => {
+                              //   navigate("/lead-management/add-lead");
+                              // }}
+                              onClick={() => setDrawerVisible(true)}
+                            >
+                              + Add Lead
+                            </Button>
+                          </Col>
+                        ) : null}
                       </Row>
                     </Col>
                   ) : null}
@@ -1136,6 +1140,31 @@ const LeadManagement = () => {
                         >
                           {getSearchInput()}
                         </Col>
+                        <Col>
+                          <Button
+                            size="small"
+                            type="primary"
+                            icon={<TbFileUpload size={18} />}
+                            onClick={() => {
+                              navigate("/lead-management/bulk-upload-lead");
+                            }}
+                          >
+                            Bulk Upload
+                          </Button>
+                        </Col>
+                        {getRoutePathDetails().add ? (
+                          <Col>
+                            <Button
+                              size="small"
+                              type="primary"
+                              onClick={() => {
+                                navigate("/lead-management/add-lead");
+                              }}
+                            >
+                              + Add Lead
+                            </Button>
+                          </Col>
+                        ) : null}
                       </>
                     ) : null}
                     {checkFilterDifference() ? (
@@ -1157,18 +1186,18 @@ const LeadManagement = () => {
                   </Row>
                 </Col>
               ) : null}
-              {showFilterView ? (
+              {/* {showFilterView ? (
                 <Col xs={24} className={"mt-1"}>
                   {renderFilterView()}
                 </Col>
-              ) : null}
+              ) : null} */}
               {leadData ? (
                 isList ? (
                   <Col xs={24} className={"mt-2"}>
                     <Table
                       dataSource={leadData || []}
                       columns={columns}
-                      bordered={true}
+                      // bordered={true}
                       pagination={leadData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />
@@ -1334,6 +1363,22 @@ const LeadManagement = () => {
           setDrawerData({ show: false, data: null });
         }}
       />
+      <Drawer
+        title={
+          <CustomDrawerHeader
+            label="Add Lead"
+            onClose={() => setDrawerVisible(false)}
+          />
+        }
+        placement="right"
+        onClose={() => setDrawerVisible(false)}
+        visible={drawerVisible}
+        width={720}
+        closable={false}
+        maskClosable={false}
+      >
+        <AddLead onClose={() => setDrawerVisible(false)} />
+      </Drawer>
     </CustomCard>
   );
 };
