@@ -757,6 +757,7 @@ const UserManagement = () => {
                     <Col style={{ textAlign: "right" }}>
                       <Button
                         type="link"
+                        size="small"
                         onClick={() => {
                           setShowFilterView(!showFilterView);
                         }}

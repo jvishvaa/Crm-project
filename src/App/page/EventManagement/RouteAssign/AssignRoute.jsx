@@ -182,42 +182,7 @@ const AssignRoute = ({
                                   />
                                 </Form.Item>
                               </Col>
-                              <Col xs={12} sm={6}>
-                                <Form.Item
-                                  {...field}
-                                  name={[field.name, "startTime"]}
-                                  label="Start Time"
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: "Please Select Start Time",
-                                    },
-                                  ]}
-                                >
-                                  <TimePicker
-                                    format="HH:mm"
-                                    style={{ width: "100%" }}
-                                  />
-                                </Form.Item>
-                              </Col>
-                              <Col xs={12} sm={6}>
-                                <Form.Item
-                                  {...field}
-                                  label="End Time"
-                                  name={[field.name, "endTime"]}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: "Please Select End Time",
-                                    },
-                                  ]}
-                                >
-                                  <TimePicker
-                                    format="HH:mm"
-                                    style={{ width: "100%" }}
-                                  />
-                                </Form.Item>
-                              </Col>
+
                               <Col xs={12} sm={4}>
                                 <Row
                                   className="d-flex flex-row align-items-end h-100"

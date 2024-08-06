@@ -1175,6 +1175,7 @@ const LeadManagement = () => {
                     <Col xs={4} style={{ textAlign: "right" }}>
                       <Button
                         type="link"
+                        size="small"
                         onClick={() => {
                           setShowFilterView(!showFilterView);
                         }}
