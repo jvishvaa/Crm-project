@@ -34,8 +34,8 @@ const UpdateUser = ({
   useEffect(() => {
     if (modalData?.data && ["Update User"].includes(modalData?.type)) {
       form.setFieldsValue({
-        contact_no: modalData?.data?.contact_no,
-        email: modalData?.data?.email,
+        contact_no: modalData?.data?.contact,
+        email: modalData?.data?.user?.email,
         field_type: modalData?.data?.field_type,
       });
     }
@@ -66,7 +66,7 @@ const UpdateUser = ({
         form.resetFields();
       }}
       open={modalData?.show && ["Update User"].includes(modalData?.type)}
-      size="large"
+      // size="large"
       closable={false}
       maskClosable={false}
       footer={
@@ -103,22 +103,28 @@ const UpdateUser = ({
             <Row gutter={[8, 0]}>
               <Col xs={24} className="mt-2">
                 <Descriptions
-                  column={2}
-                  layout="vertical"
+                  column={1}
+                  // layout="vertical"
                   className="update-user-description"
                 >
-                  {renderViewDetails("Name", "Anik Chowdhury")}
-                  {renderViewDetails("ERP", "20398383773_OLV")}
+                  {renderViewDetails(
+                    "Name",
+                    `${modalData?.data?.user?.first_name} ${modalData?.data?.user?.last_name}`
+                  )}
+                  {renderViewDetails("ERP", modalData?.data?.erp_id)}
                   {renderViewDetails(
                     "Branch",
                     "Branch 1, Branch 2",
                     width < 768 ? 2 : 1
                   )}
-                  {renderViewDetails("UserLevel", "Superadmin")}
+                  {renderViewDetails(
+                    "UserLevel",
+                    modalData?.data?.roles?.role_name
+                  )}
                 </Descriptions>
               </Col>
 
-              <Col xs={24} md={12}>
+              <Col span={24}>
                 <Form.Item
                   name="contact_no"
                   label="Contact Number"
@@ -139,7 +145,7 @@ const UpdateUser = ({
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} md={12}>
+              <Col span={24}>
                 <Form.Item
                   name="email"
                   label="Email"
@@ -158,7 +164,7 @@ const UpdateUser = ({
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} md={12}>
+              <Col span={24}>
                 <Form.Item
                   name="field_type"
                   label="Field Type"
