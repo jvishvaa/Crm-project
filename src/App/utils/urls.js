@@ -50,9 +50,11 @@ const urls = {
     zoneList: `${BASEERP}/erp_user/zone-list/`,
     branchList: `${BASEERP}/erp_user/branch-view/`,
     gradeList: `${BASEERP}/erp_user/grademapping/`,
-    userDataList: `${BASEERP}/communication/v1/view-users/`,
     userLevelList: `${BASEMARKETING}/central-admin/user_level_list/`,
     bulkUpload: `${BASECRM}/lead_mgmt/lead_bulk_upload/`,
+  },
+  UserManagement: {
+    userDataList: `${BASEERP}/communication/v1/view-users/`,
   },
 };
 

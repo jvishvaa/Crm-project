@@ -17,7 +17,7 @@ import {
   Empty,
   Pagination,
   Descriptions,
-  Tag
+  Tag,
 } from "antd";
 import "./index.scss";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
@@ -33,8 +33,6 @@ import axios from "axios";
 import urls from "../../../utils/urls";
 const { RangePicker } = DatePicker;
 
-
-
 const BulkUploadLead = () => {
   const [form] = Form.useForm();
   const [filterForm] = Form.useForm();
@@ -49,7 +47,7 @@ const BulkUploadLead = () => {
     total: 0,
   });
   const [isList, setIsList] = useState(false);
-  const [branchList, setBranchList] = useState([])
+  const [branchList, setBranchList] = useState([]);
   const [academicYear, setAcademicYear] = useState(23);
   const [schoolType, setSchoolType] = useState(1);
 
@@ -65,20 +63,20 @@ const BulkUploadLead = () => {
     try {
       const response = await axios.get(urls.masterData.branchList);
       const data = response?.data;
-      setBranchList(data?.result)
+      setBranchList(data?.result);
       // console.log(response, 'branchList')
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const branchOption = branchList?.map((each) => (
     <Select.Option key={each?.id} value={each?.id}>
       {each?.branch_name}
-      </Select.Option>
-  ))
+    </Select.Option>
+  ));
 
-  console.log(branchList, 'branchList')
+  console.log(branchList, "branchList");
 
   const onFinish = (values) => {
     if (!academicYear) {
@@ -100,22 +98,23 @@ const BulkUploadLead = () => {
     formData.append("school_type", schoolType);
     formData.append("file", selectedFile);
 
-    console.log(values, 'values')
-    setLoading(true)
+    console.log(values, "values");
+    setSubmitLoading(true);
     axios
       .post(urls.masterData.bulkUpload, formData)
       .then((res) => {
         let response = res.data;
         message.success(response.message);
+        setSelectedFile(null);
+        form.resetFields();
       })
       .catch((error) => {
         console.error("Error bulk uploading lead:", error);
         message.error(error.message ?? "Failed to bulk upload lead");
       })
-      .finally(() => { 
-        setLoading(false);
-        setSelectedFile(null);
-      })
+      .finally(() => {
+        setSubmitLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -270,31 +269,31 @@ const BulkUploadLead = () => {
 
   return (
     // <CustomCard>
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Row className="d-flex flex-column">
-            <Col xs={24}>
-              <CustomBreadCrumbs data={["Bulk Upload Lead"]} />
-            </Col>
-            <Col xs={24}>
-              <Divider />
-            </Col>
-          </Row>
-        </Col>
-        <Col xs={24}>
-          <Row className="d-flex flex-row" gutter={[8, 8]}>
-            <Col xs={24} sm={10} lg={8}>
-              <CustomCard className="bulk-upload-lead-card">
-                <Form
-                  form={form}
-                  disabled={submitLoading}
-                  layout="vertical"
-                  onFinish={onFinish}
-                  className="w-100"
-                >
-                  <Row>
-                    <Col xs={12}>
-                      {/* <Form.Item
+    <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <Row className="d-flex flex-column">
+          <Col xs={24}>
+            <CustomBreadCrumbs data={["Bulk Upload Lead"]} />
+          </Col>
+          <Col xs={24}>
+            <Divider />
+          </Col>
+        </Row>
+      </Col>
+      <Col xs={24}>
+        <Row className="d-flex flex-row" gutter={[8, 8]}>
+          <Col xs={24} sm={10} lg={8}>
+            <CustomCard className="bulk-upload-lead-card">
+              <Form
+                form={form}
+                disabled={submitLoading}
+                layout="vertical"
+                onFinish={onFinish}
+                className="w-100"
+              >
+                <Row>
+                  <Col xs={12} sm={24} md={12}>
+                    {/* <Form.Item
                         name="academic_year"
                         label="Academic Year"
                         rules={[
@@ -329,22 +328,22 @@ const BulkUploadLead = () => {
                       ]}
                     >
                       <div>
-                            {[
-                              {
-                                label: "2023-24",
-                                id: 23
-                              },
-                              {
-                                label: "2024-25",
-                                id: 24
-                            }].map((year) => (
+                        {[
+                          {
+                            label: "2023-24",
+                            id: 23,
+                          },
+                          {
+                            label: "2024-25",
+                            id: 24,
+                          },
+                        ].map((year) => (
                           <Tag.CheckableTag
                             key={year}
                             checked={academicYear === year.id}
                             onChange={() => {
                               setAcademicYear(year.id);
-                            }
-                            }
+                            }}
                           >
                             {year.label}
                           </Tag.CheckableTag>
@@ -352,7 +351,7 @@ const BulkUploadLead = () => {
                       </div>
                     </Form.Item>
                   </Col>
-                  <Col xs={24} sm={12} md={8}>
+                  <Col xs={12} sm={24} md={12}>
                     <Form.Item
                       // name={"school_type"}
                       label="School Type"
@@ -379,73 +378,74 @@ const BulkUploadLead = () => {
                       </div>
                     </Form.Item>
                   </Col>
-                  
-                    <Col xs={24}>
-                      <Form.Item
-                        name="lead_source"
-                        label="Lead Source"
-                        rules={[
+
+                  <Col xs={24}>
+                    <Form.Item
+                      name="lead_source"
+                      label="Lead Source"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select Lead Source",
+                        },
+                      ]}
+                    >
+                      <Select
+                        style={{ width: "100%" }}
+                        showSearch
+                        filterOption={(input, option) =>
+                          option.label
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        options={[
+                          { label: "DM-Direct", value: 1 },
                           {
-                            required: true,
-                            message: "Please Select Lead Source",
+                            label: "PRO Data - Field Data",
+                            value: 2,
                           },
                         ]}
-                      >
-                        <Select
-                          style={{ width: "100%" }}
-                          showSearch
-                          filterOption={(input, option) =>
-                            option.label
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24}>
+                    <Form.Item
+                      name="branch"
+                      label="Branch"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select Branch",
+                        },
+                      ]}
+                    >
+                      <Select
+                        style={{ width: "100%" }}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, options) => {
+                          return (
+                            options.children
                               .toLowerCase()
-                              .includes(input.toLowerCase())
-                          }
-                          options={[
-                            { label: "DM-Direct", value: 1 },
-                            {
-                              label: "PRO Data - Field Data",
-                              value: 2,
-                            },
-                          ]}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col xs={24}>
-                      <Form.Item
-                        name="branch"
-                        label="Branch"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please Select Branch",
-                          },
-                        ]}
+                              .indexOf(input.toLowerCase()) >= 0
+                          );
+                        }}
+                        // options={[
+                        //   {
+                        //     label: "Orchids BTM Layout",
+                        //     value: "btm-layout",
+                        //   },
+                        //   {
+                        //     label: "Orchids Banerghata",
+                        //     value: "banerghata",
+                        //   },
+                        // ]}
                       >
-                        <Select
-                          style={{ width: "100%" }}
-                          showSearch
-                          optionFilterProp='children'
-                          filterOption={(input, options) => {
-                            return (
-                              options.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                              0
-                            );
-                          }}
-                          // options={[
-                          //   {
-                          //     label: "Orchids BTM Layout",
-                          //     value: "btm-layout",
-                          //   },
-                          //   {
-                          //     label: "Orchids Banerghata",
-                          //     value: "banerghata",
-                          //   },
-                          // ]}
-                        >
-                          {branchOption}
-                          </Select>
-                      </Form.Item>
-                    </Col>
-                    {/* <Col xs={24}>
+                        {branchOption}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                  {/* <Col xs={24}>
                       <Form.Item
                         name="school_type"
                         label="School Type"
@@ -471,276 +471,281 @@ const BulkUploadLead = () => {
                         />
                       </Form.Item>
                     </Col> */}
-                    <Col xs={24}>
-                      <UploadFile
-                        selectedFile={selectedFile}
-                        fileUploadChangeHandler={fileUploadChangeHandler}
-                        accept={".xlsx"}
-                        type={"single"}
-                        required={true}
-                        disabled={submitLoading}
-                        inputClassName={"mt-3"}
-                      />
-                      <div className="helpertext-div">
-                        <span className="upload-xlsx-text">
-                          Upload File xlsx format only
-                        </span>
-                        <a
-                          className="download-sample-format"
-                          download
-                          href="/lead_template.xlsx"
-                        >
-                          Download Sample Format
-                        </a>
-                      </div>
-                    </Col>
-                    <Col xs={24} className="text-center mt-2">
-                      <Button
-                        onClick={() => {
-                          form.submit();
-                        }}
-                        loading={submitLoading}
-                        type="primary"
+                  <Col xs={24}>
+                    <UploadFile
+                      selectedFile={selectedFile}
+                      fileUploadChangeHandler={fileUploadChangeHandler}
+                      accept={".xlsx"}
+                      type={"single"}
+                      required={true}
+                      disabled={submitLoading}
+                      inputClassName={"mt-3"}
+                    />
+                    <div className="helpertext-div">
+                      <span className="upload-xlsx-text">
+                        Upload File xlsx format only
+                      </span>
+                      <a
+                        className="download-sample-format"
+                        download
+                        href="/lead_template.xlsx"
                       >
-                        Submit
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form>
-              </CustomCard>
-            </Col>
-            <Col xs={24} sm={14} lg={16}>
-              <CustomCard>
-                <Spin spinning={loading} tip="Loading">
-                  <Row gutter={[8, 8]}>
-                    <Col xs={24}>
-                      <Typography className="th-12 th-fw-500">
-                        Upload History
-                      </Typography>
-                      <Divider />
-                    </Col>
-                    <Col xs={24}>
-                      <Form
-                        form={filterForm}
-                        layout="vertical"
-                        onFinish={() => {
-                          getHistoryData(1, pageData?.pageSize);
-                        }}
+                        Download Sample Format
+                      </a>
+                    </div>
+                  </Col>
+                  <Col xs={24} className="text-center mt-2">
+                    <Button
+                      onClick={() => {
+                        form.submit();
+                      }}
+                      loading={submitLoading}
+                      type="primary"
+                    >
+                      Submit
+                    </Button>
+                  </Col>
+                </Row>
+              </Form>
+            </CustomCard>
+          </Col>
+          <Col xs={24} sm={14} lg={16}>
+            <CustomCard>
+              <Spin spinning={loading} tip="Loading">
+                <Row gutter={[8, 8]}>
+                  <Col xs={24}>
+                    <Typography className="th-12 th-fw-500">
+                      Upload History
+                    </Typography>
+                    <Divider />
+                  </Col>
+                  <Col xs={24}>
+                    <Form
+                      form={filterForm}
+                      layout="vertical"
+                      onFinish={() => {
+                        getHistoryData(1, pageData?.pageSize);
+                      }}
+                    >
+                      <Row
+                        className="d-flex flex-row"
+                        gutter={[8, 8]}
+                        style={{ marginTop: -10 }}
                       >
-                        <Row
-                          className="d-flex flex-row"
-                          gutter={[8, 8]}
-                          style={{ marginTop: -10 }}
-                        >
-                          <Col xs={18} sm={13} md={12} lg={12} xl={10}>
-                            <Form.Item
-                              name="date_range"
-                              label={"Date Range"}
-                              rules={[
-                                {
-                                  required: true,
-                                  message: "Please Select Date Range",
-                                },
-                              ]}
+                        <Col xs={18} sm={13} md={12} lg={12} xl={10}>
+                          <Form.Item
+                            name="date_range"
+                            label={"Date Range"}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Please Select Date Range",
+                              },
+                            ]}
+                          >
+                            <RangePicker
+                              className="w-100"
+                              format={"DD MMM YYYY"}
+                              onChange={() => {
+                                setHistoryData(null);
+                              }}
+                              inputReadOnly
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col xs={6} sm={5} lg={4} xl={3}>
+                          <Form.Item>
+                            <Button
+                              type="primary"
+                              htmlType="submit"
+                              size="middle"
+                              style={{ marginTop: 23, height: 30 }}
                             >
-                              <RangePicker
-                                className="w-100"
-                                format={"DD MMM YYYY"}
-                                onChange={() => {
-                                  setHistoryData(null);
-                                }}
-                                inputReadOnly
-                              />
-                            </Form.Item>
+                              Filter
+                            </Button>
+                          </Form.Item>
+                        </Col>
+                        {historyData ? (
+                          <Col
+                            xs={24}
+                            sm={6}
+                            md={7}
+                            lg={8}
+                            xl={11}
+                            style={width < 576 ? { marginTop: -30 } : {}}
+                          >
+                            <Row className="d-flex justify-content-end">
+                              <Col>
+                                <Radio.Group
+                                  style={{ marginTop: 32 }}
+                                  className="lead-radio"
+                                  options={[
+                                    {
+                                      value: true,
+                                      label: <MdListAlt size={20} />,
+                                    },
+                                    {
+                                      value: false,
+                                      label: <BiIdCard size={20} />,
+                                    },
+                                  ]}
+                                  onChange={(e) => {
+                                    setIsList(e.target.value);
+                                  }}
+                                  value={isList}
+                                  optionType="button"
+                                  buttonStyle="solid"
+                                />
+                              </Col>
+                            </Row>
                           </Col>
-                          <Col xs={6} sm={5} lg={4} xl={3}>
-                            <Form.Item>
-                              <Button
-                                type="primary"
-                                htmlType="submit"
-                                size="middle"
-                                style={{ marginTop: 23, height: 30 }}
+                        ) : null}
+                      </Row>
+                    </Form>
+                  </Col>
+                  {historyData ? (
+                    <Col xs={24}>
+                      {isList ? (
+                        <Table
+                          dataSource={historyData}
+                          columns={columns}
+                          // bordered={true}
+                          pagination={pageData}
+                          onChange={handleTableChange}
+                        />
+                      ) : (
+                        <>
+                          {historyData?.length === 0 ? (
+                            <Col xs={24} className={"mt-2"}>
+                              <Row
+                                style={{ minHeight: 200 }}
+                                className={
+                                  "d-flex justify-content-center align-items-center"
+                                }
                               >
-                                Filter
-                              </Button>
-                            </Form.Item>
-                          </Col>
-                          {historyData ? (
-                            <Col
-                              xs={24}
-                              sm={6}
-                              md={7}
-                              lg={8}
-                              xl={11}
-                              style={width < 576 ? { marginTop: -30 } : {}}
-                            >
-                              <Row className="d-flex justify-content-end">
-                                <Col>
-                                  <Radio.Group
-                                    style={{ marginTop: 32 }}
-                                    className="lead-radio"
-                                    options={[
-                                      {
-                                        value: true,
-                                        label: <MdListAlt size={20} />,
-                                      },
-                                      {
-                                        value: false,
-                                        label: <BiIdCard size={20} />,
-                                      },
-                                    ]}
-                                    onChange={(e) => {
-                                      setIsList(e.target.value);
-                                    }}
-                                    value={isList}
-                                    optionType="button"
-                                    buttonStyle="solid"
-                                  />
-                                </Col>
+                                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                               </Row>
                             </Col>
                           ) : null}
-                        </Row>
-                      </Form>
-                    </Col>
-                    {historyData ? (
-                      <Col xs={24}>
-                        {isList ? (
-                          <Table
-                            dataSource={historyData}
-                            columns={columns}
-                            // bordered={true}
-                            pagination={pageData}
-                            onChange={handleTableChange}
-                          />
-                        ) : (
-                          <>
-                            {historyData?.length === 0 ? (
+                          {historyData?.length > 0 ? (
+                            <>
                               <Col xs={24} className={"mt-2"}>
-                                <Row
-                                  style={{ minHeight: 200 }}
-                                  className={
-                                    "d-flex justify-content-center align-items-center"
-                                  }
-                                >
-                                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                                <Row className={"d-flex"} gutter={[8, 8]}>
+                                  {historyData?.map((each, index) => (
+                                    <Col xs={24} lg={12} key={index}>
+                                      <CustomCard style={{ height: "100%" }}>
+                                        <Descriptions column={1}>
+                                          {getCardDataText(
+                                            "",
+                                            <span
+                                              style={{
+                                                fontWeight: 500,
+                                                fontSize: 15,
+                                                marginBottom: 10,
+                                                color: "#821727",
+                                              }}
+                                            >
+                                              {each?.file_name || "--"}
+                                            </span>
+                                          )}
+                                          {getCardDataText(
+                                            "Uploaded By",
+                                            each?.uploaded_by || "--"
+                                          )}
+                                          {getCardDataText(
+                                            "Upload Date",
+                                            each?.upload_date
+                                              ? dayjs(each.upload_date).format(
+                                                  "DD/MM/YYYY hh:mma"
+                                                )
+                                              : "--"
+                                          )}
+                                          {getCardDataText(
+                                            "Success Count",
+                                            each.is_completed ? (
+                                              <span
+                                                style={{
+                                                  color: "green",
+                                                  fontWeight: 700,
+                                                }}
+                                              >
+                                                {each.success_count}
+                                              </span>
+                                            ) : (
+                                              <span
+                                                style={{
+                                                  color: "#F0AD4E",
+                                                  fontWeight: 700,
+                                                }}
+                                              >
+                                                Pending
+                                              </span>
+                                            )
+                                          )}
+                                          {getCardDataText(
+                                            "Failed Count",
+                                            each.is_completed ? (
+                                              <span
+                                                style={{
+                                                  color: "red",
+                                                  fontWeight: 700,
+                                                }}
+                                              >
+                                                {each.failed_count}
+                                              </span>
+                                            ) : (
+                                              <span
+                                                style={{
+                                                  color: "#F0AD4E",
+                                                  fontWeight: 700,
+                                                }}
+                                              >
+                                                Pending
+                                              </span>
+                                            )
+                                          )}
+                                          {getCardDataText(
+                                            "Completed Date",
+                                            each?.completed_date
+                                              ? dayjs(
+                                                  each.completed_date
+                                                ).format("DD/MM/YYYY hh:mma")
+                                              : "--"
+                                          )}
+                                        </Descriptions>
+                                      </CustomCard>
+                                    </Col>
+                                  ))}
                                 </Row>
                               </Col>
-                            ) : null}
-                            {historyData?.length > 0 ? (
-                              <>
-                                <Col xs={24} className={"mt-2"}>
-                                  <Row className={"d-flex"} gutter={[8, 8]}>
-                                    {historyData?.map((each, index) => (
-                                      <Col xs={24} lg={12} key={index}>
-                                        <CustomCard style={{ height: "100%" }}>
-                                          <Descriptions column={1}>
-                                            
-                                            {getCardDataText(
-                                              "",
-                                              <span style={{fontWeight:500, fontSize: 15, marginBottom: 10, color: '#821727'}}>
-
-                                                {each?.file_name || "--"}
-                                              </span>
-                                            )}
-                                            {getCardDataText(
-                                              "Uploaded By",
-                                              each?.uploaded_by || "--"
-                                            )}
-                                            {getCardDataText(
-                                              "Upload Date",
-                                              each?.upload_date
-                                                ? dayjs(
-                                                    each.upload_date
-                                                  ).format("DD/MM/YYYY hh:mma")
-                                                : "--"
-                                            )}
-                                            {getCardDataText(
-                                              "Success Count",
-                                              each.is_completed ? (
-                                                <span
-                                                  style={{
-                                                    color: "green",
-                                                    fontWeight: 700,
-                                                  }}
-                                                >
-                                                  {each.success_count}
-                                                </span>
-                                              ) : (
-                                                <span
-                                                  style={{
-                                                    color: "#F0AD4E",
-                                                    fontWeight: 700,
-                                                  }}
-                                                >
-                                                  Pending
-                                                </span>
-                                              )
-                                            )}
-                                            {getCardDataText(
-                                              "Failed Count",
-                                              each.is_completed ? (
-                                                <span
-                                                  style={{
-                                                    color: "red",
-                                                    fontWeight: 700,
-                                                  }}
-                                                >
-                                                  {each.failed_count}
-                                                </span>
-                                              ) : (
-                                                <span
-                                                  style={{
-                                                    color: "#F0AD4E",
-                                                    fontWeight: 700,
-                                                  }}
-                                                >
-                                                  Pending
-                                                </span>
-                                              )
-                                            )}
-                                            {getCardDataText(
-                                              "Completed Date",
-                                              each?.completed_date
-                                                ? dayjs(
-                                                    each.completed_date
-                                                  ).format("DD/MM/YYYY hh:mma")
-                                                : "--"
-                                            )}
-                                          </Descriptions>
-                                        </CustomCard>
-                                      </Col>
-                                    ))}
-                                  </Row>
-                                </Col>
-                                <Col
-                                  xs={24}
-                                  className="mt-2 d-flex justify-content-center"
-                                >
-                                  <Pagination
-                                    current={pageData?.page}
-                                    pageSize={pageData?.pageSize}
-                                    onChange={handleCardChange}
-                                    total={pageData?.total}
-                                  />
-                                </Col>
-                              </>
-                            ) : null}
-                          </>
-                        )}
-                      </Col>
-                    ) : (
-                      <Col xs={24}>
-                        <CustomFilterText />
-                      </Col>
-                    )}
-                  </Row>
-                </Spin>
-              </CustomCard>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+                              <Col
+                                xs={24}
+                                className="mt-2 d-flex justify-content-center"
+                              >
+                                <Pagination
+                                  current={pageData?.page}
+                                  pageSize={pageData?.pageSize}
+                                  onChange={handleCardChange}
+                                  total={pageData?.total}
+                                />
+                              </Col>
+                            </>
+                          ) : null}
+                        </>
+                      )}
+                    </Col>
+                  ) : (
+                    <Col xs={24}>
+                      <CustomFilterText />
+                    </Col>
+                  )}
+                </Row>
+              </Spin>
+            </CustomCard>
+          </Col>
+        </Row>
+      </Col>
+    </Row>
     // </CustomCard>
   );
 };

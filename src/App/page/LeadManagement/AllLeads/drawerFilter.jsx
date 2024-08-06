@@ -22,7 +22,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
         setVisible(false);
       }, [100]);
     }
-    if (drawerData.data) {
+    if (drawerData.data && drawerData.type === "Filter") {
       form.setFieldsValue({
         academic_year: drawerData?.data?.academic_year,
         school_type: drawerData?.data?.school_type,
@@ -94,7 +94,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
       className="lead-filter-drawer"
       title={<CustomDrawerHeader label="Filter" onClose={closeDrawer} />}
       onClose={closeDrawer}
-      open={drawerData?.show}
+      open={drawerData?.show && drawerData.type === "Filter"}
       size="large"
       closable={false}
       maskClosable={false}

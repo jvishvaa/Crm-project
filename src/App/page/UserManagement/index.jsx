@@ -165,7 +165,7 @@ const UserManagement = () => {
       session_year: 4,
       page_size: 15,
     };
-    // setLoading(true);
+    setLoading(true);
     // setUserData([
     //   {
     //     id: 1,
@@ -219,7 +219,7 @@ const UserManagement = () => {
     //   },
     // ]);
     axios
-      .get(`${urls.masterData.userDataList}`, {
+      .get(`${urls.UserManagement.userDataList}`, {
         params: param,
       })
       .then((res) => {
@@ -233,7 +233,9 @@ const UserManagement = () => {
         });
       })
       .catch(() => {})
-      .finally(() => {});
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -316,7 +318,7 @@ const UserManagement = () => {
         placeholder="Search User"
         style={{
           height: 30,
-          maxWidth: 250,
+          maxWidth: width < 576 ? 160 : width < 768 ? 200 : 250,
         }}
         value={searchInput}
         onChange={(e) => {
@@ -625,8 +627,13 @@ const UserManagement = () => {
               style={{ minHeight: "60vh" }}
             >
               <Col xs={24}>
-                <Row className="d-flex flex-row justify-content-between align-items-center">
-                  <Col xs={13} sm={8} md={8} lg={14}>
+                <Row
+                  className={`d-flex ${
+                    width < 576 ? "flex-column-reverse" : "flex-row"
+                  }  justify-content-between align-items-center`}
+                  gutter={[8, 8]}
+                >
+                  <Col xs={24} sm={8} md={8} lg={14}>
                     <Row
                       className="d-flex flex-row align-items-center"
                       gutter={[8, 8]}
@@ -672,8 +679,12 @@ const UserManagement = () => {
                           key={0}
                           className={`tab ${
                             activeStatus === 0 ? "active" : ""
-                            }`}
-                          style={activeStatus === 0 ? { color: "white", backgroundColor: '#BB2139' } : {}}
+                          }`}
+                          style={
+                            activeStatus === 0
+                              ? { color: "white", backgroundColor: "#BB2139" }
+                              : {}
+                          }
                           onClick={() => setActiveStatus(0)}
                         >
                           All (1000)
@@ -682,8 +693,12 @@ const UserManagement = () => {
                           key={1}
                           className={`tab ${
                             activeStatus === 1 ? "active" : ""
-                            }`}
-                            style={activeStatus === 1 ? { color: "white", backgroundColor: '#BB2139' } : {}}
+                          }`}
+                          style={
+                            activeStatus === 1
+                              ? { color: "white", backgroundColor: "#BB2139" }
+                              : {}
+                          }
                           onClick={() => setActiveStatus(1)}
                         >
                           Active (800)
@@ -692,8 +707,12 @@ const UserManagement = () => {
                           key={2}
                           className={`tab ${
                             activeStatus === 2 ? "active" : ""
-                            }`}
-                            style={activeStatus === 2 ? { color: "white", backgroundColor: '#BB2139' } : {}}
+                          }`}
+                          style={
+                            activeStatus === 2
+                              ? { color: "white", backgroundColor: "#BB2139" }
+                              : {}
+                          }
                           onClick={() => setActiveStatus(2)}
                         >
                           Inactive (200)
@@ -701,7 +720,7 @@ const UserManagement = () => {
                       </div>
                     </Row>
                   </Col>
-                  <Col xs={11} sm={16} md={16} lg={10}>
+                  <Col xs={24} sm={16} md={16} lg={10}>
                     <Row
                       className="d-flex flex-row justify-content-end align-items-center"
                       gutter={[8, 8]}
