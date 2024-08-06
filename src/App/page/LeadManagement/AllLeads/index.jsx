@@ -51,7 +51,7 @@ import urls from "../../../utils/urls";
 
 const LeadManagement = () => {
   const defaultFilters = {
-    academic_year: ["2024-25"],
+    academic_year: ["23"],
     school_type: 0,
     city: [0],
     zone_id: [0],
@@ -293,6 +293,7 @@ const LeadManagement = () => {
       .catch(() => {})
       .finally(() => {});
   };
+
   const getSourceTypeList = (values) => {
     axios
       .get(`${urls.masterData.sourceType}`)
@@ -309,6 +310,7 @@ const LeadManagement = () => {
       .catch(() => {})
       .finally(() => {});
   };
+
   const getLeadData = (page, page_size, filteredParams = filterData) => {
     let param = {};
     setLoading(true);

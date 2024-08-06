@@ -24,7 +24,7 @@ const AddEditSourceType = ({ modalData, onSubmit, closeModal }) => {
     setLoading(true);
     if (modalData?.data) {
       axios
-        .put(`${urls.masterData.sourceType}${modalData.data?.id}`, payload)
+        .put(`${urls.masterData.sourceType}${modalData.data?.id}/`, payload)
         .then((res) => {
           let response = res.data;
           form.resetFields();

@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Drawer, Button, Form, Select, DatePicker } from "antd";
+import {
+  Row,
+  Col,
+  Drawer,
+  Button,
+  Form,
+  Select,
+  DatePicker,
+  Tag,
+  Input,
+} from "antd";
 import RenderTagMultiple from "../../../component/UtilComponents/RenderMultiple";
 import CustomDrawerHeader from "../../../component/UtilComponents/CustomDrawerHeader";
 
@@ -39,6 +49,10 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
       });
     }
   }, [drawerData]);
+
+  useEffect(() => {
+    console.log(form.getFieldsValue());
+  }, [form]);
 
   const renderTagNotAll = (label, value, index, key) => {
     let selectedItems = form.getFieldsValue()?.[key];
@@ -95,7 +109,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
       title={<CustomDrawerHeader label="Filter" onClose={closeDrawer} />}
       onClose={closeDrawer}
       open={drawerData?.show && drawerData.type === "Filter"}
-      size="large"
+      size="small"
       closable={false}
       maskClosable={false}
       footer={
@@ -121,53 +135,89 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
       {visible ? (
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <Row gutter={[12, 0]}>
-            <Col xs={24} sm={12}>
-              <Form.Item name="academic_year" label="Academic Year">
-                <Select
-                  className="w-100"
-                  mode="multiple"
-                  options={dropdownData?.academicYear}
-                  allowClear
-                  onChange={(value) => {
-                    if (value.length === 0) {
-                      form.setFieldsValue({ academic_year: ["2024-25"] });
-                    }
-                  }}
-                  tagRender={(props) =>
-                    renderTagNotAll(
-                      props.label,
-                      props.value,
-                      props.index,
-                      "academic_year"
-                    )
-                  }
-                  showSearch
-                  filterOption={(input, option) =>
-                    option.label.toLowerCase().includes(input.toLowerCase())
-                  }
-                />
+            <Col xs={12}>
+              <Form.Item shouldUpdate noStyle>
+                {({ getFieldValue, setFieldsValue }) => {
+                  const selectedYear = getFieldValue("academic_year");
+                  return (
+                    <Form.Item name="academic_year" label="Academic Year">
+                      <div style={{ marginTop: -10 }}>
+                        {[
+                          {
+                            label: "2023-24",
+                            id: 23,
+                          },
+                          {
+                            label: "2024-25",
+                            id: 24,
+                          },
+                        ].map((year) => (
+                          <Tag.CheckableTag
+                            key={year}
+                            checked={selectedYear.includes(year.id?.toString())}
+                            onChange={() => {
+                              let mySelectedYear = [...selectedYear];
+                              if (
+                                mySelectedYear.includes(year.id?.toString()) &&
+                                mySelectedYear?.length === 1
+                              ) {
+                                setFieldsValue({
+                                  academic_year: mySelectedYear,
+                                });
+                              } else if (
+                                mySelectedYear.includes(year.id?.toString())
+                              ) {
+                                setFieldsValue({
+                                  academic_year: mySelectedYear?.filter(
+                                    (each) => each !== year.id?.toString()
+                                  ),
+                                });
+                              } else {
+                                setFieldsValue({
+                                  academic_year: [
+                                    ...mySelectedYear,
+                                    year.id?.toString(),
+                                  ],
+                                });
+                              }
+                            }}
+                          >
+                            {year.label}
+                          </Tag.CheckableTag>
+                        ))}
+                      </div>
+                    </Form.Item>
+                  );
+                }}
               </Form.Item>
             </Col>
-            <Col xs={24} sm={12}>
-              <Form.Item name="school_type" label="School Type">
-                <Select
-                  className="w-100"
-                  options={dropdownData?.schoolType}
-                  onChange={() => {
-                    form.setFieldsValue({
-                      city: [0],
-                      zone_id: [0],
-                      branch: [0],
-                    });
-                  }}
-                  showSearch
-                  filterOption={(input, option) =>
-                    option.label.toLowerCase().includes(input.toLowerCase())
-                  }
-                />
+            <Col xs={12}>
+              <Form.Item shouldUpdate noStyle>
+                {({ getFieldValue, setFieldsValue }) => {
+                  const schoolType = getFieldValue("school_type");
+                  return (
+                    <Form.Item name="school_type" label="School Type">
+                      <div style={{ marginTop: -10 }}>
+                        {dropdownData?.schoolType.map((item) => (
+                          <Tag.CheckableTag
+                            key={item.value}
+                            checked={schoolType === item?.value}
+                            onChange={() => {
+                              setFieldsValue({
+                                school_type: item.value,
+                              });
+                            }}
+                          >
+                            {item.label}
+                          </Tag.CheckableTag>
+                        ))}
+                      </div>
+                    </Form.Item>
+                  );
+                }}
               </Form.Item>
             </Col>
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="city" label="City">
                 <Select
                   className="w-100"
@@ -193,7 +243,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="zone_id" label="Zone">
                 <Select
                   className="w-100"
@@ -224,7 +274,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="branch" label="Branch">
                 <Select
                   className="w-100"
@@ -254,7 +304,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="source_type" label="Source Type">
                 <Select
                   className="w-100"
@@ -285,7 +335,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="lead_source" label="Lead Source">
                 <Select
                   className="w-100"
@@ -310,7 +360,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="status" label="Lead Status">
                 <Select
                   className="w-100"
@@ -335,7 +385,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="lead_type" label="Lead Type">
                 <Select
                   className="w-100"
@@ -365,7 +415,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="lead_category" label="Lead Category">
                 <Select
                   className="w-100"
@@ -390,7 +440,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item name="date_type" label="Date Type">
                 <Select
                   className="w-100"
@@ -402,7 +452,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={12}>
+            <Col xs={24}>
               <Form.Item
                 name="date_range"
                 label="Date Range"
