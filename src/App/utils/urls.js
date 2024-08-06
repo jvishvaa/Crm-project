@@ -46,13 +46,16 @@ const urls = {
     sourceType: `${BASECRM}/user_management/source_types/`,
     source: `${BASECRM}/user_management/source/`,
     addLead: `${BASECRM}/lead_mgmt/lead_info/`,
-    cityList: `${BASEERP}/erp_user/city-list/`,
-    zoneList: `${BASEERP}/erp_user/zone-list/`,
+    cityList: `${BASEERP}/erp_user/city-view/`,
+    zoneList: `${BASEERP}/erp_user/zone-view/`,
     branchList: `${BASEERP}/erp_user/branch-view/`,
     gradeList: `${BASEERP}/erp_user/grademapping/`,
     userDataList: `${BASEERP}/communication/v1/view-users/`,
     userLevelList: `${BASEMARKETING}/central-admin/user_level_list/`,
     bulkUpload: `${BASECRM}/lead_mgmt/lead_bulk_upload/`,
+    leadTypeList: `${BASECRM}/lead_mgmt/lead-type-choices/`,
+    sourceTypeList: `${BASECRM}/lead_mgmt/source-type/`,
+    leadInfo: `${BASECRM}/lead_mgmt/lead_info/`,
   },
 };
 

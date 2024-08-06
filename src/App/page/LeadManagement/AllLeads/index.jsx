@@ -15,6 +15,7 @@ import {
   Empty,
   Descriptions,
   Drawer,
+  message,
 } from "antd";
 import "./index.css";
 import { MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -35,21 +36,23 @@ import { TbFileUpload } from "react-icons/tb";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
 import AddLead from "../AddLead";
 import CustomDrawerHeader from "../../../component/UtilComponents/CustomDrawerHeader";
+import urls from "../../../utils/urls";
+import axios from "axios";
 
 const LeadManagement = () => {
   const defaultFilters = {
     academic_year: ["2024-25"],
     school_type: 0,
     city: [0],
-    zone: [0],
+    zone_id: [0],
     branch: [0],
     source_type: [0],
     lead_source: [0],
-    lead_status: [0],
+    status: [0],
     lead_type: [0],
     lead_category: [0],
-    date_type: "lead_created_date",
-    date_range: [dayjs(), dayjs()],
+    date_type: 1,
+    date_range: [dayjs().subtract(1, "month"), dayjs()],
   };
   const [loading, setLoading] = useState(false);
   const location = useLocation();
@@ -72,7 +75,7 @@ const LeadManagement = () => {
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const dropdownData = {
+  const [dropdownData, setDropdownData] = useState({
     academicYear: [
       { label: "2023-24", value: "2023-24" },
       { label: "2024-25", value: "2024-25" },
@@ -82,30 +85,10 @@ const LeadManagement = () => {
       { label: "Day", value: "day" },
       { label: "Boarding", value: "boarding" },
     ],
-    city: [
-      { label: "All", value: 0 },
-      { label: "Bangallore", value: "bangalore" },
-      { label: "Kolkata", value: "kolkata" },
-      { label: "Chennal", value: "chennai" },
-    ],
-    zone: [
-      { label: "All", value: 0 },
-      { label: "Zone 1A", value: "zone-1a" },
-      { label: "Zone 1B", value: "zone-1b" },
-      { label: "Zone 2", value: "zone-2" },
-    ],
-    branch: [
-      { label: "All", value: 0 },
-      { label: "Orchids BTM Layout", value: "btm-layout" },
-      { label: "Orchids Banerghata", value: "banerghata" },
-      { label: "Orchids Newtown", value: "newtown" },
-    ],
-    sourceType: [
-      { label: "All", value: 0 },
-      { label: "Field Marketing", value: "field_marketing" },
-      { label: "Email Marketing", value: "email_marketing" },
-      { label: "Digital Marketing", value: "digital_marketing" },
-    ],
+    city: [{ city_name: "All", id: 0 }],
+    zone: [{ zone_name: "All", id: 0 }],
+    branch: [{ branch_name: "All", id: 0 }],
+    sourceType: [{ source_name: "All", id: 0 }],
     source: [
       { label: "All", value: 0 },
       { label: "DM - Website", value: "dm-website" },
@@ -124,27 +107,20 @@ const LeadManagement = () => {
         value: "admission-done",
       },
     ],
-    leadType: [
-      { label: "All", value: 0 },
-      { label: "Active", value: "active" },
-      { label: "Dormant", value: "dormant" },
-      { label: "Active ReEnquiry", value: "active_reenquiry" },
-      { label: "Dormant ReEnquiry", value: "dormant_reenquiry" },
-      { label: "Regen", value: "reben" },
-    ],
+    leadType: [{ lead_name: "All", id: 0 }],
     leadCategory: [
       { label: "All", value: 0 },
-      { label: "Normal", value: "normal" },
-      { label: "Interested", value: "interested" },
-      { label: "Hot", value: "hot" },
+      { label: "Hot", value: 1 },
+      { label: "Interested", value: 2 },
+      { label: "Normal", value: 3 },
     ],
     dateType: [
-      { label: "Lead Created Date", value: "lead_created_date" },
-      { label: "Next Followup Date", value: "next_followup_date" },
-      { label: "ReEnquiry Date", value: "re_enquiry_date" },
-      { label: "Regen Date", value: "regen_date" },
+      { label: "Lead Created Date", value: 1 },
+      { label: "Next Followup Date", value: 2 },
+      { label: "ReEnquiry Date", value: 3 },
+      { label: "Regen Date", value: 4 },
     ],
-  };
+  });
 
   useEffect(() => {
     if (width <= 991) {
@@ -199,395 +175,128 @@ const LeadManagement = () => {
     { label: "Fresh", value: "fresh" },
     { label: "Duplicate", value: "duplicate" },
   ];
-
-  const getLeadData = (page, page_size, params = {}) => {
-    // setLoading(true);
-    setLeadData([
-      {
-        branch: "Raja Test",
-        call_count: null,
-        city: "Bangalore",
-        zone: "JP Nagar Zone",
-        contact_source: "PRO Data - Apartment",
-        lead_created_date: "2024-03-26 13:22:51",
-        lead_status: "Lead Created",
-        lead_status2: null,
-        pro_status: "Interested",
-        next_followup_date: "",
-        is_duplicate: false,
-        id: 4110729,
-        lead_name: "test new",
-        is_dormant: false,
-        in_dormant: false,
-        is_regen: false,
-        is_enquiry: true,
-        lead_status_id: 103,
-        lead_status_l2_id: null,
-        is_parent_updated: false,
-        pro_status_id: 9,
-        is_boarding: false,
-        is_live: true,
-      },
-      {
-        branch: "ORCHIDS BTM Layout",
-        call_count: null,
-        city: "Bangalore",
-        zone: "JP Nagar Zone",
-        contact_source: "PRO Data - Field Data",
-        lead_created_date: "2024-03-26 12:41:47",
-        lead_status: "Virtual counselling cancel",
-        lead_status2: "Walkin scheduled",
-        pro_status: "Normal",
-        next_followup_date: "2024-04-02 14:50:00",
-        is_duplicate: false,
-        id: 4110728,
-        lead_name: "bdm lead 2",
-        is_dormant: false,
-        in_dormant: false,
-        is_regen: true,
-        is_enquiry: false,
-        lead_status_id: 92,
-        lead_status_l2_id: 55,
-        is_parent_updated: false,
-        pro_status_id: 10,
-        is_boarding: false,
-        is_live: true,
-      },
-      {
-        branch: "Raja Test",
-        call_count: null,
-        city: "Bangalore",
-        zone: "JP Nagar Zone",
-        contact_source: "PRO Data - Apartment",
-        lead_created_date: "2024-03-26 12:09:28",
-        lead_status: "Admission done",
-        lead_status2: null,
-        pro_status: "HOT Lead",
-        next_followup_date: "2024-04-02 14:09:00",
-        is_duplicate: false,
-        id: 4110727,
-        lead_name: "Bdmfield lead",
-        is_dormant: false,
-        in_dormant: false,
-        is_regen: false,
-        is_enquiry: false,
-        lead_status_id: 49,
-        lead_status_l2_id: null,
-        is_parent_updated: false,
-        pro_status_id: 11,
-        is_boarding: false,
-        is_live: true,
-      },
-      {
-        branch: "ORCHIDS BTM Layout",
-        call_count: null,
-        city: "Bangalore",
-        zone: "JP Nagar Zone",
-        contact_source: "PRO Data - Apartment",
-        lead_created_date: "2024-03-26 12:04:47",
-        lead_status: "Walkin done",
-        lead_status2: "Will Come Again",
-        pro_status: "HOT Lead",
-        next_followup_date: "2024-04-02 13:42:00",
-        is_duplicate: false,
-        id: 4110726,
-        lead_name: "new report",
-        is_dormant: false,
-        in_dormant: false,
-        is_regen: false,
-        is_enquiry: false,
-        lead_status_id: 47,
-        lead_status_l2_id: 89,
-        is_parent_updated: false,
-        pro_status_id: 11,
-        is_boarding: false,
-        is_live: true,
-      },
-      {
-        branch: "ORCHIDS BTM Layout",
-        call_count: null,
-        city: "Bangalore",
-        zone: "JP Nagar Zone",
-        contact_source: "Direct-walkin",
-        lead_created_date: "2024-03-18 15:29:19",
-        lead_status: "Virtual counselling cancel",
-        lead_status2: "Virtual counselling scheduled",
-        pro_status: null,
-        next_followup_date: "2024-05-07 11:52:00",
-        is_duplicate: false,
-        id: 4110723,
-        lead_name: "test one",
-        is_dormant: false,
-        in_dormant: false,
-        is_regen: false,
-        is_enquiry: false,
-        contact_source__sub_name: null,
-        lead_status_id: 92,
-        lead_status_l2_id: 41,
-        is_parent_updated: false,
-        pro_status_id: null,
-        is_boarding: false,
-        is_live: true,
-      },
-      {
-        branch: "ORCHIDS BTM Layout",
-        call_count: null,
-        city: "Bangalore",
-        zone: "JP Nagar Zone",
-        contact_source: "Branch",
-        lead_created_date: "2024-03-15 14:34:50",
-        lead_status: "Walkin cancel",
-        lead_status2: "Walkin scheduled",
-        pro_status: null,
-        next_followup_date: "2024-03-18 15:32:00",
-        is_duplicate: false,
-        id: 4110722,
-        lead_name: "Automation Lead",
-        is_dormant: true,
-        in_dormant: false,
-        is_regen: false,
-        is_enquiry: true,
-        contact_source__sub_name: null,
-        lead_status_id: 94,
-        lead_status_l2_id: 55,
-        is_parent_updated: false,
-        pro_status_id: null,
-        is_boarding: false,
-        is_live: true,
-      },
-      {
-        branch: "Raja Test",
-        call_count: null,
-        city: "Bangalore",
-        zone: "JP Nagar Zone",
-        contact_source: "AOL",
-        lead_created_date: "2024-03-14 15:28:12",
-        lead_status: "Walkin cancel",
-        lead_status2: "Walkin scheduled",
-        pro_status: null,
-        next_followup_date: "2024-03-15 15:14:00",
-        is_duplicate: false,
-        id: 4110721,
-        lead_name: "admission test",
-        is_dormant: false,
-        in_dormant: false,
-        is_regen: false,
-        is_enquiry: false,
-        contact_source__sub_name: null,
-        lead_status_id: 94,
-        lead_status_l2_id: 55,
-        is_parent_updated: false,
-        pro_status_id: null,
-        is_boarding: false,
-        is_live: true,
-      },
-      {
-        branch: "Raja Test",
-        call_count: null,
-        city: "Bangalore",
-        zone: "JP Nagar Zone",
-        contact_source: "Branch",
-        lead_created_date: "2024-03-12 15:18:19",
-        lead_status: "Walkin cancel",
-        lead_status2: "Walkin scheduled",
-        pro_status: null,
-        next_followup_date: "2024-03-12 19:45:00",
-        is_duplicate: false,
-        id: 4110720,
-        lead_name: "TEST",
-        is_dormant: false,
-        in_dormant: false,
-        is_regen: false,
-        is_enquiry: false,
-        contact_source__sub_name: null,
-        lead_status_id: 94,
-        lead_status_l2_id: 55,
-        is_parent_updated: false,
-        pro_status_id: null,
-        is_boarding: false,
-        is_live: true,
-      },
-      {
-        branch: "Raja Test",
-        call_count: null,
-        city: "Bangalore",
-        zone: "JP Nagar Zone",
-        contact_source: "PRO Data - Apartment",
-        lead_created_date: "2024-03-07 13:02:50",
-        lead_status: "Walkin done",
-        lead_status2: null,
-        pro_status: "Normal",
-        next_followup_date: "2024-03-12 15:16:00",
-        is_duplicate: false,
-        id: 4110717,
-        lead_name: "apgd",
-        is_dormant: false,
-        in_dormant: false,
-        is_regen: true,
-        is_enquiry: false,
-        lead_status_id: 47,
-        lead_status_l2_id: null,
-        is_parent_updated: false,
-        pro_status_id: 10,
-        is_boarding: false,
-        is_live: true,
-      },
-      {
-        branch: "ORCHIDS Bannerghata",
-        call_count: null,
-        city: "Bangalore",
-        zone: "South Bangalore - Zonal Warehouse",
-        contact_source: "PRO Data - Field Data",
-        lead_created_date: "2024-03-07 12:58:57",
-        lead_status: "Call picked up",
-        lead_status2: "Not Interested",
-        pro_status: "Normal",
-        next_followup_date: "2024-03-11 15:16:38",
-        is_duplicate: false,
-        id: 4110715,
-        lead_name: "route",
-        is_dormant: false,
-        in_dormant: true,
-        is_regen: true,
-        is_enquiry: false,
-        lead_status_id: 29,
-        lead_status_l2_id: 33,
-        is_parent_updated: false,
-        pro_status_id: 10,
-        is_boarding: true,
-        is_live: true,
-      },
-      {
-        branch: "ORCHIDS Ambegaon",
-        call_count: null,
-        city: "Pune",
-        zone: "JP Nagar Zone",
-        contact_source: "Branch",
-        lead_created_date: "2024-03-05 17:07:10",
-        lead_status: "Not Responding",
-        lead_status2: "Invalid Number",
-        pro_status: null,
-        next_followup_date: "",
-        is_duplicate: false,
-        id: 4110699,
-        lead_name: "Automation Lead",
-        is_dormant: false,
-        in_dormant: true,
-        is_regen: false,
-        is_enquiry: false,
-        contact_source__sub_name: null,
-        lead_status_id: 30,
-        lead_status_l2_id: 38,
-        is_parent_updated: false,
-        pro_status_id: null,
-        is_boarding: false,
-        is_live: true,
-      },
-      {
-        branch: "ORCHIDS BTM Layout",
-        call_count: null,
-        city: "Bangalore",
-        zone: "JP Nagar Zone",
-        contact_source: "Branch",
-        lead_created_date: "2024-03-05 17:04:39",
-        lead_status: "Virtual counselling cancel",
-        lead_status2: "Walkin scheduled",
-        pro_status: null,
-        next_followup_date: "2024-03-15 15:16:00",
-        is_duplicate: false,
-        id: 4110698,
-        lead_name: "Automation Lead",
-        is_dormant: false,
-        in_dormant: false,
-        is_regen: false,
-        is_enquiry: false,
-        contact_source__sub_name: null,
-        lead_status_id: 92,
-        lead_status_l2_id: 55,
-        is_parent_updated: false,
-        pro_status_id: null,
-        is_boarding: false,
-        is_live: true,
-      },
-      {
-        branch: "ORCHIDS BTM Layout",
-        call_count: null,
-        city: "Bangalore",
-        zone: "JP Nagar Zone",
-        contact_source: "Branch",
-        lead_created_date: "2024-03-05 16:59:15",
-        lead_status: "Virtual counselling cancel",
-        lead_status2: "Walkin scheduled",
-        pro_status: null,
-        next_followup_date: "2024-03-15 15:28:00",
-        is_duplicate: false,
-        id: 4110697,
-        lead_name: "Automation Lead",
-        is_dormant: false,
-        in_dormant: false,
-        is_regen: true,
-        is_enquiry: false,
-        contact_source__sub_name: null,
-        lead_status_id: 92,
-        lead_status_l2_id: 55,
-        is_parent_updated: false,
-        pro_status_id: null,
-        is_boarding: false,
-        is_live: true,
-      },
-      {
-        branch: "ORCHIDS BTM Layout",
-        call_count: null,
-        city: "Bangalore",
-        zone: "JP Nagar Zone",
-        contact_source: "Branch",
-        lead_created_date: "2024-03-05 16:57:14",
-        lead_status: "Virtual counselling cancel",
-        lead_status2: "Walkin scheduled",
-        pro_status: null,
-        next_followup_date: "2024-03-15 12:24:00",
-        is_duplicate: false,
-        id: 4110696,
-        lead_name: "Automation Lead",
-        is_dormant: false,
-        in_dormant: false,
-        is_regen: false,
-        is_enquiry: false,
-        contact_source__sub_name: null,
-        lead_status_id: 92,
-        lead_status_l2_id: 55,
-        is_parent_updated: false,
-        pro_status_id: null,
-        is_boarding: false,
-        is_live: true,
-      },
-      {
-        branch: "ORCHIDS BTM Layout",
-        call_count: null,
-        city: "Bangalore",
-        zone: "JP Nagar Zone",
-        contact_source: "Branch",
-        lead_created_date: "2024-03-05 16:52:28",
-        lead_status: "Virtual counselling done",
-        lead_status2: "Walkin scheduled",
-        pro_status: null,
-        next_followup_date: "2024-03-15 16:22:00",
-        is_duplicate: false,
-        id: 4110695,
-        lead_name: "Automation Lead",
-        is_dormant: false,
-        in_dormant: false,
-        is_regen: true,
-        is_enquiry: false,
-        contact_source__sub_name: null,
-        lead_status_id: 42,
-        lead_status_l2_id: 55,
-        is_parent_updated: false,
-        pro_status_id: null,
-        is_boarding: false,
-        is_live: true,
-      },
-    ]);
+  const getBranchList = (zoneId = 2, cityId = 1) => {
+    let params = { zone_id: zoneId, city_id: cityId };
+    axios
+      .get(`${urls.masterData.branchList}`, {
+        params: params,
+      })
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setDropdownData((p) => {
+          return {
+            ...p,
+            branch: [{ branch_name: "All", id: 0 }, ...response?.result],
+          };
+        });
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
+  const getCityList = () => {
+    axios
+      .get(`${urls.masterData.cityList}`)
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setDropdownData((p) => {
+          return {
+            ...p,
+            city: [{ city_name: "All", id: 0 }, ...response?.result],
+          };
+        });
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
+  const getZoneList = (values) => {
+    axios
+      .get(`${urls.masterData.zoneList}`)
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setDropdownData((p) => {
+          return {
+            ...p,
+            zone: [{ zone_name: "All", id: 0 }, ...response?.result],
+          };
+        });
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
+  const getLeadTypeList = (values) => {
+    axios
+      .get(`${urls.masterData.leadTypeList}`)
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setDropdownData((p) => {
+          return {
+            ...p,
+            leadType: [{ lead_name: "All", id: 0 }, ...response?.result],
+          };
+        });
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
+  const getSourceTypeList = (values) => {
+    axios
+      .get(`${urls.masterData.sourceTypeList}`)
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setDropdownData((p) => {
+          return {
+            ...p,
+            sourceType: [{ source_name: "All", id: 0 }, ...response?.result],
+          };
+        });
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
+  const getLeadData = (page, page_size, filteredParams = {}) => {
+    let param = {};
+    Object.entries(filteredParams).forEach(([key, value]) => {
+      if (key === "date_range" && Array.isArray(value) && value.length === 2) {
+        const [startDate, endDate] = value.map(
+          (date) => new Date(date).toISOString().split("T")[0]
+        );
+        param["start_date"] = startDate;
+        param["end_date"] = endDate;
+      } else if (Array.isArray(value)) {
+        const filteredValues = value.filter((v) => v !== 0);
+        if (filteredValues.length > 0) {
+          param[key] = filteredValues.join(",");
+        }
+      } else if (value !== 0) {
+        param[key] = value;
+      }
+    });
+    console.log(filteredParams, param, "pp");
+    axios
+      .get(`${urls.masterData.leadInfo}`, {
+        params: param,
+      })
+      .then((res) => {
+        let response = res.data;
+        setLeadData(response);
+        message.success("Lead info fetched successfully.");
+        // setPageData({
+        //   current: response?.current_page,
+        //   pageSize: 15,
+        //   total: response?.count,
+        // });
+      })
+      .catch((err) => {
+        message.error(err?.message ?? "Failed to fetched lead info");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
     setPageData({
       current: page,
       pageSize: page_size,
@@ -597,6 +306,11 @@ const LeadManagement = () => {
 
   useEffect(() => {
     getLeadData(pageData?.current, pageData?.pageSize);
+    getCityList();
+    getBranchList();
+    getZoneList();
+    getLeadTypeList();
+    getSourceTypeList();
   }, []);
 
   const handleTableChange = (pagination) => {
@@ -727,13 +441,13 @@ const LeadManagement = () => {
               )?.join(", ")}
             />
           </Col>
-        ) : !filterData?.zone?.includes(0) ? (
+        ) : !filterData?.zone_id?.includes(0) ? (
           <Col>
             <RenderFilterTag
               label="Zone"
               value={getArrayValues(
                 dropdownData?.zone?.filter((each) =>
-                  filterData?.zone?.includes(each?.value)
+                  filterData?.zone_id?.includes(each?.value)
                 ),
                 "label"
               )?.join(", ")}
@@ -777,13 +491,13 @@ const LeadManagement = () => {
             />
           </Col>
         ) : null}
-        {!filterData?.lead_status?.includes(0) ? (
+        {!filterData?.status?.includes(0) ? (
           <Col>
             <RenderFilterTag
               label="Lead Status"
               value={getArrayValues(
                 dropdownData?.leadStatus?.filter((each) =>
-                  filterData?.lead_status?.includes(each?.value)
+                  filterData?.status?.includes(each?.value)
                 ),
                 "label"
               )?.join(", ")}
@@ -888,11 +602,11 @@ const LeadManagement = () => {
                 <Typography
                   style={{
                     whiteSpace:
-                      record?.lead_name?.length <= 30 ? "nowrap" : "normal",
+                      record?.name?.length <= 30 ? "nowrap" : "normal",
                   }}
                   className="th-12"
                 >
-                  {record?.lead_name || "NA"}
+                  {record?.name || "NA"}
                 </Typography>
               </Col>
               <Col>
@@ -912,12 +626,10 @@ const LeadManagement = () => {
       render: (record) => (
         <Row className={"d-flex flex-column flex-nowrap"}>
           <Col>
-            <Typography className="th-12">{"+917937363636"}</Typography>
+            <Typography className="th-12">{record?.contact_no}</Typography>
           </Col>
           <Col>
-            <Typography className="th-10">
-              {"anik.chowdhury@orchids.edu.in"}
-            </Typography>
+            <Typography className="th-10">{record?.email}</Typography>
           </Col>
         </Row>
       ),
@@ -925,15 +637,17 @@ const LeadManagement = () => {
     {
       title: "Source",
       key: "source",
-      dataIndex: "contact_source",
-      render: (text) => (text ? text : "--"),
+      // dataIndex: "contact_source",
+      render: (record) =>
+        record?.source_type?.name ? record?.source_type?.name : "--",
       align: "center",
     },
     {
       title: "Branch",
       key: "branch",
-      dataIndex: "branch",
-      render: (text) => (text ? text : "--"),
+      // dataIndex: "branch",
+      render: (text) =>
+        text?.branch_id?.branch_name ? text?.branch_id?.branch_name : "--",
       align: "center",
     },
     {
@@ -941,8 +655,8 @@ const LeadManagement = () => {
       key: "lead_status",
       render: (record) => (
         <span>
-          {record.lead_status}
-          {record.lead_status2 ? ` -> ${record.lead_status2}` : ""}
+          {record?.status?.status}
+          {/* {record.lead_status2 ? ` -> ${record.lead_status2}` : ""} */}
         </span>
       ),
       align: "center",
@@ -982,7 +696,8 @@ const LeadManagement = () => {
             type="text"
             icon={<IoMdEye size={20} />}
             onClick={() => {
-              navigate("/lead-management/lead-details/1");
+              navigate(`/lead-management/lead-details/1`);
+              // navigate(`/lead-management/lead-details/${record?.id}`);
             }}
           />
         </Tooltip>
@@ -1198,6 +913,7 @@ const LeadManagement = () => {
                       dataSource={leadData || []}
                       columns={columns}
                       // bordered={true}
+                      loading={loading}
                       pagination={leadData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />
@@ -1356,7 +1072,7 @@ const LeadManagement = () => {
         onSubmit={(values) => {
           setDrawerData({ show: false, data: null });
           setFilterData({ ...filterData, ...values });
-          getLeadData(1, pageData?.pageSize);
+          getLeadData(1, pageData?.pageSize, { ...filterData, ...values });
         }}
         dropdownData={dropdownData}
         closeDrawer={() => {
