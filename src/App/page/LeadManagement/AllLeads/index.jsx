@@ -15,11 +15,15 @@ import {
   Empty,
   Descriptions,
   Drawer,
+  Form,
+  Modal,
+  Select,
+  Popconfirm
 } from "antd";
 import "./index.css";
 import { MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
-import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
+import { CloseOutlined, SearchOutlined, EditFilled, FireFilled } from "@ant-design/icons";
 import { IoMdEye } from "react-icons/io";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import DrawerFilter from "./drawerFilter";
@@ -35,6 +39,9 @@ import { TbFileUpload } from "react-icons/tb";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
 import AddLead from "../AddLead";
 import CustomDrawerHeader from "../../../component/UtilComponents/CustomDrawerHeader";
+import UpdateLeadDetails from "../LeadDetails/UpdateLeadDetails";
+import axios from "axios";
+import urls from "../../../utils/urls";
 
 const LeadManagement = () => {
   const defaultFilters = {
@@ -51,6 +58,7 @@ const LeadManagement = () => {
     date_type: "lead_created_date",
     date_range: [dayjs(), dayjs()],
   };
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -76,6 +84,13 @@ const LeadManagement = () => {
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const [branchList, setBranchList] = useState([]);
+  const [modalData, setModalData] = useState({
+    show: false,
+    type: null,
+    data: null,
+  });
+  
   const dropdownData = {
     academicYear: [
       { label: "2023-24", value: "2023-24" },
@@ -150,6 +165,17 @@ const LeadManagement = () => {
     ],
   };
 
+  // useEffect(() => {
+  //   if (modalData?.show) {
+  //     if (modalData?.type === "Branch") {
+  //       form.setFieldsValue({ branch: modalData?.data?.branch });
+  //     }
+  //     if (modalData?.type === "Source") {
+  //       form.setFieldsValue({ source: modalData?.data?.source });
+  //     }
+  //   }
+  // }, [modalData]);
+
   useEffect(() => {
     if (width <= 991) {
       setShowFilterView(false);
@@ -195,6 +221,25 @@ const LeadManagement = () => {
         ],
       }
     );
+  };
+
+  const onFinish = (values) => {
+    setModalData({ show: false, type: null, data: null });
+    form.resetFields();
+  };
+
+  const getBranchList = () => {
+    let params = { session_year: 4 };
+    axios
+      .get(`${urls.masterData.branchList}`, {
+        params: params,
+      })
+      .then((res) => {
+        let response = res.data;
+        setBranchList(response?.result);
+      })
+      .catch(() => {})
+      .finally(() => {});
   };
 
   const [searchFetched, setSearchFetched] = useState(false);
@@ -601,6 +646,7 @@ const LeadManagement = () => {
 
   useEffect(() => {
     getLeadData(pageData?.current, pageData?.pageSize);
+    getBranchList();
   }, []);
 
   const handleTableChange = (pagination) => {
@@ -870,6 +916,11 @@ const LeadManagement = () => {
     );
   };
 
+  const handleUpdateLeadDetails = (data) => {
+    setModalData({ show: true, type: "UpdateLeadDetails", data: data });
+  };
+  
+
   const columns = [
     {
       title: "Sr. No.",
@@ -877,6 +928,7 @@ const LeadManagement = () => {
       render: (text, record, index) =>
         index + 1 + (pageData?.current - 1) * pageData?.pageSize,
       align: "center",
+      width: 50
     },
     {
       title: "Lead Name",
@@ -908,7 +960,7 @@ const LeadManagement = () => {
           </Col>
         </Row>
       ),
-      width: 200,
+      width: 180,
     },
     {
       title: "Lead Contact Details",
@@ -930,15 +982,41 @@ const LeadManagement = () => {
       title: "Source",
       key: "source",
       dataIndex: "contact_source",
-      render: (text) => (text ? text : "--"),
       align: "center",
+      render: (text) => (
+        <div
+          onClick={() => {
+            setModalData({
+              show: true,
+              type: "Source",
+              data: { source: 1 },
+            });
+          }}
+          style={{ cursor: 'pointer' }}
+        >
+          {text ? text : "--"}
+        </div>
+      ),
     },
     {
       title: "Branch",
       key: "branch",
       dataIndex: "branch",
-      render: (text) => (text ? text : "--"),
       align: "center",
+      render: (text) => (
+        <div
+          onClick={() => {
+            setModalData({
+              show: true,
+              type: "Branch",
+              data: { branch: 1 },
+            })
+          }}
+          style={{ cursor: 'pointer' }}
+        >
+          {text ? text : "--"}
+        </div>
+      ),
     },
     {
       title: "Lead Status",
@@ -981,6 +1059,24 @@ const LeadManagement = () => {
       title: "Action",
       key: "action",
       render: (record) => (
+        <>
+        <Tooltip title="Mark as Hot">
+          <Popconfirm title="Are you to mark lead as Hot?">
+            <Button
+              type="text"
+              icon={<FireFilled size={20} style={{color:'#BB2139'}}/>}
+            />
+          </Popconfirm>
+        </Tooltip>
+        <Tooltip title="Update Lead Details">
+          <Button
+            type="text"
+            icon={<EditFilled size={20} />}
+            onClick={() => {
+              handleUpdateLeadDetails(record);
+            }}
+          />
+        </Tooltip>
         <Tooltip title="View Lead">
           <Button
             type="text"
@@ -990,8 +1086,10 @@ const LeadManagement = () => {
             }}
           />
         </Tooltip>
+        </>
       ),
       align: "center",
+      width: 130
     },
   ];
 
@@ -1396,6 +1494,149 @@ const LeadManagement = () => {
           }
         />
       </Drawer>
+      {
+        
+          modalData.show && modalData.type !== "UpdateLeadDetails" && (
+          
+      <Modal
+        centered
+        open={modalData?.show}
+        onCancel={() => {
+          setModalData({ show: false, type: null, data: null });
+          form.resetFields();
+        }}
+        footer={[
+          <Button
+            key="back"
+            onClick={() => {
+              setModalData({ show: false, type: null, data: null });
+              form.resetFields();
+            }}
+            size="small"
+          >
+            Cancel
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            onClick={() => form.submit()}
+            loading={loading}
+            size="small"
+          >
+            Update
+          </Button>,
+        ]}
+      >
+        <Row>
+          <Col xs={24}>
+            <Typography className="th-14 th-fw-600">
+              {`Update ${modalData?.type}`}
+            </Typography>
+            <Divider />
+          </Col>
+          <Col xs={24}>
+                <Form form={form} layout="vertical" onFinish={onFinish}>
+                  {
+                    modalData?.type === "Branch" ? ( 
+                    <>
+                      <Form.Item
+                        name={modalData?.type === "Branch" ? "branch" : "source"}
+                        label={modalData?.type === "Branch" ? "Branch" : "Source"}
+                        rules={[
+                          {
+                            required: true,
+                            message: `Please Enter Branch`
+                            
+                          },
+                        ]}
+                          >
+                            <Select
+                            style={{ width: "100%" }}
+                            className="add-lead-select"
+                            placeholder="Select Branch"
+                            showSearch
+                            filterOption={(input, option) =>
+                              option.label.toLowerCase().includes(input.toLowerCase())
+                            }
+                            options={branchList?.map((item, ind) => {
+                              return {
+                                label: item?.branch_name,
+                                value: item?.id,
+                              };
+                            })}
+                          />
+                      </Form.Item>
+                        <Form.Item name={"school_type"} label={"School Type"}
+                          rules={[
+                            {
+                              required: true,
+                              message: `Please Enter School type`
+                              
+                            },
+                          ]}
+                        >
+                          <Select
+                            style={{ width: "100%" }}
+                            showSearch
+                            placeholder="Select School Type"
+                            filterOption={(input, option) =>
+                              option.label.toLowerCase().includes(input.toLowerCase())
+                            }
+                                options={[
+                                  { label: "Day", value: 1 },
+                                  { label: "Boarding", value: 2 },
+                            ]}
+                            disabled={loading}
+                          />
+                            </Form.Item>
+                    </>
+
+                    ) : (
+                    <Form.Item
+                      name="source"
+                      label="Lead Source"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select Lead Source",
+                        },
+                      ]}
+                    >
+                      <Select
+                        style={{ width: "100%" }}
+                        className="add-lead-select"
+                        placeholder="Select Lead Source"
+                        showSearch
+                        filterOption={(input, option) =>
+                          option.label.toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={[
+                          { label: "DM-Direct", value: "dm-direct" },
+                          {
+                            label: "PRO Data - Field Data",
+                            value: "pro data -field data",
+                          },
+                        ]}
+                      />
+                    </Form.Item>
+                    )
+                  }
+            </Form>
+          </Col>
+        </Row>
+      </Modal>
+        )
+      }
+      {modalData.show && modalData.type === "UpdateLeadDetails" && (
+        <UpdateLeadDetails
+          modalData={modalData}
+          handleUpdateLeadDetails={() => { }}
+          closeModal={() => {
+            setModalData({ show: false, type: null, data: null });
+          }}
+        />
+      ) 
+      }
     </CustomCard>
   );
 };
