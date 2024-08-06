@@ -309,19 +309,19 @@ const LeadManagement = () => {
       .catch(() => {})
       .finally(() => {});
   };
-  const getLeadData = (page, page_size, filteredParams = {}) => {
+  const getLeadData = (page, page_size, filteredParams = filterData) => {
     let param = {};
-    Object.entries(filteredParams).forEach(([key, value]) => {
-      if (key === "date_range" && Array.isArray(value) && value.length === 2) {
-        const [startDate, endDate] = value.map(
+    Object.entries(filteredParams)?.forEach(([key, value]) => {
+      if (key === "date_range" && Array.isArray(value) && value?.length === 2) {
+        const [startDate, endDate] = value?.map(
           (date) => new Date(date).toISOString().split("T")[0]
         );
         param["start_date"] = startDate;
         param["end_date"] = endDate;
       } else if (Array.isArray(value)) {
-        const filteredValues = value.filter((v) => v !== 0);
-        if (filteredValues.length > 0) {
-          param[key] = filteredValues.join(",");
+        const filteredValues = value?.filter((v) => v !== 0);
+        if (filteredValues?.length > 0) {
+          param[key] = filteredValues?.join(",");
         }
       } else if (value !== 0) {
         param[key] = value;
@@ -334,8 +334,9 @@ const LeadManagement = () => {
         params: param,
       })
       .then((res) => {
-        let response = res.data;
-        setLeadData(response);
+        let response = res?.data;
+        console.log(response, "lead");
+        setLeadData(response?.data);
         message.success("Lead info fetched successfully.");
         // setPageData({
         //   current: response?.current_page,
@@ -669,7 +670,7 @@ const LeadManagement = () => {
               </Col>
               <Col>
                 <Row className={"d-flex flex-row"} gutter={[4, 4]}>
-                  {renderTag(record)}
+                  {/* {renderTag(record)} */}
                 </Row>
               </Col>
             </Row>
@@ -699,27 +700,12 @@ const LeadManagement = () => {
       render: (record) =>
         record?.source_type?.name ? record?.source_type?.name : "--",
       align: "center",
-      render: (text) => (
-        <div
-          onClick={() => {
-            setModalData({
-              show: true,
-              type: "Source",
-              data: { source: 1 },
-            });
-          }}
-          style={{ cursor: "pointer" }}
-        >
-          {text ? text : "--"}
-        </div>
-      ),
     },
     {
       title: "Branch",
       key: "branch",
       // dataIndex: "branch",
-      render: (text) =>
-        text?.branch_id?.branch_name ? text?.branch_id?.branch_name : "--",
+
       align: "center",
       render: (text) => (
         <div
@@ -732,7 +718,7 @@ const LeadManagement = () => {
           }}
           style={{ cursor: "pointer" }}
         >
-          {text ? text : "--"}
+          {text?.branch_id?.branch_name ? text?.branch_id?.branch_name : "--"}
         </div>
       ),
     },
@@ -741,7 +727,7 @@ const LeadManagement = () => {
       key: "lead_status",
       render: (record) => (
         <span>
-          {record?.status?.status}
+          {record?.status?.status ?? ".."}
           {/* {record.lead_status2 ? ` -> ${record.lead_status2}` : ""} */}
         </span>
       ),
