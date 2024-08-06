@@ -101,7 +101,7 @@ const BulkUploadLead = () => {
     console.log(values, "values");
     setSubmitLoading(true);
     axios
-      .post(urls.masterData.bulkUpload, formData)
+      .post(urls.leadManagement.bulkUpload, formData)
       .then((res) => {
         let response = res.data;
         message.success(response.message);
@@ -282,7 +282,7 @@ const BulkUploadLead = () => {
       </Col>
       <Col xs={24}>
         <Row className="d-flex flex-row" gutter={[8, 8]}>
-          <Col xs={24} sm={10} lg={8}>
+          <Col xs={24} sm={24} lg={8}>
             <CustomCard className="bulk-upload-lead-card">
               <Form
                 form={form}
@@ -292,7 +292,7 @@ const BulkUploadLead = () => {
                 className="w-100"
               >
                 <Row>
-                  <Col xs={12} sm={24} md={12}>
+                  <Col xs={12} sm={12} md={12}>
                     {/* <Form.Item
                         name="academic_year"
                         label="Academic Year"
@@ -351,7 +351,7 @@ const BulkUploadLead = () => {
                       </div>
                     </Form.Item>
                   </Col>
-                  <Col xs={12} sm={24} md={12}>
+                  <Col xs={12} sm={12} md={12}>
                     <Form.Item
                       // name={"school_type"}
                       label="School Type"
@@ -509,7 +509,7 @@ const BulkUploadLead = () => {
               </Form>
             </CustomCard>
           </Col>
-          <Col xs={24} sm={14} lg={16}>
+          <Col xs={24} sm={24} lg={16}>
             <CustomCard>
               <Spin spinning={loading} tip="Loading">
                 <Row gutter={[8, 8]}>

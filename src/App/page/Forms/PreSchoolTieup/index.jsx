@@ -433,6 +433,30 @@ const PreSchoolTieup = () => {
     },
   ];
 
+  const renderAddPreSchool = () => {
+    return (
+      <>
+        {getRoutePathDetails().add ? (
+          <Col>
+            <Button
+              size="small"
+              type="primary"
+              onClick={() => {
+                setDrawerData({
+                  show: true,
+                  data: null,
+                  type: "Add Pre School",
+                });
+              }}
+            >
+              + Pre School
+            </Button>
+          </Col>
+        ) : null}
+      </>
+    );
+  };
+
   return (
     <CustomCard>
       <Row gutter={[8, 8]}>
@@ -445,23 +469,7 @@ const PreSchoolTieup = () => {
                 </Col>
                 <Col>
                   <Row className="d-flex flex-row" gutter={[8, 4]}>
-                    {getRoutePathDetails().add ? (
-                      <Col>
-                        <Button
-                          size="small"
-                          type="primary"
-                          onClick={() => {
-                            setDrawerData({
-                              show: true,
-                              data: null,
-                              type: "Add Pre School",
-                            });
-                          }}
-                        >
-                          + Pre School
-                        </Button>
-                      </Col>
-                    ) : null}
+                    {width < 768 ? renderAddPreSchool() : null}
                     <Col>
                       <Tooltip title="Refresh">
                         <Button
@@ -492,17 +500,16 @@ const PreSchoolTieup = () => {
             >
               <Col xs={24}>
                 <Row className="d-flex flex-row justify-content-between align-items-center">
-                  <Col xs={13} sm={8} md={8} lg={14}>
+                  <Col xs={13} sm={8} md={14} lg={14}>
                     <Row
                       className="d-flex flex-row align-items-center"
                       gutter={[8, 8]}
                     >
-                      <Col xs={24} md={22} lg={12}>
-                        {getSearchInput()}
-                      </Col>
+                      <Col>{getSearchInput()}</Col>
+                      {width >= 768 ? renderAddPreSchool() : null}
                     </Row>
                   </Col>
-                  <Col xs={11} sm={16} md={16} lg={10}>
+                  <Col xs={11} sm={16} md={10} lg={10}>
                     <Row
                       className="d-flex flex-row justify-content-end align-items-center"
                       gutter={[8, 8]}

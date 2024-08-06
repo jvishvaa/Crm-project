@@ -219,7 +219,7 @@ const UserManagement = () => {
     //   },
     // ]);
     axios
-      .get(`${urls.UserManagement.userDataList}`, {
+      .get(`${urls.userManagement.userDataList}`, {
         params: param,
       })
       .then((res) => {

@@ -51,10 +51,12 @@ const urls = {
     branchList: `${BASEERP}/erp_user/branch-view/`,
     gradeList: `${BASEERP}/erp_user/grademapping/`,
     userLevelList: `${BASEMARKETING}/central-admin/user_level_list/`,
-    bulkUpload: `${BASECRM}/lead_mgmt/lead_bulk_upload/`,
   },
-  UserManagement: {
+  userManagement: {
     userDataList: `${BASEERP}/communication/v1/view-users/`,
+  },
+  leadManagement: {
+    bulkUpload: `${BASECRM}/lead_mgmt/lead_bulk_upload/`,
   },
 };
 
