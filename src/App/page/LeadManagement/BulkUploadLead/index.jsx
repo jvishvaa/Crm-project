@@ -96,12 +96,14 @@ const BulkUploadLead = () => {
     setLoading(true)
     axios
       .post(urls.masterData.bulkUpload, formData)
-      .then((resp) => {
-        console.log(resp, 'bulkuploadResp')
+      .then((res) => {
+        let response = res.data;
+        message.success(response.message);
       })
-      .catch((e) => {
-        setLoading(false);
-      });
+      .catch((error) => {
+        console.error("Error bulk uploading lead:", error);
+        message.error(error.message ?? "Failed to bulk upload lead");
+      })
   };
 
   useEffect(() => {
