@@ -81,6 +81,14 @@ const BulkUploadLead = () => {
   console.log(branchList, 'branchList')
 
   const onFinish = (values) => {
+    if (!academicYear) {
+      message.error("Please Select academic year");
+      return;
+    }
+    if (!schoolType) {
+      message.error("Please Select school type");
+      return;
+    }
     if (!selectedFile) {
       message.error("Please Select File");
       return;
@@ -103,6 +111,10 @@ const BulkUploadLead = () => {
       .catch((error) => {
         console.error("Error bulk uploading lead:", error);
         message.error(error.message ?? "Failed to bulk upload lead");
+      })
+      .finally(() => { 
+        setLoading(false);
+        setSelectedFile(null);
       })
   };
 
@@ -307,7 +319,7 @@ const BulkUploadLead = () => {
                         />
                       </Form.Item> */}
                     <Form.Item
-                      name="academic_year"
+                      // name="academic_year"
                       label="Academic Year"
                       rules={[
                         {
@@ -342,7 +354,7 @@ const BulkUploadLead = () => {
                   </Col>
                   <Col xs={24} sm={12} md={8}>
                     <Form.Item
-                      name={"school_type"}
+                      // name={"school_type"}
                       label="School Type"
                       rules={[
                         {

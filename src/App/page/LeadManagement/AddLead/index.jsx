@@ -285,7 +285,7 @@ const AddLead = () => {
             <Row gutter={[12, 8]}>
               <Col xs={24} sm={12} md={8}>
                 <Form.Item
-                  name={"academic_year"}
+                  // name={"academic_year"}
                   label="Academic Year"
                   rules={[
                     {
@@ -320,7 +320,7 @@ const AddLead = () => {
               </Col>
               <Col xs={24} sm={12} md={8}>
                 <Form.Item
-                  name={"school_type"}
+                  // name={"school_type"}
                   label="School Type"
                   rules={[
                     {
