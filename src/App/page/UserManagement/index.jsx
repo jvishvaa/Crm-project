@@ -158,7 +158,11 @@ const UserManagement = () => {
   };
 
   const [searchFetched, setSearchFetched] = useState(false);
-  const getUserData = (page, page_size, params = {}) => {
+  const getUserData = (
+    page,
+    page_size = pageData?.pageSize,
+    params = filterData
+  ) => {
     let param = {
       ...params,
       page: page,
@@ -166,58 +170,7 @@ const UserManagement = () => {
       page_size: 15,
     };
     setLoading(true);
-    // setUserData([
-    //   {
-    //     id: 1,
-    //     first_name: "Anik",
-    //     last_name: "Chowdhury",
-    //     email: "anik@gmail.com",
-    //     contact: "3646462736",
-    //     erp: "2838373636_OLV",
-    //     user_level: {
-    //       id: 2,
-    //       name: "Admin",
-    //     },
-    //     zone: [
-    //       { id: 1, name: "Zone1" },
-    //       { id: 2, name: "Zone2" },
-    //     ],
-    //     branch: [
-    //       { id: 1, name: "Branch1" },
-    //       { id: 2, name: "Branch2" },
-    //     ],
-    //     field_type: [
-    //       { id: 1, name: "Field Marketing" },
-    //       { id: 2, name: "Email Marketing" },
-    //     ],
-    //     is_active: true,
-    //   },
-    //   {
-    //     id: 2,
-    //     first_name: "Utpal",
-    //     last_name: "Maji",
-    //     email: "maji@gmail.com",
-    //     contact: "3646462436",
-    //     erp: "2838373636_OLV",
-    //     user_level: {
-    //       id: 1,
-    //       name: "Super Admin",
-    //     },
-    //     zone: [
-    //       { id: 1, name: "Zone1" },
-    //       { id: 2, name: "Zone2" },
-    //     ],
-    //     branch: [
-    //       { id: 1, name: "Branch1" },
-    //       { id: 2, name: "Branch2" },
-    //     ],
-    //     field_type: [
-    //       { id: 1, name: "Field Marketing" },
-    //       { id: 2, name: "Email Marketing" },
-    //     ],
-    //     is_active: false,
-    //   },
-    // ]);
+
     axios
       .get(`${urls.userManagement.userDataList}`, {
         params: param,
@@ -328,7 +281,7 @@ const UserManagement = () => {
         onPressEnter={() => {
           setSearchFetched(true);
           setSearchValue(searchInput);
-          getUserData(1, pageData?.pageSize);
+          getUserData(1, pageData?.pageSize, { search: searchInput });
         }}
         onBlur={(e) => {
           if (
@@ -675,48 +628,64 @@ const UserManagement = () => {
                         </Flex>
                       </Col> */}
                       <div className="tab-bar">
-                        <button
-                          key={0}
-                          className={`tab ${
-                            activeStatus === 0 ? "active" : ""
-                          }`}
-                          style={
-                            activeStatus === 0
-                              ? { color: "white", backgroundColor: "#BB2139" }
-                              : {}
-                          }
-                          onClick={() => setActiveStatus(0)}
-                        >
-                          All (1000)
-                        </button>
-                        <button
-                          key={1}
-                          className={`tab ${
-                            activeStatus === 1 ? "active" : ""
-                          }`}
-                          style={
-                            activeStatus === 1
-                              ? { color: "white", backgroundColor: "#BB2139" }
-                              : {}
-                          }
-                          onClick={() => setActiveStatus(1)}
-                        >
-                          Active (800)
-                        </button>
-                        <button
-                          key={2}
-                          className={`tab ${
-                            activeStatus === 2 ? "active" : ""
-                          }`}
-                          style={
-                            activeStatus === 2
-                              ? { color: "white", backgroundColor: "#BB2139" }
-                              : {}
-                          }
-                          onClick={() => setActiveStatus(2)}
-                        >
-                          Inactive (200)
-                        </button>
+                        <Flex gap={8} align="center">
+                          <button
+                            key={0}
+                            className={`tab ${
+                              activeStatus === 0 ? "active" : ""
+                            }`}
+                            style={
+                              activeStatus === 0
+                                ? { color: "white", backgroundColor: "#BB2139" }
+                                : {}
+                            }
+                            onClick={() => setActiveStatus(0)}
+                          >
+                            All (1000)
+                          </button>
+                          <Divider
+                            type="vertical"
+                            style={{
+                              borderColor: "#7cb305",
+                              height: "100%",
+                            }}
+                          />
+                          <button
+                            key={1}
+                            className={`tab ${
+                              activeStatus === 1 ? "active" : ""
+                            }`}
+                            style={
+                              activeStatus === 1
+                                ? { color: "white", backgroundColor: "#BB2139" }
+                                : {}
+                            }
+                            onClick={() => setActiveStatus(1)}
+                          >
+                            Active (800)
+                          </button>
+                          <Divider
+                            type="vertical"
+                            style={{
+                              borderColor: "#7cb305",
+                              height: "100%",
+                            }}
+                          />{" "}
+                          <button
+                            key={2}
+                            className={`tab ${
+                              activeStatus === 2 ? "active" : ""
+                            }`}
+                            style={
+                              activeStatus === 2
+                                ? { color: "white", backgroundColor: "#BB2139" }
+                                : {}
+                            }
+                            onClick={() => setActiveStatus(2)}
+                          >
+                            Inactive (200)
+                          </button>
+                        </Flex>
                       </div>
                     </Row>
                   </Col>

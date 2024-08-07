@@ -8,6 +8,9 @@ import {
   Row,
   Select,
   Typography,
+  Modal,
+  Flex,
+  Tag,
 } from "antd";
 import "./index.scss";
 import React, { useEffect, useState } from "react";
@@ -96,32 +99,50 @@ const UpdateUser = ({
           </Button>
         </div>
       }
+      // style={{ height: "fit-content" }}
     >
       <Row>
         <Col xs={24} className="pb-2">
           <Form form={form} layout="vertical" onFinish={onFinish}>
             <Row gutter={[8, 0]}>
               <Col xs={24} className="mt-2">
-                <Descriptions
-                  column={1}
-                  // layout="vertical"
-                  className="update-user-description"
-                >
-                  {renderViewDetails(
-                    "Name",
-                    `${modalData?.data?.user?.first_name} ${modalData?.data?.user?.last_name}`
-                  )}
-                  {renderViewDetails("ERP", modalData?.data?.erp_id)}
-                  {renderViewDetails(
-                    "Branch",
-                    "Branch 1, Branch 2",
-                    width < 768 ? 2 : 1
-                  )}
-                  {renderViewDetails(
-                    "UserLevel",
-                    modalData?.data?.roles?.role_name
-                  )}
-                </Descriptions>
+                <Typography>
+                  <Typography.Text>
+                    {modalData?.data?.user?.first_name}{" "}
+                    {modalData?.data?.user?.last_name}
+                  </Typography.Text>
+                  <Typography.Text>
+                    {" "}
+                    ({modalData?.data?.erp_id})
+                  </Typography.Text>
+                </Typography>
+                <Typography.Text type="secondary" strong>
+                  {modalData?.data?.roles?.role_name}
+                </Typography.Text>
+                <Flex gap={4}>
+                  <Tag color="geekblue">Branch 1</Tag>
+                  <Tag color="geekblue">Branch 2</Tag>
+                </Flex>
+                {/* <Descriptions
+             column={1}
+             // layout="vertical"
+             className="update-user-description"
+           >
+             {renderViewDetails(
+               "Name",
+               `${modalData?.data?.user?.first_name} ${modalData?.data?.user?.last_name}`
+             )}
+             {renderViewDetails("ERP", modalData?.data?.erp_id)}
+             {renderViewDetails(
+               "Branch",
+               "Branch 1, Branch 2",
+               width < 768 ? 2 : 1
+             )}
+             {renderViewDetails(
+               "UserLevel",
+               modalData?.data?.roles?.role_name
+             )}
+           </Descriptions> */}
               </Col>
 
               <Col span={24}>
