@@ -29,6 +29,7 @@ import {
   SearchOutlined,
   EditFilled,
   FireFilled,
+  HistoryOutlined,
 } from "@ant-design/icons";
 import { IoMdEye } from "react-icons/io";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
@@ -48,6 +49,7 @@ import CustomDrawerHeader from "../../../component/UtilComponents/CustomDrawerHe
 import UpdateLeadDetails from "../LeadDetails/UpdateLeadDetails";
 import axios from "axios";
 import urls from "../../../utils/urls";
+import ActivityDrawer from "./activityDrawer";
 
 const LeadManagement = () => {
   const defaultFilters = {
@@ -795,6 +797,21 @@ const LeadManagement = () => {
               />
             </Tooltip>
           </Col>
+          <Col>
+            <Tooltip title="View Activity">
+              <Button
+                type="text"
+                icon={<HistoryOutlined size={20} />}
+                onClick={() => {
+                  setDrawerData({
+                    show: true,
+                    type: "activity",
+                    data: null,
+                  });
+                }}
+              />
+            </Tooltip>
+          </Col>
         </Row>
       ),
       align: "center",
@@ -1208,43 +1225,27 @@ const LeadManagement = () => {
           setDrawerData({ show: false, type: null, data: null });
         }}
       />
-      <Drawer
-        title={
-          <CustomDrawerHeader
-            label="Add Lead"
-            onClose={() =>
-              setDrawerData({
-                show: false,
-                type: null,
-                data: null,
-              })
-            }
-          />
-        }
-        placement="right"
-        onClose={() =>
+      <AddLead
+        setDrawerData={() =>
           setDrawerData({
             show: false,
             type: null,
             data: null,
           })
         }
-        open={drawerData?.show && drawerData?.type === "Add Lead"}
-        size="large"
-        closable={false}
-        maskClosable={false}
-        className="lead-filter-drawer"
-      >
-        <AddLead
-          onClose={() =>
-            setDrawerData({
-              show: false,
-              type: null,
-              data: null,
-            })
-          }
-        />
-      </Drawer>
+        drawerData={drawerData}
+        source={dropdownData?.source}
+      />
+      <ActivityDrawer
+        drawerData={drawerData}
+        closeDrawer={() =>
+          setDrawerData({
+            show: false,
+            type: null,
+            data: null,
+          })
+        }
+      />
       {modalData.show && modalData.type !== "UpdateLeadDetails" && (
         <Modal
           centered

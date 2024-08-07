@@ -15,6 +15,7 @@ import {
   message,
   Descriptions,
   Drawer,
+  Flex,
 } from "antd";
 import "./index.scss";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
@@ -29,7 +30,7 @@ import axios from "axios";
 import urls from "../../../utils/urls";
 import CustomDrawerHeader from "../../../component/UtilComponents/CustomDrawerHeader";
 
-const AddLead = () => {
+const AddLead = ({ source, setDrawerData, drawerData }) => {
   const [form] = Form.useForm();
   const [filterForm] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -282,8 +283,8 @@ const AddLead = () => {
             </Typography>
           </Col>
           <Col xs={24} style={{ marginBottom: "10px" }}>
-            <Row gutter={[12, 8]}>
-              <Col xs={24} sm={12} md={8}>
+            <Row gutter={[12, 8]} wrap>
+              <Col xs={24} sm={12} md={12}>
                 <Form.Item
                   // name={"academic_year"}
                   label="Academic Year"
@@ -318,7 +319,7 @@ const AddLead = () => {
                   </div>
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={12} md={8}>
+              <Col xs={24} sm={12} md={12}>
                 <Form.Item
                   // name={"school_type"}
                   label="School Type"
@@ -345,7 +346,7 @@ const AddLead = () => {
                   </div>
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={12} md={8}>
+              <Col xs={24} sm={12} md={24}>
                 <Form.Item
                   name="branch"
                   label="Branch"
@@ -386,8 +387,8 @@ const AddLead = () => {
             </Typography>
           </Col>
           <Col xs={24} style={{ marginBottom: "10px" }}>
-            <Row gutter={[12, 8]}>
-              <Col xs={24} sm={12} md={8}>
+            <Row gutter={[12, 8]} wrap>
+              <Col xs={24} sm={12} md={12}>
                 <Form.Item
                   name="lead_name"
                   label="Lead Name"
@@ -412,7 +413,37 @@ const AddLead = () => {
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={12} md={8}>
+              <Col xs={24} sm={12} md={12}>
+                <Form.Item
+                  name="source"
+                  label="Lead Source"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Select Lead Source",
+                    },
+                  ]}
+                >
+                  <Select
+                    style={{ width: "100%" }}
+                    className="add-lead-select"
+                    placeholder="Select Lead Source"
+                    showSearch
+                    filterOption={(input, option) =>
+                      option.label.toLowerCase().includes(input.toLowerCase())
+                    }
+                    options={source
+                      ?.filter((item, ind) => item?.id != 0)
+                      ?.map((item, ind) => {
+                        return {
+                          label: item?.label,
+                          value: item?.value,
+                        };
+                      })}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={24}>
                 <Form.Item
                   name="lead_email"
                   label="Lead Email"
@@ -436,39 +467,11 @@ const AddLead = () => {
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={12} md={8}>
-                <Form.Item
-                  name="source"
-                  label="Lead Source"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Select Lead Source",
-                    },
-                  ]}
-                >
-                  <Select
-                    style={{ width: "100%" }}
-                    className="add-lead-select"
-                    placeholder="Select Lead Source"
-                    showSearch
-                    filterOption={(input, option) =>
-                      option.label.toLowerCase().includes(input.toLowerCase())
-                    }
-                    options={[
-                      { label: "DM-Direct", value: "dm-direct" },
-                      {
-                        label: "PRO Data - Field Data",
-                        value: "pro data -field data",
-                      },
-                    ]}
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={12} md={15}>
+
+              <Col xs={24} sm={24} md={24}>
                 <Form.Item label="Alternate Contact">
                   <Row gutter={[4, 4]}>
-                    <Col xs={7} md={4}>
+                    <Col xs={8} md={6}>
                       <Form.Item name="country_code_alternate">
                         <Select
                           style={{ width: "100%" }}
@@ -488,7 +491,7 @@ const AddLead = () => {
                         />
                       </Form.Item>
                     </Col>
-                    <Col xs={17} md={13}>
+                    <Col xs={16} md={18}>
                       <Form.Item shouldUpdate noStyle>
                         {({ getFieldValue }) => {
                           const countryCode = getFieldValue(
@@ -526,7 +529,7 @@ const AddLead = () => {
           </Col>
           <Col xs={24}>
             <Row gutter={[12, 8]}>
-              <Col xs={24} sm={12} md={8}>
+              <Col xs={24} sm={12} md={12}>
                 <Form.Item
                   name="child_name"
                   label="Child Name"
@@ -551,7 +554,7 @@ const AddLead = () => {
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={12} md={8}>
+              <Col xs={24} sm={12} md={12}>
                 <Form.Item
                   name="child_grade"
                   label="Child Grade"
@@ -581,182 +584,214 @@ const AddLead = () => {
               </Col>
             </Row>
           </Col>
-          <Col xs={24}>
-            <Row className="d-flex justify-content-end mt-5">
+        </Row>
+      </Form>
+    );
+  };
+  const handleCloseDrawer = () => {
+    form.resetFields();
+    setDrawerData();
+  };
+  return (
+    // <CustomCard>
+    <Drawer
+      title={
+        <CustomDrawerHeader
+          label="Add Lead"
+          onClose={() => handleCloseDrawer()}
+        />
+      }
+      placement="right"
+      onClose={() => handleCloseDrawer()}
+      open={drawerData?.show && drawerData?.type === "Add Lead"}
+      closable={false}
+      maskClosable={false}
+      className="lead-filter-drawer"
+      footer={
+        <>
+          {leadData && leadData?.length > 0 ? null : (
+            <Flex justify="end" gap={4}>
               <Button
-                size="medium"
+                type="outlined"
+                size="small"
+                onClick={() => handleCloseDrawer()}
+              >
+                Cancel
+              </Button>
+              <Button
                 type="primary"
                 loading={submitLoading}
                 onClick={() => {
                   form.submit();
                 }}
+                size="small"
               >
                 Submit
               </Button>
-            </Row>
-          </Col>
-        </Row>
-      </Form>
-    );
-  };
-
-  return (
-    // <CustomCard>
-    <Row gutter={[8, 8]}>
-      <Col xs={24}>
-        <Spin spinning={loading} tip="Loading">
-          <Row gutter={[8, 8]}>
-            <Col xs={24}>
-              <Form
-                form={filterForm}
-                layout="vertical"
-                onFinish={() => {
-                  getLeadData();
-                }}
-              >
-                <Row
-                  gutter={[12, 4]}
-                  className="d-flex flex-row"
-                  style={{ marginTop: -10 }}
+            </Flex>
+          )}
+        </>
+      }
+    >
+      <Row gutter={[8, 8]}>
+        <Col xs={24}>
+          <Spin spinning={loading} tip="Loading">
+            <Row gutter={[8, 8]}>
+              <Col xs={24}>
+                <Form
+                  form={filterForm}
+                  layout="vertical"
+                  onFinish={() => {
+                    getLeadData();
+                  }}
                 >
-                  {/* <Col xs={18} sm={12} md={8} lg={9} xl={8}> */}
-                  <Col xs={24} sm={13} md={15}>
-                    <Form.Item
-                      label={
-                        <span>
-                          <span style={{ color: "red" }}>*</span> Contact
-                        </span>
-                      }
-                    >
-                      <Row gutter={[4, 4]} style={{ marginTop: -10 }}>
-                        <Col xs={8} md={5}>
-                          <Form.Item name="country_code">
-                            <Select
-                              style={{ width: "100%" }}
-                              showSearch
-                              className="add-lead-select"
-                              filterOption={(input, option) =>
-                                option.label
-                                  .toLowerCase()
-                                  .includes(input.toLowerCase())
-                              }
-                              onChange={(value) => {
-                                filterForm.setFieldsValue({
-                                  country_code: value,
-                                  contact_no: "",
-                                });
-                                setLeadData(null);
-                                form.resetFields();
+                  <Row
+                    gutter={[8, 4]}
+                    className="d-flex flex-row"
+                    style={{ marginTop: -10, alignItems: "end" }}
+                  >
+                    {/* <Col xs={18} sm={12} md={8} lg={9} xl={8}> */}
+                    <Col xs={24} sm={13} md={18}>
+                      <Form.Item
+                        label={
+                          <span>
+                            <span style={{ color: "red" }}>*</span> Contact
+                          </span>
+                        }
+                      >
+                        <Row gutter={[4, 4]} style={{ marginTop: -10 }}>
+                          <Col xs={8} md={8}>
+                            <Form.Item name="country_code">
+                              <Select
+                                style={{ width: "100%" }}
+                                showSearch
+                                className="add-lead-select"
+                                filterOption={(input, option) =>
+                                  option.label
+                                    .toLowerCase()
+                                    .includes(input.toLowerCase())
+                                }
+                                onChange={(value) => {
+                                  filterForm.setFieldsValue({
+                                    country_code: value,
+                                    contact_no: "",
+                                  });
+                                  setLeadData(null);
+                                  form.resetFields();
+                                }}
+                                options={getCountryCode()?.map((each) => {
+                                  return {
+                                    label: each?.country_code,
+                                    value: each?.country_code,
+                                  };
+                                })}
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col xs={16} md={16}>
+                            <Form.Item shouldUpdate noStyle>
+                              {({ getFieldValue }) => {
+                                const countryCode =
+                                  getFieldValue("country_code");
+                                return (
+                                  <Form.Item name="contact_no">
+                                    <Input
+                                      type="number"
+                                      placeholder="Enter Contact Number"
+                                      autoComplete="off"
+                                      onKeyDown={(e) => {
+                                        ["e", "E", "+", "-", "."].includes(
+                                          e.key
+                                        ) && e.preventDefault();
+                                      }}
+                                      onChange={(e) => {
+                                        if (
+                                          e.target.value.length <=
+                                          getCountryCode()?.filter(
+                                            (each) =>
+                                              each.country_code === countryCode
+                                          )[0]?.max_length
+                                        ) {
+                                          filterForm.setFieldsValue({
+                                            contact_no: e.target.value,
+                                          });
+                                          setLeadData(null);
+                                          form.resetFields();
+                                        } else {
+                                          filterForm.setFieldsValue({
+                                            contact_no: e.target.value?.slice(
+                                              0,
+                                              -1
+                                            ),
+                                          });
+                                        }
+                                      }}
+                                    />
+                                  </Form.Item>
+                                );
                               }}
-                              options={getCountryCode()?.map((each) => {
-                                return {
-                                  label: each?.country_code,
-                                  value: each?.country_code,
-                                };
-                              })}
-                            />
-                          </Form.Item>
-                        </Col>
-                        <Col xs={16} md={19}>
-                          <Form.Item shouldUpdate noStyle>
-                            {({ getFieldValue }) => {
-                              const countryCode = getFieldValue("country_code");
-                              return (
-                                <Form.Item name="contact_no">
-                                  <Input
-                                    type="number"
-                                    placeholder="Enter Contact Number"
-                                    autoComplete="off"
-                                    onKeyDown={(e) => {
-                                      ["e", "E", "+", "-", "."].includes(
-                                        e.key
-                                      ) && e.preventDefault();
-                                    }}
-                                    onChange={(e) => {
-                                      if (
-                                        e.target.value.length <=
-                                        getCountryCode()?.filter(
-                                          (each) =>
-                                            each.country_code === countryCode
-                                        )[0]?.max_length
-                                      ) {
-                                        filterForm.setFieldsValue({
-                                          contact_no: e.target.value,
-                                        });
-                                        setLeadData(null);
-                                        form.resetFields();
-                                      } else {
-                                        filterForm.setFieldsValue({
-                                          contact_no: e.target.value?.slice(
-                                            0,
-                                            -1
-                                          ),
-                                        });
-                                      }
-                                    }}
-                                  />
-                                </Form.Item>
-                              );
-                            }}
-                          </Form.Item>
-                        </Col>
-                      </Row>
-                    </Form.Item>
-                  </Col>
-                  <Col>
-                    <Form.Item shouldUpdate noStyle>
-                      {({ getFieldValue }) => {
-                        const countryCode = getFieldValue("country_code");
-                        const contactNo = getFieldValue("contact_no");
-                        return (
-                          <Form.Item>
-                            <Button
-                              type="primary"
-                              htmlType="submit"
-                              disabled={
-                                leadData ||
-                                contactNo?.length !==
-                                  getCountryCode()?.filter(
-                                    (each) => each.country_code === countryCode
-                                  )[0]?.max_length
-                              }
-                              size="middle"
-                              style={{ marginTop: 26, height: 28 }}
-                            >
-                              Search
-                            </Button>
-                          </Form.Item>
-                        );
-                      }}
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Form>
-            </Col>
-            <Col xs={24} style={{ marginBottom: "10px" }}>
-              <Divider />
-            </Col>
-            {leadData ? (
-              leadData?.length === 0 ? (
-                <>{renderLeadForm()}</>
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                      </Form.Item>
+                    </Col>
+                    <Col>
+                      <Form.Item shouldUpdate noStyle>
+                        {({ getFieldValue }) => {
+                          const countryCode = getFieldValue("country_code");
+                          const contactNo = getFieldValue("contact_no");
+                          return (
+                            <Form.Item>
+                              <Button
+                                type="primary"
+                                htmlType="submit"
+                                disabled={
+                                  leadData ||
+                                  contactNo?.length !==
+                                    getCountryCode()?.filter(
+                                      (each) =>
+                                        each.country_code === countryCode
+                                    )[0]?.max_length
+                                }
+                              >
+                                Search
+                              </Button>
+                            </Form.Item>
+                          );
+                        }}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Form>
+              </Col>
+              <Col xs={24} style={{ marginBottom: "10px" }}>
+                <Divider />
+              </Col>
+              {leadData ? (
+                leadData?.length === 0 ? (
+                  <>{renderLeadForm()}</>
+                ) : (
+                  <>{renderLeadCard()}</>
+                )
               ) : (
-                <>{renderLeadCard()}</>
-              )
-            ) : (
-              <div
-                className="d-flex justify-content-center align-items-center flex-column"
-                style={{ height: "30vh", width: "100%" }}
-              >
-                <MdSearch style={{ color: "#a9a7a7", height: 50, width: 50 }} />
-                <Typography style={{ color: "#a9a7a7" }} className="th-16">
-                  Search Number To Add Lead
-                </Typography>
-              </div>
-            )}
-          </Row>
-        </Spin>
-      </Col>
-    </Row>
+                <div
+                  className="d-flex justify-content-center align-items-center flex-column"
+                  style={{ height: "30vh", width: "100%" }}
+                >
+                  <MdSearch
+                    style={{ color: "#a9a7a7", height: 50, width: 50 }}
+                  />
+                  <Typography style={{ color: "#a9a7a7" }} className="th-16">
+                    Search Number To Add Lead
+                  </Typography>
+                </div>
+              )}
+            </Row>
+          </Spin>
+        </Col>
+      </Row>
+    </Drawer>
+
     // </CustomCard>
   );
 };
