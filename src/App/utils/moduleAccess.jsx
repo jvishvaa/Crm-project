@@ -3,6 +3,7 @@ import {
   TbFileUpload,
   TbLayoutDashboard,
   TbRouteSquare,
+  TbSchool,
   TbUser,
   TbUserSquare,
 } from "react-icons/tb";
@@ -39,7 +40,7 @@ const modules = [
     label: "Dashboard",
     route: "/",
     permission: {
-      is_view: [1, 2, 3, 4, 5],
+      is_view: [1, 2, 3, 4, 5, 8, 9],
     },
     component: lazy(() => import("../page/Dashboard")),
     is_route: true,
@@ -49,7 +50,7 @@ const modules = [
     key: "2",
     route: "/profile",
     permission: {
-      is_view: [1, 2, 3, 4, 5],
+      is_view: [1, 2, 3, 4, 5, 8, 9],
     },
     component: lazy(() => import("../page/Profile")),
     is_route: true,
@@ -60,7 +61,7 @@ const modules = [
     icon: <TbDatabase />,
     label: "Master Data",
     permission: {
-      is_view: [1, 2, 3, 4, 5],
+      is_view: [1, 2, 3, 4, 5, 8, 9],
     },
     is_route: true,
     is_sidebar: true,
@@ -71,9 +72,9 @@ const modules = [
         label: "Activity Status",
         route: "/master-data/activity-status",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
-          is_add: [1, 2, 3, 4, 5],
-          is_modify: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8, 9],
+          is_add: [1, 2, 3, 4, 5, 8, 9],
+          is_modify: [1, 2, 3, 4, 5, 8, 9],
         },
         component: lazy(() => import("../page/MasterData/ActivityStatus")),
         is_route: true,
@@ -85,9 +86,9 @@ const modules = [
         label: "Source Type",
         route: "/master-data/source-type",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
-          is_add: [1, 2, 3, 4, 5],
-          is_modify: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8, 9],
+          is_add: [1, 2, 3, 4, 5, 8, 9],
+          is_modify: [1, 2, 3, 4, 5, 8, 9],
         },
         component: lazy(() => import("../page/MasterData/SourceType")),
         is_route: true,
@@ -99,9 +100,9 @@ const modules = [
         label: "Source",
         route: "/master-data/source",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
-          is_add: [1, 2, 3, 4, 5],
-          is_modify: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8, 9],
+          is_add: [1, 2, 3, 4, 5, 8, 9],
+          is_modify: [1, 2, 3, 4, 5, 8, 9],
         },
         component: lazy(() => import("../page/MasterData/Source")),
         is_route: true,
@@ -134,25 +135,25 @@ const modules = [
     is_route: true,
     is_sidebar: true,
     children: [
-      {
-        key: "5",
-        icon: <LuUserPlus />,
-        label: "Add Lead",
-        route: "/lead-management/add-lead",
-        permission: {
-          is_view: [1, 2, 3, 4, 5, 8],
-        },
-        component: lazy(() => import("../page/LeadManagement/AddLead")),
-        is_route: true,
-        is_sidebar: true,
-      },
+      // {
+      //   key: "5",
+      //   icon: <LuUserPlus />,
+      //   label: "Add Lead",
+      //   route: "/lead-management/add-lead",
+      //   permission: {
+      //     is_view: [1, 2, 3, 4, 5, 8, 9, 8],
+      //   },
+      //   component: lazy(() => import("../page/LeadManagement/AddLead")),
+      //   is_route: true,
+      //   is_sidebar: true,
+      // },
       {
         key: "9",
         icon: <TbFileUpload />,
         label: "Bulk Upload Lead",
         route: "/lead-management/bulk-upload-lead",
         permission: {
-          is_view: [1, 2, 3, 4, 5, 8],
+          is_view: [1, 2, 3, 4, 5, 8, 9, 8],
         },
         component: lazy(() => import("../page/LeadManagement/BulkUploadLead")),
         is_route: true,
@@ -162,7 +163,7 @@ const modules = [
         key: "10",
         route: "/lead-management/lead-details/:id",
         permission: {
-          is_view: [1, 2, 3, 4, 5, 8],
+          is_view: [1, 2, 3, 4, 5, 8, 9, 8],
         },
         component: lazy(() => import("../page/LeadManagement/LeadDetails")),
         is_route: true,
@@ -174,9 +175,9 @@ const modules = [
         label: "All Leads",
         route: "/lead-management/all-leads",
         permission: {
-          is_view: [1, 2, 3, 4, 5, 8],
-          is_add: [1, 2, 3, 4, 5, 8],
-          is_modify: [1, 2, 3, 4, 5, 8],
+          is_view: [1, 2, 3, 4, 5, 8, 9, 8],
+          is_add: [1, 2, 3, 4, 5, 8, 9, 8],
+          is_modify: [1, 2, 3, 4, 5, 8, 9, 8],
         },
         component: lazy(() => import("../page/LeadManagement/AllLeads")),
         is_route: true,
@@ -189,9 +190,9 @@ const modules = [
     icon: <FaUsersViewfinder />,
     label: "Lead Assigning",
     permission: {
-      is_view: [1, 2, 3, 4, 5],
-      is_add: [1, 2, 3, 4, 5],
-      is_modify: [1, 2, 3, 4, 5],
+      is_view: [1, 2, 3, 4, 5, 8, 9],
+      is_add: [1, 2, 3, 4, 5, 8, 9],
+      is_modify: [1, 2, 3, 4, 5, 8, 9],
     },
     is_route: true,
     is_sidebar: true,
@@ -202,7 +203,7 @@ const modules = [
         label: "Assign Leads To PRM",
         route: "/lead-assigning/assign-leads-to-prm",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8, 9],
         },
         component: lazy(() => import("../page/LeadAssigning/AssignLeadToPRM")),
         is_route: true,
@@ -214,7 +215,7 @@ const modules = [
         label: "Ressign Leads To PRM",
         route: "/lead-assigning/reassign-leads-to-prm",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8, 9],
         },
         component: lazy(() =>
           import("../page/LeadAssigning/ReassignLeadToPRM")
@@ -228,7 +229,7 @@ const modules = [
         label: "Unassign Leads From PRM",
         route: "/lead-assigning/unassign-leads-from-prm",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8, 9],
         },
         component: lazy(() =>
           import("../page/LeadAssigning/UnassignLeadFromPRM")
@@ -242,7 +243,7 @@ const modules = [
         label: "Regen and Assign Leads To PRM",
         route: "/lead-assigning/regen-and-assign-leads-to-prm",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8, 9],
         },
         component: lazy(() =>
           import("../page/LeadAssigning/RegenAndAssignDormantLeadToPRM")
@@ -258,9 +259,9 @@ const modules = [
     label: "Follow Up",
     route: "/lead-management/follow-up",
     permission: {
-      is_view: [1, 2, 3, 4, 5],
-      is_add: [1, 2, 3, 4, 5],
-      is_modify: [1, 2, 3, 4, 5],
+      is_view: [1, 2, 3, 4, 5, 8, 9],
+      is_add: [1, 2, 3, 4, 5, 8, 9],
+      is_modify: [1, 2, 3, 4, 5, 8, 9],
     },
     component: lazy(() => import("../page/FollowUp")),
     is_route: true,
@@ -271,9 +272,9 @@ const modules = [
     icon: <MdOutlineEventNote />,
     label: "Event Management",
     permission: {
-      is_view: [1, 2, 3, 4, 5],
-      is_add: [1, 2, 3, 4, 5],
-      is_modify: [1, 2, 3, 4, 5],
+      is_view: [1, 2, 3, 4, 5, 8, 9],
+      is_add: [1, 2, 3, 4, 5, 8, 9],
+      is_modify: [1, 2, 3, 4, 5, 8, 9],
     },
     is_route: true,
     is_sidebar: true,
@@ -284,9 +285,9 @@ const modules = [
         label: "Hotspots",
         route: "/event_management/hotspots",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
-          is_add: [1, 2, 3, 4, 5],
-          is_modify: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8, 9],
+          is_add: [1, 2, 3, 4, 5, 8, 9],
+          is_modify: [1, 2, 3, 4, 5, 8, 9],
         },
         component: lazy(() => import("../page/EventManagement/Hotspots")),
         is_route: true,
@@ -298,9 +299,9 @@ const modules = [
         label: "Events",
         route: "/event_management/events",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
-          is_add: [1, 2, 3, 4, 5],
-          is_modify: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8, 9],
+          is_add: [1, 2, 3, 4, 5, 8, 9],
+          is_modify: [1, 2, 3, 4, 5, 8, 9],
         },
         component: lazy(() => import("../page/EventManagement/Events")),
         is_route: true,
@@ -312,9 +313,9 @@ const modules = [
         label: "Route Assign",
         route: "/event_management/route_assign",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
-          is_add: [1, 2, 3, 4, 5],
-          is_modify: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8, 9],
+          is_add: [1, 2, 3, 4, 5, 8, 9],
+          is_modify: [1, 2, 3, 4, 5, 8, 9],
         },
         component: lazy(() => import("../page/EventManagement/RouteAssign")),
         is_route: true,
@@ -327,9 +328,9 @@ const modules = [
     icon: <AiOutlineForm />,
     label: "Enquiry Form",
     permission: {
-      is_view: [1, 2, 3, 4, 5],
-      is_add: [1, 2, 3, 4, 5],
-      is_modify: [1, 2, 3, 4, 5],
+      is_view: [1, 2, 3, 4, 5, 8, 9],
+      is_add: [1, 2, 3, 4, 5, 8, 9],
+      is_modify: [1, 2, 3, 4, 5, 8, 9],
     },
     is_route: true,
     is_sidebar: true,
@@ -340,7 +341,7 @@ const modules = [
         label: "Digital Enquiry Form",
         route: "/enquiry-form/digital-enquiry-form",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8, 9],
         },
         component: lazy(() => import("../page/EnquiryForm/DigitalEnquiryForm")),
         is_route: true,
@@ -350,7 +351,7 @@ const modules = [
         key: "19",
         route: "/enquiry-form/digital-enquiry-form/create-enquiry",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8, 9],
         },
         component: lazy(() =>
           import("../page/EnquiryForm/DigitalEnquiryForm/CreateEnquiry")
@@ -364,9 +365,9 @@ const modules = [
     icon: <CgFileDocument />,
     label: "Forms",
     permission: {
-      is_view: [1, 2, 3, 4, 5],
-      is_add: [1, 2, 3, 4, 5],
-      is_modify: [1, 2, 3, 4, 5],
+      is_view: [1, 2, 3, 4, 5, 8, 9],
+      is_add: [1, 2, 3, 4, 5, 8, 9],
+      is_modify: [1, 2, 3, 4, 5, 8, 9],
     },
     is_route: true,
     is_sidebar: true,
@@ -377,11 +378,25 @@ const modules = [
         label: "Newspaper Insert",
         route: "/forms/newspaper_insert",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
-          is_add: [1, 2, 3, 4, 5],
-          is_modify: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8, 9],
+          is_add: [1, 2, 3, 4, 5, 8, 9],
+          is_modify: [1, 2, 3, 4, 5, 8, 9],
         },
         component: lazy(() => import("../page/Forms/NewspaperInsert")),
+        is_route: true,
+        is_sidebar: true,
+      },
+      {
+        key: "29",
+        icon: <TbSchool />,
+        label: "Pre School Tie Up",
+        route: "/forms/pre_school_tieup",
+        permission: {
+          is_view: [1, 2, 3, 4, 5, 8, 9],
+          is_add: [1, 2, 3, 4, 5, 8, 9],
+          is_modify: [1, 2, 3, 4, 5, 8, 9],
+        },
+        component: lazy(() => import("../page/Forms/PreSchoolTieup")),
         is_route: true,
         is_sidebar: true,
       },
@@ -391,9 +406,9 @@ const modules = [
         label: "RWA Event",
         route: "/forms/rwa_event",
         permission: {
-          is_view: [1, 2, 3, 4, 5],
-          is_add: [1, 2, 3, 4, 5],
-          is_modify: [1, 2, 3, 4, 5],
+          is_view: [1, 2, 3, 4, 5, 8, 9],
+          is_add: [1, 2, 3, 4, 5, 8, 9],
+          is_modify: [1, 2, 3, 4, 5, 8, 9],
         },
         component: lazy(() => import("../page/Forms/RWAEvent")),
         is_route: true,

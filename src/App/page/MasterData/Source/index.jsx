@@ -463,7 +463,6 @@ const Source = () => {
                   <Table
                     dataSource={sourceData}
                     columns={columns}
-                    bordered={true}
                     pagination={pageData}
                     onChange={handleTableChange}
                   />

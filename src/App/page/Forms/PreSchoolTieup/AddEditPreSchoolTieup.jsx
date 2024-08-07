@@ -32,9 +32,9 @@ import VideoPreview from "../../../assest/images/video-thumbnail.png";
 
 const { TextArea } = Input;
 
-const AddEditNewspaperInsert = ({
+const AddEditPreSchoolTieup = ({
   modalData,
-  handleAddEditNewspaperInsert,
+  handleAddEditPreSchoolTieup,
   closeModal,
   dropdownData,
 }) => {
@@ -45,7 +45,7 @@ const AddEditNewspaperInsert = ({
   const { width } = useWindowDimensions();
 
   const onFinish = (values) => {
-    handleAddEditNewspaperInsert(values);
+    handleAddEditPreSchoolTieup(values);
 
     form.resetFields();
   };
@@ -53,16 +53,15 @@ const AddEditNewspaperInsert = ({
   const clearData = () => {};
 
   useEffect(() => {
-    if (
-      modalData?.data &&
-      ["Update Newspaper Insert"].includes(modalData?.type)
-    ) {
+    if (modalData?.data && ["Update Pre School"].includes(modalData?.type)) {
       form.setFieldsValue({
-        date: modalData.data?.date,
-        newspaper: getArrayValues(modalData.data?.newspaper, "id"),
+        pre_school_name: modalData?.data?.pre_school_name,
         branch: modalData.data?.branch?.id,
-        target_area: modalData.data?.target_area,
-        amount_paid: modalData.data?.amount_paid,
+        location: modalData?.data?.location,
+        principal_name: modalData?.data?.principal_name,
+        principal_contact_no: modalData?.data?.principal_contact_no,
+        bdm_remarks: modalData?.data?.bdm_remarks,
+        principal_remarks: modalData?.data?.principal_remarks,
       });
     }
     if (!modalData?.data) {
@@ -109,7 +108,9 @@ const AddEditNewspaperInsert = ({
       title={
         <CustomDrawerHeader
           label={
-            modalData?.data ? "Update Newspaper Insert" : "Add Newspaper Insert"
+            modalData?.data
+              ? "Update Pre School Tie Up"
+              : "Add Pre School Tie Up"
           }
           onClose={() => {
             closeModal();
@@ -123,9 +124,7 @@ const AddEditNewspaperInsert = ({
       }}
       open={
         modalData?.show &&
-        ["Add Newspaper Insert", "Update Newspaper Insert"].includes(
-          modalData?.type
-        )
+        ["Add Pre School", "Update Pre School"].includes(modalData?.type)
       }
       size="large"
       closable={false}
@@ -165,19 +164,49 @@ const AddEditNewspaperInsert = ({
             <Row gutter={[8, 0]}>
               <Col xs={24} md={12}>
                 <Form.Item
-                  name="date"
-                  label="Date"
+                  name="pre_school_name"
+                  label="Pre School Name"
                   rules={[
                     {
                       required: true,
-                      message: "Please Select Date",
+                      message: "Please Input Pre School Name",
                     },
                   ]}
                 >
-                  <DatePicker
-                    className="w-100"
-                    format={"DD/MM/YYYY"}
-                    disabled
+                  <Input
+                    maxLength={48}
+                    autoComplete="off"
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        pre_school_name: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} md={12}>
+                <Form.Item
+                  name="location"
+                  label="Location"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Input Location",
+                    },
+                  ]}
+                >
+                  <Input
+                    maxLength={48}
+                    autoComplete="off"
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        location: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
+                    }}
                   />
                 </Form.Item>
               </Col>
@@ -207,46 +236,21 @@ const AddEditNewspaperInsert = ({
               </Col>
               <Col xs={24} md={12}>
                 <Form.Item
-                  name="newspaper"
-                  label="Newspaper"
+                  name="principal_name"
+                  label="Owner/Principal Name"
                   rules={[
                     {
                       required: true,
-                      message: "Please Select Newspaper",
-                    },
-                  ]}
-                >
-                  <Select
-                    className="w-100"
-                    mode="multiple"
-                    options={dropdownData?.newspaper?.filter(
-                      (each) => each.value !== 0
-                    )}
-                    allowClear
-                    showSearch
-                    filterOption={(input, option) =>
-                      option.label.toLowerCase().includes(input.toLowerCase())
-                    }
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24} md={12}>
-                <Form.Item
-                  name="target_area"
-                  label="Target Area"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please Input Target Area",
+                      message: "Please Input Owner/Principal Name",
                     },
                   ]}
                 >
                   <Input
-                    maxLength={64}
+                    maxLength={48}
                     autoComplete="off"
                     onChange={(e) => {
                       form.setFieldsValue({
-                        target_area: e.target.value
+                        location: e.target.value
                           ?.trimStart()
                           ?.replace("  ", " "),
                       });
@@ -256,33 +260,80 @@ const AddEditNewspaperInsert = ({
               </Col>
               <Col xs={24} md={12}>
                 <Form.Item
-                  name="amount_paid"
-                  label="Amount Paid(Rs.)"
+                  name="principal_contact_no"
+                  label="Owner/Principal Mobile No."
                   rules={[
                     {
                       required: true,
-                      message: "Please Input Amount Paid",
+                      message: "Please Input Owner/Principal Mobile No.",
                     },
                   ]}
                 >
                   <Input
                     type="number"
+                    autoComplete="off"
                     onKeyDown={(e) => {
                       ["e", "E", "+", "-", "."].includes(e.key) &&
                         e.preventDefault();
                     }}
                     onChange={(e) => {
-                      if (Number(e.target.value) <= 99999999999999) {
+                      if (Number(e.target.value) <= 9999999999) {
                         form.setFieldsValue({
-                          amount_paid: e.target.value,
+                          principal_contact_no: e.target.value,
                         });
                       } else {
                         form.setFieldsValue({
-                          amount_paid: Number(
+                          principal_contact_no: Number(
                             e.target.value?.toString()?.slice(0, -1)
                           ),
                         });
                       }
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} md={12}>
+                <Form.Item
+                  name="bdm_remarks"
+                  label="BDM Remarks"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Input BDM Remarks",
+                    },
+                  ]}
+                >
+                  <TextArea
+                    rows={3}
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        bdm_remarks: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} md={12}>
+                <Form.Item
+                  name="principal_remarks"
+                  label="Principal Remarks"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Input Principal Remarks",
+                    },
+                  ]}
+                >
+                  <TextArea
+                    rows={3}
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        principal_remarks: e.target.value
+                          ?.trimStart()
+                          ?.replace("  ", " "),
+                      });
                     }}
                   />
                 </Form.Item>
@@ -414,4 +465,4 @@ const AddEditNewspaperInsert = ({
   );
 };
 
-export default AddEditNewspaperInsert;
+export default AddEditPreSchoolTieup;

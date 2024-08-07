@@ -115,41 +115,25 @@ const Events = () => {
       id: 1,
       label: "Completed",
       color: "#4CAF50",
-      value: 10,
+      value: 20,
       icon: <FaCheckCircle size={20} style={{ color: "#4CAF50" }} />,
       smallWidth: "33%",
     },
     {
       id: 2,
       label: "In Progress",
-      color: "#8BC34A",
-      value: 20,
-      icon: <FaSpinner size={20} style={{ color: "#8BC34A" }} />,
+      color: "#fdb614",
+      value: 50,
+      icon: <FaSpinner size={20} style={{ color: "#fdb614" }} />,
       smallWidth: "33%",
     },
     {
       id: 3,
       label: "Yet To Start",
-      color: "#fdb614",
-      value: 30,
-      icon: <FaHourglassStart size={20} style={{ color: "#fdb614" }} />,
-      smallWidth: "33%",
-    },
-    {
-      id: 4,
-      label: "Pending",
-      color: "#FF9800",
-      value: 15,
-      icon: <FaClock size={20} style={{ color: "#FF9800" }} />,
-      smallWidth: "50%",
-    },
-    {
-      id: 5,
-      label: "Timed Out",
       color: "#F44336",
-      value: 25,
-      icon: <FaStopwatch size={20} style={{ color: "#F44336" }} />,
-      smallWidth: "50%",
+      value: 30,
+      icon: <FaHourglassStart size={20} style={{ color: "#F44336" }} />,
+      smallWidth: "33%",
     },
   ];
 
@@ -322,7 +306,7 @@ const Events = () => {
         end_date: "2024-01-01 12:12",
         event_cost: 100,
         assigned_user: null,
-        status: "Timed Out",
+        status: "Yet To Start",
         total_lead: 100,
         created_by: "Admin",
       },
@@ -729,6 +713,30 @@ const Events = () => {
       : []),
   ];
 
+  const renderAddEvent = () => {
+    return (
+      <>
+        {getRoutePathDetails().add ? (
+          <Col>
+            <Button
+              size="small"
+              type="primary"
+              onClick={() => {
+                setDrawerData({
+                  show: true,
+                  data: null,
+                  type: "Add Event",
+                });
+              }}
+            >
+              + Add Event
+            </Button>
+          </Col>
+        ) : null}
+      </>
+    );
+  };
+
   return (
     <CustomCard>
       <Row gutter={[8, 8]}>
@@ -741,23 +749,7 @@ const Events = () => {
                 </Col>
                 <Col>
                   <Row className="d-flex flex-row" gutter={[8, 4]}>
-                    {getRoutePathDetails().add ? (
-                      <Col>
-                        <Button
-                          size="small"
-                          type="primary"
-                          onClick={() => {
-                            setDrawerData({
-                              show: true,
-                              data: null,
-                              type: "Add Event",
-                            });
-                          }}
-                        >
-                          + Add Event
-                        </Button>
-                      </Col>
-                    ) : null}
+                    {width < 768 ? renderAddEvent() : null}
                     <Col>
                       <Tooltip title="Refresh">
                         <Button
@@ -788,17 +780,16 @@ const Events = () => {
             >
               <Col xs={24}>
                 <Row className="d-flex flex-row justify-content-between align-items-center">
-                  <Col xs={13} sm={8} md={8} lg={14}>
+                  <Col xs={13} sm={8} md={14} lg={14}>
                     <Row
                       className="d-flex flex-row align-items-center"
                       gutter={[8, 8]}
                     >
-                      <Col xs={24} md={22} lg={12}>
-                        {getSearchInput()}
-                      </Col>
+                      <Col>{getSearchInput()}</Col>
+                      {width >= 768 ? renderAddEvent() : null}
                     </Row>
                   </Col>
-                  <Col xs={11} sm={16} md={16} lg={10}>
+                  <Col xs={11} sm={16} md={10} lg={10}>
                     <Row
                       className="d-flex flex-row justify-content-end align-items-center"
                       gutter={[8, 8]}
@@ -890,9 +881,7 @@ const Events = () => {
               <Col xs={24} className={"mt-2"}>
                 <Row gutter={[6, 6]}>
                   {eventStatusCountList?.map((each) => (
-                    <Col
-                      style={{ width: width < 768 ? each?.smallWidth : "20%" }}
-                    >
+                    <Col xs={8}>
                       <CustomCard
                         className={
                           selectedStatus === each?.id
@@ -928,7 +917,7 @@ const Events = () => {
                             </Row>
                           </Col>
                           <Col xs={24}>
-                            <Typography className="card-label-text-followup">
+                            <Typography className="th-12">
                               {each.label}
                             </Typography>
                           </Col>
@@ -944,7 +933,6 @@ const Events = () => {
                     <Table
                       dataSource={eventData || []}
                       columns={columns}
-                      bordered={true}
                       pagination={eventData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />

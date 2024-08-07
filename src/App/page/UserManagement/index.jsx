@@ -16,6 +16,8 @@ import {
   Popconfirm,
   Switch,
   Descriptions,
+  Flex,
+  Badge,
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -68,6 +70,7 @@ const UserManagement = () => {
   const searchIconRef = useRef(null);
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
+  const [activeStatus, setActiveStatus] = useState(0);
   const [dropdownData, setDropdownData] = useState({
     userLevel: [
       // { label: "All", value: 0 },
@@ -162,7 +165,7 @@ const UserManagement = () => {
       session_year: 4,
       page_size: 15,
     };
-    // setLoading(true);
+    setLoading(true);
     // setUserData([
     //   {
     //     id: 1,
@@ -216,7 +219,7 @@ const UserManagement = () => {
     //   },
     // ]);
     axios
-      .get(`${urls.masterData.userDataList}`, {
+      .get(`${urls.userManagement.userDataList}`, {
         params: param,
       })
       .then((res) => {
@@ -230,7 +233,9 @@ const UserManagement = () => {
         });
       })
       .catch(() => {})
-      .finally(() => {});
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -313,7 +318,7 @@ const UserManagement = () => {
         placeholder="Search User"
         style={{
           height: 30,
-          maxWidth: 250,
+          maxWidth: width < 576 ? 160 : width < 768 ? 200 : 250,
         }}
         value={searchInput}
         onChange={(e) => {
@@ -493,22 +498,24 @@ const UserManagement = () => {
       render: (record) => <span>{record?.roles?.role_name}</span>,
       align: "center",
     },
-    // {
-    //   title: "Branch",
-    //   key: "branch",
-    //   render: (record) => (
-    //     <span>{getArrayValues(record?.branch, "name")?.join(", ")}</span>
-    //   ),
-    //   align: "center",
-    // },
-    // {
-    //   title: "Marketing Type",
-    //   key: "field_type",
-    //   render: (record) => (
-    //     <span>{getArrayValues(record?.field_type, "name")?.join(", ")}</span>
-    //   ),
-    //   align: "center",
-    // },
+    {
+      title: "Branch",
+      key: "branch",
+      render: (record) => (
+        // <span>{getArrayValues(record?.branch, "name")?.join(", ")}</span>
+        <span>Branch 1, Branch 2</span>
+      ),
+      align: "center",
+    },
+    {
+      title: "Marketing Type",
+      key: "field_type",
+      render: (record) => (
+        // <span>{getArrayValues(record?.field_type, "name")?.join(", ")}</span>
+        <span>Field marketing, Digital Marketing</span>
+      ),
+      align: "center",
+    },
     {
       title: "Status",
       key: "is_active",
@@ -530,6 +537,7 @@ const UserManagement = () => {
                 }}
                 checkedChildren="Active"
                 unCheckedChildren="Inactive"
+                // size="small"
               />
             </Popconfirm>
           ) : (
@@ -619,22 +627,105 @@ const UserManagement = () => {
               style={{ minHeight: "60vh" }}
             >
               <Col xs={24}>
-                <Row className="d-flex flex-row justify-content-between align-items-center">
-                  <Col xs={13} sm={8} md={8} lg={14}>
+                <Row
+                  className={`d-flex ${
+                    width < 576 ? "flex-column-reverse" : "flex-row"
+                  }  justify-content-between align-items-center`}
+                  gutter={[8, 8]}
+                >
+                  <Col xs={24} sm={8} md={8} lg={14}>
                     <Row
                       className="d-flex flex-row align-items-center"
                       gutter={[8, 8]}
                     >
-                      <Col xs={24} md={22} lg={12}>
-                        {getSearchInput()}
-                      </Col>
+                      {/* <Col xs={24} md={22} lg={12}>
+                        <Flex gap={8} className="status-tag">
+                          <Tag.CheckableTag
+                            key={0}
+                            color="success"
+                            checked={activeStatus == 0}
+                            onChange={() => {
+                              setActiveStatus(0);
+                            }}
+                            style={{ fontSize: "18px !important" }}
+                          >
+                            All : 1000
+                          </Tag.CheckableTag>
+                    
+                          <Tag.CheckableTag
+                            key={1}
+                            color="success"
+                            checked={activeStatus == 1}
+                            onChange={() => {
+                              setActiveStatus(1);
+                            }}
+                          >
+                            Active: 800
+                          </Tag.CheckableTag>
+                        
+                          <Tag.CheckableTag
+                            key={2}
+                            checked={activeStatus == 2}
+                            onChange={() => {
+                              setActiveStatus(2);
+                            }}
+                          >
+                            Inactive : 200
+                          </Tag.CheckableTag>
+                        </Flex>
+                      </Col> */}
+                      <div className="tab-bar">
+                        <button
+                          key={0}
+                          className={`tab ${
+                            activeStatus === 0 ? "active" : ""
+                          }`}
+                          style={
+                            activeStatus === 0
+                              ? { color: "white", backgroundColor: "#BB2139" }
+                              : {}
+                          }
+                          onClick={() => setActiveStatus(0)}
+                        >
+                          All (1000)
+                        </button>
+                        <button
+                          key={1}
+                          className={`tab ${
+                            activeStatus === 1 ? "active" : ""
+                          }`}
+                          style={
+                            activeStatus === 1
+                              ? { color: "white", backgroundColor: "#BB2139" }
+                              : {}
+                          }
+                          onClick={() => setActiveStatus(1)}
+                        >
+                          Active (800)
+                        </button>
+                        <button
+                          key={2}
+                          className={`tab ${
+                            activeStatus === 2 ? "active" : ""
+                          }`}
+                          style={
+                            activeStatus === 2
+                              ? { color: "white", backgroundColor: "#BB2139" }
+                              : {}
+                          }
+                          onClick={() => setActiveStatus(2)}
+                        >
+                          Inactive (200)
+                        </button>
+                      </div>
                     </Row>
                   </Col>
-                  <Col xs={11} sm={16} md={16} lg={10}>
+                  <Col xs={24} sm={16} md={16} lg={10}>
                     <Row
                       className="d-flex flex-row justify-content-end align-items-center"
                       gutter={[8, 8]}
                     >
+                      <Col>{getSearchInput()}</Col>
                       <Col>
                         <Radio.Group
                           className="lead-radio"
@@ -688,6 +779,7 @@ const UserManagement = () => {
                     <Col style={{ textAlign: "right" }}>
                       <Button
                         type="link"
+                        size="small"
                         onClick={() => {
                           setShowFilterView(!showFilterView);
                         }}
@@ -704,7 +796,7 @@ const UserManagement = () => {
                   {renderFilterView()}
                 </Col>
               ) : null}
-              <Col xs={24} className={"mt-2"}>
+              {/* <Col xs={24} className={"mt-2"}>
                 <Row className="d-flex flex-row" gutter={[8, 8]}>
                   {userCountData?.map((each) => (
                     <Col xs={8}>
@@ -762,14 +854,13 @@ const UserManagement = () => {
                     </Col>
                   ))}
                 </Row>
-              </Col>
+              </Col> */}
               {userData ? (
                 isList ? (
                   <Col xs={24} className={"mt-2"}>
                     <Table
                       dataSource={userData ?? []}
                       columns={columns}
-                      bordered={true}
                       pagination={userData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />

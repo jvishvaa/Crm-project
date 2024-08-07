@@ -1140,7 +1140,6 @@ const FollowUp = () => {
                     <Table
                       dataSource={leadData || []}
                       columns={columns}
-                      bordered={true}
                       pagination={leadData?.length > 0 ? pageData : false}
                       onChange={handleTableChange}
                     />
