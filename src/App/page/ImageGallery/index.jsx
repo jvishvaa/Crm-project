@@ -2,6 +2,7 @@ import {
   Button,
   Col,
   DatePicker,
+  Divider,
   Form,
   Image,
   Pagination,
@@ -406,6 +407,9 @@ const ImageGallery = () => {
               </Row>
             </Col>
           </Row>
+        </Col>
+        <Col xs={24}>
+          <Divider />
         </Col>
         <Col xs={24} style={{ marginTop: -10 }}>
           <Spin spinning={loading} tip="Loading">

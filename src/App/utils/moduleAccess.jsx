@@ -19,7 +19,12 @@ import {
   AiOutlineUsergroupAdd,
   AiOutlineUsergroupDelete,
 } from "react-icons/ai";
-import { MdOutlineEvent, MdOutlineEventNote, MdRoute } from "react-icons/md";
+import {
+  MdOutlineEvent,
+  MdOutlineEventNote,
+  MdRoute,
+  MdOutlineContactPhone,
+} from "react-icons/md";
 import {
   CgUserList,
   CgFileDocument,
@@ -412,8 +417,8 @@ const modules = [
   },
   {
     key: "28",
-    icon: <CgCircleci />,
-    label: "Source Data List",
+    icon: <MdOutlineContactPhone />,
+    label: "Call Auditing",
     permission: {
       is_view: [1, 2, 3, 4, 5],
       is_add: [1, 2, 3, 4, 5],
@@ -421,8 +426,8 @@ const modules = [
     },
     is_route: true,
     is_sidebar: true,
-    route: "/source_data_list",
-    component: lazy(() => import("../page/SourceDataList")),
+    route: "/call_auditing",
+    component: lazy(() => import("../page/CallAuditing")),
   },
 ];
 
