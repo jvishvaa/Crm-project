@@ -24,17 +24,13 @@ const AddEditSourceType = ({ modalData, onSubmit, closeModal }) => {
     setLoading(true);
     if (modalData?.data) {
       axios
-        .put(`${urls.masterData.sourceType}${modalData.data?.id}`, payload)
+        .put(`${urls.masterData.sourceType}${modalData.data?.id}/`, payload)
         .then((res) => {
           let response = res.data;
-          if ([200, 201].includes(response?.status_code)) {
-            form.resetFields();
-            onSubmit();
-            closeModal();
-            message.success(response.message);
-          } else {
-            message.error(response?.message);
-          }
+          form.resetFields();
+          onSubmit();
+          closeModal();
+          message.success("Source Type Updated Successfully");
         })
         .catch(() => {})
         .finally(() => {
@@ -44,15 +40,10 @@ const AddEditSourceType = ({ modalData, onSubmit, closeModal }) => {
       axios
         .post(urls.masterData.sourceType, payload)
         .then((res) => {
-          let response = res.data;
-          if ([200, 201].includes(response?.status_code)) {
-            form.resetFields();
-            onSubmit();
-            closeModal();
-            message.success(response?.message);
-          } else {
-            message.error(response?.message);
-          }
+          form.resetFields();
+          onSubmit();
+          closeModal();
+          message.success("Source Type Created Successfully");
         })
         .catch(() => {})
         .finally(() => {

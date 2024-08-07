@@ -51,7 +51,7 @@ import urls from "../../../utils/urls";
 
 const LeadManagement = () => {
   const defaultFilters = {
-    academic_year: ["2024-25"],
+    academic_year: ["23"],
     school_type: 0,
     city: [0],
     zone_id: [0],
@@ -279,7 +279,7 @@ const LeadManagement = () => {
   };
   const getLeadTypeList = (values) => {
     axios
-      .get(`${urls.leadManagement.leadTypeList}`)
+      .get(`${urls.masterData.leadTypeList}`)
       .then((res) => {
         let response = res.data;
         console.log(response);
@@ -293,9 +293,10 @@ const LeadManagement = () => {
       .catch(() => {})
       .finally(() => {});
   };
+
   const getSourceTypeList = (values) => {
     axios
-      .get(`${urls.leadManagement.sourceTypeList}`)
+      .get(`${urls.masterData.sourceType}`)
       .then((res) => {
         let response = res.data;
         console.log(response);
@@ -309,6 +310,7 @@ const LeadManagement = () => {
       .catch(() => {})
       .finally(() => {});
   };
+
   const getLeadData = (page, page_size, filteredParams = filterData) => {
     let param = {};
     setLoading(true);
@@ -337,7 +339,7 @@ const LeadManagement = () => {
       .then((res) => {
         let response = res?.data;
         setLeadData(response?.data);
-        message.success("Lead info fetched successfully.");
+        // message.success("Lead info fetched successfully.");
         setPageData({
           current: 1,
           pageSize: response?.data?.length,

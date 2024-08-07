@@ -33,15 +33,15 @@ const SourceType = () => {
   const [modalData, setModalData] = useState({ show: false, data: null });
 
   useEffect(() => {
-    form.setFieldsValue({ is_active: true });
-    getSourceTypeData({ is_active: true });
+    form.setFieldsValue({ status: true });
+    getSourceTypeData({ status: true });
   }, []);
 
   const { width } = useWindowDimensions();
 
   const getSourceTypeData = (values) => {
     let params = {
-      ...(values.is_active !== 0 ? { is_active: values.is_active } : {}),
+      ...(values.status !== 0 ? { status: values.status } : {}),
     };
     setLoading(true);
     axios
@@ -50,11 +50,7 @@ const SourceType = () => {
       })
       .then((res) => {
         let response = res.data;
-        if ([200, 201].includes(response?.status_code)) {
-          setSourceTypeData(response?.result);
-        } else {
-          message.error(response?.message);
-        }
+        setSourceTypeData(response?.result);
       })
       .catch(() => {})
       .finally(() => {
@@ -65,15 +61,11 @@ const SourceType = () => {
   const handleStatusChange = (data, value) => {
     setLoading(true);
     axios
-      .put(`${urls.masterData.sourceType}${data?.id}`, { is_active: value })
+      .put(`${urls.masterData.sourceType}${data?.id}/`, { status: value })
       .then((res) => {
         let response = res.data;
-        if ([200, 201].includes(response?.status_code)) {
-          getSourceTypeData(form.getFieldsValue());
-          message.success(response.message);
-        } else {
-          message.error(response?.message);
-        }
+        getSourceTypeData(form.getFieldsValue());
+        message.success(response.message);
       })
       .catch(() => {})
       .finally(() => {
@@ -140,22 +132,22 @@ const SourceType = () => {
     },
     {
       title: "Status",
-      key: "is_active",
+      key: "status",
       render: (record) => (
         <>
           {getRoutePathDetails().modify ? (
             <Popconfirm
-              title={`Are you sure to update "${record?.source_type}" as ${
-                record?.is_active ? "inactive" : "active"
+              title={`Are you sure to update "${record?.source_name}" as ${
+                record?.status ? "inactive" : "active"
               }?`}
-              onConfirm={() => handleStatusChange(record, !record?.is_active)}
+              onConfirm={() => handleStatusChange(record, !record?.status)}
               okText="Yes"
               cancelText="No"
             >
               <Switch
-                checked={record?.is_active}
+                checked={record?.status}
                 style={{
-                  backgroundColor: record.is_active
+                  backgroundColor: record.status
                     ? getColour("active")
                     : getColour("inactive"),
                 }}
@@ -166,10 +158,10 @@ const SourceType = () => {
           ) : (
             <Tag
               color={
-                record?.is_active ? getColour("active") : getColour("inactive")
+                record?.status ? getColour("active") : getColour("inactive")
               }
             >
-              {record?.is_active ? "Active" : "Inactive"}
+              {record?.status ? "Active" : "Inactive"}
             </Tag>
           )}
         </>
@@ -224,11 +216,7 @@ const SourceType = () => {
                 >
                   <Row gutter={[8, 8]}>
                     <Col xs={12} sm={8} xl={6}>
-                      <Form.Item
-                        className="w-100"
-                        name="is_active"
-                        label="Status"
-                      >
+                      <Form.Item className="w-100" name="status" label="Status">
                         <Select
                           className="w-100"
                           onChange={() => {

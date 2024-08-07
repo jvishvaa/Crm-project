@@ -99,7 +99,7 @@ const AddLead = () => {
 
     setSubmitLoading(true);
     axios
-      .post(`${urls.masterData.addLead}`, data)
+      .post(`${urls.leadManagement.addLead}`, data)
       .then((res) => {
         let response = res.data;
         // Handle the response as needed
