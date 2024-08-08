@@ -8,7 +8,6 @@ import {
   Popconfirm,
   Tooltip,
   Spin,
-  Collapse,
 } from "antd";
 import "./index.scss";
 import CustomBreadCrumbs from "../../../component/UtilComponents/CustomBreadCrumbs";
@@ -130,7 +129,7 @@ const LeadDetails = () => {
           </Col>
           <Col xs={24} className="mt-2">
             <Row gutter={[8, 8]}>
-              <Col xs={24} md={12} lg={16}>
+              <Col xs={24} md={12} lg={8}>
                 <Row className="d-flex flex-column" gutter={[8, 8]}>
                   <Col xs={24}>
                     <LeadDetailsCard />
@@ -142,73 +141,40 @@ const LeadDetails = () => {
                   ) : null}
                 </Row>
               </Col>
-
+              <Col xs={24} md={12} lg={9}>
+                <Row className="d-flex flex-column" gutter={[8, 8]}>
+                  {/* <Col xs={24}>
+                    <ActivityHistory />
+                  </Col> */}
+                  <Col xs={24} md={12} lg={24}>
+                    <AssigningDetailsCard />
+                  </Col>
+                  <Col xs={24} md={12} lg={24}>
+                    <LeadAddedDetails />
+                  </Col>
+                  <Col xs={24} md={12} lg={24}>
+                    <ReEnquirySource />
+                  </Col>
+                  {width >= 768 && width <= 991 ? (
+                    <>
+                      <Col xs={24}>
+                        <AssigningDetailsCard />
+                      </Col>
+                      <Col xs={24}>
+                        <LeadAddedDetails />
+                      </Col>
+                      <Col xs={24}>
+                        <ReEnquirySource />
+                      </Col>
+                    </>
+                  ) : null}
+                </Row>
+              </Col>
               {!(width >= 768 && width <= 991) ? (
-                <Col xs={24} md={24} lg={8}>
+                <Col xs={24} md={24} lg={7}>
                   <Row className="d-flex flex-row" gutter={[8, 8]}>
                     <Col xs={24} md={12} lg={24}>
-                      <Collapse>
-                        <Collapse.Panel
-                          key={"1"}
-                          header={
-                            <Row className="d-flex flex-row justify-content-between align-items-center mb-1">
-                              <Col>
-                                <Typography className="assign-details-card-header">
-                                  Child Details
-                                </Typography>
-                              </Col>
-                              <Col>
-                                <Button
-                                  size="small"
-                                  type="primary"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setModalData({
-                                      show: true,
-                                      type: "Add Child",
-                                      data: null,
-                                    });
-                                  }}
-                                >
-                                  + Add Child
-                                </Button>
-                              </Col>
-                            </Row>
-                          }
-                        >
-                          <ChildDetails />
-                        </Collapse.Panel>
-                        <Collapse.Panel
-                          key={"2"}
-                          header={
-                            <Typography className="assign-details-card-header">
-                              Assign Details
-                            </Typography>
-                          }
-                        >
-                          <AssigningDetailsCard />
-                        </Collapse.Panel>
-                        <Collapse.Panel
-                          key={"3"}
-                          header={
-                            <Typography className="assign-details-card-header">
-                              Lead Added By
-                            </Typography>
-                          }
-                        >
-                          <LeadAddedDetails />
-                        </Collapse.Panel>
-                        <Collapse.Panel
-                          key={"4"}
-                          header={
-                            <Typography className="assign-details-card-header">
-                              ReEnquiry Source
-                            </Typography>
-                          }
-                        >
-                          <ReEnquirySource />
-                        </Collapse.Panel>
-                      </Collapse>
+                      <ChildDetails />
                     </Col>
                   </Row>
                 </Col>
