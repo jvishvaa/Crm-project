@@ -77,9 +77,10 @@ const UpdateUser = ({
         form.resetFields();
       }}
       open={modalData?.show && ["Update User"].includes(modalData?.type)}
-      // size="large"
       closable={false}
       maskClosable={false}
+      height="auto"
+      bodyStyle={{ padding: "16px" }}
       footer={
         <div
           style={{
@@ -107,7 +108,6 @@ const UpdateUser = ({
           </Button>
         </div>
       }
-      // style={{ height: "fit-content" }}
     >
       <Row>
         <Col xs={24} className="pb-2">
@@ -153,7 +153,7 @@ const UpdateUser = ({
                 </Flex>
               </Flex>
 
-              <Col span={24}>
+              <Col xs={24} sm={12}>
                 <Form.Item
                   name="contact_no"
                   label="Contact Number"
@@ -187,26 +187,8 @@ const UpdateUser = ({
                   />
                 </Form.Item>
               </Col>
-              <Col span={24}>
-                <Form.Item
-                  name="email"
-                  label="Email"
-                  rules={[
-                    { required: true, message: "Please input your email!" },
-                    { type: "email", message: "Please enter a valid email!" },
-                  ]}
-                >
-                  <Input
-                    type="email"
-                    onChange={(e) => {
-                      form.setFieldsValue({
-                        email: e.target.value?.trimStart()?.replace("  ", " "),
-                      });
-                    }}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={24}>
+
+              <Col xs={24} sm={12}>
                 <Form.Item
                   name="field_type"
                   label="Field Type"
@@ -227,6 +209,46 @@ const UpdateUser = ({
                   />
                 </Form.Item>
               </Col>
+              <Col span={24}>
+                <Form.Item
+                  name="email"
+                  label="Email"
+                  rules={[
+                    { required: true, message: "Please input your email!" },
+                    { type: "email", message: "Please enter a valid email!" },
+                  ]}
+                >
+                  <Input
+                    type="email"
+                    onChange={(e) => {
+                      form.setFieldsValue({
+                        email: e.target.value?.trimStart()?.replace("  ", " "),
+                      });
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+              {/* <Col span={24}>
+                <Form.Item
+                  name="field_type"
+                  label="Field Type"
+                  rules={[
+                    { required: true, message: "Please Select Field Type!" },
+                  ]}
+                >
+                  <Select
+                    className="w-100"
+                    options={[]}
+                    onChange={() => {
+                      form.setFieldsValue({ hotspot: null });
+                    }}
+                    showSearch
+                    filterOption={(input, option) =>
+                      option.label.toLowerCase().includes(input.toLowerCase())
+                    }
+                  />
+                </Form.Item>
+              </Col> */}
             </Row>
           </Form>
         </Col>
