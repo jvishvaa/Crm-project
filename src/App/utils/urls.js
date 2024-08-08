@@ -44,7 +44,8 @@ const urls = {
   },
   masterData: {
     sourceType: `${BASECRM}/lead_mgmt/source-type/`,
-    source: `${BASECRM}/user_management/source/`,
+    source: `${BASECRM}/lead_mgmt/source/`,
+    leadSource: `${BASECRM}/lead_mgmt/lead_source/`,
     cityList: `${BASEERP}/erp_user/city-view/`,
     zoneList: `${BASEERP}/erp_user/zone-view/`,
     branchList: `${BASEERP}/erp_user/branch-view/`,
