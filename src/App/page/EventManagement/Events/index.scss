@@ -1,68 +1,96 @@
 @import "../../../assest/css/mixins.scss";
 
 .lead-button {
-    height: 30px !important;
-    padding: 0px 5px !important;
+  height: 30px !important;
+  padding: 0px 5px !important;
 }
 
 @media (max-width: 600px) {
-    .lead-button {
-        height: 30px !important;
-        padding: 0px 4px !important;
-    }
+  .lead-button {
+    height: 30px !important;
+    padding: 0px 4px !important;
+  }
 
-    .lead-radio .ant-radio-button-wrapper {
-        padding-inline: 4px !important;
-    }
+  .lead-radio .ant-radio-button-wrapper {
+    padding-inline: 4px !important;
+  }
 }
 
 .lead-filter-drawer .ant-drawer-header {
-    padding: 8px 16px !important;
+  padding: 8px 16px !important;
 }
 
 .lead-filter-drawer .ant-drawer-body {
-    padding: 0px 16px !important;
+  padding: 0px 16px !important;
 }
 
-.update-event-description .ant-descriptions-row>td {
-    padding-bottom: 8px !important;
+.update-event-description .ant-descriptions-row > td {
+  padding-bottom: 8px !important;
 }
-
 
 .card-stats-icon-div {
-    padding: 1px 2px;
-    border-radius: 20px;
+  padding: 1px 2px;
+  border-radius: 20px;
 }
 
 .event-stats-card {
-    height: 100%;
-    cursor: pointer;
-    background-color: $white-contrast-background;
+  height: 100%;
+  cursor: pointer;
+  background-color: $white-contrast-background;
 }
 
 .event-stats-card:hover {
-    background-color: $primary-ultra-light;
+  background-color: $primary-ultra-light;
 }
 
 .event-stats-card-selected {
-    background-color: $primary-ultra-light;
-    border: 2px solid $primary !important;
+  background-color: $primary-ultra-light;
+  border: 2px solid $primary !important;
 }
 
 .view-date-wise-button {
-    font-size: 11px !important;
+  font-size: 11px !important;
 }
 
 .assign-popover .ant-popover-content .ant-popover-inner {
-    padding: 10px;
+  padding: 10px;
 }
 
 .assign-user-list:hover {
-    cursor: pointer;
-    background-color: $white-contrast-background;
+  cursor: pointer;
+  background-color: $white-contrast-background;
 }
 
 .selected-count-assign {
-    color: $primary;
-    font-size: 10px;
+  color: $primary;
+  font-size: 10px;
+}
+.tab-bar {
+  display: flex;
+  background-color: #f0f0f0; /* Greyish background */
+  border-radius: 8px; /* Rounded corners for the container */
+  padding: 4px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle inset shadow for depth */
+}
+
+.tab {
+  padding-inline: 8px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  color: #333;
+}
+
+.tab:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.tab.active {
+  //   background-color: #bb2139;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

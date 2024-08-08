@@ -20,6 +20,7 @@ import {
   Select,
   Popconfirm,
   message,
+  Flex,
 } from "antd";
 import "./index.css";
 import { MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -38,6 +39,7 @@ import dayjs from "dayjs";
 import getArrayValues from "../../../utils/getArrayValues";
 import RenderFilterTag from "../../../component/UtilComponents/RenderFilterTag";
 import { BiIdCard } from "react-icons/bi";
+import { MdCall } from "react-icons/md";
 import CustomCard from "../../../component/UtilComponents/CustomCard";
 import { useLocation, useNavigate } from "react-router-dom";
 import getChangedCountValues from "../../../utils/getChangeCountObject";
@@ -702,14 +704,22 @@ const LeadManagement = () => {
       title: "Lead Contact Details",
       key: "lead",
       render: (record) => (
-        <Row className={"d-flex flex-column flex-nowrap"}>
+        <Flex align="center" gap={4}>
           <Col>
             <Typography className="th-12">{record?.contact_no}</Typography>
-          </Col>
-          <Col>
+
             <Typography className="th-10">{record?.email}</Typography>
           </Col>
-        </Row>
+          {record?.contact_no ? (
+            <Tooltip title="Call">
+              <Button
+                type="text"
+                icon={<MdCall size={20} />}
+                onClick={() => {}}
+              />
+            </Tooltip>
+          ) : null}
+        </Flex>
       ),
     },
     {
@@ -845,7 +855,7 @@ const LeadManagement = () => {
         <Col>
           <Button
             size="small"
-            type="primary"
+            // type="primary"
             icon={<TbFileUpload size={18} />}
             onClick={() => {
               navigate("/lead-management/bulk-upload-lead");

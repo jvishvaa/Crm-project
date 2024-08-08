@@ -57,7 +57,7 @@ const AssignRoute = ({
         form.resetFields();
       }}
       open={modalData?.show && ["Route Assign"].includes(modalData?.type)}
-      size="large"
+      // size="large"
       closable={false}
       maskClosable={false}
       footer={
@@ -92,7 +92,7 @@ const AssignRoute = ({
         <Col xs={24} className="pb-2">
           <Form form={form} layout="vertical" onFinish={onFinish}>
             <Row gutter={[8, 0]}>
-              <Col xs={24} md={8}>
+              <Col span={24}>
                 <Form.Item
                   name="branch"
                   label="Branch"
@@ -109,7 +109,7 @@ const AssignRoute = ({
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} md={8}>
+              <Col span={24}>
                 <Form.Item
                   name="bde"
                   label="BDE"
@@ -126,7 +126,7 @@ const AssignRoute = ({
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} md={8}>
+              <Col span={24}>
                 <Form.Item
                   name="date"
                   label="Date"
@@ -150,14 +150,14 @@ const AssignRoute = ({
                           <Col xs={24} key={field.key}>
                             <Row gutter={[8, 0]}>
                               <Col
-                                xs={1}
+                                span={2}
                                 className="d-flex flex-row align-items-end"
                               >
                                 <Typography className="th-12 mb-2">
-                                  {index + 1}
+                                  {index + 1}.
                                 </Typography>
                               </Col>
-                              <Col xs={11} sm={7}>
+                              <Col span={16}>
                                 <Form.Item
                                   {...field}
                                   name={[field.name, "hotspotName"]}
@@ -183,7 +183,7 @@ const AssignRoute = ({
                                 </Form.Item>
                               </Col>
 
-                              <Col xs={12} sm={4}>
+                              <Col span={6}>
                                 <Row
                                   className="d-flex flex-row align-items-end h-100"
                                   gutter={[8, 8]}

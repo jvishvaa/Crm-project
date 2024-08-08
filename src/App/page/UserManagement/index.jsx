@@ -18,6 +18,7 @@ import {
   Descriptions,
   Flex,
   Badge,
+  message,
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -93,7 +94,7 @@ const UserManagement = () => {
       { label: "Inactive", value: false },
     ],
   });
-
+  const maskPattern = /^X{4,13}$/;
   const userCountData = [
     {
       filterValue: 0,
@@ -194,7 +195,52 @@ const UserManagement = () => {
   useEffect(() => {
     getUserData(pageData?.current, pageData?.pageSize);
   }, []);
+  const handleUnmask = (erpId, callback) => {
+    if (callback) {
+      setLoading(true);
+    }
+    axios
+      .get(`${urls.userManagement.unMaskDetails}`, {
+        params: { erp_id: erpId },
+      })
+      .then((res) => {
+        let response = res.data;
+        if (response?.status_code == 200) {
+          setUserData((prevData) => {
+            const updatedUserData = prevData.map((user) =>
+              user.erp_id === erpId
+                ? {
+                    ...user,
+                    contact: response?.data.contact,
+                    email: response?.data.email,
+                  }
+                : user
+            );
 
+            const updatedRecord = updatedUserData.find(
+              (user) => user.erp_id === erpId
+            );
+
+            if (callback && typeof callback === "function") {
+              callback(updatedRecord);
+            }
+
+            return updatedUserData;
+          });
+
+          message.success("Contact details unmasked successfully");
+        } else {
+          message.error("Failed to unmask contact details");
+        }
+      })
+      .catch((error) => {
+        console.error("Error unmasking contact details:", error);
+        message.error("An error occurred while unmasking contact details");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
   const handleTableChange = (pagination) => {
     window.scrollTo(0, 0);
     getUserData(pagination?.current, pagination?.pageSize);
@@ -432,9 +478,21 @@ const UserManagement = () => {
       title: "User Contact Details",
       key: "user",
       render: (record) => (
-        <Row className={"d-flex flex-column flex-nowrap"}>
+        <Row
+          className={"d-flex flex-column flex-nowrap"}
+          onClick={() => handleUnmask(record?.erp_id)}
+          style={{ cursor: "pointer" }}
+        >
           <Col>
-            <Typography className="th-12">{record?.contact}</Typography>
+            <Typography className="th-12">
+              {maskPattern.test(record?.contact) ? (
+                <>
+                  -------- <IoMdEye />
+                </>
+              ) : (
+                record?.contact
+              )}
+            </Typography>
           </Col>
           <Col>
             <Typography style={{ whiteSpace: "nowrap" }} className="th-10">
@@ -522,10 +580,12 @@ const UserManagement = () => {
                       size="small"
                       icon={<MdEdit size={18} />}
                       onClick={() => {
-                        setDrawerData({
-                          show: true,
-                          type: "Update User",
-                          data: record,
+                        handleUnmask(record?.erp_id, (updatedRecord) => {
+                          setDrawerData({
+                            show: true,
+                            type: "Update User",
+                            data: updatedRecord,
+                          });
                         });
                       }}
                     />
