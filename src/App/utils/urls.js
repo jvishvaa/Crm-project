@@ -65,6 +65,10 @@ const urls = {
     leadStatus: `${BASECRM}/lead_mgmt/status/`,
     dateType: `${BASECRM}/lead_mgmt/date_type/`,
   },
+  eventManagement: {
+    hotspot: `${BASECRM}/events_mgmt/hotspot/`, 
+    events: `${BASECRM}/events_mgmt/events/`,
+  } 
 };
 
 export default urls;

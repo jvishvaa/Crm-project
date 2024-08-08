@@ -52,6 +52,7 @@ import UpdateLeadDetails from "../LeadDetails/UpdateLeadDetails";
 import axios from "axios";
 import urls from "../../../utils/urls";
 import ActivityDrawer from "./activityDrawer";
+import RenderTagMultiple from "../../../component/UtilComponents/RenderMultiple";
 
 const LeadManagement = () => {
   const defaultFilters = {
@@ -93,8 +94,6 @@ const LeadManagement = () => {
   const searchIconRef = useRef(null);
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
-  const [drawerVisible, setDrawerVisible] = useState(false);
-  const [branchList, setBranchList] = useState([]);
   const [modalData, setModalData] = useState({
     show: false,
     type: null,
@@ -113,6 +112,7 @@ const LeadManagement = () => {
     city: [{ city_name: "All", id: 0 }],
     zone: [{ zone_name: "All", id: 0 }],
     branch: [{ branch_name: "All", id: 0 }],
+    allBranch: [{ branch_name: "All", id: 0 }],
     sourceType: [{ source_name: "All", id: 0 }],
     source: [
       { label: "All", value: 0 },
@@ -205,10 +205,18 @@ const LeadManagement = () => {
       })
       .then((res) => {
         let response = res.data;
-        setBranchList(response?.result);
+        console.log(response);
+        setDropdownData((p) => {
+          return {
+            ...p,
+            allBranch: [{ branch_name: "All", id: 0 }, ...response?.result],
+          };
+        });
       })
-      .catch(() => {})
-      .finally(() => {});
+      .catch((error) => {
+        message.error(error?.message ?? "Failed to fetch branch list");
+      })
+      .finally(() => { });
   };
 
   const [searchFetched, setSearchFetched] = useState(false);
@@ -233,15 +241,15 @@ const LeadManagement = () => {
           };
         });
       })
-      .catch(() => {})
-      .finally(() => {});
+      .catch(() => { })
+      .finally(() => { });
   };
   const getCityList = () => {
     axios
       .get(`${urls.masterData.cityList}`)
       .then((res) => {
         let response = res.data;
-        console.log(response);
+        console.log(response, 'resposedata');
         setDropdownData((p) => {
           return {
             ...p,
@@ -249,8 +257,8 @@ const LeadManagement = () => {
           };
         });
       })
-      .catch(() => {})
-      .finally(() => {});
+      .catch(() => { })
+      .finally(() => { });
   };
   const getZoneList = (values) => {
     axios
@@ -265,8 +273,8 @@ const LeadManagement = () => {
           };
         });
       })
-      .catch(() => {})
-      .finally(() => {});
+      .catch(() => { })
+      .finally(() => { });
   };
   const getLeadTypeList = (values) => {
     axios
@@ -281,8 +289,8 @@ const LeadManagement = () => {
           };
         });
       })
-      .catch(() => {})
-      .finally(() => {});
+      .catch(() => { })
+      .finally(() => { });
   };
 
   const getSourceTypeList = (values) => {
@@ -298,8 +306,8 @@ const LeadManagement = () => {
           };
         });
       })
-      .catch(() => {})
-      .finally(() => {});
+      .catch(() => { })
+      .finally(() => { });
   };
   const getLeadStatusList = () => {
     axios
@@ -314,8 +322,8 @@ const LeadManagement = () => {
           };
         });
       })
-      .catch(() => {})
-      .finally(() => {});
+      .catch(() => { })
+      .finally(() => { });
   };
   const getDateType = () => {
     axios
@@ -330,8 +338,8 @@ const LeadManagement = () => {
           };
         });
       })
-      .catch(() => {})
-      .finally(() => {});
+      .catch(() => { })
+      .finally(() => { });
   };
   const getLeadData = (page, page_size, filteredParams = filterData) => {
     let param = {};
@@ -469,6 +477,27 @@ const LeadManagement = () => {
       >
         Clear Filters
       </Button>
+    );
+  };
+
+  const renderTagAll = (label, value, index, key) => {
+    let selectedItems = form.getFieldsValue()?.[key];
+    const showCloseIcon = !selectedItems?.includes(0);
+    return (
+      <RenderTagMultiple
+        label={label}
+        value={value}
+        showCloseIcon={showCloseIcon}
+        onClose={(closeValue) => {
+          if (selectedItems?.length === 1) {
+            form.setFieldsValue({ [key]: [0] });
+          } else {
+            form.setFieldsValue({
+              [key]: selectedItems.filter((each) => each !== closeValue),
+            });
+          }
+        }}
+      />
     );
   };
 
@@ -623,10 +652,10 @@ const LeadManagement = () => {
               dayjs(filterData?.date_range[0]).isSame(filterData?.date_range[1])
                 ? dayjs(filterData?.date_range[0]).format("DD MMM YYYY")
                 : `${dayjs(filterData?.date_range[0]).format(
-                    "DD MMM YYYY"
-                  )} to ${dayjs(filterData?.date_range[1]).format(
-                    "DD MMM YYYY"
-                  )}`
+                  "DD MMM YYYY"
+                )} to ${dayjs(filterData?.date_range[1]).format(
+                  "DD MMM YYYY"
+                )}`
             }
           />
         </Col>
@@ -655,9 +684,26 @@ const LeadManagement = () => {
     );
   };
 
-  const handleUpdateLeadDetails = (data) => {
-    setModalData({ show: true, type: "UpdateLeadDetails", data: data });
+  const handleUpdateLeadDetails = (values) => {
+    let leadID = modalData?.data?.id;
+    let updatedData = {
+      name: values?.lead_name,
+      email: values?.lead_email,
+    };
+    axios
+      .put(`${urls.leadManagement.leadInfo}${leadID}`, updatedData)
+      .then((res) => {
+        const response = res?.data;
+        message.success(response?.message);
+        getLeadData(pageData.current, pageData.pageSize);
+        setModalData({ show: false, type: null, data: null });
+      })
+      .catch((err) => {
+        message.error(err.message ?? "Failed to update lead details");
+      });
   };
+
+
 
   const columns = [
     {
@@ -715,7 +761,7 @@ const LeadManagement = () => {
               <Button
                 type="text"
                 icon={<MdCall size={20} />}
-                onClick={() => {}}
+                onClick={() => { }}
               />
             </Tooltip>
           ) : null}
@@ -810,7 +856,7 @@ const LeadManagement = () => {
                 type="text"
                 icon={<EditFilled size={20} />}
                 onClick={() => {
-                  handleUpdateLeadDetails(record);
+                  setModalData({ show: true, type: "UpdateLeadDetails", data: record });
                 }}
               />
             </Tooltip>
@@ -1141,9 +1187,10 @@ const LeadManagement = () => {
                                                     <EditFilled size={20} />
                                                   }
                                                   onClick={() => {
-                                                    handleUpdateLeadDetails(
-                                                      record
-                                                    );
+                                                    // handleUpdateLeadDetails(
+                                                    //   record
+                                                    // );
+                                                    setModalData({ show: true, type: "UpdateLeadDetails", data: data });
                                                   }}
                                                 />
                                               </Tooltip>
@@ -1185,11 +1232,10 @@ const LeadManagement = () => {
                                         {getCardDataText(
                                           "Lead Status",
                                           `${each.lead_status}
-                                                ${
-                                                  each.lead_status2
-                                                    ? ` -> ${each.lead_status2}`
-                                                    : ""
-                                                }`
+                                                ${each.lead_status2
+                                            ? ` -> ${each.lead_status2}`
+                                            : ""
+                                          }`
                                         )}
                                         {getCardDataText(
                                           "Created Date",
@@ -1328,21 +1374,30 @@ const LeadManagement = () => {
                       ]}
                     >
                       <Select
-                        style={{ width: "100%" }}
-                        className="add-lead-select"
-                        placeholder="Select Branch"
-                        showSearch
-                        filterOption={(input, option) =>
-                          option.label
-                            .toLowerCase()
-                            .includes(input.toLowerCase())
-                        }
-                        options={branchList?.map((item, ind) => {
+                        className="w-100"
+                        mode="multiple"
+                        options={dropdownData?.allBranch?.map((item, ind) => {
                           return {
-                            label: item?.branch_name,
                             value: item?.id,
+                            label: item?.branch_name,
                           };
                         })}
+                        tagRender={(props) =>
+                          renderTagAll(
+                            props.label,
+                            props.value,
+                            props.index,
+                            "branch"
+                          )
+                        }
+                        onChange={(value) => {
+                          onChangeMultiple(value, "branch");
+                        }}
+                        showSearch
+                        allowClear
+                        filterOption={(input, option) =>
+                          option.label.toLowerCase().includes(input.toLowerCase())
+                        }
                       />
                     </Form.Item>
                     <Form.Item
@@ -1409,7 +1464,7 @@ const LeadManagement = () => {
       {modalData.show && modalData.type === "UpdateLeadDetails" && (
         <UpdateLeadDetails
           modalData={modalData}
-          handleUpdateLeadDetails={() => {}}
+          handleUpdateLeadDetails={handleUpdateLeadDetails}
           closeModal={() => {
             setModalData({ show: false, type: null, data: null });
           }}

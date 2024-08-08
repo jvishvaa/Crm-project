@@ -85,7 +85,7 @@ const AddEditHotspot = ({
         google_lat: mapData?.mapPosition?.lat,
         google_lng: mapData?.mapPosition?.lng,
         ...(mapData?.mapPosition?.lat !== defaultCenter.lat ||
-        mapData?.mapPosition?.lng !== defaultCenter.lng
+          mapData?.mapPosition?.lng !== defaultCenter.lng
           ? { google_address: mapData.address }
           : {}),
       });
@@ -224,7 +224,7 @@ const AddEditHotspot = ({
       maskClosable={false}
       footer={
         ["Add Hotspot"].includes(modalData?.type) ||
-        (["View Hotspot"].includes(modalData?.type) && isEdit) ? (
+          (["View Hotspot"].includes(modalData?.type) && isEdit) ? (
           <div
             style={{
               textAlign: "right",
@@ -262,7 +262,7 @@ const AddEditHotspot = ({
     >
       <Row>
         {["Add Hotspot"].includes(modalData?.type) ||
-        (["View Hotspot"].includes(modalData?.type) && isEdit) ? (
+          (["View Hotspot"].includes(modalData?.type) && isEdit) ? (
           <Col xs={24} className="pb-2">
             <Form form={form} layout="vertical" onFinish={onFinish}>
               <Row gutter={[8, 0]}>
@@ -633,7 +633,7 @@ const AddEditHotspot = ({
                     type="multiple"
                     label="Upload File"
                     labelClassName={"mt-3"}
-                    // disabled={submitLoading}
+                  // disabled={submitLoading}
                   />
 
                   {selectedFile?.length ? (
@@ -688,8 +688,8 @@ const AddEditHotspot = ({
           </Col>
         ) : null}
         {["View Hotspot"].includes(modalData?.type) &&
-        !modalData?.data?.is_edit &&
-        !isEdit ? (
+          !modalData?.data?.is_edit &&
+          !isEdit ? (
           <Col xs={24} className="pb-2 mt-2">
             <Row gutter={[8, 8]}>
               <Descriptions

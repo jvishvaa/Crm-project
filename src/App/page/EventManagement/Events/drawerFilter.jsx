@@ -102,12 +102,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 <Select
                   className="w-100"
                   mode="multiple"
-                  options={dropdownData?.city?.map((item, ind) => {
-                    return {
-                      label: item?.city_name,
-                      value: item?.id,
-                    };
-                  })}
+                  options={dropdownData?.city}
                   tagRender={(props) =>
                     renderTagAll(props.label, props.value, props.index, "city")
                   }
@@ -129,12 +124,7 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 <Select
                   className="w-100"
                   mode="multiple"
-                  options={dropdownData?.branch?.map((item, ind) => {
-                    return {
-                      value: item?.id,
-                      label: item?.branch_name,
-                    };
-                  })}
+                  options={dropdownData?.branch}
                   tagRender={(props) =>
                     renderTagAll(
                       props.label,

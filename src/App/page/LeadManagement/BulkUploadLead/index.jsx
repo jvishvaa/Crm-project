@@ -76,8 +76,6 @@ const BulkUploadLead = () => {
     </Select.Option>
   ));
 
-  console.log(branchList, "branchList");
-
   const onFinish = (values) => {
     if (!academicYear) {
       message.error("Please Select academic year");

@@ -44,8 +44,6 @@ import {
 import { MdOutlineCurrencyRupee } from "react-icons/md";
 import getFilterItemFromArray from "../../../utils/getFilterItemFromArray";
 import DateWiseEvent from "./DateWiseEvent";
-import axios from "axios";
-import urls from "../../../utils/urls";
 const data = [
   {
     id: 1,
@@ -126,56 +124,28 @@ const Events = () => {
     { id: 7, label: "Anik3", erp: 2039484838 },
     { id: 8, label: "Utpal3", erp: 2039484838 },
   ];
-  const [dropdownData, setDropdownData] = useState({
-    city: [{ city_name: "All", id: 0 }],
+  const dropdownData = {
+    city: [
+      { label: "All", value: 0 },
+      { label: "Bangallore", value: "bangalore" },
+      { label: "Kolkata", value: "kolkata" },
+      { label: "Chennal", value: "chennai" },
+    ],
 
-    branch: [{ branch_name: "All", id: 0 }],
+    branch: [
+      { label: "All", value: 0 },
+      { label: "Orchids BTM Layout", value: "btm-layout" },
+      { label: "Orchids Banerghata", value: "banerghata" },
+      { label: "Orchids Newtown", value: "newtown" },
+    ],
 
     source: [
       { label: "All", value: 0 },
       { label: "Apartment", value: "apartment" },
       { label: "Branch", value: "branch" },
     ],
-  });
-  useEffect(() => {
-    getBranchList();
-    getCityList();
-  }, []);
+  };
 
-  const getBranchList = () => {
-    let params = { session_year: 4 };
-    axios
-      .get(`${urls.masterData.branchList}`, {
-        params: params,
-      })
-      .then((res) => {
-        let response = res.data;
-        setDropdownData((p) => {
-          return {
-            ...p,
-            branch: [{ branch_name: "All", id: 0 }, ...response?.result],
-          };
-        });
-      })
-      .catch(() => {})
-      .finally(() => {});
-  };
-  const getCityList = () => {
-    axios
-      .get(`${urls.masterData.cityList}`)
-      .then((res) => {
-        let response = res.data;
-        console.log(response);
-        setDropdownData((p) => {
-          return {
-            ...p,
-            city: [{ city_name: "All", id: 0 }, ...response?.result],
-          };
-        });
-      })
-      .catch(() => {})
-      .finally(() => {});
-  };
   const eventStatusCountList = [
     {
       id: 1,
@@ -280,8 +250,8 @@ const Events = () => {
               ?.filter((each) =>
                 searchAssignInput
                   ? each?.label
-                      ?.toLowerCase()
-                      ?.includes(searchAssignInput?.toLowerCase())
+                    ?.toLowerCase()
+                    ?.includes(searchAssignInput?.toLowerCase())
                   : true
               )
               ?.map((each) => (
@@ -510,10 +480,10 @@ const Events = () => {
                 )
                   ? dayjs(filterData?.date_range[0]).format("DD MMM YYYY")
                   : `${dayjs(filterData?.date_range[0]).format(
-                      "DD MMM YYYY"
-                    )} to ${dayjs(filterData?.date_range[1]).format(
-                      "DD MMM YYYY"
-                    )}`
+                    "DD MMM YYYY"
+                  )} to ${dayjs(filterData?.date_range[1]).format(
+                    "DD MMM YYYY"
+                  )}`
               }
             />
           </Col>
@@ -542,17 +512,16 @@ const Events = () => {
                     ? { borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }
                     : {}),
                   ...(index ===
-                  valueList.filter((item1) => item1.value !== 0).length - 1
+                    valueList.filter((item1) => item1.value !== 0).length - 1
                     ? { borderTopRightRadius: 10, borderBottomRightRadius: 10 }
                     : {}),
                 }}
               >
                 <div
-                  className={`d-flex flex-row ${
-                    item.value < 5
+                  className={`d-flex flex-row ${item.value < 5
                       ? "justify-content-start"
                       : "justify-content-end"
-                  } align-items-center`}
+                    } align-items-center`}
                   style={{ height: 12 }}
                 >
                   <div>
@@ -619,8 +588,8 @@ const Events = () => {
             {dayjs(record?.start_date).isSame(dayjs(record?.end_date), "day")
               ? dayjs(record?.start_date).format("DD/MM/YYYY")
               : `${dayjs(record?.start_date).format("DD/MM/YYYY")} To ${dayjs(
-                  record?.end_date
-                ).format("DD/MM/YYYY")}`}
+                record?.end_date
+              ).format("DD/MM/YYYY")}`}
           </span>{" "}
           <br />
           {!dayjs(record?.start_date).isSame(dayjs(record?.end_date)) ? (
@@ -718,37 +687,37 @@ const Events = () => {
     },
     ...(getRoutePathDetails().modify
       ? [
-          {
-            title: "Action",
-            key: "action",
-            render: (record) => (
-              <Row
-                className={
-                  "d-flex flex-row justify-content-center align-items-center"
-                }
-                gutter={[4, 4]}
-              >
-                <Col>
-                  <Tooltip title="Update Event">
-                    <Button
-                      type="text"
-                      size="small"
-                      icon={<MdEdit size={18} />}
-                      onClick={() => {
-                        setDrawerData({
-                          show: true,
-                          type: "Update Event",
-                          data: record,
-                        });
-                      }}
-                    />
-                  </Tooltip>
-                </Col>
-              </Row>
-            ),
-            align: "center",
-          },
-        ]
+        {
+          title: "Action",
+          key: "action",
+          render: (record) => (
+            <Row
+              className={
+                "d-flex flex-row justify-content-center align-items-center"
+              }
+              gutter={[4, 4]}
+            >
+              <Col>
+                <Tooltip title="Update Event">
+                  <Button
+                    type="text"
+                    size="small"
+                    icon={<MdEdit size={18} />}
+                    onClick={() => {
+                      setDrawerData({
+                        show: true,
+                        type: "Update Event",
+                        data: record,
+                      });
+                    }}
+                  />
+                </Tooltip>
+              </Col>
+            </Row>
+          ),
+          align: "center",
+        },
+      ]
       : []),
   ];
 
@@ -1048,15 +1017,15 @@ const Events = () => {
                                                   "day"
                                                 )
                                                   ? dayjs(
-                                                      each?.start_date
-                                                    ).format("DD/MM/YYYY")
+                                                    each?.start_date
+                                                  ).format("DD/MM/YYYY")
                                                   : `${dayjs(
-                                                      each?.start_date
-                                                    ).format(
-                                                      "DD/MM/YYYY"
-                                                    )} To ${dayjs(
-                                                      each?.end_date
-                                                    ).format("DD/MM/YYYY")}`}
+                                                    each?.start_date
+                                                  ).format(
+                                                    "DD/MM/YYYY"
+                                                  )} To ${dayjs(
+                                                    each?.end_date
+                                                  ).format("DD/MM/YYYY")}`}
                                               </Typography>
                                             </Col>
                                             <Col xs={24}>
@@ -1166,9 +1135,9 @@ const Events = () => {
                                           "BDE",
                                           each?.assigned_user
                                             ? getArrayValues(
-                                                each?.assigned_user,
-                                                "name"
-                                              )?.join(", ")
+                                              each?.assigned_user,
+                                              "name"
+                                            )?.join(", ")
                                             : "--"
                                         )}
                                         {getCardDataText(
@@ -1235,7 +1204,7 @@ const Events = () => {
       />
       <AddEditEvents
         modalData={drawerData}
-        handleAddEditEvent={() => {}}
+        handleAddEditEvent={() => { }}
         closeModal={() => {
           setDrawerData({ show: false, type: null, data: null });
         }}

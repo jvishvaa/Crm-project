@@ -1,8 +1,10 @@
-import { Button, Col, Drawer, Form, Input, Row, Typography } from "antd";
-import React, { useState } from "react";
+import { Button, Col, Drawer, Form, Input, Row, Typography, message } from "antd";
+import React, { useEffect, useState } from "react";
 import "../index.scss";
 import Map from "./gMap";
 import CustomDrawerHeader from "../../../../component/UtilComponents/CustomDrawerHeader";
+import axios from "axios";
+import urls from "../../../../utils/urls";
 
 const { TextArea } = Input;
 
@@ -24,6 +26,25 @@ const UpdateLeadDetails = ({
     lng: 77.56816509999999,
   };
 
+  console.log(modalData, "modalData");
+
+  useEffect(() => {
+    if (modalData?.data) {
+      form.setFieldsValue({
+        lead_name: modalData?.data?.name,
+        lead_email: modalData?.data?.email,
+        lead_address: modalData?.data?.address,
+        lead_remarks: modalData?.data?.remarks,
+      })
+      // If there is Google map data in modalData, set it here
+      setGoogleData({
+        google_lat: modalData?.data?.google_lat || "",
+        google_lng: modalData?.data?.google_lng || "",
+        google_address: modalData?.data?.google_address || "",
+      });
+    }
+  }, [modalData, form])
+
   const setMapData = (mapData) => {
     if (mapData) {
       setGoogleData({
@@ -31,7 +52,7 @@ const UpdateLeadDetails = ({
         google_lat: mapData?.mapPosition?.lat,
         google_lng: mapData?.mapPosition?.lng,
         ...(mapData?.mapPosition?.lat !== defaultCenter.lat ||
-        mapData?.mapPosition?.lng !== defaultCenter.lng
+          mapData?.mapPosition?.lng !== defaultCenter.lng
           ? { google_address: mapData.address }
           : {}),
       });
@@ -39,8 +60,12 @@ const UpdateLeadDetails = ({
   };
 
   const onFinish = (values) => {
-    console.log("Received values:", values);
-    handleUpdateLeadDetails(values);
+    handleUpdateLeadDetails({
+      ...values,
+      google_lat: googleData.google_lat,
+      google_lng: googleData.google_lng,
+      google_address: googleData.google_address,
+    });
     form.resetFields();
   };
 
@@ -62,6 +87,7 @@ const UpdateLeadDetails = ({
       }}
       open={modalData.show && modalData.type === "UpdateLeadDetails"}
       size="large"
+      width={500}
       closable={false}
       maskClosable={false}
       footer={
