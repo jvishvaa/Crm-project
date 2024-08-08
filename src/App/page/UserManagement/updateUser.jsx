@@ -33,12 +33,20 @@ const UpdateUser = ({
     handleUpdateUser(values);
     form.resetFields();
   };
+  const trimCountryCode = (contactNumber) => {
+    const countryCodePattern = /^\+\d{1,3}-/;
 
+    if (countryCodePattern.test(contactNumber)) {
+      return contactNumber.replace(countryCodePattern, "");
+    }
+
+    return contactNumber;
+  };
   useEffect(() => {
     if (modalData?.data && ["Update User"].includes(modalData?.type)) {
       form.setFieldsValue({
-        contact_no: modalData?.data?.contact,
-        email: modalData?.data?.user?.email,
+        contact_no: trimCountryCode(modalData?.data?.contact),
+        email: modalData?.data?.email,
         field_type: modalData?.data?.field_type,
       });
     }
@@ -105,45 +113,45 @@ const UpdateUser = ({
         <Col xs={24} className="pb-2">
           <Form form={form} layout="vertical" onFinish={onFinish}>
             <Row gutter={[8, 0]}>
-              <Col xs={24} className="mt-2">
-                <Typography>
-                  <Typography.Text>
-                    {modalData?.data?.user?.first_name}{" "}
-                    {modalData?.data?.user?.last_name}
-                  </Typography.Text>
-                  <Typography.Text>
-                    {" "}
-                    ({modalData?.data?.erp_id})
-                  </Typography.Text>
-                </Typography>
+              <Flex gap={4} vertical xs={24} className="mt-2">
+                <Typography.Text>
+                  {modalData?.data?.user?.first_name}{" "}
+                  {modalData?.data?.user?.last_name}
+                </Typography.Text>
+                <Typography.Text> {modalData?.data?.erp_id}</Typography.Text>
                 <Typography.Text type="secondary" strong>
                   {modalData?.data?.roles?.role_name}
                 </Typography.Text>
+
+                <Descriptions
+                  column={1}
+                  layout="vertical"
+                  className="update-user-description"
+                >
+                  {/* {renderViewDetails(
+                    "Name",
+                    `${modalData?.data?.user?.first_name} ${modalData?.data?.user?.last_name}`
+                  )}
+                  {renderViewDetails("ERP", modalData?.data?.erp_id)} */}
+                  {/* {renderViewDetails(
+                    "Branch",
+                    "Branch 1, Branch 2",
+                    width < 768 ? 2 : 1
+                  )} */}
+                  {/* {renderViewDetails(
+                    "UserLevel",
+                    modalData?.data?.roles?.role_name
+                  )} */}
+                  {renderViewDetails(
+                    "Marketing Type",
+                    "Field marketing, Digital Marketing"
+                  )}
+                </Descriptions>
                 <Flex gap={4}>
                   <Tag color="geekblue">Branch 1</Tag>
                   <Tag color="geekblue">Branch 2</Tag>
                 </Flex>
-                {/* <Descriptions
-             column={1}
-             // layout="vertical"
-             className="update-user-description"
-           >
-             {renderViewDetails(
-               "Name",
-               `${modalData?.data?.user?.first_name} ${modalData?.data?.user?.last_name}`
-             )}
-             {renderViewDetails("ERP", modalData?.data?.erp_id)}
-             {renderViewDetails(
-               "Branch",
-               "Branch 1, Branch 2",
-               width < 768 ? 2 : 1
-             )}
-             {renderViewDetails(
-               "UserLevel",
-               modalData?.data?.roles?.role_name
-             )}
-           </Descriptions> */}
-              </Col>
+              </Flex>
 
               <Col span={24}>
                 <Form.Item

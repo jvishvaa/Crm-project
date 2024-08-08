@@ -55,6 +55,7 @@ const urls = {
   },
   userManagement: {
     userDataList: `${BASEERP}/communication/v1/view-users/`,
+    unMaskDetails: `${BASEERP}/erp_user/fetch-user-details-by-erp-id/`,
   },
   leadManagement: {
     bulkUpload: `${BASECRM}/lead_mgmt/lead_bulk_upload/`,

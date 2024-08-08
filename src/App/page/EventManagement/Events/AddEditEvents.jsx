@@ -19,6 +19,7 @@ import {
 } from "antd";
 import "./index.scss";
 import React, { useEffect, useState } from "react";
+import { MdOutlineCurrencyRupee } from "react-icons/md";
 import getArrayValues from "../../../utils/getArrayValues";
 import { MdClose, MdDelete, MdEdit, MdLink } from "react-icons/md";
 import CustomDrawerHeader from "../../../component/UtilComponents/CustomDrawerHeader";
@@ -154,7 +155,6 @@ const AddEditEvent = ({
         modalData?.show &&
         ["Add Event", "Update Event"].includes(modalData?.type)
       }
-      size="large"
       closable={false}
       maskClosable={false}
       footer={
@@ -190,7 +190,7 @@ const AddEditEvent = ({
         <Col xs={24} className="pb-2">
           <Form form={form} layout="vertical" onFinish={onFinish}>
             <Row gutter={[8, 0]}>
-              <Col xs={24} md={12}>
+              <Col span={24}>
                 <Form.Item
                   name="event_name"
                   label="Event Name"
@@ -211,7 +211,7 @@ const AddEditEvent = ({
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} md={12}>
+              <Col span={24}>
                 <Form.Item
                   name="hotspot_type"
                   label="Hotspot Type"
@@ -235,7 +235,7 @@ const AddEditEvent = ({
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} md={12}>
+              <Col span={24}>
                 <Form.Item
                   name="branch"
                   label="Branch"
@@ -257,7 +257,7 @@ const AddEditEvent = ({
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} md={12}>
+              <Col span={24}>
                 <Form.Item
                   name="hotspot"
                   label="Hotspot"
@@ -302,7 +302,7 @@ const AddEditEvent = ({
                   </Row>
                 </Col>
               ) : null}
-              <Col xs={24} md={12}>
+              <Col span={24}>
                 <Form.Item
                   label="Event Cost"
                   name="event_cost"
@@ -330,10 +330,11 @@ const AddEditEvent = ({
                         });
                       }
                     }}
+                    prefix={<MdOutlineCurrencyRupee />}
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} md={12}>
+              <Col span={24}>
                 <Form.Item
                   name="event_start_date"
                   label="Event Start Date"
@@ -358,7 +359,7 @@ const AddEditEvent = ({
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} md={12}>
+              <Col span={24}>
                 <Form.Item
                   name="event_end_date"
                   label="Event End Date"
