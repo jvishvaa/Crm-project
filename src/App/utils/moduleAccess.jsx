@@ -170,6 +170,16 @@ const modules = [
         is_sidebar: false,
       },
       {
+        key: "10",
+        route: "/lead-management/lead-details-1/:id",
+        permission: {
+          is_view: [1, 2, 3, 4, 5, 8, 9, 8],
+        },
+        component: lazy(() => import("../page/LeadManagement/LeadDetails1")),
+        is_route: true,
+        is_sidebar: false,
+      },
+      {
         key: "4",
         icon: <GrGroup />,
         label: "All Leads",

@@ -9,12 +9,6 @@ const LeadAddedDetails = () => {
       <CustomCard>
         <Row className="d-flex flex-column flex-nowrap" gutter={[8, 8]}>
           <Col xs={24}>
-            <Typography className="assign-details-card-header">
-              Lead Added By
-            </Typography>
-            <Divider />
-          </Col>
-          <Col xs={24}>
             <Row className="d-flex flex-row" gutter={[16, 8]}>
               <Col xs={24} md={24} lg={24}>
                 <Row>
