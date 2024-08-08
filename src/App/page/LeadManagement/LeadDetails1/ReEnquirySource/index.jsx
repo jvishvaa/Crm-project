@@ -9,6 +9,12 @@ const ReEnquirySource = () => {
       <CustomCard>
         <Row className="d-flex flex-column flex-nowrap" gutter={[8, 8]}>
           <Col xs={24}>
+            <Typography className="assign-details-card-header">
+              ReEnquiry Source
+            </Typography>
+            <Divider />
+          </Col>
+          <Col xs={24}>
             <Row>
               <Col
                 xs={24}

@@ -18,7 +18,7 @@ const ChildDetails = () => {
     <>
       <CustomCard>
         <Row className="d-flex flex-column flex-nowrap" gutter={[8, 8]}>
-          {/* <Col xs={24}>
+          <Col xs={24}>
             <Row className="d-flex flex-row justify-content-between align-items-center mb-1">
               <Col>
                 <Typography className="assign-details-card-header">
@@ -38,7 +38,7 @@ const ChildDetails = () => {
               </Col>
             </Row>
             <Divider />
-          </Col> */}
+          </Col>
           <Col xs={24} className="lead-child-list">
             <Row className="d-flex  " gutter={[16, 8]}>
               {[1, 2].map((each) => (
