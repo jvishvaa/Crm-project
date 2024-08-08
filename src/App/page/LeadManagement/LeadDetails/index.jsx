@@ -143,8 +143,17 @@ const LeadDetails = () => {
               </Col>
               <Col xs={24} md={12} lg={9}>
                 <Row className="d-flex flex-column" gutter={[8, 8]}>
-                  <Col xs={24}>
+                  {/* <Col xs={24}>
                     <ActivityHistory />
+                  </Col> */}
+                  <Col xs={24} md={12} lg={24}>
+                    <AssigningDetailsCard />
+                  </Col>
+                  <Col xs={24} md={12} lg={24}>
+                    <LeadAddedDetails />
+                  </Col>
+                  <Col xs={24} md={12} lg={24}>
+                    <ReEnquirySource />
                   </Col>
                   {width >= 768 && width <= 991 ? (
                     <>
@@ -166,15 +175,6 @@ const LeadDetails = () => {
                   <Row className="d-flex flex-row" gutter={[8, 8]}>
                     <Col xs={24} md={12} lg={24}>
                       <ChildDetails />
-                    </Col>
-                    <Col xs={24} md={12} lg={24}>
-                      <AssigningDetailsCard />
-                    </Col>
-                    <Col xs={24} md={12} lg={24}>
-                      <LeadAddedDetails />
-                    </Col>
-                    <Col xs={24} md={12} lg={24}>
-                      <ReEnquirySource />
                     </Col>
                   </Row>
                 </Col>

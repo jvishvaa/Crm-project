@@ -15,8 +15,10 @@ import {
 } from "antd";
 import "../index.scss";
 import { MdCall } from "react-icons/md";
+import { SiGooglemaps } from "react-icons/si";
 import useWindowDimensions from "../../../../component/UtilComponents/useWindowDimensions";
 import Map from "./gMap";
+import { EditOutlined } from "@ant-design/icons";
 
 const LeadDetailsCard = () => {
   const [form] = Form.useForm();
@@ -114,25 +116,25 @@ const LeadDetailsCard = () => {
           <Divider />
           <Col xs={24}>
             <Row className={"d-flex"} gutter={[16, 8]}>
-              <Col xs={12}>
+              <Col xs={24}>
                 <Typography className="lead-details-card-data-text">
                   <span>Alt. Contact No. :</span>
-                  <br />
-                  {"+91 4663664646"}
+                  {/* <br /> */}
+                  {" +91 4663664646"}
                 </Typography>
               </Col>
-              <Col xs={12}>
+              <Col xs={24}>
                 <Typography className="lead-details-card-data-text">
                   <span>Academic Year :</span>
-                  <br />
-                  {"2023-24"}
+                  {/* <br /> */}
+                  {" 2023-24"}
                 </Typography>
               </Col>
               <Col xs={24}>
                 <Typography className="lead-details-card-data-text">
                   <span>Status :</span>
-                  <br />
-                  {"Home Counselling Cancel -> Home Counselling Scheduled"}
+                  {/* <br /> */}
+                  {" Home Counselling Cancel -> Home Counselling Scheduled"}
                 </Typography>
               </Col>
               <Col xs={24}>
@@ -143,8 +145,8 @@ const LeadDetailsCard = () => {
                   <Col xs={17} md={16} xl={17}>
                     <Typography className="lead-details-card-data-text">
                       <span>Branch :</span>
-                      <br />
-                      {"Orchids BTM Layout"}
+                      {/* <br /> */}
+                      {" Orchids BTM Layout"} <span>&bull; Day</span>
                     </Typography>
                   </Col>
                   <Col xs={7} md={8} xl={7}>
@@ -161,18 +163,20 @@ const LeadDetailsCard = () => {
                           });
                         }}
                       >
-                        Update Branch
+                        {/* Update Branch */}
+                        <EditOutlined />
                       </Button>
                     </Row>
                   </Col>
                 </Row>
               </Col>
-              <Col xs={24}>
+              {/* <Col xs={24}>
                 <Typography className="lead-details-card-data-text">
-                  <span>School Type :</span> <br />
-                  {"Day"}
+                  <span>School Type :</span>
+
+                  {" Day"}
                 </Typography>
-              </Col>
+              </Col> */}
               <Col xs={24}>
                 <Row
                   className="d-flex flex-row align-items-center"
@@ -180,8 +184,8 @@ const LeadDetailsCard = () => {
                 >
                   <Col xs={17} md={16} xl={17}>
                     <Typography className="lead-details-card-data-text">
-                      <span>Source :</span> <br />
-                      {"DM - Direct"}
+                      <span>Source :</span>
+                      {" DM - Direct"}
                     </Typography>
                   </Col>
                   <Col xs={7} md={8} xl={7}>
@@ -198,7 +202,8 @@ const LeadDetailsCard = () => {
                           });
                         }}
                       >
-                        Update Source
+                        {/* Update Source */}
+                        <EditOutlined />
                       </Button>
                     </Row>
                   </Col>
@@ -206,14 +211,14 @@ const LeadDetailsCard = () => {
               </Col>
               <Col xs={12}>
                 <Typography className="lead-details-card-data-text">
-                  <span>Lead Created Date :</span> <br />
-                  {"31/05/2022"}
+                  <span>Lead Created Date :</span>
+                  {" 31/05/2022"}
                 </Typography>
               </Col>
               <Col xs={12}>
                 <Typography className="lead-details-card-data-text">
-                  <span>Lead Age :</span> <br />
-                  {"36 days"}
+                  <span>Lead Age :</span>
+                  {" 36 days"}
                 </Typography>
               </Col>
               {isShowMore ? (
@@ -221,47 +226,52 @@ const LeadDetailsCard = () => {
                   <Col xs={24}>
                     <Typography className="lead-details-card-data-text">
                       <span>Lead Email :</span>
-                      <br />
-                      {"anik.chowdhury@orchids.edu.in"}
+                      {/* <br /> */}
+                      {" anik.chowdhury@orchids.edu.in"}
                     </Typography>
                   </Col>
                   <Col xs={12}>
                     <Typography className="lead-details-card-data-text">
-                      <span>Lead Occupation :</span> <br />
-                      {"NA"}
+                      <span>Lead Occupation :</span>
+                      {" NA"}
                     </Typography>
                   </Col>
                   <Col xs={12}>
                     <Typography className="lead-details-card-data-text">
-                      <span>Lead Income :</span> <br />
-                      {"NA"}
+                      <span>Lead Income :</span>
+                      {" NA"}
                     </Typography>
                   </Col>
                   <Col xs={24}>
                     <Typography className="lead-details-card-data-text">
-                      <span>Event Name :</span> <br />
-                      {"ProField-AY 24-25 NR windgates"}
+                      <span>Event Name :</span>
+                      {" ProField-AY 24-25 NR windgates"}
                     </Typography>
                   </Col>
                   <Col xs={24}>
                     <Typography className="lead-details-card-data-text">
-                      <span>Lead Address : </span> <br />
-                      {"Test Address"}
+                      <span>
+                        Lead Address{" "}
+                        <Button
+                          type="iconbutton"
+                          size="small"
+                          icon={
+                            <SiGooglemaps
+                              onClick={() => {
+                                setModalData({
+                                  show: true,
+                                  type: "Address",
+                                  data: null,
+                                });
+                              }}
+                              size={12}
+                            />
+                          }
+                        />
+                        :{" "}
+                      </span>
+                      {" Test Address"}
                     </Typography>
-                  </Col>
-                  <Col xs={24}>
-                    <Typography className="lead-details-card-data-text">
-                      <span>Google Address : </span> <br />
-                    </Typography>
-                    <Map
-                      google={"Test Address"}
-                      center={{
-                        lat: +28.07575,
-                        lng: +-81.885078,
-                      }}
-                      height="250px"
-                      zoom={15}
-                    />
                   </Col>
                   <Col xs={24}>
                     <Typography className="lead-details-card-data-text">
@@ -362,6 +372,32 @@ const LeadDetailsCard = () => {
                 </Form.Item>
               ) : null}
             </Form>
+          </Col>
+        </Row>
+      </Modal>
+      <Modal
+        title={"Google Address"}
+        centered
+        open={modalData?.show && modalData?.type === "Address"}
+        onCancel={() => {
+          setModalData({ show: false, type: null, data: null });
+        }}
+        footer={null}
+      >
+        <Row>
+          <Col xs={24}>
+            <Typography className="lead-details-card-data-text">
+              {/* <span>Google Address : </span> <br /> */}
+            </Typography>
+            <Map
+              google={"Test Address"}
+              center={{
+                lat: +28.07575,
+                lng: +-81.885078,
+              }}
+              height="250px"
+              zoom={15}
+            />
           </Col>
         </Row>
       </Modal>
