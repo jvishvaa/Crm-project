@@ -121,15 +121,7 @@ const LeadManagement = () => {
         value: "pro-data-apartment",
       },
     ],
-    leadStatus: [
-      { label: "All", value: 0 },
-      { label: "Call Not Made", value: "call-not-made" },
-      { label: "Home Counselling Scheduled", value: "hc-scheduled" },
-      {
-        label: "Admission Done",
-        value: "admission-done",
-      },
-    ],
+    leadStatus: [{ status: "All", id: 0 }],
     leadType: [{ name: "All", id: 0 }],
     leadCategory: [
       { label: "All", value: 0 },
@@ -137,12 +129,7 @@ const LeadManagement = () => {
       { label: "Interested", value: 2 },
       { label: "Normal", value: 3 },
     ],
-    dateType: [
-      { label: "Lead Created Date", value: 1 },
-      { label: "Next Followup Date", value: 2 },
-      { label: "ReEnquiry Date", value: 3 },
-      { label: "Regen Date", value: 4 },
-    ],
+    dateType: [],
   });
 
   // useEffect(() => {
@@ -298,7 +285,7 @@ const LeadManagement = () => {
 
   const getSourceTypeList = (values) => {
     axios
-      .get(`${urls.masterData.sourceType}`)
+      .get(`${urls.leadManagement.sourceTypeList}`)
       .then((res) => {
         let response = res.data;
         console.log(response);
@@ -312,7 +299,38 @@ const LeadManagement = () => {
       .catch(() => {})
       .finally(() => {});
   };
-
+  const getLeadStatusList = () => {
+    axios
+      .get(`${urls.leadManagement.leadStatus}`)
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setDropdownData((p) => {
+          return {
+            ...p,
+            leadStatus: [{ status: "All", id: 0 }, ...response?.data],
+          };
+        });
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
+  const getDateType = () => {
+    axios
+      .get(`${urls.leadManagement.dateType}`)
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setDropdownData((p) => {
+          return {
+            ...p,
+            dateType: [...response?.result],
+          };
+        });
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
   const getLeadData = (page, page_size, filteredParams = filterData) => {
     let param = {};
     setLoading(true);
@@ -364,6 +382,8 @@ const LeadManagement = () => {
     getLeadTypeList();
     getSourceTypeList();
     getBranchList2();
+    getLeadStatusList();
+    getDateType();
   }, []);
 
   const handleTableChange = (pagination) => {
