@@ -27,3 +27,8 @@ code {
 tr.ant-table-row.ant-table-row-level-0 td:nth-child(5) {
   text-transform: capitalize;
 }
+
+
+.image-gallery .ant-image{
+  height: 100% !important;
+}

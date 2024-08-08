@@ -20,8 +20,18 @@ import {
   AiOutlineUsergroupAdd,
   AiOutlineUsergroupDelete,
 } from "react-icons/ai";
-import { MdOutlineEvent, MdOutlineEventNote, MdRoute } from "react-icons/md";
-import { CgUserList, CgFileDocument } from "react-icons/cg";
+import {
+  MdOutlineEvent,
+  MdOutlineEventNote,
+  MdRoute,
+  MdOutlineContactPhone,
+} from "react-icons/md";
+import {
+  CgUserList,
+  CgFileDocument,
+  CgImage,
+  CgCircleci,
+} from "react-icons/cg";
 
 const modules = [
   {
@@ -338,6 +348,20 @@ const modules = [
         is_sidebar: true,
       },
       {
+        key: "18.1",
+        icon: <AiOutlineFundView />,
+        label: "Physical Enquiry Form",
+        route: "/enquiry-form/physical-enquiry-form",
+        permission: {
+          is_view: [1, 2, 3, 4, 5, 8, 9],
+        },
+        component: lazy(() =>
+          import("../page/EnquiryForm/PhysicalEnquiryForm")
+        ),
+        is_route: true,
+        is_sidebar: true,
+      },
+      {
         key: "19",
         route: "/enquiry-form/digital-enquiry-form/create-enquiry",
         permission: {
@@ -405,6 +429,34 @@ const modules = [
         is_sidebar: true,
       },
     ],
+  },
+  {
+    key: "27",
+    icon: <CgImage />,
+    label: "Image Gallery",
+    permission: {
+      is_view: [1, 2, 3, 4, 5],
+      is_add: [1, 2, 3, 4, 5],
+      is_modify: [1, 2, 3, 4, 5],
+    },
+    is_route: true,
+    is_sidebar: true,
+    route: "/image_gallery",
+    component: lazy(() => import("../page/ImageGallery")),
+  },
+  {
+    key: "28",
+    icon: <MdOutlineContactPhone />,
+    label: "Call Auditing",
+    permission: {
+      is_view: [1, 2, 3, 4, 5],
+      is_add: [1, 2, 3, 4, 5],
+      is_modify: [1, 2, 3, 4, 5],
+    },
+    is_route: true,
+    is_sidebar: true,
+    route: "/call_auditing",
+    component: lazy(() => import("../page/CallAuditing")),
   },
 ];
 
