@@ -44,6 +44,8 @@ import {
 import { MdOutlineCurrencyRupee } from "react-icons/md";
 import getFilterItemFromArray from "../../../utils/getFilterItemFromArray";
 import DateWiseEvent from "./DateWiseEvent";
+import axios from "axios";
+import urls from "../../../utils/urls";
 const data = [
   {
     id: 1,
@@ -124,28 +126,56 @@ const Events = () => {
     { id: 7, label: "Anik3", erp: 2039484838 },
     { id: 8, label: "Utpal3", erp: 2039484838 },
   ];
-  const dropdownData = {
-    city: [
-      { label: "All", value: 0 },
-      { label: "Bangallore", value: "bangalore" },
-      { label: "Kolkata", value: "kolkata" },
-      { label: "Chennal", value: "chennai" },
-    ],
+  const [dropdownData, setDropdownData] = useState({
+    city: [{ city_name: "All", id: 0 }],
 
-    branch: [
-      { label: "All", value: 0 },
-      { label: "Orchids BTM Layout", value: "btm-layout" },
-      { label: "Orchids Banerghata", value: "banerghata" },
-      { label: "Orchids Newtown", value: "newtown" },
-    ],
+    branch: [{ branch_name: "All", id: 0 }],
 
     source: [
       { label: "All", value: 0 },
       { label: "Apartment", value: "apartment" },
       { label: "Branch", value: "branch" },
     ],
-  };
+  });
+  useEffect(() => {
+    getBranchList();
+    getCityList();
+  }, []);
 
+  const getBranchList = () => {
+    let params = { session_year: 4 };
+    axios
+      .get(`${urls.masterData.branchList}`, {
+        params: params,
+      })
+      .then((res) => {
+        let response = res.data;
+        setDropdownData((p) => {
+          return {
+            ...p,
+            branch: [{ branch_name: "All", id: 0 }, ...response?.result],
+          };
+        });
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
+  const getCityList = () => {
+    axios
+      .get(`${urls.masterData.cityList}`)
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setDropdownData((p) => {
+          return {
+            ...p,
+            city: [{ city_name: "All", id: 0 }, ...response?.result],
+          };
+        });
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
   const eventStatusCountList = [
     {
       id: 1,
