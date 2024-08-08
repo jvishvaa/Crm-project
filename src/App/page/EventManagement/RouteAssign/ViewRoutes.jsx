@@ -10,6 +10,7 @@ import {
   Descriptions,
   Divider,
   Popconfirm,
+  Flex,
 } from "antd";
 import CustomDrawerHeader from "../../../component/UtilComponents/CustomDrawerHeader";
 import getFilterItemFromArray from "../../../utils/getFilterItemFromArray";
@@ -78,7 +79,7 @@ const ViewRoutes = ({ drawerData, closeDrawer, dropdownData }) => {
       title={<CustomDrawerHeader label="View Route" onClose={closeDrawer} />}
       onClose={closeDrawer}
       open={drawerData?.show && drawerData?.type === "View Route"}
-      size="large"
+      // size="large"
       closable={false}
       maskClosable={false}
       footer={null}
@@ -102,28 +103,29 @@ const ViewRoutes = ({ drawerData, closeDrawer, dropdownData }) => {
           <Typography className="th-14 th-fw-500 text-center">
             Route Details
           </Typography>
-          <Timeline
-            className="route-timeline"
-            style={{ marginTop: 30, marginLeft: "30%" }}
-            items={routeData?.map((each) => {
-              return {
-                dot: (
-                  <ClockCircleFilled
-                    style={{
-                      fontSize: "16px",
-                    }}
-                  />
-                ),
+          <Flex justify="center">
+            <Timeline
+              className="route-timeline"
+              style={{ marginTop: 30 }}
+              items={routeData?.map((each) => {
+                return {
+                  dot: (
+                    <ClockCircleFilled
+                      style={{
+                        fontSize: "16px",
+                      }}
+                    />
+                  ),
 
-                children: renderContent(each),
-              };
-            })}
-          />
+                  children: renderContent(each),
+                };
+              })}
+            />
+          </Flex>
         </Col>
         <Col
           xs={24}
           className="d-flex flex-row align-items-center justify-content-center"
-          style={{ marginLeft: "-15%" }}
         >
           <Button
             size="small"

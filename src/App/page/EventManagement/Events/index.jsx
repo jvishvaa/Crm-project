@@ -16,6 +16,7 @@ import {
   Descriptions,
   Popover,
   Checkbox,
+  Flex,
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -40,9 +41,44 @@ import {
   FaSpinner,
   FaStopwatch,
 } from "react-icons/fa";
+import { MdOutlineCurrencyRupee } from "react-icons/md";
 import getFilterItemFromArray from "../../../utils/getFilterItemFromArray";
 import DateWiseEvent from "./DateWiseEvent";
-
+const data = [
+  {
+    id: 1,
+    event_name: "Test Event",
+    hotspot: { id: 1, name: "Test Hotspot" },
+    branch: { id: 1, name: "Branch 1" },
+    source: { id: 1, name: "Source 1" },
+    start_date: "2024-01-01 13:12",
+    end_date: "2024-01-03 12:12",
+    event_cost: 100,
+    assigned_user: [
+      { id: 1, name: "Test 1" },
+      { id: 2, name: "Test 2" },
+    ],
+    status: "In Progress",
+    status_type: 1,
+    total_lead: 100,
+    created_by: "Admin",
+  },
+  {
+    id: 2,
+    event_name: "Test Event2",
+    hotspot: { id: 1, name: "Test Hotspot" },
+    branch: { id: 1, name: "Branch 1" },
+    source: { id: 1, name: "Source 1" },
+    start_date: "2024-01-01 12:12",
+    end_date: "2024-01-01 12:12",
+    event_cost: 100,
+    assigned_user: null,
+    status: "Yet To Start",
+    status_type: 2,
+    total_lead: 100,
+    created_by: "Admin",
+  },
+];
 const Events = () => {
   const defaultFilters = {
     city: [0],
@@ -278,39 +314,7 @@ const Events = () => {
 
   const getEventData = (page, page_size, params = {}) => {
     // setLoading(true);
-    setEventData([
-      {
-        id: 1,
-        event_name: "Test Event",
-        hotspot: { id: 1, name: "Test Hotspot" },
-        branch: { id: 1, name: "Branch 1" },
-        source: { id: 1, name: "Source 1" },
-        start_date: "2024-01-01 13:12",
-        end_date: "2024-01-03 12:12",
-        event_cost: 100,
-        assigned_user: [
-          { id: 1, name: "Test 1" },
-          { id: 2, name: "Test 2" },
-        ],
-        status: "In Progress",
-        total_lead: 100,
-        created_by: "Admin",
-      },
-      {
-        id: 2,
-        event_name: "Test Event2",
-        hotspot: { id: 1, name: "Test Hotspot" },
-        branch: { id: 1, name: "Branch 1" },
-        source: { id: 1, name: "Source 1" },
-        start_date: "2024-01-01 12:12",
-        end_date: "2024-01-01 12:12",
-        event_cost: 100,
-        assigned_user: null,
-        status: "Yet To Start",
-        total_lead: 100,
-        created_by: "Admin",
-      },
-    ]);
+    setEventData(data);
     setPageData({
       current: page,
       pageSize: page_size,
@@ -519,7 +523,7 @@ const Events = () => {
                       ? "justify-content-start"
                       : "justify-content-end"
                   } align-items-center`}
-                  style={{ height: 20 }}
+                  style={{ height: 12 }}
                 >
                   <div>
                     {item.widthPercentage > 5 ? (
@@ -613,7 +617,12 @@ const Events = () => {
     {
       title: "Event Cost",
       key: "event_cost",
-      render: (record) => <span>{`${record?.event_cost} INR` || "0 INR"}</span>,
+      render: (record) => (
+        <>
+          <MdOutlineCurrencyRupee />
+          <span>{`${record?.event_cost}` || "0"}</span>
+        </>
+      ),
       align: "center",
     },
     {
@@ -785,6 +794,23 @@ const Events = () => {
                       className="d-flex flex-row align-items-center"
                       gutter={[8, 8]}
                     >
+                      <ButtonTabs
+                        tabList={eventStatusCountList}
+                        activeStatus={selectedStatus}
+                        handleClick={(ind) => {
+                          if (selectedStatus === ind) {
+                            setSelectedStatus(null);
+                            setEventData(data);
+                          } else {
+                            setSelectedStatus(ind);
+                            setEventData(
+                              data?.filter(
+                                (item, i) => item?.status_type == ind
+                              )
+                            );
+                          }
+                        }}
+                      />
                       <Col>{getSearchInput()}</Col>
                       {width >= 768 ? renderAddEvent() : null}
                     </Row>
@@ -811,7 +837,6 @@ const Events = () => {
                       </Col>
                       <Col>
                         <Button
-                          size="medium"
                           type="primary"
                           className="lead-button"
                           onClick={() => {
@@ -864,7 +889,7 @@ const Events = () => {
                   {renderFilterView()}
                 </Col>
               ) : null}
-              <Col xs={24} className={"mt-2"}>
+              {/* <Col xs={24} className={"mt-2"}>
                 <Row className="d-flex flex-row">
                   {renderProgressBar(
                     eventStatusCountList?.map((each) => {
@@ -877,8 +902,8 @@ const Events = () => {
                     })
                   )}
                 </Row>
-              </Col>
-              <Col xs={24} className={"mt-2"}>
+              </Col> */}
+              {/* <Col xs={24} className={"mt-2"}>
                 <Row gutter={[6, 6]}>
                   {eventStatusCountList?.map((each) => (
                     <Col xs={8}>
@@ -926,7 +951,7 @@ const Events = () => {
                     </Col>
                   ))}
                 </Row>
-              </Col>
+              </Col> */}
               {eventData ? (
                 isList ? (
                   <Col xs={24} className={"mt-2"}>
@@ -1190,4 +1215,39 @@ const Events = () => {
   );
 };
 
+const ButtonTabs = ({ tabList, handleClick, activeStatus }) => {
+  return (
+    <div className="tab-bar">
+      <Flex gap={8} align="center">
+        {tabList?.map((item, ind) => {
+          return (
+            <>
+              <>
+                {ind == 0 ? null : (
+                  <Divider
+                    type="vertical"
+                    style={{
+                      borderColor: "#7cb305",
+                      height: "100%",
+                    }}
+                  />
+                )}
+              </>
+              <button
+                key={ind}
+                className={`tab ${activeStatus === ind ? "active" : ""}`}
+                onClick={() => handleClick(ind)}
+                style={{
+                  backgroundColor: activeStatus === ind ? item?.color : "",
+                }}
+              >
+                {`${item?.label} (${item?.value})`}
+              </button>
+            </>
+          );
+        })}
+      </Flex>
+    </div>
+  );
+};
 export default Events;
