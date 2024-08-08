@@ -31,7 +31,7 @@ import urls from "../../../utils/urls";
 import getSelectArray from "../../../utils/getSelectArray";
 
 const Source = () => {
-  const defaultValue = { is_active: true, source_type: [0] };
+  const defaultValue = { status: true, source_type: [0] };
   const [form] = Form.useForm();
   const [pageData, setPageData] = useState({
     current: 1,
@@ -70,7 +70,7 @@ const Source = () => {
 
   const getSourceData = (page, page_size, values) => {
     let params = {
-      ...(values.is_active !== 0 ? { is_active: values.is_active } : {}),
+      ...(values.status !== 0 ? { status: values.status } : {}),
       ...(values.source_type.includes(0)
         ? { source_type: values?.source_type?.join(",") }
         : {}),
@@ -80,42 +80,44 @@ const Source = () => {
     };
     setLoading(true);
     axios
-      .get(`${urls.masterData.source}`, {
+      .get(`${urls.masterData.leadSource}`, {
         params: params,
       })
       .then((res) => {
         let response = res.data;
-        if ([200, 201].includes(response?.status_code)) {
-          setSourceData(response?.result?.result);
-          setPageData({
-            current: page,
-            pageSize: page_size,
-            total: response?.result?.count,
-          });
-        } else {
-          message.error(response?.message);
-        }
+        setSourceData(response?.result);
+        setPageData({
+          current: page,
+          pageSize: page_size,
+          total: response?.result?.count,
+        });
       })
-      .catch(() => {})
+      .catch((err) => {
+        message.error(err?.response?.data?.message ?? "Something went wrong!");
+      })
       .finally(() => {
         setLoading(false);
       });
   };
 
+  console.log({ sourceData });
+
   const getSourceTypeList = () => {
     axios
       .get(`${urls.masterData.sourceType}`, {
-        params: { is_active: true },
+        params: { status: true },
       })
       .then((res) => {
         let response = res.data;
-        if ([200, 201].includes(response?.status_code)) {
-          setSourceTypeList(response?.result);
-        } else {
-          message.error(response?.message);
-        }
+        // if ([200, 201].includes(response?.status_code)) {
+        setSourceTypeList(response?.result);
+        // } else {
+        //   message.error(response?.message);
+        // }
       })
-      .catch(() => {});
+      .catch((err) => {
+        message.error(err?.response?.data?.message ?? "Something went wrong!");
+      });
   };
 
   const handleTableChange = (pagination) => {
@@ -133,25 +135,27 @@ const Source = () => {
   const handleStatusChange = (data, value) => {
     setLoading(true);
     axios
-      .put(`${urls.masterData.source}${data?.id}`, { is_active: value })
+      .put(`${urls.masterData.leadSource}${data?.id}`, { status: value })
       .then((res) => {
         let response = res.data;
-        if ([200, 201].includes(response?.status_code)) {
-          getSourceData(
-            pageData?.current > 0 &&
-              sourceData?.length === 1 &&
-              form?.getFieldsValue()?.is_active !== 0
-              ? pageData?.current - 1
-              : pageData?.current,
-            pageData?.pageSize,
-            getValues()
-          );
-          message.success(response.message);
-        } else {
-          message.error(response?.message);
-        }
+        // if ([200, 201].includes(response?.status_code)) {
+        getSourceData(
+          pageData?.current > 0 &&
+            sourceData?.length === 1 &&
+            form?.getFieldsValue()?.status !== 0
+            ? pageData?.current - 1
+            : pageData?.current,
+          pageData?.pageSize,
+          getValues()
+        );
+        message.success(response.message);
+        // } else {
+        //   message.error(response?.message);
+        // }
       })
-      .catch(() => {})
+      .catch((err) => {
+        message.error(err?.response?.data?.message ?? "Something went wrong!");
+      })
       .finally(() => {
         setLoading(false);
       });
@@ -168,14 +172,14 @@ const Source = () => {
     },
     {
       title: "Source Name",
-      key: "source_name",
+      key: "source_type_name",
       render: (record) => <span>{record?.source_name}</span>,
       align: "center",
     },
     {
       title: "Source Type",
       key: "source_type",
-      render: (record) => <span>{record?.source_type?.name}</span>,
+      render: (record) => <span>{record?.source_type_name}</span>,
       align: "center",
     },
     {
@@ -192,22 +196,22 @@ const Source = () => {
     },
     {
       title: "Status",
-      key: "is_active",
+      key: "status",
       render: (record) => (
         <>
           {getRoutePathDetails().modify ? (
             <Popconfirm
               title={`Are you sure to update "${
                 record?.source_type
-              }" sorce as ${record?.is_active ? "inactive" : "active"}?`}
-              onConfirm={() => handleStatusChange(record, !record?.is_active)}
+              }" source as ${record?.status ? "inactive" : "active"}?`}
+              onConfirm={() => handleStatusChange(record, !record?.status)}
               okText="Yes"
               cancelText="No"
             >
               <Switch
-                checked={record?.is_active}
+                checked={record?.status}
                 style={{
-                  backgroundColor: record.is_active
+                  backgroundColor: record.status
                     ? getColour("active")
                     : getColour("inactive"),
                 }}
@@ -218,10 +222,10 @@ const Source = () => {
           ) : (
             <Tag
               color={
-                record?.is_active ? getColour("active") : getColour("inactive")
+                record?.status ? getColour("active") : getColour("inactive")
               }
             >
-              {record?.is_active ? "Active" : "Inactive"}
+              {record?.status ? "Active" : "Inactive"}
             </Tag>
           )}
         </>
@@ -325,6 +329,7 @@ const Source = () => {
                           className="w-100"
                           mode="multiple"
                           allowClear
+                          maxTagCount={1}
                           onChange={(value) => {
                             if (value.length === 0) {
                               form.setFieldsValue({ source_type: [0] });
@@ -337,7 +342,7 @@ const Source = () => {
                             },
                             ...getSelectArray(
                               sourceTypeList,
-                              "source_name",
+                              "source_type_name",
                               "id"
                             ),
                           ]}
@@ -359,11 +364,7 @@ const Source = () => {
                       </Form.Item>
                     </Col>
                     <Col xs={12} sm={7} xl={6}>
-                      <Form.Item
-                        className="w-100"
-                        name="is_active"
-                        label="Status"
-                      >
+                      <Form.Item className="w-100" name="status" label="Status">
                         <Select
                           className="w-100"
                           onChange={() => {

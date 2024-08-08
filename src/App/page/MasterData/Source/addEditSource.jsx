@@ -24,43 +24,51 @@ const AddEditSource = ({ modalData, onSubmit, closeModal, dropdownData }) => {
     let payload = {
       source_name: values.source_name?.trim(),
       source_type: values.source_type,
-      UTM_Source: values.utm_source || null,
-      UTM_Source: values.utm_medium || null,
+      // UTM_Source: values.utm_source || null,
+      // UTM_Source: values.utm_medium || null,
     };
     setLoading(true);
     if (modalData?.data) {
       axios
-        .put(`${urls.masterData.source}${modalData.data?.id}`, payload)
+        .put(`${urls.masterData.leadSource}${modalData.data?.id}`, payload)
         .then((res) => {
           let response = res.data;
-          if ([200, 201].includes(response?.status_code)) {
-            form.resetFields();
-            onSubmit(values);
-            closeModal();
-            message.success(response.message);
-          } else {
-            message.error(response?.message);
-          }
+          // if ([200, 201].includes(response?.status_code)) {
+          form.resetFields();
+          onSubmit(values);
+          closeModal();
+          message.success(response.message);
+          // } else {
+          //   message.error(response?.message);
+          // }
         })
-        .catch(() => {})
+        .catch((err) => {
+          message.error(
+            err?.response?.data?.message ?? "Something went wrong!"
+          );
+        })
         .finally(() => {
           setLoading(false);
         });
     } else {
       axios
-        .post(urls.masterData.source, payload)
+        .post(urls.masterData.leadSource, payload)
         .then((res) => {
           let response = res.data;
-          if ([200, 201].includes(response?.status_code)) {
-            form.resetFields();
-            onSubmit(values);
-            closeModal();
-            message.success(response.message);
-          } else {
-            message.error(response?.message);
-          }
+          // if ([200, 201].includes(response?.status_code)) {
+          form.resetFields();
+          onSubmit(values);
+          closeModal();
+          message.success(response.message);
+          // } else {
+          //   message.error(response?.message);
+          // }
         })
-        .catch(() => {})
+        .catch((err) => {
+          message.error(
+            err?.response?.data?.message ?? "Something went wrong!"
+          );
+        })
         .finally(() => {
           setLoading(false);
         });
@@ -71,7 +79,7 @@ const AddEditSource = ({ modalData, onSubmit, closeModal, dropdownData }) => {
     if (modalData?.data) {
       form.setFieldsValue({
         source_name: modalData?.data?.source_name,
-        source_type: modalData?.data?.source_type?.id,
+        source_type: modalData?.data?.source_type,
         utm_source: modalData?.data?.UTM_Source,
         utm_medium: modalData?.data?.UTM_Medium,
       });
@@ -153,7 +161,11 @@ const AddEditSource = ({ modalData, onSubmit, closeModal, dropdownData }) => {
                 >
                   <Select
                     className="w-100"
-                    options={getSelectArray(dropdownData?.sourceTypeList)}
+                    options={getSelectArray(
+                      dropdownData?.sourceTypeList,
+                      "source_type_name",
+                      "id"
+                    )}
                     disabled={loading}
                   />
                 </Form.Item>
