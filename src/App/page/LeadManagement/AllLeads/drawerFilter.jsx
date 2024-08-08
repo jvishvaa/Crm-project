@@ -365,7 +365,12 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 <Select
                   className="w-100"
                   mode="multiple"
-                  options={dropdownData?.leadStatus}
+                  options={dropdownData?.leadStatus?.map((item, ind) => {
+                    return {
+                      value: item?.status,
+                      label: item?.status,
+                    };
+                  })}
                   tagRender={(props) =>
                     renderTagAll(
                       props.label,
@@ -444,7 +449,12 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
               <Form.Item name="date_type" label="Date Type">
                 <Select
                   className="w-100"
-                  options={dropdownData?.dateType}
+                  options={dropdownData?.dateType?.map((item, ind) => {
+                    return {
+                      value: item?.id,
+                      label: item?.type,
+                    };
+                  })}
                   showSearch
                   filterOption={(input, option) =>
                     option.label.toLowerCase().includes(input.toLowerCase())
