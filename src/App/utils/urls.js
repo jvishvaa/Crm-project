@@ -60,6 +60,8 @@ const urls = {
     addLead: `${BASECRM}/lead_mgmt/lead_info/`,
     sourceTypeList: `${BASECRM}/lead_mgmt/source-type/`,
     leadInfo: `${BASECRM}/lead_mgmt/lead_info/`,
+    leadStatus: `${BASECRM}/lead_mgmt/status/`,
+    dateType: `${BASECRM}/lead_mgmt/date_type/`,
   },
 };
 
