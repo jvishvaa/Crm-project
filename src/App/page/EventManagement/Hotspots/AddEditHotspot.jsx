@@ -24,6 +24,9 @@ import { MdClose, MdDelete, MdEdit, MdLink } from "react-icons/md";
 import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import useWindowDimensions from "../../../component/UtilComponents/useWindowDimensions";
 import getExtensions from "../../../utils/getExtensions";
+import axios from "axios";
+import urls from "../../../utils/urls";
+import RenderTagMultiple from "../../../component/UtilComponents/RenderMultiple";
 
 const { TextArea } = Input;
 
@@ -61,6 +64,8 @@ const AddEditHotspot = ({
   handleAddEditHotspot,
   closeModal,
   dropdownData,
+  getHotspotData,
+  setLoading
 }) => {
   const [form] = Form.useForm();
   const hotspotType = Form.useWatch("hotspot_type", form);
@@ -92,15 +97,98 @@ const AddEditHotspot = ({
     }
   };
 
-  const onFinish = (values) => {
-    console.log("Received values:", values);
+  const onChangeMultiple = (value, key) => {
     if (
-      !googleData?.google_lat ||
-      !googleData?.google_lng ||
-      !googleData?.google_address
+      value?.length === 0 ||
+      (value.length > 0 && value[value.length - 1] === 0)
     ) {
-      message.error("Please Select Google Address");
-      return;
+      form.setFieldsValue({ [key]: [0] });
+    } else {
+      form.setFieldsValue({ [key]: value.filter((each) => each !== 0) });
+    }
+  };
+
+  const renderTagAll = (label, value, index, key) => {
+    let selectedItems = form.getFieldsValue()?.[key];
+    const showCloseIcon = !selectedItems?.includes(0);
+    return (
+      <RenderTagMultiple
+        label={label}
+        value={value}
+        showCloseIcon={showCloseIcon}
+        onClose={(closeValue) => {
+          if (selectedItems?.length === 1) {
+            form.setFieldsValue({ [key]: [0] });
+          } else {
+            form.setFieldsValue({
+              [key]: selectedItems.filter((each) => each !== closeValue),
+            });
+          }
+        }}
+      />
+    );
+  };
+
+  const onFinish = (values) => {
+    console.log("values", values);
+
+    setLoading(true);
+    if (!modalData?.data) {
+      if (
+        !googleData?.google_lat ||
+        !googleData?.google_lng ||
+        !googleData?.google_address
+      ) {
+        message.error("Please Select Google Address");
+        return;
+      }
+      let params = {
+        ...values,
+        google_lat: googleData?.google_lat,
+        google_lng: googleData?.google_lng,
+        google_address: googleData?.google_address,
+      }
+      axios
+        .post(`${urls.eventManagement.hotspot}`, params)
+        .then((res) => {
+          const data = res?.data;
+          console.log(data, "data");
+          message.success(data?.message);
+        })
+        .catch((err) => {
+          console.log(err);
+          message.error("Something went wrong");
+        })
+        .then(() => {
+          getHotspotData();
+          closeModal();
+          setLoading(false);
+        })
+    }
+    else {
+      let hotspot_id = modalData?.data?.id;
+      let params = {
+        ...values,
+        google_lat: googleData?.google_lat,
+        google_lng: googleData?.google_lng,
+        google_address: googleData?.google_address,
+      }
+      axios
+        .put(`${urls.eventManagement.hotspot}${hotspot_id}/`, params)
+        .then((res) => {
+          const data = res?.data;
+          console.log(data, "data");
+          message.success(data?.message);
+        })
+        .catch((err) => {
+          console.log(err);
+          message.error("Something went wrong");
+        })
+        .then(() => {
+          getHotspotData();
+          closeModal();
+          setLoading(false)
+        })
     }
     if (modalData?.type === "Add Hotspot") {
       handleAddEditHotspot(values);
@@ -137,21 +225,21 @@ const AddEditHotspot = ({
     if (isEdit) {
       form.setFieldsValue({
         hotspot_name: modalData?.data?.hotspot_name,
-        branch: modalData?.data?.branch?.id,
-        hotspot_type: modalData?.data?.hotspot_type?.id,
-        address: modalData?.data?.address,
+        branch: modalData?.data?.branch_data?.map((item) => item?.branch_name),
+        hotspot_type: modalData?.data?.hotspot_type,
+        hotspot_address: modalData?.data?.hotspot_address,
         contact_name: modalData?.data?.contact_name,
-        contact_email: modalData?.data?.contact_email,
-        contact_no: modalData?.data?.contact_no,
-        entry_cost: modalData?.data?.entry_cost,
-        no_of_kids: modalData?.data?.other_detail?.no_of_kids,
-        no_of_flats: modalData?.data?.other_detail?.no_of_flats,
-        no_of_blocks: modalData?.data?.other_detail?.no_of_blocks,
-        flat_series: modalData?.data?.other_detail?.flat_series,
-        block_series: modalData?.data?.other_detail?.block_series,
-        community: modalData?.data?.other_detail?.community,
-        no_of_footfall: modalData?.data?.other_detail?.no_of_footfall,
-        remarks: modalData?.data?.other_detail?.remarks,
+        email: modalData?.data?.email,
+        contact_number: modalData?.data?.contact_number,
+        event_cost: modalData?.data?.event_cost,
+        no_of_kids: modalData?.data?.no_of_kids,
+        no_of_flats: modalData?.data?.no_of_flats,
+        no_of_blocks: modalData?.data?.no_of_blocks,
+        flat_series: modalData?.data?.flat_series,
+        block_series: modalData?.data?.block_series,
+        community_gathering_area: modalData?.data?.community_gathering_area,
+        estimated_footfall: modalData?.data?.estimated_footfall,
+        remarks: modalData?.data?.remarks,
       });
       setGoogleData({
         google_lat: modalData?.data?.google_lat,
@@ -188,6 +276,8 @@ const AddEditHotspot = ({
       </Descriptions.Item>
     );
   };
+
+  console.log(modalData, 'dropdownData')
 
   return (
     <Drawer
@@ -297,11 +387,26 @@ const AddEditHotspot = ({
                   >
                     <Select
                       className="w-100"
-                      options={dropdownData?.branch?.filter(
-                        (each) => each.value !== 0
-                      )}
-                      allowClear
+                      mode="multiple"
+                      options={dropdownData?.branch?.map((item, ind) => {
+                        return {
+                          value: item?.id,
+                          label: item?.branch_name,
+                        };
+                      })}
+                      tagRender={(props) =>
+                        renderTagAll(
+                          props.label,
+                          props.value,
+                          props.index,
+                          "branch"
+                        )
+                      }
+                      onChange={(value) => {
+                        onChangeMultiple(value, "branch");
+                      }}
                       showSearch
+                      allowClear
                       filterOption={(input, option) =>
                         option.label.toLowerCase().includes(input.toLowerCase())
                       }
@@ -331,7 +436,7 @@ const AddEditHotspot = ({
                 </Col>
                 <Col xs={24} md={12}>
                   <Form.Item
-                    name="address"
+                    name="hotspot_address"
                     label="Address"
                     rules={[
                       { required: true, message: "Please Enter Address" },
@@ -381,7 +486,7 @@ const AddEditHotspot = ({
                   </Form.Item>
                 </Col>
                 <Col xs={24} md={12}>
-                  <Form.Item name="entry_cost" label="Entry Cost">
+                  <Form.Item name="event_cost" label="Entry Cost">
                     <Input
                       type="number"
                       autoComplete="off"
@@ -406,7 +511,7 @@ const AddEditHotspot = ({
                   </Form.Item>
                 </Col>
                 <Col xs={24} md={12}>
-                  <Form.Item label="Contact No" name="contact_no">
+                  <Form.Item label="Contact No" name="contact_number">
                     <Input
                       type="number"
                       autoComplete="off"
@@ -433,7 +538,7 @@ const AddEditHotspot = ({
                 <Col xs={24} md={12}>
                   <Form.Item
                     label="Contact Email"
-                    name="contact_email"
+                    name="email"
                     rules={[
                       {
                         type: "email",
@@ -575,7 +680,7 @@ const AddEditHotspot = ({
                 <Col xs={12} md={8}>
                   <Form.Item
                     label="Community / Gathering Area"
-                    name="community"
+                    name="community_gathering_area"
                   >
                     <Radio.Group>
                       <Radio value={"yes"}>Yes</Radio>
@@ -586,7 +691,7 @@ const AddEditHotspot = ({
                 <Col xs={12} md={8}>
                   <Form.Item
                     label="Estimated No. of Footfall Per day"
-                    name="no_of_footfall"
+                    name="estimated_footfall"
                   >
                     <Input
                       type="number"
@@ -697,17 +802,17 @@ const AddEditHotspot = ({
                 layout="vertical"
                 className="update-hotspot-description"
               >
-                {renderViewDetails("Hotspot Name", "Test Hotspot")}
-                {renderViewDetails("Branch", "Orchids BTM Layout")}
-                {renderViewDetails("Hotspot Type", "Apartment")}
-                {renderViewDetails("Address", "Test Address")}
+                {renderViewDetails("Hotspot Name", modalData?.data?.hotspot_name)}
+                {renderViewDetails("Branch", modalData?.data?.branch_data?.map((item) => item?.branch_name).join(", "))}
+                {renderViewDetails("Hotspot Type", modalData?.data?.hotspot_type)}
+                {renderViewDetails("Address", modalData?.data?.hotspot_address)}
               </Descriptions>
               <Col xs={24}>
                 <Map
-                  google={googleData?.google_address || "Test Address"}
+                  google={modalData?.data?.google_address || "Test Address"}
                   center={{
-                    lat: +googleData?.google_lat || +defaultCenter.lat,
-                    lng: +googleData?.google_lng || +defaultCenter.lng,
+                    lat: +modalData?.data?.google_lat || +defaultCenter.lat,
+                    lng: +modalData?.data?.google_lng || +defaultCenter.lng,
                   }}
                   height="200px"
                   setMapData={setMapData}
@@ -720,10 +825,10 @@ const AddEditHotspot = ({
                 layout="vertical"
                 className="update-hotspot-description"
               >
-                {renderViewDetails("Contact Name", "Test Contact")}
-                {renderViewDetails("Entry Cost", "3533")}
-                {renderViewDetails("Contact No", "3654243434")}
-                {renderViewDetails("Contact Email", "shdhd@gmail.com")}
+                {renderViewDetails("Contact Name", modalData?.data?.contact_name)}
+                {renderViewDetails("Entry Cost", modalData?.data?.event_cost)}
+                {renderViewDetails("Contact No", modalData?.data?.contact_number)}
+                {renderViewDetails("Contact Email", modalData?.data?.email)}
               </Descriptions>
               <Col xs={24} className="mt-2">
                 <Divider />
@@ -739,16 +844,16 @@ const AddEditHotspot = ({
                   layout="vertical"
                   className="update-hotspot-description"
                 >
-                  {renderViewDetails("No. Of Flats", "10")}
-                  {renderViewDetails("Flat Series", "A1 - A10")}
-                  {renderViewDetails("No. Of Blocks", "5")}
-                  {renderViewDetails("Block Series", "B1 - B10")}
-                  {renderViewDetails("No of Kids", "1000", width < 768 ? 2 : 1)}
-                  {renderViewDetails("Community / Gathering Area", "Yes")}
-                  {renderViewDetails("Estimated No. of Footfall Per day", "10")}
+                  {renderViewDetails("No. Of Flats", modalData?.data?.no_of_flats ? modalData?.data?.no_of_flats : "NA")}
+                  {renderViewDetails("Flat Series", modalData?.data?.flat_series ? modalData?.data?.flat_series : "NA")}
+                  {renderViewDetails("No. Of Blocks", modalData?.data?.no_of_blocks ? modalData?.data?.no_of_blocks : "NA")}
+                  {renderViewDetails("Block Series", modalData?.data?.block_series ? modalData?.data?.block_series : "NA")}
+                  {renderViewDetails("No of Kids", modalData?.data?.no_of_kids ? modalData?.data?.no_of_kids : "NA", width < 768 ? 2 : 1)}
+                  {renderViewDetails("Community / Gathering Area", modalData?.data?.community_gathering_area)}
+                  {renderViewDetails("Estimated No. of Footfall Per day", modalData?.data?.estimated_footfall ? modalData?.data?.estimated_footfall : "NA")}
                   {renderViewDetails(
                     "Remarks",
-                    "Test Remarks",
+                    modalData?.data?.remarks ? modalData?.data?.remarks : "NA",
                     width < 768 ? 2 : 1
                   )}
                 </Descriptions>

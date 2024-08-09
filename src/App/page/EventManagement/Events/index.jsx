@@ -17,6 +17,7 @@ import {
   Popover,
   Checkbox,
   Flex,
+  message
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -44,6 +45,8 @@ import {
 import { MdOutlineCurrencyRupee } from "react-icons/md";
 import getFilterItemFromArray from "../../../utils/getFilterItemFromArray";
 import DateWiseEvent from "./DateWiseEvent";
+import axios from "axios";
+import urls from "../../../utils/urls";
 const data = [
   {
     id: 1,
@@ -124,27 +127,17 @@ const Events = () => {
     { id: 7, label: "Anik3", erp: 2039484838 },
     { id: 8, label: "Utpal3", erp: 2039484838 },
   ];
-  const dropdownData = {
-    city: [
-      { label: "All", value: 0 },
-      { label: "Bangallore", value: "bangalore" },
-      { label: "Kolkata", value: "kolkata" },
-      { label: "Chennal", value: "chennai" },
-    ],
-
-    branch: [
-      { label: "All", value: 0 },
-      { label: "Orchids BTM Layout", value: "btm-layout" },
-      { label: "Orchids Banerghata", value: "banerghata" },
-      { label: "Orchids Newtown", value: "newtown" },
-    ],
-
+  const [dropdownData, setDropdownData] = useState({
+    city: [{ city_name: "All", id: 0 }],
+    branch: [{ branch_name: "All", id: 0 }],
     source: [
       { label: "All", value: 0 },
       { label: "Apartment", value: "apartment" },
       { label: "Branch", value: "branch" },
     ],
-  };
+
+    hotspot: []
+  });
 
   const eventStatusCountList = [
     {
@@ -312,18 +305,85 @@ const Events = () => {
 
   const [searchFetched, setSearchFetched] = useState(false);
 
-  const getEventData = (page, page_size, params = {}) => {
-    // setLoading(true);
-    setEventData(data);
-    setPageData({
-      current: page,
-      pageSize: page_size,
-      total: 2,
-    });
+  const getEventData = () => {
+    axios
+      .get(`${urls.eventManagement.events}`)
+      .then((res) => {
+        const data = res.data;
+        console.log(data?.result, 'eventdata');
+        setEventData(data?.result);
+        message.success(data?.message);
+      })
+      .catch((err) => {
+        message.error("Failed to fetch Events data");
+      })
+  }
+
+  const getBranchList = (params = {}) => {
+    const queryString = Object.keys(params)
+      .map(key => Array.isArray(params[key])
+        ? params[key].map(value => `${key}=${value}`).join('&')
+        : `${key}=${params[key]}`)
+      .join('&');
+    axios
+      .get(`${urls.masterData.branchList}?${queryString}`)
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setDropdownData((p) => {
+          return {
+            ...p,
+            branch: [{ branch_name: "All", id: 0 }, ...response?.result],
+          };
+        });
+      })
+      .catch((error) => {
+        message.error(error?.message ?? "Failed to fetch branch list");
+      })
+      .finally(() => { });
   };
 
+  const getCityList = () => {
+    axios
+      .get(`${urls.masterData.cityList}`)
+      .then((res) => {
+        let response = res.data;
+        console.log(response, 'resposedata');
+        setDropdownData((p) => {
+          return {
+            ...p,
+            city: [{ city_name: "All", id: 0 }, ...response?.result],
+          };
+        });
+      })
+      .catch(() => { })
+      .finally(() => { });
+  };
+
+  const getHotspotData = () => {
+    axios
+      .get(`${urls.eventManagement.hotspot}`)
+      .then((res) => {
+        const data = res.data;
+        console.log(data?.result, 'hotspotdata');
+        setDropdownData((p) => {
+          return {
+            ...p,
+            hotspot: [...data?.result]
+          }
+        })
+        message.success(data?.message);
+      })
+      .catch((err) => {
+        message.error("Failed to fetch Hotspot data");
+      })
+  }
+
   useEffect(() => {
-    getEventData(pageData?.current, pageData?.pageSize);
+    getEventData();
+    getHotspotData();
+    getCityList();
+    getBranchList({ session_year: 4 });
   }, []);
 
   const handleTableChange = (pagination) => {
@@ -519,8 +579,8 @@ const Events = () => {
               >
                 <div
                   className={`d-flex flex-row ${item.value < 5
-                      ? "justify-content-start"
-                      : "justify-content-end"
+                    ? "justify-content-start"
+                    : "justify-content-end"
                     } align-items-center`}
                   style={{ height: 12 }}
                 >
@@ -563,20 +623,20 @@ const Events = () => {
     },
     {
       title: "Hotspot",
-      key: "hotspot",
-      render: (record) => <span>{record?.hotspot?.name || "--"}</span>,
+      key: "hotspot_name",
+      render: (record) => <span>{record?.hotspotdata?.hotspot_name || "--"}</span>,
       align: "center",
     },
     {
       title: "Branch",
-      key: "branch",
-      render: (record) => <span>{record?.branch?.name || "--"}</span>,
+      key: "branch_name",
+      render: (record) => <span>{record?.branch_name || "--"}</span>,
       align: "center",
     },
     {
       title: "Hotspot Type",
-      key: "source",
-      render: (record) => <span>{record?.source?.name || "--"}</span>,
+      key: "hotspot_type",
+      render: (record) => <span>{record?.hotspotdata?.hotspot_type || "--"}</span>,
       align: "center",
     },
     {
@@ -660,13 +720,13 @@ const Events = () => {
       key: "status",
       render: (record) => (
         <Tag
-          color={
-            getFilterItemFromArray(
-              eventStatusCountList,
-              "label",
-              record.status
-            )[0].color
-          }
+        // color={
+        //   getFilterItemFromArray(
+        //     eventStatusCountList,
+        //     "label",
+        //     record.status
+        //   )[0].color
+        // }
         >
           {record?.status}
         </Tag>
@@ -676,7 +736,7 @@ const Events = () => {
     {
       title: "Total Leads",
       key: "total_leads",
-      render: (record) => <span>{record?.total_lead || "0"}</span>,
+      render: (record) => <span>{record?.total_lead_count || "0"}</span>,
       align: "center",
     },
     {
@@ -1030,13 +1090,13 @@ const Events = () => {
                                             </Col>
                                             <Col xs={24}>
                                               <Tag
-                                                color={
-                                                  getFilterItemFromArray(
-                                                    eventStatusCountList,
-                                                    "label",
-                                                    each.status
-                                                  )[0].color
-                                                }
+                                                // color={
+                                                //   getFilterItemFromArray(
+                                                //     eventStatusCountList,
+                                                //     "label",
+                                                //     each.status
+                                                //   )[0].color
+                                                // }
                                                 className="mr-1"
                                               >
                                                 {each?.status}
@@ -1125,11 +1185,11 @@ const Events = () => {
                                       <Descriptions column={1}>
                                         {getCardDataText(
                                           "Hotspot",
-                                          each?.hotspot?.name || "--"
+                                          each?.hotspotdata?.hotspot_name || "--"
                                         )}
                                         {getCardDataText(
                                           "Hotspot Type",
-                                          each?.source?.name || "--"
+                                          each?.hotspotdata?.hotspot_type || "--"
                                         )}
                                         {getCardDataText(
                                           "BDE",
@@ -1146,11 +1206,11 @@ const Events = () => {
                                         )}
                                         {getCardDataText(
                                           "Total Leads",
-                                          each.total_lead || "0"
+                                          each.total_lead_count || "0"
                                         )}
                                         {getCardDataText(
                                           "Created By",
-                                          each.created_by || "0"
+                                          each.created_by || "--"
                                         )}
                                       </Descriptions>
                                     </Col>

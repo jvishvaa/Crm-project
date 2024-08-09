@@ -14,6 +14,7 @@ import {
   Pagination,
   Empty,
   Descriptions,
+  message,
 } from "antd";
 import "./index.scss";
 import { MdEdit, MdFilterAlt, MdListAlt, MdRefresh } from "react-icons/md";
@@ -34,6 +35,8 @@ import getRoutePathDetails from "../../../utils/getRoutePathDetails";
 import { TbFileUpload } from "react-icons/tb";
 import getCardDataText from "../../../component/UtilComponents/CardDataText";
 import AddEditHotspot from "./AddEditHotspot";
+import axios from "axios";
+import urls from "../../../utils/urls";
 
 const Hotspot = () => {
   const defaultFilters = {
@@ -64,27 +67,15 @@ const Hotspot = () => {
   const searchIconRef = useRef(null);
   const { width } = useWindowDimensions();
   const [searchInput, setSearchInput] = useState("");
-  const dropdownData = {
-    city: [
-      { label: "All", value: 0 },
-      { label: "Bangallore", value: "bangalore" },
-      { label: "Kolkata", value: "kolkata" },
-      { label: "Chennal", value: "chennai" },
-    ],
-
-    branch: [
-      { label: "All", value: 0 },
-      { label: "Orchids BTM Layout", value: "btm-layout" },
-      { label: "Orchids Banerghata", value: "banerghata" },
-      { label: "Orchids Newtown", value: "newtown" },
-    ],
-
+  const [dropdownData, setDropdownData] = useState({
+    city: [{ city_name: "All", id: 0 }],
+    branch: [{ branch_name: "All", id: 0 }],
     source: [
       { label: "All", value: 0 },
       { label: "Apartment", value: "apartment" },
       { label: "Branch", value: "branch" },
     ],
-  };
+  });
 
   useEffect(() => {
     if (width <= 991) {
@@ -109,49 +100,66 @@ const Hotspot = () => {
 
   const [searchFetched, setSearchFetched] = useState(false);
 
-  const getHotspotData = (page, page_size, params = {}) => {
-    // setLoading(true);
-    setHotspotData([
-      {
-        id: 1,
-        hotspot_name: "Test",
-        branch: {
-          id: 1,
-          name: "Orchids BTM Layout",
-        },
-        contact_name: "Test",
-        contact_no: "2443242432",
-        hotspot_type: {
-          id: 1,
-          name: "Apartment",
-        },
-        entry_cost: 100,
-      },
-      {
-        id: 2,
-        hotspot_name: "Test1",
-        branch: {
-          id: 1,
-          name: "Orchids BTM Layout",
-        },
-        contact_name: "Test",
-        contact_no: "2443242432",
-        hotspot_type: {
-          id: 1,
-          name: "Apartment",
-        },
-        entry_cost: 100,
-      },
-    ]);
-    setPageData({
-      current: page,
-      pageSize: page_size,
-      total: 2,
-    });
+
+  const getHotspotData = () => {
+    axios
+      .get(`${urls.eventManagement.hotspot}`)
+      .then((res) => {
+        const data = res.data;
+        console.log(data?.result, 'hotspotdata');
+        setHotspotData(data?.result);
+        message.success(data?.message);
+      })
+      .catch((err) => {
+        message.error("Failed to fetch Hotspot data");
+      })
+  }
+
+  const getCityList = () => {
+    axios
+      .get(`${urls.masterData.cityList}`)
+      .then((res) => {
+        let response = res.data;
+        console.log(response, 'resposedata');
+        setDropdownData((p) => {
+          return {
+            ...p,
+            city: [{ city_name: "All", id: 0 }, ...response?.result],
+          };
+        });
+      })
+      .catch(() => { })
+      .finally(() => { });
+  };
+
+  const getBranchList2 = (params = {}) => {
+    const queryString = Object.keys(params)
+      .map(key => Array.isArray(params[key])
+        ? params[key].map(value => `${key}=${value}`).join('&')
+        : `${key}=${params[key]}`)
+      .join('&');
+    axios
+      .get(`${urls.masterData.branchList}?${queryString}`)
+      .then((res) => {
+        let response = res.data;
+        console.log(response);
+        setDropdownData((p) => {
+          return {
+            ...p,
+            branch: [{ branch_name: "All", id: 0 }, ...response?.result],
+          };
+        });
+      })
+      .catch((error) => {
+        message.error(error?.message ?? "Failed to fetch branch list");
+      })
+      .finally(() => { });
   };
 
   useEffect(() => {
-    getHotspotData(pageData?.current, pageData?.pageSize);
+    getHotspotData();
+    getBranchList2({ session_year: 4 });
+    getCityList();
   }, []);
 
   const handleTableChange = (pagination) => {
@@ -315,13 +323,17 @@ const Hotspot = () => {
     {
       title: "Branch",
       key: "branch",
-      render: (record) => <span>{record?.branch?.name || "--"}</span>,
+      render: (record) => {
+        const branchNames = record.branch_data?.map(branch => branch.branch_name).join(", ") || "--";
+        return <span>{branchNames}</span>;
+      },
+
       align: "center",
     },
     {
       title: "Hotspot Type",
       key: "hotspot_type",
-      render: (record) => <span>{record?.hotspot_type?.name || "--"}</span>,
+      render: (record) => <span>{record?.hotspot_type || "--"}</span>,
       align: "center",
     },
     {
@@ -332,14 +344,14 @@ const Hotspot = () => {
     },
     {
       title: "Contact No.",
-      key: "contact_no",
-      render: (record) => <span>{record?.contact_no || "--"}</span>,
+      key: "contact_number",
+      render: (record) => <span>{record?.contact_number || "--"}</span>,
       align: "center",
     },
     {
       title: "Entry Cost",
-      key: "entry_cost",
-      render: (record) => <span>{record?.entry_cost || "0"}</span>,
+      key: "event_cost",
+      render: (record) => <span>{record?.event_cost || "0"}</span>,
       align: "center",
     },
     {
@@ -649,7 +661,7 @@ const Hotspot = () => {
                                       <Descriptions column={1}>
                                         {getCardDataText(
                                           "Hotspot Type",
-                                          each?.hotspot_type?.name || "--"
+                                          each?.hotspot_type || "--"
                                         )}
                                         {getCardDataText(
                                           "Contact Name",
@@ -657,11 +669,11 @@ const Hotspot = () => {
                                         )}
                                         {getCardDataText(
                                           "Contact No.",
-                                          each?.contact_no || "--"
+                                          each?.contact_number || "--"
                                         )}
                                         {getCardDataText(
                                           "Entry Cost",
-                                          each?.entry_cost || "0"
+                                          each?.event_cost || "0"
                                         )}
                                       </Descriptions>
                                     </Col>
@@ -702,14 +714,17 @@ const Hotspot = () => {
         closeDrawer={() => {
           setDrawerData({ show: false, type: null, data: null });
         }}
+        getBranchList2={getBranchList2}
       />
       <AddEditHotspot
         modalData={drawerData}
-        handleAddEditHotspot={() => {}}
+        handleAddEditHotspot={() => { }}
         closeModal={() => {
           setDrawerData({ show: false, type: null, data: null });
         }}
         dropdownData={dropdownData}
+        getHotspotData={getHotspotData}
+        setLoading={setLoading}
       />
     </CustomCard>
   );

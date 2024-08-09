@@ -102,13 +102,20 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 <Select
                   className="w-100"
                   mode="multiple"
-                  options={dropdownData?.city}
+                  options={dropdownData?.city?.map((item, ind) => {
+                    return {
+                      value: item?.id,
+                      label: item?.city_name,
+                    };
+                  })}
                   tagRender={(props) =>
                     renderTagAll(props.label, props.value, props.index, "city")
                   }
                   onChange={(value) => {
+                    console.log("value", value);
                     onChangeMultiple(value, "city");
                     form.setFieldsValue({ branch: [0] });
+                    getBranchList2({ city_id: value });
                   }}
                   showSearch
                   allowClear
@@ -124,7 +131,12 @@ const DrawerFilter = ({ drawerData, onSubmit, closeDrawer, dropdownData }) => {
                 <Select
                   className="w-100"
                   mode="multiple"
-                  options={dropdownData?.branch}
+                  options={dropdownData?.branch?.map((item, ind) => {
+                    return {
+                      value: item?.id,
+                      label: item?.branch_name,
+                    };
+                  })}
                   tagRender={(props) =>
                     renderTagAll(
                       props.label,

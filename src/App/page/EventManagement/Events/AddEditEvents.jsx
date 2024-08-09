@@ -24,6 +24,9 @@ import getArrayValues from "../../../utils/getArrayValues";
 import { MdClose, MdDelete, MdEdit, MdLink } from "react-icons/md";
 import CustomDrawerHeader from "../../../component/UtilComponents/CustomDrawerHeader";
 import dayjs from "dayjs";
+import axios from "axios";
+import urls from "../../../utils/urls";
+import RenderTagMultiple from "../../../component/UtilComponents/RenderMultiple";
 
 const { TextArea } = Input;
 
@@ -35,8 +38,8 @@ const AddEditEvent = ({
 }) => {
   const [form] = Form.useForm();
   const hotspotData = Form.useWatch("hotspot", form);
-  const eventStartDate = Form.useWatch("event_start_date", form);
-  const eventEndDate = Form.useWatch("event_end_date", form);
+  const eventStartDate = Form.useWatch("event_start_date_time", form);
+  const eventEndDate = Form.useWatch("event_start_date_time", form);
   const [selectedDay, setSelectedDay] = useState([]);
   const [updatedDateList, setUpdatedDateList] = useState([]);
 
@@ -74,25 +77,89 @@ const AddEditEvent = ({
     return daysOfWeek;
   };
 
+  console.log("selectedDay", modalData?.data);
+
   const onFinish = (values) => {
     console.log("Received values:", values);
-    handleAddEditEvent(values);
-    form.resetFields();
+    setLoading(true);
+
+    if (!modalData?.data) {
+      // Add new event
+      axios
+        .post(`${urls.eventManagement.events}`, values)
+        .then((res) => {
+          const data = res?.data;
+          console.log(data, "data");
+          message.success(data?.message || "Event added successfully");
+          handleAddEditEvent(data); // Update parent component state if needed
+        })
+        .catch((err) => {
+          console.log(err);
+          message.error(err.response?.data?.message || "Something went wrong");
+        })
+        .finally(() => {
+          closeModal();
+          setLoading(false);
+          form.resetFields();
+        });
+    } else {
+      // Update existing event
+      let event_id = modalData?.data?.id;
+      axios
+        .put(`${urls.eventManagement.events}${event_id}/`, values)
+        .then((res) => {
+          const data = res?.data;
+          console.log(data, "data");
+          message.success(data?.message || "Event updated successfully");
+          handleAddEditEvent(data); // Update parent component state if needed
+        })
+        .catch((err) => {
+          console.log(err);
+          message.error(err.response?.data?.message || "Something went wrong");
+        })
+        .finally(() => {
+          closeModal();
+          setLoading(false);
+          form.resetFields();
+        });
+    }
+  };
+  console.log(modalData, 'modalDataevents');
+
+  const renderTagAll = (label, value, index, key) => {
+    let selectedItems = form.getFieldsValue()?.[key];
+    const showCloseIcon = !selectedItems?.includes(0);
+    return (
+      <RenderTagMultiple
+        label={label}
+        value={value}
+        showCloseIcon={showCloseIcon}
+        onClose={(closeValue) => {
+          if (selectedItems?.length === 1) {
+            form.setFieldsValue({ [key]: [0] });
+          } else {
+            form.setFieldsValue({
+              [key]: selectedItems.filter((each) => each !== closeValue),
+            });
+          }
+        }}
+      />
+    );
   };
 
   useEffect(() => {
     if (modalData?.data && ["Update Event"].includes(modalData?.type)) {
       form.setFieldsValue({
         event_name: modalData?.data?.event_name,
-        branch: modalData?.data?.branch?.id,
-        hotspot_type: modalData?.data?.hotspot_type?.id,
-        hotspot: modalData?.data?.hotspot?.id,
+        branch: modalData?.data?.branch_name,
+        hotspot_type: modalData?.data?.hotspotdata?.hotspot_type,
+        hotspot_data: modalData?.data?.hotspotdata?.hotspot_name,
         event_cost: modalData?.data?.event_cost,
-        event_start_date: dayjs(
-          modalData?.data?.start_date,
+        event_start_date_time: dayjs(
+          modalData?.data?.event_start_date_time,
           "YYYY-MM-DD HH:mm"
         ),
-        event_end_date: dayjs(modalData?.data?.end_date, "YYYY-MM-DD HH:mm"),
+        event_end_date_time: dayjs(modalData?.data?.event_end_date_time, "YYYY-MM-DD HH:mm"),
       });
     } else {
       form.setFieldsValue({ event_start_date: null, event_end_date: null });
@@ -158,11 +225,7 @@ const AddEditEvent = ({
       closable={false}
       maskClosable={false}
       footer={
-        <div
-          style={{
-            textAlign: "right",
-          }}
-        >
+        <div style={{ textAlign: "right" }}>
           <Button
             size="small"
             onClick={() => {
@@ -180,6 +243,8 @@ const AddEditEvent = ({
               form.submit();
             }}
             type="primary"
+            loading={loading}
+            disabled={loading}
           >
             {modalData?.data ? "Update" : "Save"}
           </Button>
@@ -225,7 +290,7 @@ const AddEditEvent = ({
                       (each) => each.value !== 0
                     )}
                     onChange={() => {
-                      form.setFieldsValue({ hotspot: null });
+                      form.setFieldsValue({ hotspot_data: null });
                     }}
                     allowClear
                     showSearch
@@ -243,14 +308,23 @@ const AddEditEvent = ({
                 >
                   <Select
                     className="w-100"
-                    options={dropdownData?.branch?.filter(
-                      (each) => each.value !== 0
-                    )}
-                    onChange={() => {
-                      form.setFieldsValue({ hotspot: null });
-                    }}
-                    allowClear
+                    mode="single"
+                    options={dropdownData?.branch?.map((item, ind) => {
+                      return {
+                        value: item?.id,
+                        label: item?.branch_name,
+                      };
+                    })}
+                    tagRender={(props) =>
+                      renderTagAll(
+                        props.label,
+                        props.value,
+                        props.index,
+                        "branch"
+                      )
+                    }
                     showSearch
+                    allowClear
                     filterOption={(input, option) =>
                       option.label.toLowerCase().includes(input.toLowerCase())
                     }
@@ -259,15 +333,29 @@ const AddEditEvent = ({
               </Col>
               <Col span={24}>
                 <Form.Item
-                  name="hotspot"
+                  name="hotspot_data"
                   label="Hotspot"
                   rules={[{ required: true, message: "Please Select Hotspot" }]}
                 >
                   <Select
                     className="w-100"
-                    options={[{ label: "Hotspot 1", value: "hotspot 1" }]}
-                    allowClear
+                    mode="single"
+                    options={dropdownData?.hotspot?.map((item, ind) => {
+                      return {
+                        value: item?.id,
+                        label: item?.hotspot_name,
+                      };
+                    })}
+                    tagRender={(props) =>
+                      renderTagAll(
+                        props.label,
+                        props.value,
+                        props.index,
+                        "hotspot_data"
+                      )
+                    }
                     showSearch
+                    allowClear
                     filterOption={(input, option) =>
                       option.label.toLowerCase().includes(input.toLowerCase())
                     }
@@ -336,7 +424,7 @@ const AddEditEvent = ({
               </Col>
               <Col span={24}>
                 <Form.Item
-                  name="event_start_date"
+                  name="event_start_date_time"
                   label="Event Start Date"
                   rules={[
                     {
@@ -351,7 +439,7 @@ const AddEditEvent = ({
                       format: "h:mm a",
                     }}
                     onChange={() => {
-                      form.setFieldsValue({ event_end_date: null });
+                      form.setFieldsValue({ event_end_date_time: null });
                     }}
                     format={"DD/MM/YYYY hh:mm a"}
                     className="w-100"
@@ -361,7 +449,7 @@ const AddEditEvent = ({
               </Col>
               <Col span={24}>
                 <Form.Item
-                  name="event_end_date"
+                  name="event_end_date_time"
                   label="Event End Date"
                   rules={[
                     {
@@ -399,8 +487,8 @@ const AddEditEvent = ({
                 </Form.Item>
               </Col>
               {eventStartDate &&
-              eventEndDate &&
-              dayjs(eventStartDate).format("YYYY-MM-DD") !==
+                eventEndDate &&
+                dayjs(eventStartDate).format("YYYY-MM-DD") !==
                 dayjs(eventEndDate).format("YYYY-MM-DD") ? (
                 <Col xs={24} md={12} className="mt-3">
                   <Row>
