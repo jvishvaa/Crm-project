@@ -812,10 +812,10 @@ const FollowUp = () => {
               dayjs(filterData?.date_range[0]).isSame(filterData?.date_range[1])
                 ? dayjs(filterData?.date_range[0]).format("DD MMM YYYY")
                 : `${dayjs(filterData?.date_range[0]).format(
-                    "DD MMM YYYY"
-                  )} to ${dayjs(filterData?.date_range[1]).format(
-                    "DD MMM YYYY"
-                  )}`
+                  "DD MMM YYYY"
+                )} to ${dayjs(filterData?.date_range[1]).format(
+                  "DD MMM YYYY"
+                )}`
             }
           />
         </Col>
@@ -1235,11 +1235,10 @@ const FollowUp = () => {
                                         {getCardDataText(
                                           "Lead Status",
                                           `${each.lead_status}
-                                                ${
-                                                  each.lead_status2
-                                                    ? ` -> ${each.lead_status2}`
-                                                    : ""
-                                                }`
+                                                ${each.lead_status2
+                                            ? ` -> ${each.lead_status2}`
+                                            : ""
+                                          }`
                                         )}
                                         {getCardDataText(
                                           "Next Follow Up Date",

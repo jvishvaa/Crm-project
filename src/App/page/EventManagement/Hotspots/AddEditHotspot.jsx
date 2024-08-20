@@ -77,6 +77,7 @@ const AddEditHotspot = ({
   const { width } = useWindowDimensions();
   const [selectedFile, setSelectedFile] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const defaultCenter = {
     lat: 13.0342708,
@@ -258,6 +259,7 @@ const AddEditHotspot = ({
   }, [isEdit]);
 
   const fileUploadChangeHandler = (e) => {
+    console.log(e.target.files, 'fileUploadChangeHandler')
     if (
       ![...getExtensions("image")].includes(
         `.${e.target.files[i]?.name?.split(".")?.pop()}`

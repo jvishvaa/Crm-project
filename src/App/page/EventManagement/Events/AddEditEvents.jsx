@@ -42,6 +42,7 @@ const AddEditEvent = ({
   const eventEndDate = Form.useWatch("event_start_date_time", form);
   const [selectedDay, setSelectedDay] = useState([]);
   const [updatedDateList, setUpdatedDateList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const clearData = () => {
     setSelectedDay([]);
